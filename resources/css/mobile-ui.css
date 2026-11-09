@@ -1,0 +1,36 @@
+/* ==========================================================================
+   MOBILE-UI REFINEMENT 01
+   Lapisan presentasi lintas modul yang aktif di bawah 768px. Satu aturan
+   desktop pada mobile-bahan.css meratakan wrapper filter semantik supaya
+   susunan filter desktop tetap seperti sebelum wrapper ditambahkan.
+
+   Kontrak (jangan dilanggar di file ini):
+   - Tidak ada perubahan visual desktop; hanya wrapper filter diratakan
+     kembali pada >= 768px.
+   - Tidak ada id/name/form/action/event yang diubah - murni CSS.
+   - Selector lintas modul dibatasi ke konten aplikasi; aturan khusus
+     halaman tetap di-scope ke koridor konten `.max-w-\[1600px\]`.
+   - Tidak memakai zoom/transform untuk mengecilkan halaman.
+   - Toleran light/dark mode (warna netral/rgba) dan print (print tidak
+     menjalankan max-width:767px ini).
+   ========================================================================== */
+
+/* Tipe jersey tanpa lengan/kerah (Celana): sembunyikan kolom & field-nya
+   seluruhnya, desktop maupun mobile. */
+.jersey-line-card.tanpa-lengan-kerah .col-lengan-kerah { display: none !important; }
+.jersey-line-card.tanpa-lengan-kerah .wrapper-lengan-kerah-default { display: none !important; }
+
+@import "./mobile-dashboard.css";   /* Fase 1 - dashboard */
+@import "./mobile-bahan.css";       /* Fase 2/3 - master bahan + tabel */
+@import "./mobile-modal.css";       /* Fase 4 - modal & form */
+@import "./mobile-nav.css";         /* Fase 3 - navigasi bawah HP */
+@import "./mobile-erp.css";         /* Fondasi responsif lintas modul ERP */
+@import "./mobile-pos.css";         /* Fase 2 - POS dan pembayaran */
+@import "./mobile-spk.css";         /* Fase 3 - work queue SPK */
+@import "./mobile-produksi.css";    /* Fase 4 - work queue Produksi */
+
+@import "./mobile-all-modules.css";    /* Fase 5 - all modules responsive */
+@import "./mobile-collecting.css";      /* Fase 6 - pengambilan mobile */
+@import "./mobile-jersey.css";          /* Fase 6 - pesanan jersey mobile */
+@import "./mobile-operations.css"; /* Mobile operational purchase, receiving, stock & cashier screens */
+@import "./mobile-dark-mode.css";   /* Peta kontras slate→token saat dark mode (lintas modul kartu) */

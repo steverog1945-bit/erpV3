@@ -1,0 +1,93 @@
+/* ==========================================================================
+   FONT MAJALAH - NUNITO, LORA, PLAYFAIR DISPLAY
+   ==========================================================================
+   Tiga keluarga font ini bukan untuk antarmuka aplikasi - Inter yang
+   dipakai di seluruh UI. Ketiganya khusus fitur Postingan, yang
+   sengaja bergaya majalah: judul artikel pakai Playfair (serif
+   kontras tinggi), isi pakai Nunito, kutipan memakai Lora. Jadi
+   mengorbankan tipografi itu demi kecepatan tidak akan sepadan.
+
+   Tetap dilayani sendiri, dengan alasan yang sama seperti Inter:
+   satu permintaan CSS lagi yang memblokir render, ke domain ketiga,
+   dengan nama file yang berubah setiap kali Google menerbitkan versi
+   baru sehingga cache hampir tidak pernah kena.
+
+   Ketiganya FONT VARIABLE. Satu file per gaya sudah mencakup rentang
+   bobot penuh, jadi yang diunduh hanya 6 file (3 keluarga x normal +
+   italic), bukan 3 keluarga x 5 bobot x 2 gaya.
+
+   Hanya subset latin yang diambil, sama seperti Inter: seluruh isi
+   artikel berbahasa Indonesia.
+
+   Font ini HANYA dimuat di halaman Postingan (form dan show), lewat
+   <link> di masing-masing blade. Sengaja tidak dimasukkan ke app.css:
+   peramban baru mengunduh font yang benar-benar dipakai teks yang
+   sedang dirender, jadi menaruhnya di CSS global tidak menambah unduhan
+   - tapi memuat CSS-nya di setiap halaman tetap sia-sia.
+   ========================================================================== */
+
+/* --- Nunito: isi artikel dan font bawaan editor --- */
+@font-face {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 200 1000;
+    font-display: swap;
+    src: url('nunito-normal.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                   U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+                   U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+    font-family: 'Nunito';
+    font-style: italic;
+    font-weight: 200 1000;
+    font-display: swap;
+    src: url('nunito-italic.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                   U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+                   U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* --- Lora: kutipan dan blok kode --- */
+@font-face {
+    font-family: 'Lora';
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url('lora-normal.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                   U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+                   U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+    font-family: 'Lora';
+    font-style: italic;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url('lora-italic.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                   U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+                   U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* --- Playfair Display: judul artikel --- */
+@font-face {
+    font-family: 'Playfair Display';
+    font-style: normal;
+    font-weight: 400 900;
+    font-display: swap;
+    src: url('playfair-normal.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                   U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+                   U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+    font-family: 'Playfair Display';
+    font-style: italic;
+    font-weight: 400 900;
+    font-display: swap;
+    src: url('playfair-italic.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+                   U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122,
+                   U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}

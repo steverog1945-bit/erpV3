@@ -1,0 +1,96 @@
+/* POS and payment presentation, isolated from desktop and business behavior. */
+@media screen and (max-width: 767.98px) {
+    .pos-mobile-shell {
+        padding: 16px 12px 24px;
+    }
+
+    .pos-mobile-shell > div.mb-10 {
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .pos-mobile-shell > div.mb-10 > div.flex.items-center.gap-3 {
+        align-items: stretch;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .pos-mobile-shell > div.mb-10 > div.flex.items-center.gap-3 > * {
+        width: 100%;
+        max-width: 100%;
+        justify-content: center;
+    }
+
+    .pos-order-layout {
+        gap: 14px;
+    }
+
+    .pos-order-form,
+    .pos-cart-panel {
+        width: 100%;
+    }
+
+    .pos-cart-panel > div {
+        border-radius: 16px;
+    }
+
+    .pos-cart-panel > div > .flex-grow.overflow-y-auto {
+        max-height: 40vh;
+        max-height: 40svh;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .pos-cart-panel > div > .px-6.py-5 {
+        padding: 16px;
+    }
+
+    .pos-cart-panel > div > .mt-auto.p-6 {
+        padding: 16px;
+    }
+
+    .pos-cart-panel #grand_total,
+    .payment-mobile-shell #display-grand-total {
+        font-size: clamp(24px, 7vw, 32px);
+        line-height: 1.15;
+        overflow-wrap: anywhere;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .pos-cart-panel button[onclick="simpanTransaksi(this)"] {
+        min-height: 48px;
+        padding: 12px 14px;
+        line-height: 1.35;
+    }
+
+    .payment-mobile-shell {
+        padding: 16px 12px 24px;
+    }
+
+    .payment-mobile-shell > div.mb-10 {
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .payment-mobile-shell > div.mb-10 > div.flex.items-center.gap-3 {
+        width: 100%;
+    }
+
+    .payment-mobile-shell #form-pembayaran > .grid {
+        gap: 14px;
+    }
+
+    .payment-mobile-shell #form-pembayaran .rounded-2xl.bg-white.border {
+        padding: 16px;
+    }
+
+    .payment-mobile-shell #display-grand-total {
+        max-width: 68%;
+        text-align: right;
+    }
+
+    .payment-mobile-shell #form-pembayaran button[type="submit"],
+    .payment-mobile-shell #form-pembayaran button[onclick="simpanSaja()"] {
+        min-height: 48px;
+    }
+}

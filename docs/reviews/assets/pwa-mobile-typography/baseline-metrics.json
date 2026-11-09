@@ -1,0 +1,248 @@
+[
+  {
+    "url": "http://127.0.0.1:8000/kasir/monitoring",
+    "viewport": {
+      "w": 1920,
+      "h": 900
+    },
+    "details": {
+      "open": null,
+      "box": null
+    },
+    "summary": {
+      "box": null
+    },
+    "form": {
+      "box": null
+    },
+    "fields": {
+      "box": null
+    },
+    "actions": {
+      "box": null
+    },
+    "cardBox": null,
+    "fieldWrappers": [],
+    "fieldRows": 0,
+    "input": null,
+    "label": null,
+    "table": {
+      "x": 345,
+      "y": 408,
+      "w": 1518,
+      "h": 121
+    },
+    "tableTopVsCardBottom": null,
+    "docScrollW": 1920,
+    "docClientW": 1920,
+    "bodyText": "Monitoring Kasir\n\nDaftar order yang transaksinya sudah dibuka kasir. Order yang masih menunggu ada di Antrean Baru.\n\nScan Barcode\nAntrean Baru\n2\nOrder Dari\nOrder Sampai\nKonsumen\n-- Semua Konsumen --\nA",
+    "toggleVisible": null,
+    "filterActive": false,
+    "consoleErrors": []
+  },
+  {
+    "url": "http://127.0.0.1:8000/kasir/monitoring",
+    "viewport": {
+      "w": 1440,
+      "h": 900
+    },
+    "details": {
+      "open": null,
+      "box": null
+    },
+    "summary": {
+      "box": null
+    },
+    "form": {
+      "box": null
+    },
+    "fields": {
+      "box": null
+    },
+    "actions": {
+      "box": null
+    },
+    "cardBox": null,
+    "fieldWrappers": [],
+    "fieldRows": 0,
+    "input": null,
+    "label": null,
+    "table": {
+      "x": 345,
+      "y": 460,
+      "w": 1038,
+      "h": 141
+    },
+    "tableTopVsCardBottom": null,
+    "docScrollW": 1440,
+    "docClientW": 1440,
+    "bodyText": "Monitoring Kasir\n\nDaftar order yang transaksinya sudah dibuka kasir. Order yang masih menunggu ada di Antrean Baru.\n\nScan Barcode\nAntrean Baru\n2\nOrder Dari\nOrder Sampai\nKonsumen\n-- Semua Konsumen --\nA",
+    "toggleVisible": null,
+    "filterActive": false,
+    "consoleErrors": []
+  },
+  {
+    "url": "http://127.0.0.1:8000/kasir/monitoring",
+    "viewport": {
+      "w": 1366,
+      "h": 900
+    },
+    "details": {
+      "open": null,
+      "box": null
+    },
+    "summary": {
+      "box": null
+    },
+    "form": {
+      "box": null
+    },
+    "fields": {
+      "box": null
+    },
+    "actions": {
+      "box": null
+    },
+    "cardBox": null,
+    "fieldWrappers": [],
+    "fieldRows": 0,
+    "input": null,
+    "label": null,
+    "table": {
+      "x": 345,
+      "y": 489,
+      "w": 1000,
+      "h": 141
+    },
+    "tableTopVsCardBottom": null,
+    "docScrollW": 1366,
+    "docClientW": 1366,
+    "bodyText": "Monitoring Kasir\n\nDaftar order yang transaksinya sudah dibuka kasir. Order yang masih menunggu ada di Antrean Baru.\n\nScan Barcode\nAntrean Baru\n2\nOrder Dari\nOrder Sampai\nKonsumen\n-- Semua Konsumen --\nA",
+    "toggleVisible": null,
+    "filterActive": false,
+    "consoleErrors": []
+  },
+  {
+    "url": "http://127.0.0.1:8000/kasir/monitoring",
+    "viewport": {
+      "w": 1280,
+      "h": 900
+    },
+    "details": {
+      "open": null,
+      "box": null
+    },
+    "summary": {
+      "box": null
+    },
+    "form": {
+      "box": null
+    },
+    "fields": {
+      "box": null
+    },
+    "actions": {
+      "box": null
+    },
+    "cardBox": null,
+    "fieldWrappers": [],
+    "fieldRows": 0,
+    "input": null,
+    "label": null,
+    "table": {
+      "x": 345,
+      "y": 510,
+      "w": 1000,
+      "h": 141
+    },
+    "tableTopVsCardBottom": null,
+    "docScrollW": 1280,
+    "docClientW": 1280,
+    "bodyText": "Monitoring Kasir\n\nDaftar order yang transaksinya sudah dibuka kasir. Order yang masih menunggu ada di Antrean Baru.\n\nScan Barcode\nAntrean Baru\n2\nOrder Dari\nOrder Sampai\nKonsumen\n-- Semua Konsumen --\nA",
+    "toggleVisible": null,
+    "filterActive": false,
+    "consoleErrors": []
+  },
+  {
+    "url": "http://127.0.0.1:8000/kasir/monitoring",
+    "viewport": {
+      "w": 1024,
+      "h": 900
+    },
+    "details": {
+      "open": null,
+      "box": null
+    },
+    "summary": {
+      "box": null
+    },
+    "form": {
+      "box": null
+    },
+    "fields": {
+      "box": null
+    },
+    "actions": {
+      "box": null
+    },
+    "cardBox": null,
+    "fieldWrappers": [],
+    "fieldRows": 0,
+    "input": null,
+    "label": null,
+    "table": {
+      "x": 345,
+      "y": 510,
+      "w": 1000,
+      "h": 141
+    },
+    "tableTopVsCardBottom": null,
+    "docScrollW": 1024,
+    "docClientW": 1024,
+    "bodyText": "Monitoring Kasir\n\nDaftar order yang transaksinya sudah dibuka kasir. Order yang masih menunggu ada di Antrean Baru.\n\nScan Barcode\nAntrean Baru\n2\nOrder Dari\nOrder Sampai\nKonsumen\n-- Semua Konsumen --\nA",
+    "toggleVisible": null,
+    "filterActive": false,
+    "consoleErrors": []
+  },
+  {
+    "url": "http://127.0.0.1:8000/kasir/monitoring",
+    "viewport": {
+      "w": 768,
+      "h": 900
+    },
+    "details": {
+      "open": null,
+      "box": null
+    },
+    "summary": {
+      "box": null
+    },
+    "form": {
+      "box": null
+    },
+    "fields": {
+      "box": null
+    },
+    "actions": {
+      "box": null
+    },
+    "cardBox": null,
+    "fieldWrappers": [],
+    "fieldRows": 0,
+    "input": null,
+    "label": null,
+    "table": {
+      "x": 49,
+      "y": 510,
+      "w": 1000,
+      "h": 141
+    },
+    "tableTopVsCardBottom": null,
+    "docScrollW": 768,
+    "docClientW": 768,
+    "bodyText": "Monitoring Kasir\n\nDaftar order yang transaksinya sudah dibuka kasir. Order yang masih menunggu ada di Antrean Baru.\n\nScan Barcode\nAntrean Baru\n2\nOrder Dari\nOrder Sampai\nKonsumen\n-- Semua Konsumen --\nA",
+    "toggleVisible": null,
+    "filterActive": false,
+    "consoleErrors": []
+  }
+]

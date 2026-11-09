@@ -1,0 +1,77 @@
+/* Jersey order list and create/edit forms: scoped to mobile. */
+.jersey-mobile-action-label{display:none}
+@media screen and (max-width:767.98px){
+ .jersey-orders-mobile-page{padding:16px 12px calc(130px + env(safe-area-inset-bottom,0px))}
+ .jersey-orders-filter{gap:10px}
+ .jersey-orders-filter>*{min-width:0}
+ .jersey-orders-filter input,.jersey-orders-filter select{width:100%;min-height:44px;font-size:16px}
+ .jersey-orders-mobile-table-shell,.jersey-orders-mobile-table-shell .modern-table-wrapper{width:100%;min-width:0;overflow:visible;border:0;box-shadow:none;background:transparent}
+ .jersey-orders-mobile-table,.jersey-orders-mobile-table tbody{display:block;width:100%;min-width:0}
+ .jersey-orders-mobile-table thead{display:none}
+ .jersey-orders-mobile-table tbody tr.jersey-orders-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"order order" "customer customer" "product product" "status payment" "deadline date" "total total" "actions actions";gap:10px 12px;margin-bottom:10px;padding:13px 12px;border:1px solid var(--brand-surface-border,var(--border-primary));border-radius:14px;background:var(--brand-surface-primary,var(--surface-primary));box-shadow:0 3px 12px rgb(15 23 42 / 4%)}
+ .jersey-orders-mobile-table .jersey-orders-row>td{display:block;min-width:0;width:auto;padding:0;border:0;text-align:left;overflow-wrap:anywhere;white-space:normal;font-size:13px;line-height:1.35}
+ .jersey-orders-mobile-table .jersey-orders-row>td::before{content:attr(data-label);display:block;margin-bottom:3px;color:var(--brand-surface-text_tertiary,var(--text-tertiary));font-size:11px;font-weight:600;line-height:1.3}
+ .jersey-orders-mobile-table .jersey-order-sequence{display:none!important}
+ .jersey-orders-mobile-table .jersey-order-number{grid-area:order;font-size:14px;font-weight:700}
+ .jersey-orders-mobile-table .jersey-order-date{grid-area:date}
+ .jersey-orders-mobile-table .jersey-order-customer{grid-area:customer;font-size:14px}
+ .jersey-orders-mobile-table .jersey-order-product{grid-area:product}
+ .jersey-orders-mobile-table .jersey-order-deadline{grid-area:deadline}
+ .jersey-orders-mobile-table .jersey-order-status{grid-area:status}
+ .jersey-orders-mobile-table .jersey-order-payment{grid-area:payment}
+ .jersey-orders-mobile-table .jersey-order-total{grid-area:total;font-weight:700;font-variant-numeric:tabular-nums}
+ .jersey-orders-mobile-table .jersey-order-action{grid-area:actions;padding-top:9px!important;border-top:1px solid var(--brand-surface-border,var(--border-primary))!important}
+ .jersey-orders-mobile-table .jersey-order-action::before{display:none!important}
+ .jersey-orders-mobile-table .jersey-order-action>*{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;width:auto!important;height:auto!important;padding:0 12px!important}
+ .jersey-orders-mobile-table .jersey-mobile-action-label{display:inline;font-size:12px}
+ .jersey-orders-mobile-table .jersey-orders-empty-row,.jersey-orders-mobile-table .jersey-orders-empty-row>td{display:block;width:100%}
+ /* A single rule set for dynamic create and edit forms: do not change field names or JS templates. */
+ .jersey-mobile-form-page{padding:16px 12px calc(130px + env(safe-area-inset-bottom,0px))}
+ .jersey-mobile-form-page #jersey-order-form,.jersey-mobile-form-page #wrapper-lines{width:100%;min-width:0}
+ .jersey-mobile-form-page .jersey-line-card{border-radius:14px;max-width:100%}
+ .jersey-mobile-form-page .jersey-line-card>div.p-5{padding:12px}
+ .jersey-mobile-form-page .jersey-line-card .overflow-x-auto{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+ .jersey-mobile-form-page .jersey-line-card .overflow-x-auto>table{min-width:700px}
+ .jersey-mobile-form-page .jersey-line-card .baris-pemain td input,.jersey-mobile-form-page .jersey-line-card .baris-pemain td select{min-width:82px;min-height:44px;font-size:14px}
+ .jersey-mobile-form-page .jersey-line-card .baris-pemain td:first-child input{min-width:140px}
+ .jersey-mobile-form-page #preview-total-order{font-size:22px;font-variant-numeric:tabular-nums}
+ .jersey-mobile-form-page #jersey-order-form button[type="submit"]{min-height:48px}
+}
+
+/* Polish tambahan visual form jersey (mobile) - tanpa mengubah fungsi/field. */
+@media screen and (max-width:767.98px){
+ .jersey-mobile-form-page .line-type-option{min-height:44px;padding:10px 8px;font-size:13px;line-height:1.2}
+ .jersey-mobile-form-page .line-type-option input[type="radio"]{top:8px;right:8px}
+ .jersey-mobile-form-page .line-price-preview{padding:12px}
+ .jersey-mobile-form-page .line-price-preview-list li{padding:6px 0;gap:8px}
+ .jersey-mobile-form-page .jersey-line-card textarea{min-height:60px}
+ .jersey-mobile-form-page .jersey-line-card .thumbnail-dropzone{width:56px;height:56px}
+ .jersey-mobile-form-page .jersey-line-card .overflow-x-auto>table{min-width:640px}
+ .jersey-mobile-form-page .input-qty-ukuran{min-height:44px;font-size:14px}
+ .jersey-mobile-form-page .grup-ukuran label{white-space:normal;word-break:break-word}
+ .jersey-mobile-form-page .baris-pemain td select{min-width:72px;min-height:44px;font-size:14px}
+}
+@media screen and (max-width:767.98px){
+ .jersey-mobile-finance-page{padding:16px 12px calc(130px + env(safe-area-inset-bottom,0px))}
+ .jersey-mobile-finance-page .text-2xl{overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+ .jersey-finance-mobile-table-shell,.jersey-finance-mobile-table-shell .modern-table-wrapper{width:100%;min-width:0;overflow:visible;border:0;box-shadow:none;background:transparent}
+ .jersey-finance-mobile-table,.jersey-finance-mobile-table tbody{display:block;min-width:0;width:100%}
+ .jersey-finance-mobile-table thead{display:none}
+ .jersey-finance-mobile-table tbody tr.jersey-finance-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"order order" "customer customer" "remain remain" "total paid" "status deadline" "date date" "action action";gap:10px 12px;margin-bottom:10px;padding:13px 12px;border:1px solid var(--brand-surface-border,var(--border-primary));border-radius:14px;background:var(--brand-surface-primary,var(--surface-primary));box-shadow:0 3px 12px rgb(15 23 42 / 4%)}
+ .jersey-finance-mobile-table .jersey-finance-row>td{display:block;min-width:0;width:auto;padding:0;border:0;text-align:left;overflow-wrap:anywhere;white-space:normal;font-size:13px;line-height:1.35}
+ .jersey-finance-mobile-table .jersey-finance-row>td::before{content:attr(data-label);display:block;margin-bottom:3px;color:var(--brand-surface-text_tertiary,var(--text-tertiary));font-size:11px;font-weight:600}
+ .jersey-finance-mobile-table .jersey-finance-sequence{display:none!important}
+ .jersey-finance-mobile-table .jersey-finance-order{grid-area:order;font-size:14px;font-weight:700}
+ .jersey-finance-mobile-table .jersey-finance-date{grid-area:date}
+ .jersey-finance-mobile-table .jersey-finance-customer{grid-area:customer}
+ .jersey-finance-mobile-table .jersey-finance-total{grid-area:total;font-variant-numeric:tabular-nums}
+ .jersey-finance-mobile-table .jersey-finance-paid{grid-area:paid;font-variant-numeric:tabular-nums}
+ .jersey-finance-mobile-table .jersey-finance-remain{grid-area:remain;font-weight:700;font-variant-numeric:tabular-nums}
+ .jersey-finance-mobile-table .jersey-finance-deadline{grid-area:deadline}
+ .jersey-finance-mobile-table .jersey-finance-status{grid-area:status}
+ .jersey-finance-mobile-table .jersey-finance-action{grid-area:action;padding-top:9px!important;border-top:1px solid var(--brand-surface-border,var(--border-primary))!important}
+ .jersey-finance-mobile-table .jersey-finance-action::before{display:none!important}
+ .jersey-finance-mobile-table .jersey-finance-action>*{display:inline-flex;gap:6px;align-items:center;justify-content:center;min-height:44px;width:auto!important;height:auto!important;padding:0 12px!important}
+ .jersey-finance-mobile-table .jersey-mobile-action-label{display:inline;font-size:12px}
+ .jersey-finance-mobile-table .jersey-finance-empty-row,.jersey-finance-mobile-table .jersey-finance-empty-row td{display:block;width:100%}
+}

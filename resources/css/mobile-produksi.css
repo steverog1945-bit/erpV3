@@ -1,0 +1,268 @@
+/* ==========================================================================
+   MOBILE-04 Fase 4 - PRODUKSI: WORK QUEUE MOBILE
+   Kartu pekerjaan ringkas di bawah 768px, mengikuti pola SPK.
+   Semua aturan hanya berlaku di @media (max-width: 767.98px).
+   Desktop >=768px: tetap tabel asli (0 perubahan).
+   ========================================================================== */
+
+.produksi-mobile-icon,
+.produksi-mobile-action-label {
+    display: none;
+}
+
+@media screen and (max-width: 767.98px) {
+    .produksi-page {
+        padding: 16px 12px 24px;
+    }
+
+    .produksi-filter-card {
+        margin-bottom: 12px;
+        border-color: var(--brand-surface-border, var(--border-primary));
+        border-radius: 16px;
+        background: var(--brand-surface-primary, var(--surface-primary));
+    }
+
+    .produksi-filter-card > div {
+        padding: 12px;
+    }
+
+    .produksi-filter-form {
+        align-items: end;
+        gap: 10px;
+    }
+
+    .produksi-filter-search {
+        flex: 1 0 100%;
+        min-width: 0;
+    }
+
+    .produksi-filter-search > label,
+    .produksi-filter-id > label,
+    .produksi-filter-date > label,
+    .produksi-filter-status > label {
+        margin: 0 0 5px 2px;
+        color: var(--brand-surface-text_tertiary, var(--text-tertiary));
+        font-size: 12px;
+        letter-spacing: 0.04em;
+    }
+
+    .content-wrapper .produksi-page .produksi-filter-search input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    .content-wrapper .produksi-page .produksi-filter-id input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    .content-wrapper .produksi-page .produksi-filter-date input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    .content-wrapper .produksi-page .produksi-filter-status select {
+        min-height: 44px;
+        padding: 10px 12px;
+        border: 1px solid var(--brand-surface-border, var(--border-primary));
+        border-radius: 12px;
+        background: var(--brand-surface-primary, var(--surface-primary));
+        color: var(--brand-surface-text, var(--text-primary));
+        font-size: 14px;
+        box-shadow: none;
+    }
+
+    .produksi-filter-id {
+        flex: 1 1 calc(33% - 7px);
+        min-width: 0;
+    }
+
+    .produksi-filter-date {
+        flex: 1 1 calc(50% - 5px);
+        min-width: 0;
+    }
+
+    .produksi-filter-status {
+        flex: 1 1 100%;
+        min-width: 0;
+    }
+
+    .produksi-workqueue-shell,
+    .produksi-workqueue-shell .modern-table-wrapper {
+        width: 100%;
+        min-width: 0;
+        overflow: visible;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .produksi-workqueue-table,
+    .produksi-workqueue-table.modern-table {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        background: transparent;
+        border: 0;
+    }
+
+    .produksi-workqueue-table thead,
+    .produksi-workqueue-table tbody {
+        display: block;
+        width: 100%;
+    }
+
+    .produksi-workqueue-table thead {
+        margin-bottom: 8px;
+        padding: 10px 12px;
+        border: 1px solid var(--brand-surface-border, var(--border-primary));
+        border-radius: 14px;
+        background: var(--brand-surface-secondary, var(--surface-secondary));
+    }
+
+    .produksi-workqueue-table thead tr {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .produksi-workqueue-table thead th:not(:first-child) {
+        display: none;
+    }
+
+    .produksi-workqueue-table thead th:first-child {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: auto;
+        padding: 0;
+        color: var(--brand-surface-text_secondary, var(--text-secondary));
+        font-size: 12px;
+    }
+
+    /* Kolom pertama tabel Produksi sekarang nomor urut (#), bukan checkbox
+       "Pilih semua" seperti SPK - label usang itu jangan ditampilkan lagi. */
+    .produksi-workqueue-table thead th:first-child::after {
+        content: none;
+    }
+
+    .produksi-workqueue-table thead th:first-child input,
+    .produksi-workqueue-table tbody td:first-child input {
+        width: 18px;
+        height: 18px;
+    }
+
+    .produksi-workqueue-table tbody tr:not(.produksi-empty-row) {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-areas:
+            "identity identity"
+            "consumer consumer"
+            "date urgent"
+            "qtyorder qtycetak"
+            "status status"
+            "actions actions";
+        gap: 10px 12px;
+        width: 100%;
+        margin: 0 0 10px;
+        padding: 14px 12px 12px;
+        border: 1px solid var(--brand-surface-border, var(--border-primary));
+        border-radius: 16px;
+        background: var(--brand-surface-primary, var(--surface-primary));
+        box-shadow: 0 4px 14px rgb(15 23 42 / 5%);
+    }
+
+    html.dark .produksi-workqueue-table tbody tr:not(.produksi-empty-row) {
+        box-shadow: 0 4px 16px rgb(0 0 0 / 16%);
+    }
+
+    .produksi-workqueue-table tbody td {
+        display: block;
+        width: auto;
+        min-width: 0;
+        padding: 0;
+        border: 0;
+        color: var(--brand-surface-text, var(--text-primary));
+        text-align: left;
+        font-size: 13px;
+        line-height: 1.35;
+        overflow-wrap: anywhere;
+    }
+
+    .produksi-workqueue-table tbody td::before {
+        display: block;
+        margin-bottom: 3px;
+        color: var(--brand-surface-text_tertiary, var(--text-tertiary));
+        content: attr(data-label);
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        line-height: 1.2;
+        text-transform: uppercase;
+    }
+
+    .produksi-workqueue-table tbody td:nth-child(1) {
+        display: none;
+    }
+
+    /* Pemetaan 9 kolom Produksi (tanpa kolom checkbox): 1=# (disembunyikan),
+       2=Nama File(identity), 3=Konsumen, 4=Tanggal, 5=Urgent, 6=Qty Order,
+       7=Qty Cetak, 8=Status, 9=Aksi. Versi sebelumnya digeser satu kolom
+       (ditulis saat baris masih punya checkbox) sehingga sel Aksi jatuh ke
+       area Status dan ikon aksi menumpuk tak karuan. */
+    .produksi-workqueue-table tbody td:nth-child(2) { grid-area: identity; padding-right: 34px; }
+    .produksi-workqueue-table tbody td:nth-child(3) { grid-area: consumer; }
+    .produksi-workqueue-table tbody td:nth-child(4) { grid-area: date; }
+    .produksi-workqueue-table tbody td:nth-child(5) { grid-area: urgent; }
+    .produksi-workqueue-table tbody td:nth-child(6) { grid-area: qtyorder; }
+    .produksi-workqueue-table tbody td:nth-child(7) { grid-area: qtycetak; }
+    .produksi-workqueue-table tbody td:nth-child(8) { grid-area: status; }
+    .produksi-workqueue-table tbody td:nth-child(9) { grid-area: actions; }
+
+    .produksi-workqueue-table .produksi-work-name {
+        padding-right: 2px;
+        color: var(--brand-surface-text, var(--text-primary));
+        font-size: 14px;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+    }
+
+    .produksi-workqueue-table .produksi-work-number,
+    .produksi-workqueue-table .produksi-division {
+        margin-top: 4px;
+        color: var(--brand-surface-text_tertiary, var(--text-tertiary));
+        font-size: 12px;
+        line-height: 1.3;
+    }
+
+    .produksi-row-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 6px;
+        padding-top: 8px;
+        border-top: 1px solid var(--brand-surface-border, var(--border-primary));
+    }
+
+    .produksi-row-actions > * {
+        display: inline-flex;
+        min-height: 44px;
+        min-width: 44px;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        width: auto !important;
+        height: auto !important;
+        padding: 0 9px !important;
+        border-radius: 10px !important;
+        font-size: 12px;
+        line-height: 1.2;
+        text-decoration: none;
+    }
+
+    .produksi-workqueue-table .produksi-empty-row {
+        display: block;
+        width: 100%;
+        border-radius: 14px;
+        background: var(--brand-surface-primary, var(--surface-primary));
+    }
+
+    .produksi-workqueue-table .produksi-empty-row td {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 359.98px) {
+    .produksi-page .produksi-filter-id {
+        flex-basis: 100%;
+    }
+}

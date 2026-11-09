@@ -1,0 +1,1293 @@
+/* ==========================================================================
+   UI REFRESH - OpenCode Desktop Aesthetic
+   ==========================================================================
+   Standardisasi global:
+   - Radius: 4px (chip/badge), 6px (button/input), 8px (card/table/modal)
+   - Search icon: left-3, padding pl-10
+   - Form: border 1px solid, tanpa shadow-inner
+   - Semua elemen konsisten tanpa kecuali
+
+   RESTORE: hapus @import file ini dari app.css
+   ========================================================================== */
+
+:root {
+    /* Bobot teks. OpenCode hanya punya dua: 400 dan 500. Tidak ada
+       semibold, bold, atau black di range itu, dan itulah alasan teksnya
+       di sana terasa ringan. Nilai ini di sini supaya elemen yang
+       tidak punya kelas utility eksplisit - <th> polos, <b> di dalam
+       tabel harga, <strong> di teks - ikut dapat bobot yang benar.
+
+       Kenapa perlu: <th> tanpa kelas font-* sama sekali tidak
+       mewarisi apa pun, jadi browser memberinya 700.stormsari <b> dan
+       <strong> bawa 700 dari stylesheet bawaan. Keduanya muncul di
+       banyak tabel tanpa disadari - tabel harga finishing dan master
+       ukuran jersey semua kolomnya 700 tanpa satu pun kelas yang
+       menyebutnya. */
+    --bobot-teks: 400;
+    --bobot-teks-tegas: 500;
+
+    /* Token gerak */
+    --ui-ease: cubic-bezier(0.23, 1, 0.32, 1);
+    --ui-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+    --ui-fast: 140ms;
+    --ui-med: 220ms;
+
+    /* Token warna - Light mode */
+    --surface-primary: var(--brand-surface-primary, #ffffff);
+    --surface-secondary: var(--brand-surface-secondary, #FAFBF9);
+    --surface-tertiary: var(--brand-surface-tertiary, #F1F5F1);
+    --border-primary: var(--brand-surface-border, #E2EAE4);
+    --border-secondary: var(--brand-surface-border_strong, #C9D6CE);
+    --text-primary: var(--brand-surface-text, #1A231F);
+    --text-secondary: var(--brand-surface-text_secondary, #3F4F47);
+    --text-tertiary: var(--brand-surface-text_tertiary, #5F7167);
+    /* Ikon dekoratif (search, panah, dsb) adalah "non-text content":
+       WCAG 1.4.11 menuntut minimal 3:1 terhadap latar, bukan 4.5:1.
+       text-slate-400 (#5F7167) hanya 2.56:1 di atas putih sehingga GAGAL,
+       makanya dipakai warna tersendiri yang sudah dihitung. */
+    --icon-muted: #76869f;
+    --accent-primary: var(--brand-accent-light, #006C7B);
+    --accent-hover: var(--brand-accent-hover-light, #005663);
+    --accent-light: var(--brand-accent-surface-light, #EAF6F7);
+
+    /* Token warna - Dark mode */
+    
+    
+    --dark-surface-primary: var(--brand-surface-dark_primary, #1A231F);
+    --dark-surface-secondary: var(--brand-surface-dark_secondary, #2A3731);
+    --dark-surface-tertiary: var(--brand-surface-dark_tertiary, #3F4F47);
+    --dark-border-primary: var(--brand-surface-dark_border, #3F4F47);
+    
+    --dark-text-primary: var(--brand-surface-dark_text, #F1F5F1);
+    --dark-text-secondary: var(--brand-surface-dark_text_secondary, #C9D6CE);
+    /* Disamakan dengan --text-tertiary mode gelap di app.css (#5F7167).
+       Nilai lama #4A5B53 hanya 3.75:1 di atas #1A231F, gagal untuk teks
+       kecil. Dua sistem token harus mengantar angka yang sama; kalau
+       tidak, perbaikan di satu tempat akan dibatalkan di tempat lain. */
+    --dark-text-tertiary: var(--brand-surface-dark_text_tertiary, #9DB8AD);
+    --dark-icon-muted: #71867A;
+    --dark-accent-primary: var(--brand-accent-dark, #5FC4D4);
+    --dark-accent-hover: var(--brand-dark-accent-hover, #05818F);
+    --dark-accent-light: var(--brand-accent-surface-dark, #02363E);
+
+    /* Token radius - KONSISTEN */
+    --radius-sm: 4px;   /* chip, badge */
+    --radius-md: 6px;   /* button, input */
+    --radius-lg: 8px;   /* card, table, modal */
+
+    /* Token spacing */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 12px;
+    --space-lg: 16px;
+    --space-xl: 24px;
+    --space-2xl: 32px;
+}
+
+/* ==========================================================================
+   1. SIDEBAR - Clean, solid, no gradient
+   ========================================================================== */
+aside {
+    background: var(--brand-sidebar-base, var(--or-8));
+    border-right: 1px solid var(--brand-sidebar-deep, var(--or-9));
+    box-shadow: none;
+    transition: width var(--ui-med) var(--ui-ease);
+}
+
+/* Sidebar gelap di kedua mode, jadi mode terang tidak boleh menimpanya
+   kembali ke surface terang. */
+html:not(.dark) aside {
+    background: var(--brand-sidebar-base, var(--or-8));
+    border-right-color: var(--brand-sidebar-deep, var(--or-9));
+}
+
+html.dark aside {
+    background: var(--brand-sidebar-deep, var(--dark-surface-primary));
+    border-right-color: var(--brand-sidebar-border, var(--dark-border-primary));
+}
+
+/* Menu items.
+   Sidebar sekarang selalu gelap, jadi aturan di sini memakai token or-* secara
+   langsung, bukan --text-secondary/--accent-light yang ikut berubah saat tema
+   aplikasi berganti. Kalau ikut, hover di mode terang akan menyalakan
+   background putih di atas sidebar gelap. */
+aside nav > a {
+    border-radius: var(--radius-md);
+    color: var(--brand-sidebar-text, var(--or-teks));
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 12px;
+    transition: background-color var(--ui-fast) var(--ui-ease),
+                color var(--ui-fast) var(--ui-ease);
+}
+
+aside nav > a:hover:not(.sb-active) {
+    background: rgb(255 255 255 / 0.06);
+    color: var(--brand-sidebar-title, var(--or-judul));
+}
+
+aside nav > a.sb-active {
+    background: rgb(255 255 255 / 0.12);
+    color: var(--brand-sidebar-title, var(--or-judul));
+    font-weight: 500;
+}
+
+aside nav > a.sb-active svg,
+aside nav > a.sb-active i {
+    color: var(--or-aksen);
+}
+
+/* Kepala grup di sidebar (Produksi & Logistik, Relasi Bisnis, dst).
+   Tanpa huruf besar dan tanpa tracking: OpenCode tidak memakai
+   text-transform untuk teks UI dan letter-spacing-nya 0. Hierarki di
+   sini tetap terbaca karena posisinya - grup jelas dari indentasinya
+   dan dari anak-anaknya, bukan dari bentuk hurufnya.
+
+   Ukuran 13px, sama dengan menu item di bawahnya. Sebelumnya 11px -
+   dan itu masalah nyata: label grup adalah satu-satunya teks di sidebar
+   yang harus dibaca dari jarak jauh (kasir berdiri di depan mesin, bukan
+   duduk di depan monitor), justru yang paling kecil.
+
+   Hover-nya memakai latar abu-abu membulat yang SAMA dengan menu item
+   (lihat aside nav > a:hover di bawah). Sebelumnya hover hanya mengubah
+   warna teks - tidak ada pembeda bentuk, jadi tidak terlihat dari jarak.
+   Dengan latar yang sama, keduanya terasa seperti satu sistem. */
+aside .menu-group-toggle {
+    color: var(--brand-sidebar-muted, var(--or-teks-lembut));
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0;
+    padding: 8px 12px;
+    text-transform: none;
+    transition: color var(--ui-fast) var(--ui-ease),
+                background-color var(--ui-fast) var(--ui-ease);
+}
+
+aside .menu-group-toggle:hover {
+    background: rgb(255 255 255 / 0.06);
+    color: var(--brand-sidebar-title, var(--or-judul));
+}
+
+/* Sidebar brand */
+aside #sidebarBrandHeader {
+    border-bottom-color: rgb(255 255 255 / 0.10);
+}
+
+/* Sidebar scrollbar */
+aside nav::-webkit-scrollbar {
+    width: 4px;
+}
+
+aside nav::-webkit-scrollbar-thumb {
+    background: rgb(255 255 255 / 0.18);
+    border-radius: 2px;
+}
+
+/* ==========================================================================
+   2. TOPBAR - Floating, clean, no blur
+   ========================================================================== */
+.topbar {
+    background: var(--surface-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    margin: 12px 16px;
+    padding: 12px 20px;
+    top: 0;
+    transition: background var(--ui-med) var(--ui-ease),
+                border-color var(--ui-med) var(--ui-ease);
+}
+
+html.dark .topbar {
+    background: var(--dark-surface-primary);
+    border-color: var(--dark-border-primary);
+}
+
+/* ==========================================================================
+   3. CARD - Grounded, no excessive shadow
+   ========================================================================== */
+.card {
+    background: var(--surface-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: none;
+    padding: 20px;
+    transition: border-color var(--ui-fast) var(--ui-ease);
+}
+
+html.dark .card {
+    background: var(--dark-surface-primary);
+    border-color: var(--dark-border-primary);
+}
+
+/* ==========================================================================
+   4. TABLE - Readable, compact, no zebra
+   ========================================================================== */
+.modern-table-wrapper {
+    background: var(--surface-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: none;
+}
+
+html.dark .modern-table-wrapper {
+    background: var(--dark-surface-primary);
+    border-color: var(--dark-border-primary);
+}
+
+/* Kepala tabel.
+
+   ATURAN INI YANG MENANG, bukan yang di app.css. app.css punya
+   .modern-table th dengan isi yang sama, tapi specificity-nya lebih
+   rendah (tanpa "thead"), dan ui-refresh.css diimpor lebih dulu -
+   jadi perubahan harus dibuat DI SINI. Duplikasi itulah yang dulu
+   membuat bobot 600 bertahan meski kedua berkas sudah ditulis 500.
+   Kalau nanti app.css dihapus duplikatnya, hapus catatan ini juga.
+
+   Tanpa huruf besar dan tanpa letter-spacing: OpenCode tidak memakai
+   text-transform untuk teks UI dan spacing-nya 0. "NAMA AKUN" dengan
+   jarak antar huruf harus dibaca huruf demi huruf; "Nama Akun" dibaca
+   sebagai satu kata - lebih cepat, bukan lebih lambat. */
+.modern-table thead th {
+    background: var(--surface-secondary);
+    border-bottom: 1px solid var(--border-primary);
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0;
+    padding: 10px 16px;
+    text-transform: none;
+}
+
+html.dark .modern-table thead th {
+    background: var(--dark-surface-secondary);
+    border-bottom-color: var(--dark-border-primary);
+    color: var(--dark-text-secondary);
+}
+
+.modern-table tbody td {
+    border-bottom: 1px solid var(--border-primary);
+    color: var(--text-primary);
+    font-size: 13px;
+    padding: 10px 16px;
+}
+
+html.dark .modern-table tbody td {
+    border-bottom-color: var(--dark-border-primary);
+    color: var(--dark-text-primary);
+}
+
+.modern-table tbody tr:hover td {
+    background: var(--surface-secondary);
+}
+
+html.dark .modern-table tbody tr:hover td {
+    background: var(--dark-surface-secondary);
+}
+
+.modern-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ==========================================================================
+   5. BUTTON - Consistent, responsive
+   ========================================================================== */
+button, .btn {
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 500;
+    transition: transform var(--ui-fast) var(--ui-ease),
+                background-color var(--ui-fast) var(--ui-ease),
+                border-color var(--ui-fast) var(--ui-ease);
+}
+
+button:active, .btn:active {
+    transform: scale(0.97);
+}
+
+/* ==========================================================================
+   6. FOCUS RING - Visible, consistent
+   ========================================================================== */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+}
+
+html.dark a:focus-visible,
+html.dark button:focus-visible,
+html.dark input:focus-visible,
+html.dark select:focus-visible,
+html.dark textarea:focus-visible,
+html.dark [tabindex]:focus-visible {
+    outline-color: var(--dark-accent-primary);
+}
+
+/* ==========================================================================
+   7. MODAL - Clean, no excessive blur
+   ========================================================================== */
+[data-modal-root] > div.relative,
+[data-modal-root] > div:not(.absolute) {
+    background: var(--surface-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+html.dark [data-modal-root] > div.relative,
+html.dark [data-modal-root] > div:not(.absolute) {
+    background: var(--dark-surface-primary);
+    border-color: var(--dark-border-primary);
+}
+
+/* ==========================================================================
+   8. FORM ELEMENTS - Consistent
+   ========================================================================== */
+input:not([type=checkbox]):not([type=radio]):not([type=range]),
+textarea,
+select {
+    background: var(--surface-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 13px;
+    padding: 8px 12px;
+    transition: border-color var(--ui-fast) var(--ui-ease),
+                box-shadow var(--ui-fast) var(--ui-ease);
+}
+
+html.dark input:not([type=checkbox]):not([type=radio]):not([type=range]),
+html.dark textarea,
+html.dark select {
+    background: var(--dark-surface-secondary);
+    border-color: var(--dark-border-primary);
+    color: var(--dark-text-primary);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px var(--accent-light);
+    outline: none;
+}
+
+html.dark input:focus,
+html.dark textarea:focus,
+html.dark select:focus {
+    border-color: var(--dark-accent-primary);
+    box-shadow: 0 0 0 3px var(--dark-accent-light);
+}
+
+/* ==========================================================================
+   9. CHIP/BADGE - Compact, readable
+   ========================================================================== */
+.chip {
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 4px 10px;
+}
+
+/* ==========================================================================
+   9b. BOBOT TEKS DASAR
+
+   Elemen yang tidak punya kelas utility font-* tidak mewarisi bobot
+   apa pun dari orang tuanya, jadi browser memberinya nilai bawaan:
+   <th> menjadi 700, dan <b>/<strong> juga 700 dari stylesheet
+   bawaan. Akibatnya ada tabel yang seluruh kolomnya tebal tanpa satu
+   pun kelas yang menyebutnya - tabel harga finishing, tabel ukuran
+   jersey, tabel dashboard. Sekali class utility dibersihkan, tempat-
+   tempat itu justru masih tebal karena sumbernya elemen, bukan kelas.
+
+   Jadi bobotnya dikunci di sini, sekali, untuk elemen yang tidak
+   menentukan sendiri. Yang TIDAK disentuh: .prose-post dan
+   .ql-editor (isi artikel - bukan UI), serta apa pun yang sudah
+   menulis font-weight sendiri secara eksplisit.
+   ========================================================================== */
+th {
+    font-weight: var(--bobot-teks-tegas);
+}
+
+b,
+strong {
+    font-weight: var(--bobot-teks-tegas);
+}
+
+/* ==========================================================================
+   10. SCROLLBAR - Subtle
+   ========================================================================== */::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-secondary);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-tertiary);
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+    background: var(--dark-border-secondary);
+}
+
+/* ==========================================================================
+   11. EMPTY STATE - Readable
+   ========================================================================== */
+.empty-state {
+    color: var(--text-tertiary);
+    font-size: 13px;
+    padding: 40px;
+}
+
+/* ==========================================================================
+   12. ANIMASI
+   ==========================================================================
+   Animasi modal TIDAK lagi memakai @keyframes di sini. Dulu ada
+   `modal-enter` di blok ini, sementara blok 21 juga mendefinisikan
+   animasi berbasis transition untuk panel yang sama. Dua sistem itu
+   menggerakkan properti transform yang sama, dan keyframe menang -
+   akibatnya panel bisa tertahan di scale(0.98) translateY(8px) dan
+   tidak pernah sampai ke posisi akhir.
+
+   Keyframes juga tidak bisa diinterupsi: kalau modal ditutup di tengah
+   animasi, gerakan yang sama terulang dari awal. Transition bisa
+   di-retarget, jadi untuk UI yang bisa dibatalkan midstroke,
+   transition adalah pilihan yang benar. Definisi animasinya ada di
+   blok 21. */
+
+/* ==========================================================================
+   13. REDUCED MOTION - Respect user preference
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ==========================================================================
+   14. PRINT - Clean paper
+   ========================================================================== */
+@media print {
+    aside,
+    .topbar {
+        display: none !important;
+    }
+
+    .card,
+    .modern-table-wrapper {
+        background: #fff !important;
+        border: 1px solid #E2EAE4 !important;
+        box-shadow: none !important;
+    }
+
+    .modern-table thead th {
+        background: #fff !important;
+        border-bottom: 1.5px solid #1A231F !important;
+        color: #1A231F !important;
+    }
+
+    .modern-table tbody td {
+        color: #1A231F !important;
+    }
+}
+
+/* ==========================================================================
+   15. SEARCH ICON + SEARCH INPUT - Centered, consistent
+   ========================================================================== */
+/* PENTING: posisi ikon TIDAK dipaksa lewat CSS.
+   tiap halaman sudah memakai pola Tailwind yang benar, yaitu
+   `absolute left-3 top-1/2 -translate-y-1/2` di dalam pembungkus
+   `.relative` yang hanya memuat satu input. Pola itu menengahkan ikon
+   dengan benar karena top-50% + translate(-50%) selalu tepat terhadap
+   tinggi induknya.
+
+   Pernah aturan ini memaksa `left: 12px; top: 0; bottom: 0;
+   margin-block: auto; transform: none` ke SEMUA ikon absolut. Itu
+   merusak halaman: (a) ikon yang memang sengaja di sisi kanan ikut
+   tergeser ke kiri, (b) `transform: none` menabrak transform milik
+   Tailwind, (c) pembungkus `.relative` yang isinya lebih dari satu
+   elemen membuat ikon menengak di kotak yang salah. Karena itu tidak
+   ada lagi posisi ikon yang dipaksa dari sini. */
+
+/* Padding horizontal dari utilitas Tailwind harus SELALU menang atas
+   aturan dasar input di atas.
+
+   Aturan dasar itu memakai shorthand `padding: 8px 12px`, yang
+   spesifisitasnya lebih tinggi dari utilitas `pl-*` milik Tailwind.
+   Akibatnya SETIAP `pl-*` dan `pr-*` kecil di markup jadi tidak
+   berlaku, bukan hanya yang besar. Contoh: input harga bertingkat
+   punya awalan "Rp" yang diposisikan absolut di left 10px dan berakhir
+   di 23px, sementara teksnya mulai di 12px - tumpang tindih 11px,
+   persis yang dilaporkan.
+
+   Dua kelompok, dibedakan maknanya:
+
+     pl-5 s/d pl-8, pr-2, pr-4  -> nilai aslinya dipulihkan. Awalan
+       kecil (mis. "Rp") atau sekadar ruang bernapas; pemanggilnya
+       sudah menghitung lebar yang pas.
+
+     pl-9 s/d pl-14, pr-9 s/d pr-14 -> dinormalkan ke 40px. Angka-angka
+       ini dipakai HANYA ketika ada ikon 16px di dalam input, dan teksnya
+       selalu dimulai di 40px supaya seragam antar halaman. Nilai
+       aslinya berbeda-beda (36px sampai 56px) sehingga jaraknya tidak
+       konsisten kalau dipakai apa adanya. */
+input[class*="pl-5"] { padding-left: 20px !important; }
+input[class*="pl-6"] { padding-left: 24px !important; }
+input[class*="pl-7"] { padding-left: 28px !important; }
+input[class*="pl-8"] { padding-left: 32px !important; }
+input[class*="pr-2"] { padding-right: 8px !important; }
+input[class*="pr-4"] { padding-right: 16px !important; }
+
+input[class*="pl-9"],
+input[class*="pl-10"],
+input[class*="pl-11"],
+input[class*="pl-12"],
+input[class*="pl-14"] {
+    padding-left: 40px !important;
+}
+
+/* Pengecualian: field Uang Diterima di form pembayaran.
+   Dua alasan, keduanya dibuktikan di browser:
+
+   1. Padding. Awalan "Rp" berakhir di 43px, sedangkan padding 40px dari
+      aturan di atas membuat teks angka mulai di 40px - keduanya bertumpuk
+      3px dan saling tindih.
+
+   2. Ukuran. Tiga aturan global di file ini meratakan semua input:
+      font-size 13px, height 38px, dan border-radius !important. Akibatnya
+      kelas h-14, text-xl, dan rounded-2xl pada field ini tidak berlaku -
+      hasilnya 38px, 13px, dan radius 6px: kotak kecil dengan huruf kecil,
+      padahal ini field yang paling penting di layar dan berada persis di
+      bawah Grand Total 30px. Hierarki visualnya terbalik.
+
+   Field ini adalah titik fokus layar pembayaran, jadi wajarUkurannya lebih
+   besar dari input biasa: 26px dan tinggi 64px - sedikit di bawah Grand
+   Total 30px supaya urutan bacanya tetap benar (fakta di atas,
+   tindakan di bawah). Warna aksen hanya saat fokus, tidak menyala terus.
+
+   Semua aturan di sini memakai id, jadi specificity-nya menang atas selector
+   atribut dan tag di atas tanpa menyentuh satu pun halaman lain. */
+input#input-bayar-mask {
+    height: 64px !important;
+    font-size: 26px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
+    border-radius: 12px !important;
+    padding-left: 48px !important;
+    padding-right: 20px !important;
+    border-width: 2px !important;
+    border-color: #E2EAE4 !important;
+    background: #FFFFFF !important;
+    color: #2A3731 !important;
+    transition: border-color .16s ease, box-shadow .16s ease, background-color .16s ease;
+}
+
+input#input-bayar-mask::placeholder {
+    color: #9DB8AD !important;
+}
+
+input#input-bayar-mask:focus {
+    border-color: #006C7B !important;
+    background: #FFFFFF !important;
+    box-shadow: 0 0 0 4px rgb(0 108 123 / 0.12) !important;
+    outline: none !important;
+}
+
+/* Awalan "Rp" ikut membesar agar proporsinya masih menempel dengan angka. */
+#prefix-uang-diterima {
+    font-size: 19px !important;
+    font-weight: 500 !important;
+    color: #55685F !important;
+}
+
+input#input-bayar-mask:focus ~ #prefix-uang-diterima,
+#prefix-uang-diterima:focus-within {
+    color: #006C7B !important;
+}
+
+input[class*="pr-9"],
+input[class*="pr-10"],
+input[class*="pr-11"],
+input[class*="pr-12"],
+input[class*="pr-14"] {
+    padding-right: 40px !important;
+}
+
+/* Warna ikon search diseragamkan. Halaman memakai campur warna
+   slate-300 (1.48:1) dan slate-400 (2.56:1) di atas putih, keduanya
+   gagal standar 3:1 untuk non-text content, sehingga ikonsearch
+   nyaris tak terlihat. Token --icon-muted sudah dihitung 3.70:1. */
+[class*="fa-search"][class*="absolute"] {
+    color: var(--icon-muted) !important;
+}
+
+html.dark [class*="fa-search"][class*="absolute"] {
+    color: var(--dark-icon-muted) !important;
+}
+
+/* Aksen saat hover tetap dipertahankan: sebagian halaman memakai
+   group-hover:text-indigo-500 pada ikonnya. Rule ini menimpa warna
+   dasar hanya ketika induk .group benar-benar di-hover. */
+.group:hover [class*="fa-search"][class*="absolute"] {
+    color: var(--accent-primary) !important;
+}
+
+html.dark .group:hover [class*="fa-search"][class*="absolute"] {
+    color: var(--dark-accent-primary) !important;
+}
+
+/* Isian satu baris dikunci tingginya supaya ikon, teks, dan select di
+   sebelahnya satu sama lain benar-benar sejajar. `height` (bukan
+   min-height) dipilih supaya semua isian benar-benar sama tinggi;
+   field yang memang lebih tinggi (min-h-[...] di markup) tetap aman
+   karena min-height menang atas height. */
+input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]),
+select:not([multiple]):not([size]) {
+    height: 38px;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--text-tertiary);
+    opacity: 1;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+    color: var(--dark-text-tertiary);
+}
+
+/* Fokus diseragamkan untuk SEMUA isian. Sebagian halaman memakai
+   `focus:ring-2 focus:ring-indigo-500/20` dan sebagian lain tidak
+   memakai apa-apa, sehingga kotak yang sama terlihat berbeda fokusnya.
+   Satu aturan di sini membuat seluruh isian dalam aplikasi ini sama. */
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 0 3px var(--accent-light) !important;
+    outline: none !important;
+}
+
+html.dark input:focus,
+html.dark textarea:focus,
+html.dark select:focus {
+    border-color: var(--dark-accent-primary) !important;
+    box-shadow: 0 0 0 3px var(--dark-accent-light) !important;
+}
+
+/* ==========================================================================
+   16. BADGE - Consistent radius
+   ========================================================================== */
+.badge,
+[class*="badge-"] {
+    border-radius: var(--radius-sm) !important;
+}
+
+/* ==========================================================================
+   17. RADIUS GLOBAL - oversized radii dinormalkan ke --radius-lg
+   ========================================================================== */
+/* Halaman lama masih menandai kontainer besar dengan rounded-2xl (16px),
+   rounded-3xl (24px) atau rounded-[2rem] (32px) enquanto .card/.table/
+   .modal memakai 8px. Tanpa aturan ini tabel, panel filter, dan kartu
+  BERBEDA radius satu sama lain di halaman yang sama. Semua diseragamkan
+   ke 8px; radius yang lebih kecil (chip, badge, icon button) tetap
+   dipertahankan karena punya makna hierarki. */
+.rounded-\[2rem\],
+.rounded-3xl,
+.rounded-2xl {
+    border-radius: var(--radius-lg) !important;
+}
+
+/* Pengecualian: elemen yang benar-benar "pill" (chip status, lencana
+   bulat, avatar) boleh tetap bulat - ditandai eksplisit. */
+.rounded-full {
+    border-radius: 9999px !important;
+}
+
+/* ==========================================================================
+   18. FORM INPUT - Remove shadow-inner, use border
+   ========================================================================== */
+input,
+textarea,
+select {
+    box-shadow: none !important;
+}
+
+/* ==========================================================================
+   19. CONSISTENCY FIX - All rounded elements
+   ========================================================================== */
+/* Card, table, modal use radius-lg */
+.card,
+.modern-table-wrapper,
+[data-modal-root] > div.relative,
+[data-modal-root] > div:not(.absolute) {
+    border-radius: var(--radius-lg) !important;
+}
+
+/* Button, input, select use radius-md.
+   Checkbox dan radio dikecualikan: keduanya punya bentuk baku
+   (kotak dan pil) yang mengikuti platform, jadi ikut diubah
+   hanya membuat keduanya tampak aneh. */
+button,
+.btn,
+input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]),
+textarea,
+select {
+    border-radius: var(--radius-md) !important;
+}
+
+/* Chip, badge use radius-sm */
+.chip,
+.badge,
+[class*="badge-"] {
+    border-radius: var(--radius-sm) !important;
+}
+
+
+/* ==========================================================================
+   21. ANIMASI - HALUS, CEPAT, BISA DIGAGASI
+   ==========================================================================
+   Aturan yang dipakai di seluruh animasi di bawah:
+     - hanya `transform` dan `opacity` yang dianimasikan, karena keduanya
+       tidak memicu layout/paint ulang
+     - durasi 150-220ms, di bawah batas 300ms supaya terasa responsif
+     - `ease-out` untuk masuk (cepat di awal, terasa gesit) dan
+       `ease-in-out` untuk gerak di layar
+     - scale tidak pernah mulai dari 0, selalu dari 0.96+
+   ------------------------------------------------------------------------ */
+
+/* --- Modal: fade untuk lapisan, scale untuk panel ---
+   Selector memakai data-modal-root, bukan [id^="modal-"], karena
+   judul di dalam modal juga ber-prefix "modal-" (id="modal-{id}-title")
+   dan akan ikut ter-jarum, lalu ikut ter-skale dan ter-fade. */
+[data-modal-root] {
+    opacity: 0;
+    transition: opacity var(--ui-med) var(--ui-ease);
+}
+
+[data-modal-root][data-state="open"] {
+    opacity: 1;
+}
+
+[data-modal-root] [data-modal-panel] {
+    transform: scale(0.96) translateY(8px);
+    transition: transform var(--ui-med) var(--ui-ease);
+}
+
+[data-modal-root][data-state="open"] [data-modal-panel] {
+    transform: scale(1) translateY(0);
+}
+
+/* Modal yang ditulis manual per halaman tidak memakai data-modal-panel.
+   Panahnya adalah anak pertama root, jadi itu yang digerakkan. */
+[data-modal-root]:not(:has([data-modal-panel])) > div {
+    transform: scale(0.96) translateY(8px);
+    transition: transform var(--ui-med) var(--ui-ease);
+}
+
+[data-modal-root][data-state="open"]:not(:has([data-modal-panel])) > div {
+    transform: scale(1) translateY(0);
+}
+
+/* --- Dropdown Select2: panah berputar halus saat terbuka --- */
+.select2-container--open .select2-selection__arrow {
+    transition: transform var(--ui-fast) var(--ui-ease);
+}
+
+.select2-container--open .select2-selection__arrow b {
+    border-color: #05818F transparent transparent transparent;
+}
+
+/* --- Accordion sidebar: buka-tutup tanpa lompatan --- */
+aside .menu-group-items {
+    transition: opacity var(--ui-fast) var(--ui-ease);
+}
+
+aside .menu-group-items.hidden {
+    display: none;
+}
+
+aside .menu-group-toggle i.fa-chevron-down {
+    transition: transform var(--ui-fast) var(--ui-ease);
+}
+
+/* --- Menu sidebar: garis penanda aktif bergeser halus, bukan muncul mendadak --- */
+aside nav > a::before {
+    transition: opacity var(--ui-fast) var(--ui-ease),
+                transform var(--ui-fast) var(--ui-ease);
+}
+
+aside nav > a.sb-active::before {
+    opacity: 1;
+    transform: scaleY(1);
+}
+
+/* --- Baris tabel & kartu: hover halus --- */
+.modern-table tbody tr td,
+.card {
+    transition: background-color var(--ui-fast) var(--ui-ease),
+                border-color var(--ui-fast) var(--ui-ease);
+}
+
+/* --- Link & tombol teks: warna berubah halus --- */
+a,
+button,
+.btn,
+.x-page-header a {
+    transition: color var(--ui-fast) var(--ui-ease),
+                background-color var(--ui-fast) var(--ui-ease),
+                border-color var(--ui-fast) var(--ui-ease),
+                transform var(--ui-fast) var(--ui-ease),
+                opacity var(--ui-fast) var(--ui-ease);
+}
+
+/* --- Hormati preferensi pengguna: tanpa gerak, tanpa blur --- */
+@media (prefers-reduced-motion: reduce) {
+    [data-modal-root],
+    [data-modal-root] [data-modal-panel],
+    [data-modal-root]:not(:has([data-modal-panel])) > div,
+    aside .menu-group-items,
+    aside .menu-group-toggle i.fa-chevron-down,
+    aside nav > a::before,
+    .modern-table tbody tr td,
+    .card,
+    a,
+    button,
+    .btn {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* ==========================================================================
+   22. WARNA LABEL FORM - BACA DI PUTIH, DAN SERAGAM DENGAN KOMPONEN
+   ==========================================================================
+   Micro-label form di aplikasi ini (text-[10px] font-bold uppercase
+   tracking-widest) ditulis langsung di markup, bukan lewat komponen.
+   Masalahnya dua, keduanya soal warna:
+
+     1. TDK TERBACA. Hampir semuanya memakai text-slate-400 (#5F7167).
+        Di atas putih rasionya cuma 2.56:1, sedangkan WCAG AA menuntut
+        4.5:1 untuk teks di bawah 18pt. Label ini 10px, jadi jelas
+        termasuk teks kecil. Dibanding teks isiannya yang hitam, label
+        ini praktis hilang.
+
+     2. TIDAK SERAGAM dengan <x-form.group>, yang sudah memakai
+        text-slate-500 (#4A5B53, rasionya 4.76:1 dan lolos). Jadi
+        form yang memakai komponen dan form yang menulis label sendiri punya warna label berbeda, meski tipografinya sama persis.
+
+   Arah perbaikannya hanya satu: menaikkan 169 label inline itu ke
+   slate-500 agar menyusul komponen. Menurunkan komponen ke slate-400
+   akan menyamakan angka tapi memperburik keterbacaan, jadi bukan
+   pilihan.
+
+   Sengaja diperbaiki di CSS, bukan dengan mengedit 169 tempat di
+   markup: satu blok di sini berlaku untuk semuanya dan tidak bisa
+   tercecer saat ada halaman baru. Selector-nya sengaja sempit - hanya
+   label uppercase 10/11px - supaya teks slate-400 lain yang memang sengaja diredupkan (placeholder,
+   keterangan, kolom tabel) tidak ikut menjadi lebih gelap dari yang dimaksud.
+   ------------------------------------------------------------------------ */
+
+/* .text-\[10px\] - tanda kurung siku harus di-escape di CSS */
+label.text-\[10px\].uppercase,
+label.text-\[11px\].uppercase,
+legend.text-\[10px\].uppercase {
+    color: #4A5B53; /* slate-500 */
+}
+
+/* Mode gelap TIDAK diberi aturan sendiri di sini. Percobaan pertama
+   menulis `html.dark label... { color: #5F7167 }`, tapi aturan itu
+   selalu kalah: app.css punya
+       html.dark .text-slate-400, html.dark .text-slate-500
+           { color: var(--text-tertiary) !important; }
+   dan penanda !important menang apa pun spesifisitasnya. Warna label
+   gelap sebenarnya datang dari token --text-tertiary yang sudah
+   diperbaiki di app.css - di situ perbaikannya berlaku untuk semua
+   teks tertiary, bukan cuma label. */
+
+   /* ==========================================================================
+      22. TIPOGRAFI - HURUF BESAR & TRACKING LEBAR DIBUANG
+
+      INI AKAR MASALAH "HALAMAN INI TIDAK TERLIHAT SEPERTI OPENCODE".
+
+      Di seluruh aplikasi ada satu pola label mikro yang sangat sering:
+      9-10px, uppercase, letter-spacing 0.05-0.1em, warna slate-400.
+      Di halaman berdata (jasa, bahan baku, karyawan, akun, dashboard,
+      jurnal) jumlahnya 18 sampai 104 elemen per halaman. Itu pola
+      "admin dashboard padat" - bukan OpenCode.
+
+      Token OpenCode, diambil dari packages/ui/src/styles/theme.css di
+      repo sst/opencode (lihat scripts/audit-token-opencode.cjs):
+        - text-transform: tidak dipakai sama sekali untuk teks UI
+        - letter-spacing: 0
+        - ukuran teks terendah: 13px
+        - pembeda label dan nilai: WARNA, bukan huruf besar atau ukuran
+
+      Kenapa di CSS dan bukan dibersihkan per berkas:
+      utility `uppercase` + `tracking-widest` tersebar di lebih dari 100
+      view (546 + 50 + 30 pemakaian). Membersihkannya satu per satu
+      berarti perubahan besar di banyak berkas sekaligus. Karena ini
+      keputusan token, bukan keputusan per halaman, satu tempat adalah
+      tempat yang benar - sama seperti section 17 untuk radius.
+
+      Yang SENGAJA tidak disentuh:
+        - .tracking-tight (nilai negatif -0.025em). OpenCode memakai
+          tracking sangat kecil pada judul besar; ini membuat teks
+          besar lebih rapat, bukan membuatnya renggang.
+        - .uppercase-buka: escape hatch untuk label yang memang harus
+          huruf besar (kode, singkatan baku).
+      ======================================================================== */
+
+   /* 1. Huruf besar dibuang.
+
+      Badge dan chip di aplikasi ini TIDAK memakai uppercase (sudah
+      diukur: 0 elemen), jadi tidak ada bentuk pil yang kehilangan
+      penandanya. Yang berubah: label form, header tabel, dan tab -
+      semuanya jadi kapitalisasi kalimat, seperti OpenCode. */
+   .uppercase,
+   label,
+   th,
+   legend {
+      text-transform: none !important;
+   }
+
+   /* 2. Tracking positif dinormalkan ke 0.
+
+      Tracking lebar ada justru karena hurufnya besar: huruf besar
+      tanpa jarak terlihat renggang. Sekarang huruf besarnya sudah
+      dibuang, jadi spacing itu hanya menambah lebar sia-sia. */
+   .tracking-wide,
+   .tracking-wider,
+   .tracking-widest,
+   [class*='tracking-[0.'] {
+      letter-spacing: 0 !important;
+   }
+
+   /* 3. Label mikro dinaikkan satu tingkat.
+
+      Huruf besar 10px jauh lebih tinggi dari huruf kecil 10px. Kalau
+      huruf besarnya dihapus tanpa menaikkan ukuran, label yang tadinya
+      terbaca jadi menyusut - hierarki hilang, bukan membaik. Jadi 9px
+      naik ke 10px dan 10px naik ke 11px: cukup untuk tetap terbaca,
+      dan tidak cukup untuk membuat kolom tabel sempit meluber.
+
+      11px ke atas TIDAK disentuh - ukurannya sudah wajar, dan
+      menaikkannya berisiko membongkar tabel. */
+   .text-\[8px\] {
+      font-size: 13px !important;
+   }
+
+   .text-\[9px\] {
+      font-size: 13px !important;
+   }
+
+   .text-\[10px\] {
+      font-size: 13px !important;
+   }
+
+   .text-\[11px\] {
+      font-size: 13px !important;
+   }
+
+   .text-\[12px\] {
+      font-size: 13px !important;
+   }
+
+   /* .text-xs = 12px bawaan Tailwind, dipakai di ratusan tempat.
+      Dinaikkan ke 13px karena permintaannya "minimal 13px". */
+   .text-xs {
+      font-size: 13px !important;
+   }
+
+   /* ==========================================================================
+      23. FONT 11px -> 13px
+
+      Permintaan: hindari font-size 11px, minimal 13px agar terbaca jelas.
+
+      Angka 11px tersebar di 371 tempat pada 111 berkas. Mengeditnya satu
+      per satu berarti perubahan besar di banyak berkas sekaligus, dan
+      yang terlewat tidak akan ketahuan sampai halamannya dibuka satu per
+      satu. Karena ini keputusan token (OpenCode tidak memakai 11px -
+      ukuran terendahnya 13px), satu tempat adalah tempat yang benar -
+      sama seperti section 22 untuk huruf besar.
+
+      Yang SENGAJA tidak ikut:
+        - .text-\[11px\].tetap-kecil : escape hatch untuk tempat yang
+          memang harus kecil (badge di dalam tabel yang sangat padat).
+        - SVG <text> di dalam diagram: angka di sana bukan ukuran layar,
+          dan mengubahnya mengubah proporsi gambar.
+      ======================================================================== */
+   .text-\[11px\] {
+      font-size: 13px !important;
+   }
+   /* ==========================================================================
+      24. DIALOG DAN NOTIFIKASI - satu gaya untuk semua SweetAlert2
+
+      Mengikuti contoh dari pemilik ("Delete file?"): kartu putih bersudut
+      besar dengan bayangan lembut, judul besar rata kiri, tombol tutup
+      bulat abu-abu di pojok kanan atas, keterangan abu-abu di bawahnya,
+      tanpa ikon, lalu dua tombol di kanan: Batal bergaris dan aksi utama
+      solid. Aksi yang merusak (hapus, batal) merah; aksi biasa hitam.
+
+      Berlaku untuk semua panggilan Swal.fire() di aplikasi (default di
+      layouts/app.blade.php: tombol tutup, urutan Batal-Aksi, tanpa gaya
+      bawaan), termasuk toast notifikasi, supaya semuanya senada.
+      ======================================================================== */
+   .swal2-container { padding: 16px !important; }
+   .swal2-container.swal2-backdrop-show { background: rgba(24, 24, 27, 0.32) !important; }
+
+   .swal2-popup:not(.swal2-toast) {
+      display: flex !important;
+      flex-direction: column !important;
+      width: min(34rem, calc(100vw - 32px)) !important;
+      padding: 28px 28px 24px !important;
+      border-radius: 28px !important;
+      background: #fcfcfd !important;
+      border: 0 !important;
+      box-shadow: 0 24px 60px rgba(24, 24, 27, 0.14), 0 2px 6px rgba(24, 24, 27, 0.05) !important;
+      text-align: left !important;
+      position: relative !important;
+   }
+
+   /* Ikon status tidak dipakai: arti dialog terbaca dari judul dan warna tombol. */
+   .swal2-popup .swal2-icon { display: none !important; }
+
+   .swal2-popup:not(.swal2-toast) .swal2-title {
+      order: 1;
+      margin: 0 !important;
+      padding: 0 44px 0 0 !important;
+      font-size: 24px !important;
+      line-height: 1.25 !important;
+      font-weight: 600 !important;
+      letter-spacing: -0.02em !important;
+      color: #232326 !important;
+      text-align: left !important;
+   }
+
+   .swal2-popup:not(.swal2-toast) .swal2-html-container {
+      order: 2;
+      margin: 10px 0 0 !important;
+      padding: 0 !important;
+      font-size: 16px !important;
+      line-height: 1.55 !important;
+      color: #8c8c93 !important;
+      text-align: left !important;
+   }
+   /* Kata yang ditebalkan (mis. nama berkas, nomor nota) tampil gelap seperti di contoh. */
+   .swal2-popup .swal2-html-container b,
+   .swal2-popup .swal2-html-container strong { color: #232326 !important; font-weight: 500 !important; }
+
+   /* Isian di dalam dialog (alasan, jumlah, dst.) */
+   .swal2-popup .swal2-input, .swal2-popup .swal2-textarea, .swal2-popup .swal2-select {
+      order: 3;
+      margin: 16px 0 0 !important;
+      width: 100% !important;
+      border-radius: 14px !important;
+      border: 1px solid #d9d9de !important;
+      box-shadow: none !important;
+      font-size: 15px !important;
+   }
+   .swal2-popup .swal2-validation-message { order: 4; margin: 12px 0 0 !important; border-radius: 12px !important; background: #fdecec !important; color: #b42318 !important; font-size: 14px !important; }
+
+   .swal2-popup:not(.swal2-toast) .swal2-actions {
+      order: 5;
+      width: 100% !important;
+      margin: 28px 0 0 !important;
+      padding: 0 !important;
+      gap: 12px !important;
+      justify-content: flex-end !important;
+      flex-wrap: wrap !important;
+   }
+
+   .swal2-popup .swal2-styled,
+   .swal2-popup .swal2-actions button {
+      margin: 0 !important;
+      min-width: 132px;
+      height: 52px;
+      padding: 0 26px !important;
+      border-radius: 16px !important;
+      font-size: 17px !important;
+      font-weight: 500 !important;
+      box-shadow: none !important;
+      transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), background-color 150ms ease, border-color 150ms ease;
+   }
+   .swal2-popup .swal2-actions button:active { transform: scale(0.97); }
+   .swal2-popup .swal2-actions button:focus-visible { outline: 2px solid #006C7B !important; outline-offset: 2px !important; }
+
+   /* Batal: putih bergaris, teks gelap. */
+   .swal2-popup .swal2-cancel {
+      background: #ffffff !important;
+      color: #232326 !important;
+      border: 1.5px solid #d4d4d8 !important;
+   }
+   .swal2-popup .swal2-cancel:hover { background: #f4f4f5 !important; border-color: #a1a1aa !important; }
+
+   /* Aksi utama biasa: hitam. */
+   .swal2-popup .swal2-confirm, .swal2-popup .swal2-deny {
+      background: #232326 !important;
+      color: #ffffff !important;
+      border: 1.5px solid #232326 !important;
+   }
+   .swal2-popup .swal2-confirm:hover { background: #000000 !important; }
+
+   /* Aksi yang merusak (dialog berstatus warning/error/question, atau ditandai kelas tombol-bahaya): merah. */
+   .swal2-popup:has(.swal2-icon.swal2-warning[style*="flex"]) .swal2-confirm,
+   .swal2-popup:has(.swal2-icon.swal2-error[style*="flex"]) .swal2-confirm,
+   .swal2-popup:has(.swal2-icon.swal2-question[style*="flex"]) .swal2-confirm,
+   .swal2-popup .swal2-confirm.tombol-bahaya,
+   .swal2-popup .swal2-deny {
+      background: #ee2b2e !important;
+      border-color: #c81e21 !important;
+      color: #ffffff !important;
+   }
+   .swal2-popup:has(.swal2-icon.swal2-warning[style*="flex"]) .swal2-confirm:hover,
+   .swal2-popup:has(.swal2-icon.swal2-error[style*="flex"]) .swal2-confirm:hover,
+   .swal2-popup:has(.swal2-icon.swal2-question[style*="flex"]) .swal2-confirm:hover,
+   .swal2-popup .swal2-confirm.tombol-bahaya:hover { background: #d71f22 !important; }
+   /* Pemberitahuan sukses atau info tanpa tombol Batal tetap hitam (bukan merah). */
+   .swal2-popup:has(.swal2-icon.swal2-question[style*="flex"]):not(:has(.swal2-cancel[style*="inline"])) .swal2-confirm { background: #232326 !important; border-color: #232326 !important; }
+
+   /* Tombol tutup: lingkaran abu-abu di pojok kanan atas. */
+   .swal2-popup .swal2-close {
+      position: absolute !important;
+      top: 24px !important;
+      right: 24px !important;
+      width: 36px !important;
+      height: 36px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border-radius: 50% !important;
+      background: #ececee !important;
+      color: #232326 !important;
+      font-size: 22px !important;
+      line-height: 1 !important;
+      box-shadow: none !important;
+      transition: background-color 150ms ease;
+   }
+   .swal2-popup .swal2-close:hover { background: #dedee2 !important; color: #000000 !important; }
+   .swal2-popup .swal2-close:focus-visible { outline: 2px solid #006C7B !important; outline-offset: 2px !important; }
+
+   /* Toast (notifikasi singkat di pojok): kartu yang sama, versi ringkas. */
+   .swal2-popup.swal2-toast {
+      padding: 14px 18px !important;
+      border-radius: 18px !important;
+      background: #fcfcfd !important;
+      box-shadow: 0 16px 40px rgba(24, 24, 27, 0.14), 0 1px 4px rgba(24, 24, 27, 0.06) !important;
+      align-items: center !important;
+   }
+   .swal2-popup.swal2-toast .swal2-title { margin: 0 !important; font-size: 15px !important; font-weight: 500 !important; color: #232326 !important; text-align: left !important; }
+   .swal2-popup.swal2-toast .swal2-html-container { margin: 2px 0 0 !important; font-size: 14px !important; color: #8c8c93 !important; text-align: left !important; }
+   .swal2-popup.swal2-toast .swal2-close { position: static !important; width: 28px !important; height: 28px !important; font-size: 18px !important; margin-left: 10px !important; }
+   .swal2-popup.swal2-toast .swal2-timer-progress-bar { background: #d4d4d8 !important; }
+
+   /* Layar sempit: tombol berbagi lebar penuh supaya mudah ditekan. */
+   @media (max-width: 480px) {
+      .swal2-popup:not(.swal2-toast) { padding: 24px 20px 20px !important; border-radius: 24px !important; }
+      .swal2-popup:not(.swal2-toast) .swal2-title { font-size: 21px !important; }
+      .swal2-popup:not(.swal2-toast) .swal2-actions button { flex: 1 1 0; min-width: 0; }
+   }
+
+   html.dark .swal2-popup { background: #1c1c1f !important; }
+   html.dark .swal2-popup .swal2-title, html.dark .swal2-popup .swal2-html-container b { color: #f4f4f5 !important; }
+   html.dark .swal2-popup .swal2-cancel { background: transparent !important; color: #f4f4f5 !important; border-color: #3f3f46 !important; }
+   html.dark .swal2-popup .swal2-close { background: #2a2a2e !important; color: #f4f4f5 !important; }
+
+   /* ==========================================================================
+      25. LABEL DI DALAM KOLOM (uji coba: modal Tambah Jasa, modal Konsumen)
+
+      Mengikuti contoh dari pemilik: kolom tinggi berlatar abu sangat muda, sudut
+      membulat, label di dalam kolom. Kolom kosong: label tampil besar seperti
+      placeholder. Saat diketik atau sudah berisi: label mengecil ke kiri atas
+      dan isinya di bawahnya. Pilihan (select) dan kotak teks panjang selalu
+      memakai label kecil di atas karena isinya tidak pernah "kosong".
+
+      Dipakai lewat <x-form.group dalam> (komponen form/group) atau
+      <div class="ld"> isian lalu <label class="ld-label">.
+      ======================================================================== */
+   .ld { position: relative; }
+   .ld input:not([type=checkbox]):not([type=radio]):not([type=hidden]),
+   .ld select,
+   .ld textarea {
+      width: 100% !important;
+      height: 58px !important;
+      padding: 25px 16px 7px !important;
+      border-radius: 16px !important;
+      border: 1px solid transparent !important;
+      background: #FAFBF9 !important;
+      font-size: 15px !important;
+      font-weight: 400 !important;
+      color: #1c1c1f !important;
+      box-shadow: none !important;
+      transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+   }
+   .ld textarea { height: auto !important; min-height: 92px; padding-top: 28px !important; resize: vertical; }
+   .ld select { padding-right: 40px !important; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231c1c1f' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important; background-repeat: no-repeat !important; background-position: right 16px center !important; -webkit-appearance: none; appearance: none; }
+   .ld input::placeholder, .ld textarea::placeholder { color: transparent !important; }
+   /* Contoh isian (placeholder) baru terlihat saat kolom dipilih dan label sudah naik. */
+   .ld input:focus::placeholder, .ld textarea:focus::placeholder { color: #a1a1aa !important; }
+   .ld input:focus, .ld select:focus, .ld textarea:focus {
+      outline: none !important;
+      background: #ffffff !important;
+      border-color: #c7c7cf !important;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12) !important;
+   }
+
+   .ld > .ld-label {
+      position: absolute;
+      left: 17px;
+      top: 19px;
+      margin: 0;
+      font-size: 15px;
+      line-height: 20px;
+      font-weight: 400;
+      color: #55555c;
+      letter-spacing: 0;
+      text-transform: none;
+      pointer-events: none;
+      transform-origin: left top;
+      transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), color 150ms ease;
+   }
+   .ld-wajib { color: #93481A; margin-left: 2px; }
+
+   /* Mengecil ke atas: saat fokus, saat berisi, dan selalu untuk select/textarea. */
+   .ld:focus-within > .ld-label,
+   .ld:has(input:not(:placeholder-shown)) > .ld-label,
+   .ld:has(select) > .ld-label,
+   .ld:has(textarea) > .ld-label {
+      transform: translateY(-11px) scale(0.8);
+      color: #6b6b72;
+   }
+   /* Kolom yang tidak memakai placeholder sama sekali (:placeholder-shown tidak berlaku): label selalu di atas. */
+   .ld:has(input:not([placeholder])) > .ld-label { transform: translateY(-11px) scale(0.8); }
+   /* Tanggal, waktu, dan bulan selalu menampilkan pola isian bawaan peramban: label tetap di atas. */
+   .ld:has(input[type=date]) > .ld-label, .ld:has(input[type=datetime-local]) > .ld-label,
+   .ld:has(input[type=time]) > .ld-label, .ld:has(input[type=month]) > .ld-label { transform: translateY(-11px) scale(0.8); }
+   /* Kolom terkunci/hanya-baca tetap terbaca tetapi jelas tidak bisa diubah. */
+   .ld input:disabled, .ld select:disabled, .ld textarea:disabled, .ld input[readonly] { color: #6b6b72 !important; cursor: not-allowed; }
+
+   /* Tombol cari cepat yang membungkus select tetap sejajar dengan kolom tinggi. */
+   .ld .qp-grup { align-items: stretch; }
+   .ld .qp-grup { gap: 8px; }
+   .ld .qp-grup .qp-tombol { width: 58px !important; height: 58px !important; border-radius: 16px !important; border: 0 !important; background: #FAFBF9 !important; color: #55555c !important; flex: 0 0 58px; }
+   .ld .qp-grup .qp-tombol:hover { background: #e8ecf2 !important; color: #1c1c1f !important; }
+
+   html.dark .ld input:not([type=checkbox]):not([type=radio]), html.dark .ld select, html.dark .ld textarea { background: #232327 !important; color: #f4f4f5 !important; }
+   html.dark .ld > .ld-label { color: #a1a1aa; }
+   @media (prefers-reduced-motion: reduce) { .ld > .ld-label { transition: none; } }

@@ -1,0 +1,1072 @@
+/* ==========================================================================
+   MOBILE-02 Fase 2 - MASTER BAHAN BAKU: TAMPILAN KARTU MATERIAL BENAR
+   Pendekatan: tabel dirubah menjadi deretan kartu melalui CSS
+   (table/tr/td/th ditampilkan ulang dalam grid), DOM asli TIDAK disusun ulang -
+   setiap checkbox, tombol aksi, handler, dan form tetap ada SALAH SATU
+   saja. Label kolom diambil dari atribut data-label yang dipasang pada
+   setiap sel. Aturan tampilan kartu hanya berlaku di bawah 768px; aturan
+   display:contents pada desktop menghilangkan wrapper filter tanpa mengubah
+   susunan aslinya.
+   ========================================================================== */
+#bulk-delete-form .mobile-bahan-details > summary {
+    display: none;
+}
+#bulk-delete-form .mobile-bahan-details-content {
+    display: block;
+}
+#bulk-delete-form .mobile-bahan-status {
+    display: none;
+}
+
+@media screen and (max-width: 767.98px) {
+
+    /* ---------- Panel filter: surface halus, lega, jarak nyaman ---------- */
+    .max-w-\[1600px\] > .bg-white.rounded-2xl {
+        padding: 16px;
+        margin-bottom: 12px;
+        border-radius: 12px;
+    }
+    .max-w-\[1600px\] > .bg-white.rounded-2xl form {
+        gap: 12px;
+    }
+    .max-w-\[1600px\] > .bg-white.rounded-2xl form .flex-1.min-w-\[300px\] {
+        min-width: 0;        /* 320px viewport aman dari overflow */
+    }
+    .mobile-bahan-filter-form > .flex-1.min-w-\[300px\] {
+        flex: 1 1 150px;
+        min-width: 0;
+    }
+    #filterForm.mobile-bahan-filter-form {
+        align-items: center;
+        gap: 8px;
+    }
+    #filterForm.mobile-bahan-filter-form > div:first-child > label {
+        display: none;
+    }
+    #filterForm.mobile-bahan-filter-form .relative input {
+        height: 38px;
+        padding-top: 0;
+        padding-bottom: 0;
+        border: 1px solid var(--brand-surface-border, #E2EAE4);
+        border-radius: 999px;
+        background: var(--brand-surface-primary, #ffffff);
+        box-shadow: 0 3px 12px rgb(15 23 42 / 5%);
+        font-size: 13px;
+    }
+    .max-w-\[1600px\] > .bg-white.rounded-2xl form > a[href$="/bahan-baku"] {
+        min-height: 44px;    /* tombol reset mudah disentuh ibu jari */
+    }
+    .mobile-bahan-records {
+        overflow: visible;
+    }
+    .content-wrapper .mobile-bahan-records .modern-table-wrapper {
+        overflow: visible;
+    }
+    #bulk-delete-form > .modern-table-wrapper {
+        width: 100%;
+        max-width: 100%;
+        overflow: visible;
+    }
+
+    /* Judul halaman: lebih proporsional, tidak mengambang terlalu tinggi */
+    .max-w-\[1600px\]:has(\#filterForm.mobile-bahan-filter-form) > .flex.flex-col[class*="md:flex-row"] {
+        margin-bottom: 16px;
+    }
+    .max-w-\[1600px\]:has(\#filterForm.mobile-bahan-filter-form) > .flex.flex-col[class*="md:flex-row"] h1.text-3xl {
+        font-size: 1.45rem;
+        line-height: 1.2;
+        letter-spacing: -0.01em;
+    }
+
+    /* ---------- Tabel diubah tampilnya menjadi deretan kartu ---------- */
+    #bulk-delete-form table,
+    #bulk-delete-form thead,
+    #bulk-delete-form tbody,
+    #bulk-delete-form tr,
+    #bulk-delete-form td,
+    #bulk-delete-form th {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        border: none;
+    }
+    #bulk-delete-form table { background: none; }
+    #bulk-delete-form table,
+    #bulk-delete-form table.modern-table {
+        /* This one table becomes cards; the global ERP table keeps its desktop width. */
+        display: block;
+        min-width: 0;
+        max-width: 100%;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    /* Keep the select-all control; hide desktop column headings on mobile. */
+    #bulk-delete-form thead {
+        display: block;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--brand-surface-border, #E2EAE4);
+        background: var(--brand-surface-secondary, #FAFBF9);
+    }
+    #bulk-delete-form thead tr {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    #bulk-delete-form thead th:not(:first-child) { display: none; }
+    #bulk-delete-form thead th:first-child {
+        width: auto; padding: 0; margin: 0;
+        display: flex; align-items: center; gap: 8px;
+    }
+    #bulk-delete-form thead th:first-child input {
+        width: 20px; height: 20px; flex-shrink: 0;
+    }
+    #bulk-delete-form thead th:first-child::after {
+        content: "Pilih semua";
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--brand-surface-text_tertiary, #64748b);
+    }
+    html.dark #bulk-delete-form thead {
+        background: var(--brand-surface-dark_secondary, #2A3731);
+        border-bottom-color: var(--brand-surface-dark_border, #3F4F47);
+    }
+    html.dark #bulk-delete-form thead th:first-child::after { color: var(--brand-surface-dark_text_tertiary, #9DB8AD); }
+
+    /* Setiap <tr> = satu kartu material */
+    #bulk-delete-form tbody tr {
+        display: grid;
+        position: relative;
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+        grid-template-areas:
+            "identity stock"
+            "spec average"
+            "latest delta";
+        column-gap: 12px;
+        row-gap: 6px;
+        width: 100%;
+        min-width: 0;
+        background: var(--brand-surface-primary, #ffffff);
+        border: 1px solid var(--brand-surface-border, #E2EAE4);
+        border-radius: 14px;
+        margin: 0 0 10px 0;
+        padding: 13px 12px;
+        box-shadow: 0 3px 12px rgb(15 23 42 / 4%);
+        transition: border-color 0.18s ease;
+    }
+    #bulk-delete-form tbody tr.group:hover {
+        border-color: var(--brand-accent-light, #0F6472);
+    }
+    #bulk-delete-form tbody tr.opacity-50 {
+        opacity: 0.55;
+        filter: grayscale(0.35);
+    }
+    html.dark #bulk-delete-form tbody tr {
+        background: var(--brand-surface-dark_secondary, #2A3731);
+        border-color: var(--brand-surface-dark_border, #3F4F47);
+    }
+
+    /* Label kolom di setiap sel (diambil dari data-label) */
+    #bulk-delete-form td::before {
+        content: attr(data-label);
+        display: block;
+        font-size: 10px;
+        line-height: 1.15;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--brand-surface-text_tertiary, #94a3b8);
+        margin-bottom: 0;
+    }
+    /* Identitas material sudah self-explanatory (avatar + nama + SKU);
+       sel kosong (@empty) tidak perlu label. */
+    #bulk-delete-form td:nth-child(3)::before,
+    #bulk-delete-form td[colspan]::before {
+        content: none;
+    }
+    #bulk-delete-form td {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+        padding: 3px 0;
+    }
+    #bulk-delete-form td:nth-child(3) { grid-area: identity; }
+    #bulk-delete-form td:nth-child(4) { grid-area: spec; }
+    #bulk-delete-form td:nth-child(5) { grid-area: stock; }
+    #bulk-delete-form td:nth-child(6) { grid-area: average; }
+    #bulk-delete-form td:nth-child(7) { grid-area: latest; }
+    #bulk-delete-form td:nth-child(8) { grid-area: delta; }
+    #bulk-delete-form td[colspan] {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 18px 0;
+        color: var(--brand-surface-text_tertiary, #94a3b8);
+        font-weight: 500;
+    }
+    #bulk-delete-form tbody tr td[colspan] {
+        grid-area: 1 / 1 / auto / -1;
+    }
+
+    /* Checkbox, row number, and disclosure stay in the original cells. */
+    #bulk-delete-form td:nth-child(1) {
+        position: absolute;
+        top: 8px;
+        left: 10px;
+        z-index: 1;
+    }
+    #bulk-delete-form td:nth-child(2) {
+        position: absolute;
+        top: 8px;
+        left: 38px;
+        z-index: 1;
+    }
+    #bulk-delete-form td:nth-child(1) .row-checkbox {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+    }
+    #bulk-delete-form td:nth-child(1)::before,
+    #bulk-delete-form td:nth-child(2)::before,
+    #bulk-delete-form td:nth-child(9)::before {
+        display: none;
+    }
+
+    /* Product identity leads the card; retain the original monogram. */
+    #bulk-delete-form td:nth-child(3) {
+        min-height: 68px;
+        padding-top: 26px;
+    }
+    #bulk-delete-form td:nth-child(3) > div {
+        align-items: flex-start;
+        gap: 8px;
+        min-width: 0;
+    }
+    #bulk-delete-form td:nth-child(3) > div > :first-child {
+        width: 40px;
+        height: 40px;
+        flex: 0 0 40px;
+        border-radius: 10px;
+    }
+    #bulk-delete-form td:nth-child(3) > div > div:last-child {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+    #bulk-delete-form td:nth-child(3) .text-\[14px\] {
+        font-size: 15px;
+        color: var(--brand-accent-light, #0F6472);
+        font-weight: 700;
+    }
+    #bulk-delete-form td:nth-child(3) .text-\[11px\] {
+        font-size: 11px;
+        color: var(--brand-surface-text_tertiary, #64748b);
+        font-weight: 600;
+        letter-spacing: 0.04em;
+    }
+
+    /* Compact specification tags and numeric stock/price columns. */
+    #bulk-delete-form td:nth-child(4) > div {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px;
+    }
+    #bulk-delete-form td:nth-child(4) > div > span {
+        margin: 0;
+        padding: 3px 6px;
+        font-size: 9px;
+        line-height: 1.3;
+    }
+    #bulk-delete-form td:nth-child(5) > .inline-flex {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 4px 8px;
+    }
+    #bulk-delete-form td:nth-child(5) {
+        padding-top: 26px;
+    }
+    #bulk-delete-form td:nth-child(5)::before,
+    #bulk-delete-form td:nth-child(6)::before,
+    #bulk-delete-form td:nth-child(7)::before,
+    #bulk-delete-form td:nth-child(8)::before {
+        text-align: right;
+    }
+
+    /* Stok: angka besar, satuan, mini-bar, dan peringatan stok menipis */
+    #bulk-delete-form td:nth-child(5) .text-\[15px\] {
+        font-size: 16px;
+        font-weight: 700;
+    }
+    #bulk-delete-form td:nth-child(5) .w-20.h-1,
+    #bulk-delete-form td:nth-child(5) .w-16.h-1 {
+        width: 100%;
+        height: 5px;
+        border-radius: 6px;
+        overflow: hidden;
+        background: var(--brand-surface-border, #E2EAE4);
+    }
+    #bulk-delete-form td:nth-child(5) .w-20.h-1 > div {
+        border-radius: 6px;
+        height: 100%;
+    }
+    #bulk-delete-form td:nth-child(5) .text-xs {
+        font-size: 11px;
+    }
+    #bulk-delete-form td:nth-child(4),
+    #bulk-delete-form td:nth-child(5),
+    #bulk-delete-form td:nth-child(6),
+    #bulk-delete-form td:nth-child(7),
+    #bulk-delete-form td:nth-child(8) {
+        padding: 1px 0;
+        border-top: 1px solid var(--brand-surface-tertiary, #F1F5F1);
+    }
+    html.dark #bulk-delete-form td:nth-child(4),
+    html.dark #bulk-delete-form td:nth-child(5),
+    html.dark #bulk-delete-form td:nth-child(6),
+    html.dark #bulk-delete-form td:nth-child(7),
+    html.dark #bulk-delete-form td:nth-child(8) {
+        border-top-color: var(--brand-surface-dark_border, #3F4F47);
+    }
+
+    /* The card-corner action button occupies the top-right 40px; keep the
+       stock label and value below it instead of letting the cells overlap. */
+    #bulk-delete-form td:nth-child(5) {
+        padding-top: 48px;
+    }
+
+    /* Tombol koreksi harga: lebar penuh, rapi, ikon selalu terlihat */
+    #bulk-delete-form td:nth-child(6) button {
+        width: 100%;
+        min-height: 44px;
+        justify-content: flex-start;
+        gap: 4px;
+        padding: 6px;
+        overflow-wrap: anywhere;
+    }
+    #bulk-delete-form td:nth-child(6) button .fa-pen {
+        opacity: 1;
+    }
+
+    /* Harga beli terakhir & selisih: angka utuh, tidak benang-curut */
+    #bulk-delete-form td:nth-child(7) .text-\[13px\] {
+        font-size: 14px;
+    }
+    #bulk-delete-form td:nth-child(8) .inline-flex {
+        flex-direction: row;
+        gap: 6px;
+        align-items: center;
+    }
+    #bulk-delete-form td:nth-child(8) .text-\[12px\] {
+        font-size: 12px;
+    }
+
+    /* Keep the existing action disclosure anchored to the card corner. */
+    #bulk-delete-form td:nth-child(9) {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        z-index: 2;
+        padding: 0;
+        border: 0;
+    }
+    .mobile-bahan-actions {
+        position: relative;
+    }
+    .mobile-bahan-actions > summary {
+        display: grid;
+        width: 44px;
+        height: 44px;
+        place-items: center;
+        margin-left: auto;
+        border-radius: 12px;
+        color: var(--brand-surface-text_tertiary, #5F7167);
+        background: var(--brand-surface-secondary, #FAFBF9);
+        cursor: pointer;
+        list-style: none;
+    }
+    .mobile-bahan-actions > summary::-webkit-details-marker {
+        display: none;
+    }
+    .mobile-bahan-actions > summary:focus-visible {
+        outline: 2px solid var(--brand-accent-light);
+        outline-offset: 2px;
+    }
+    .mobile-bahan-actions > summary svg {
+        width: 20px;
+        height: 20px;
+    }
+    .mobile-bahan-action-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 6px);
+        right: 0;
+        z-index: 10;
+        width: max-content;
+        padding: 6px;
+        gap: 4px;
+        border: 1px solid var(--brand-surface-border, #E2EAE4);
+        border-radius: 14px;
+        background: var(--brand-surface-primary, #ffffff);
+        box-shadow: 0 10px 28px rgb(15 23 42 / 16%);
+    }
+    .mobile-bahan-actions[open] .mobile-bahan-action-menu {
+        display: flex;
+    }
+    #bulk-delete-form td:nth-child(9) button {
+        width: 44px;
+        height: 44px;
+        flex: 0 0 44px;
+    }
+    .mobile-bahan-actions > summary {
+        position: relative;
+        z-index: 1;
+    }
+    html.dark .mobile-bahan-actions > summary {
+        color: var(--brand-surface-dark_text_secondary, #C9D6CE);
+        background: var(--brand-surface-dark_tertiary, #3F4F47);
+    }
+
+    @media screen and (max-width: 767.98px) {
+        .content-wrapper .mobile-bahan-records .modern-table {
+            display: block;
+            min-width: 0;
+            max-width: 100%;
+            width: 100%;
+        }
+    }
+    html.dark .mobile-bahan-action-menu {
+        border-color: var(--brand-surface-dark_border, #3F4F47);
+        background: var(--brand-surface-dark_secondary, #2A3731);
+    }
+
+    /* Pagination: target sentuh memadat */
+    .max-w-\[1600px\] .border-t.border-slate-100 a.w-8,
+    .max-w-\[1600px\] .border-t.border-slate-100 span.w-8 {
+        width: 44px;
+        height: 44px;
+    }
+
+    /* Footer bulk action: tombol mudah dijangkau */
+    #bulk-footer #btn-bulk-delete {
+        min-height: 46px;
+    }
+    html.dark #bulk-delete-form td::before,
+    html.dark #bulk-delete-form td:nth-child(2),
+    html.dark #bulk-delete-form td:nth-child(3) .text-\[11px\],
+    html.dark #bulk-delete-form td[colspan] {
+        color: var(--brand-surface-dark_text_tertiary, #9DB8AD);
+    }
+    html.dark #bulk-delete-form td:nth-child(3) .text-\[14px\] {
+        color: var(--brand-accent-dark, #5FC4D4);
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .mobile-bahan-details,
+    .mobile-bahan-actions {
+        display: block;
+    }
+    .mobile-bahan-details::details-content,
+    .mobile-bahan-actions::details-content {
+        display: contents;
+        content-visibility: visible;
+    }
+    .mobile-bahan-actions > summary { display: none; }
+    /* Desktop: menu aksi (3 tombol) harus tetap tampil sebagai baris ikon,
+       bukan display:none (default mobile). */
+    .mobile-bahan-action-menu {
+        display: flex;
+        position: static;
+        width: auto;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+    .mobile-bahan-action-menu > button {
+        flex: 0 0 auto;
+        min-width: 0;
+    }
+    #filterForm.mobile-bahan-filter-form {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 16px;
+    }
+    #filterForm.mobile-bahan-filter-form > div:first-child {
+        flex: 1 1 220px;
+        min-width: 200px;
+    }
+    #filterForm.mobile-bahan-filter-form > div:not(:first-child) {
+        flex: 0 1 160px;
+        min-width: 128px;
+        width: 160px;
+    }
+    #filterForm.mobile-bahan-filter-form > a { flex: 0 0 38px; }
+
+    /* Desktop: menu aksi = baris ikon selalu-tampak persis seperti markup
+       sebelumnya (td > div.flex > 3 tombol); slot popup (padding, border,
+       background, width) tidak berlaku di desktop. */
+    .mobile-bahan-action-menu {
+        display: flex;
+        position: static;
+        width: auto;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+    .mobile-bahan-action-menu > button {
+        flex: 0 0 auto;
+        min-width: 0;
+    }
+    .mobile-bahan-action-menu {
+        display: flex;
+        position: static;
+        width: auto;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+    .mobile-bahan-action-menu > button {
+        flex: 0 0 auto;
+        min-width: 0;
+    }
+    .mobile-bahan-details {
+        text-align: center;
+    }
+    .mobile-bahan-details > summary {
+        display: none;
+    }
+    .mobile-bahan-details-content {
+        display: block;
+    }
+    .mobile-bahan-status {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 767.98px) {
+    .content-wrapper > .max-w-\[1600px\] {
+        padding-top: 12px;
+        padding-bottom: 120px;
+    }
+
+    .content-wrapper .max-w-\[1600px\]:has(\#filterForm.mobile-bahan-filter-form) > .flex.flex-col[class*="md:flex-row"] {
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+    .content-wrapper .max-w-\[1600px\]:has(\#filterForm.mobile-bahan-filter-form) > .flex.flex-col[class*="md:flex-row"] > div:first-child {
+        min-width: 0;
+    }
+    .content-wrapper .max-w-\[1600px\]:has(\#filterForm.mobile-bahan-filter-form) > .flex.flex-col[class*="md:flex-row"] h1.text-3xl {
+        font-size: 22px;
+        line-height: 1.15;
+        letter-spacing: -0.025em;
+        font-weight: 700;
+    }
+    .content-wrapper .max-w-\[1600px\]:has(\#filterForm.mobile-bahan-filter-form) > .flex.flex-col[class*="md:flex-row"] p {
+        margin-top: 2px;
+        font-size: 12px;
+        line-height: 1.3;
+    }
+    .content-wrapper .max-w-\[1600px\]:has(\#filterForm.mobile-bahan-filter-form) > .flex.flex-col[class*="md:flex-row"] > div.flex.flex-wrap {
+        width: auto;
+        flex: 0 0 auto;
+        gap: 0;
+    }
+    .content-wrapper .max-w-\[1600px\]:has(\#filterForm.mobile-bahan-filter-form) > .flex.flex-col[class*="md:flex-row"] > div.flex.flex-wrap button {
+        min-height: 44px;
+        padding: 0 12px;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .content-wrapper .max-w-\[1600px\] > .bg-white.rounded-2xl.shadow-sm.border {
+        padding: 0;
+        margin-bottom: 8px;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+    #filterForm.mobile-bahan-filter-form {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        align-items: end;
+    }
+    #filterForm.mobile-bahan-filter-form > div:first-child {
+        grid-column: 1 / -1;
+        min-width: 0;
+    }
+    #filterForm.mobile-bahan-filter-form > div { min-width: 0; width: 100%; }
+    #filterForm.mobile-bahan-filter-form > a { min-height: 44px; }
+    #filterForm.mobile-bahan-filter-form .relative input {
+        height: 46px;
+        padding-left: 38px;
+        font-size: 14px;
+        box-shadow: none;
+    }
+    #filterForm.mobile-bahan-filter-form .relative > i {
+        left: 14px;
+    }
+    /* Lepas kotak luar agar daftar tidak terlihat sebagai card di dalam card. */
+    .content-wrapper .mobile-bahan-records {
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+    #bulk-delete-form > .modern-table-wrapper,
+    .content-wrapper .mobile-bahan-records .modern-table-wrapper {
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+    #bulk-delete-form table,
+    #bulk-delete-form table.modern-table {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        table-layout: fixed;
+        background: transparent;
+    }
+    #bulk-delete-form thead,
+    #bulk-delete-form tbody {
+        display: block;
+        width: 100%;
+    }
+    #bulk-delete-form thead {
+        padding: 0 0 6px;
+        border: 0;
+        background: transparent;
+    }
+    #bulk-delete-form thead tr {
+        display: flex;
+        align-items: center;
+        min-height: 30px;
+    }
+    #bulk-delete-form thead th:not(:first-child) {
+        display: none;
+    }
+    #bulk-delete-form thead th:first-child {
+        display: flex;
+        width: auto;
+        align-items: center;
+        gap: 7px;
+        padding: 0 4px;
+    }
+    #bulk-delete-form thead th:first-child input {
+        width: 18px;
+        height: 18px;
+    }
+    #bulk-delete-form thead th:first-child::after {
+        content: "Pilih semua";
+        color: var(--brand-surface-text_tertiary, #5F7167);
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.035em;
+    }
+    #bulk-delete-form tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding: 0;
+    }
+    #bulk-delete-form tbody > tr:not(:has(td[colspan])) {
+        display: grid;
+        position: relative;
+        grid-template-columns: 18px 16px minmax(0, 1fr) minmax(90px, 0.78fr) 44px;
+        grid-template-rows: auto auto auto;
+        grid-template-areas:
+            "select number identity stock actions"
+            "select number identity average actions"
+            "select number detail detail actions";
+        align-items: center;
+        column-gap: 4px;
+        row-gap: 4px;
+        width: 100%;
+        min-width: 0;
+        min-height: 0;
+        margin: 0;
+        padding: 2px 6px;
+        border: 1px solid var(--brand-surface-border, #E2EAE4);
+        border-radius: 12px;
+        background: var(--brand-surface-primary, #fff);
+        box-shadow: 0 2px 8px rgb(15 23 42 / 4%);
+    }
+    html.dark #bulk-delete-form tbody > tr:not(:has(td[colspan])) {
+        border-color: var(--brand-surface-dark_border, #3F4F47);
+        background: var(--brand-surface-dark_secondary, #2A3731);
+    }
+    #bulk-delete-form tbody > tr:not(:has(td[colspan])) > td {
+        display: flex;
+        min-width: 0;
+        padding: 0;
+        border: 0;
+        background: transparent;
+    }
+    #bulk-delete-form tbody > tr:not(:has(td[colspan])) > td::before {
+        display: none;
+        content: none;
+    }
+    #bulk-delete-form td:nth-child(1) {
+        position: static;
+        grid-area: select;
+        align-items: center;
+        justify-content: center;
+        z-index: auto;
+    }
+    #bulk-delete-form td:nth-child(1) .row-checkbox {
+        width: 18px;
+        height: 18px;
+        margin: 0;
+    }
+    #bulk-delete-form td:nth-child(2) {
+        position: static;
+        grid-area: number;
+        align-items: center;
+        justify-content: center;
+        z-index: auto;
+        color: var(--brand-surface-text_tertiary, #5F7167);
+        font-size: 11px;
+        line-height: 1.25;
+    }
+    #bulk-delete-form td:nth-child(3) {
+        grid-area: identity;
+        align-self: stretch;
+        align-items: center;
+        min-height: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+    #bulk-delete-form td:nth-child(3) > div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        min-width: 0;
+    }
+    #bulk-delete-form td:nth-child(3) > div > :first-child {
+        display: flex;
+        width: 44px;
+        height: 44px;
+        flex: 0 0 44px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 11px;
+        font-size: 13px;
+    }
+    #bulk-delete-form td:nth-child(3) > div > div:last-child {
+        min-width: 0;
+        overflow: hidden;
+    }
+    #bulk-delete-form td:nth-child(3) .text-\[14px\] {
+        display: -webkit-box;
+        overflow: hidden;
+        color: var(--brand-surface-text, #1A231F);
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.3;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        white-space: normal;
+    }
+    #bulk-delete-form td:nth-child(3) .text-\[11px\] {
+        display: block;
+        margin-top: 2px;
+        color: var(--brand-surface-text_tertiary, #5F7167);
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 1.3;
+        letter-spacing: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    #bulk-delete-form td:nth-child(3) .mobile-bahan-desktop-status {
+        display: none;
+    }
+    #bulk-delete-form td:nth-child(5) {
+        grid-area: stock;
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 2px;
+        padding: 0;
+        border: 0;
+        text-align: right;
+    }
+    #bulk-delete-form td:nth-child(5) .mobile-bahan-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1.25;
+    }
+    #bulk-delete-form td:nth-child(5) .mobile-bahan-status > span {
+        width: 6px;
+        height: 6px;
+        flex: 0 0 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+    #bulk-delete-form td:nth-child(5) .mobile-bahan-status-active {
+        color: var(--color-emerald-700, #095745);
+        background: var(--color-emerald-100, #D2EBE2);
+    }
+    #bulk-delete-form td:nth-child(5) .mobile-bahan-status-inactive {
+        color: var(--brand-surface-text_secondary, #3F4F47);
+        background: var(--brand-surface-tertiary, #F1F5F1);
+    }
+    #bulk-delete-form td:nth-child(5) > .inline-flex {
+        display: flex;
+        width: 100%;
+        flex-direction: row;
+        align-items: baseline;
+        justify-content: flex-end;
+        gap: 3px;
+        white-space: nowrap;
+    }
+    #bulk-delete-form td:nth-child(5) .text-\[15px\] {
+        color: var(--brand-surface-text, #1A231F);
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.25;
+    }
+    #bulk-delete-form td:nth-child(5) .text-xs {
+        color: var(--brand-surface-text_tertiary, #5F7167);
+        font-size: 11px;
+        line-height: 1.3;
+    }
+    #bulk-delete-form td:nth-child(5) .w-20.h-1,
+    #bulk-delete-form td:nth-child(5) .w-16.h-1 {
+        display: none;
+    }
+    #bulk-delete-form td:nth-child(6) {
+        grid-area: average;
+        align-self: center;
+        justify-content: flex-end;
+        padding: 0;
+        border: 0;
+        text-align: right;
+    }
+    #bulk-delete-form td:nth-child(6) button {
+        display: inline-flex;
+        width: 100%;
+        min-width: 0;
+        min-height: 40px;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0;
+        overflow: hidden;
+        color: var(--brand-accent-light, #006C7B);
+        font-size: 13px;
+        line-height: 1.3;
+        text-align: right;
+    }
+    #bulk-delete-form td:nth-child(6) button .fa-pen,
+    #bulk-delete-form td:nth-child(6) button .text-xs {
+        display: none;
+    }
+    #bulk-delete-form td:nth-child(7),
+    #bulk-delete-form td:nth-child(8) {
+        display: none;
+    }
+    #bulk-delete-form tbody > tr:not(:has(td[colspan])) > td:nth-child(7),
+    #bulk-delete-form tbody > tr:not(:has(td[colspan])) > td:nth-child(8) {
+        display: none;
+    }
+    #bulk-delete-form td:nth-child(4) {
+        position: static;
+        grid-area: detail;
+        display: flex;
+        min-width: 0;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 0;
+        border: 0;
+    }
+    #bulk-delete-form td:nth-child(4) .mobile-bahan-details {
+        display: block;
+        width: 100%;
+        min-width: 0;
+    }
+    #bulk-delete-form td:nth-child(4) .mobile-bahan-details > summary {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 10px;
+        border-radius: 8px;
+        color: var(--brand-accent-light, #006C7B);
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1.3;
+        list-style: none;
+        cursor: pointer;
+    }
+    #bulk-delete-form td:nth-child(4) .mobile-bahan-details > summary::-webkit-details-marker {
+        display: none;
+    }
+    #bulk-delete-form td:nth-child(4) .mobile-bahan-details > summary::after {
+        content: "";
+        width: 5px;
+        height: 5px;
+        border-right: 1.5px solid currentColor;
+        border-bottom: 1.5px solid currentColor;
+        transform: translateY(-1px) rotate(45deg);
+    }
+    #bulk-delete-form td:nth-child(4) .mobile-bahan-details-content {
+        display: none;
+    }
+    #bulk-delete-form td:nth-child(4) .mobile-bahan-details[open] .mobile-bahan-details-content {
+        display: block;
+        padding-top: 5px;
+    }
+    #bulk-delete-form td:nth-child(4) .mobile-bahan-details-content > div {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 4px;
+    }
+    #bulk-delete-form td:nth-child(4) .mobile-bahan-details-content > div > span {
+        margin: 0;
+        padding: 3px 6px;
+        font-size: 9px;
+        line-height: 1.2;
+    }
+    #bulk-delete-form tbody tr:has(.mobile-bahan-details[open]) {
+        grid-template-rows: auto auto auto auto;
+        grid-template-areas:
+            "select number identity stock actions"
+            "select number identity average actions"
+            "select number detail detail actions"
+            "select number latest delta actions";
+        row-gap: 3px;
+    }
+    #bulk-delete-form tbody tr:has(.mobile-bahan-details[open]) td:nth-child(7),
+    #bulk-delete-form tbody tr:has(.mobile-bahan-details[open]) td:nth-child(8) {
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        gap: 2px;
+        align-items: flex-start;
+        padding: 4px 0 0;
+        border-top: 1px solid var(--brand-surface-border, #E2EAE4);
+        font-size: 10px;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+    }
+    #bulk-delete-form tbody tr:has(.mobile-bahan-details[open]) td:nth-child(7)::before,
+    #bulk-delete-form tbody tr:has(.mobile-bahan-details[open]) td:nth-child(8)::before {
+        display: block;
+        content: attr(data-label);
+        color: var(--brand-surface-text_tertiary, #5F7167);
+        font-size: 9px;
+        line-height: 1.2;
+    }
+    #bulk-delete-form tbody tr:has(.mobile-bahan-details[open]) td:nth-child(8) {
+        align-items: flex-end;
+        text-align: right;
+    }
+    #bulk-delete-form tbody tr:has(.mobile-bahan-details[open]) td:nth-child(9) {
+        position: static;
+        grid-area: actions;
+        align-self: stretch;
+        justify-content: center;
+        padding: 0;
+    }
+    #bulk-delete-form td:nth-child(9) {
+        position: static;
+        grid-area: actions;
+        align-self: stretch;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        padding: 0;
+    }
+    #bulk-delete-form td:nth-child(9) .mobile-bahan-actions {
+        position: relative;
+    }
+    #bulk-delete-form td:nth-child(9) .mobile-bahan-actions > summary {
+        display: grid;
+        width: 44px;
+        height: 44px;
+        place-items: center;
+        margin: 0;
+        border-radius: 12px;
+        color: var(--brand-surface-text_tertiary, #5F7167);
+        background: transparent;
+    }
+    #bulk-delete-form td:nth-child(9) .mobile-bahan-action-menu {
+        position: absolute;
+        top: 50%;
+        right: calc(100% + 4px);
+        z-index: 30;
+        width: max-content;
+        transform: translateY(-50%);
+    }
+    #bulk-delete-form td:nth-child(9) button {
+        width: 44px;
+        height: 44px;
+        min-height: 44px;
+    }
+    #bulk-delete-form tbody > tr:has(td[colspan]) {
+        display: block;
+        min-height: 0;
+        padding: 18px;
+        text-align: center;
+    }
+    #bulk-delete-form tbody > tr:has(td[colspan]) > td {
+        display: block;
+        width: 100%;
+    }
+    #bulk-footer {
+        padding: 10px 4px;
+    }
+}
+
+@media screen and (max-width: 389.98px) {
+    #bulk-delete-form td:nth-child(3) .text-\[14px\] {
+        display: -webkit-box;
+        overflow: hidden;
+        white-space: normal;
+        text-overflow: clip;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+    }
+}
+
+@media screen and (max-width: 359.98px) {
+    #bulk-delete-form tbody > tr:not(:has(td[colspan])) {
+        grid-template-columns: 16px 12px minmax(0, 1fr) minmax(84px, 0.72fr) 44px;
+        column-gap: 3px;
+        padding-right: 4px;
+        padding-left: 4px;
+    }
+    #bulk-delete-form td:nth-child(3) > div {
+        gap: 6px;
+    }
+}

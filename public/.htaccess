@@ -1,0 +1,45 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # Berkas unggahan (storage publik) dilayani langsung oleh Apache tanpa melewati
+    # Laravel, jadi header pengaman aplikasi tidak menyentuhnya. Tanpa aturan ini,
+    # sebuah berkas HTML yang terunggah menjalankan skripnya di asal aplikasi.
+    # - skrip server (php/phtml/phar) di /storage tidak pernah boleh dieksekusi;
+    # - tipe konten tidak boleh ditebak (nosniff) untuk semua berkas unggahan;
+    # - skrip peramban dimatikan lewat CSP untuk tipe yang bisa membawa skrip
+    #   (html, svg, xml, js, atau tanpa ekstensi). PDF dan gambar sengaja tidak
+    #   diberi CSP ketat supaya penampil PDF peramban tetap berfungsi.
+    RewriteRule ^storage/.*\.(php|phtml|phar|php[0-9])$ - [F,L,NC]
+    # Folder berisi data usaha (desain pelanggan, bukti bayar) tidak dilayani langsung: diteruskan ke Laravel
+    # (BerkasPrivatController) yang mewajibkan login. Logo dan gambar postingan tetap publik.
+    RewriteRule ^storage/(order_thumbnails|jersey_thumbnails|jersey_bukti_bayar|kas_kecil_bukti|bukti_serah_terima|berkas_order)/ index.php [L,NC]
+    RewriteRule ^storage/ - [E=BERKAS_STATIS:1]
+    RewriteRule ^storage/.*\.(x?html?|svg|xml|m?js)$ - [E=BERKAS_AKTIF:1,NC]
+    RewriteRule ^storage/[^.]*$ - [E=BERKAS_AKTIF:1]
+    <IfModule mod_headers.c>
+        Header always set X-Content-Type-Options "nosniff" env=BERKAS_STATIS
+        Header always set Content-Security-Policy "default-src 'none'; script-src 'none'; object-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'" env=BERKAS_AKTIF
+    </IfModule>
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Handle X-XSRF-Token Header
+    RewriteCond %{HTTP:x-xsrf-token} .
+    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>

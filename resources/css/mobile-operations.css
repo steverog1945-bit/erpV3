@@ -1,0 +1,114 @@
+/* ORION GRAFIKA â€” operational table cards: scoped and mobile-only. */
+.pwa-ops-mobile-only{display:none}
+/* Filter collapsible ala SPK/Produksi (mobile: <details> buka/tutup).
+   Desktop >=768px harus kembali ke baris filter horizontal seperti
+   baseline; lihat blok @media min-width:768px di bawah - display:contents
+   tidak bisa dipakai pada <details> karena Chromium tetap membangun kotak
+   ::details-content sendiri. */
+/* DESKTOP (>=768px) - filter Monitoring Kasir harus baris horizontal.
+   Regresi commit 1b0c1cf: <details class="pwa-ops-filter"> diberi
+   display:contents, tapi di Chromium <details> tetap membangun kotak
+   ::details-content sendiri, sehingga anak-anaknya TIDAK ikut flex form
+   dan justru menumpuk vertikal (5 baris, panel tinggi, tabel terdorong).
+   Perbaikan minimal: buat <details> kotak flex nyata dan netralkan
+   ::details-content supaya isi menjadi item flex - geometri sama persis
+   dengan baseline sebelum <details> dipasang (form flex-wrap items-end
+   gap-4). Tidak ada selector lain yang diubah. */
+@media screen and (min-width:768px){
+ .pwa-ops-filter{display:flex;flex:1 1 100%;flex-wrap:wrap;align-items:flex-end;gap:16px;width:100%}
+ .pwa-ops-filter::details-content{display:contents;content-visibility:visible}
+}
+.pwa-ops-filter .pwa-ops-filter-toggle{display:none}
+.pwa-ops-filter .pwa-ops-filter-fields{display:contents}
+.pwa-ops-filter .pwa-ops-filter-actions{display:inline-flex;flex-wrap:wrap;align-items:center;gap:10px}
+@media screen and (max-width:767.98px){
+ .pwa-ops-page form[method='GET'] .pwa-ops-filter{display:block;width:100%}
+ .pwa-ops-page .pwa-ops-filter .pwa-ops-filter-toggle{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:44px;padding:0 14px;margin:0 0 10px;border:1px solid var(--brand-surface-border,var(--border-primary,#e2e8f0));border-radius:12px;background:var(--brand-surface-secondary,transparent);color:var(--brand-surface-text_secondary,var(--text-secondary,#334155));font-size:13px;font-weight:600;cursor:pointer;list-style:none}
+ .pwa-ops-page .pwa-ops-filter .pwa-ops-filter-toggle::-webkit-details-marker{display:none}
+ .pwa-ops-page .pwa-ops-filter .pwa-ops-filter-toggle::after{content:'\f078';font-family:'Font Awesome 6 Free';font-weight:900;transition:transform .2s ease;font-size:11px;color:var(--brand-surface-text_tertiary,var(--text-tertiary,#64748b))}
+ .pwa-ops-page .pwa-ops-filter[open] .pwa-ops-filter-toggle::after{transform:rotate(180deg)}
+ .pwa-ops-page .pwa-ops-filter:not([open]) .pwa-ops-filter-fields{display:none}
+ .pwa-ops-page .pwa-ops-filter--active .pwa-ops-filter-toggle{color:var(--brand-aksen,#E8891D)}
+ .pwa-ops-page .pwa-ops-filter--active .pwa-ops-filter-toggle > span{position:relative}
+ .pwa-ops-page .pwa-ops-filter--active .pwa-ops-filter-toggle > span::after{content:'';position:absolute;top:-4px;right:-12px;width:6px;height:6px;border-radius:999px;background:var(--brand-aksen,#E8891D)}
+ .pwa-ops-page .pwa-ops-filter .pwa-ops-filter-actions{display:flex !important;flex-wrap:wrap;align-items:center;gap:10px;padding-top:10px;margin-top:10px;border-top:1px solid var(--brand-surface-border,var(--border-primary,#e2e8f0));width:100%;flex-basis:100%;order:99}
+ .pwa-ops-page{padding:16px 12px calc(130px + env(safe-area-inset-bottom,0px));min-width:0}
+ .pwa-ops-page .pwa-ops-shell,.pwa-ops-page .pwa-ops-shell .modern-table-wrapper{width:100%;max-width:100%;min-width:0;overflow:visible;background:transparent;border:0;box-shadow:none}
+ .pwa-ops-page .pwa-ops-table,.pwa-ops-page .pwa-ops-table tbody{display:block;width:100%;min-width:0;background:transparent}
+ .pwa-ops-page .pwa-ops-table thead{display:none}
+ .pwa-ops-page .pwa-ops-table tbody tr.pwa-ops-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px 12px;margin-bottom:10px;padding:13px 12px;border:1px solid var(--brand-surface-border,var(--border-primary,#e2e8f0));border-radius:14px;background:var(--brand-surface-primary,var(--surface-primary,#fff));box-shadow:0 3px 12px rgb(15 23 42 / 4%);width:100%;min-width:0}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-cell{display:block;width:auto;min-width:0;padding:0;border:0;text-align:left;white-space:normal;overflow-wrap:anywhere;line-height:1.35;font-size:13px;color:var(--brand-surface-text,var(--text-primary,#0f172a))}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-cell::before{content:attr(data-label);display:block;font-size:11px;line-height:1.3;font-weight:600;margin-bottom:3px;color:var(--brand-surface-text_tertiary,var(--text-tertiary,#64748b))}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-sequence{display:none}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-sequence::before{display:none}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-invoice,.pwa-ops-page .pwa-ops-row >td.pwa-ops-doc,.pwa-ops-page .pwa-ops-row >td.pwa-ops-note,.pwa-ops-page .pwa-ops-row >td.pwa-ops-name{font-size:14px;font-weight:700}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-total,.pwa-ops-page .pwa-ops-row >td.pwa-ops-stock{font-variant-numeric:tabular-nums;font-weight:700}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-actions{border-top:1px solid var(--brand-surface-border,var(--border-primary,#e2e8f0));padding-top:9px!important}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-actions::before{display:none}
+ .pwa-ops-page .pwa-ops-row .pwa-ops-actions>div{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:8px}
+ .pwa-ops-page .pwa-ops-row .pwa-ops-actions>div>*{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;height:auto!important;padding:8px!important}
+ .pwa-ops-page .produksi-row-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:8px}
+ .pwa-ops-page .produksi-row-actions>*{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;height:auto!important;padding:8px!important}
+ .pwa-ops-page .pwa-ops-table tbody>tr:not(.pwa-ops-row){display:block;width:100%}
+ .pwa-ops-page .pwa-ops-table tbody>tr:not(.pwa-ops-row)>td{display:block;width:100%}
+ .pwa-ops-page .pwa-ops-mobile-only{display:inline;font-size:12px;font-weight:600;margin-left:8px}
+ .pwa-ops-page .pwa-ops-table:is(.pwa-ops-table--purchase,.pwa-ops-table--receiving) thead{display:block;width:100%}
+ .pwa-ops-page .pwa-ops-table:is(.pwa-ops-table--purchase,.pwa-ops-table--receiving) thead tr{display:block}
+ .pwa-ops-page .pwa-ops-table:is(.pwa-ops-table--purchase,.pwa-ops-table--receiving) thead th{display:none}
+ .pwa-ops-page .pwa-ops-table:is(.pwa-ops-table--purchase,.pwa-ops-table--receiving) thead th:first-child{display:flex;align-items:center;justify-content:flex-start;min-height:44px;padding:0 12px 8px;border:0}
+ .pwa-ops-page .pwa-ops-row .pwa-ops-select{display:flex!important;align-items:center;grid-area:select}
+ .pwa-ops-page .pwa-ops-row .pwa-ops-select::before{display:none}
+ .pwa-ops-page .pwa-ops-row input.row-checkbox,.pwa-ops-page .pwa-ops-table #checkAll{min-width:20px;min-height:20px}
+ .pwa-ops-page .pwa-ops-table--cashier .pwa-ops-row{grid-template-areas:"note note" "customer customer" "total status" "time type" "actions actions"}
+ .pwa-ops-page .pwa-ops-table--purchase .pwa-ops-row{grid-template-areas:"select invoice" "supplier supplier" "total status" "due date" "actions actions"}
+ .pwa-ops-page .pwa-ops-table--receiving .pwa-ops-row{grid-template-areas:"select doc" "entity entity" "status status" "note note" "actions actions"}
+ .pwa-ops-page .pwa-ops-table--stock .pwa-ops-row{grid-template-areas:"name name" "code code" "stock status" "category unit" "movement movement" "actions actions"}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-time{grid-area:time}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-type{grid-area:type}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-note{grid-area:note}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-customer{grid-area:customer}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-total{grid-area:total}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-status{grid-area:status}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-actions{grid-area:actions}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-select{grid-area:select}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-invoice{grid-area:invoice}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-date{grid-area:date}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-supplier{grid-area:supplier}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-due{grid-area:due}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-doc{grid-area:doc}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-entity{grid-area:entity}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-code{grid-area:code}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-name{grid-area:name}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-category{grid-area:category}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-stock{grid-area:stock}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-unit{grid-area:unit}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-movement{grid-area:movement}
+ .pwa-ops-page .pwa-ops-row .pwa-ops-note .catatan-isi{overflow-wrap:anywhere}
+ .pwa-ops-page .pwa-ops-row >td.pwa-ops-actions [title]{touch-action:manipulation}
+ /* Kontras kartu gelap: teks abu-abu (slate) di dalam kartu operasional
+    dipetakan ke token terang agar nilai transaksi/pesanan tetap terbaca. */
+ .pwa-ops-row :is(.text-slate-200,.text-slate-300,.text-slate-400,.text-slate-500,.text-slate-600,.text-slate-700){color:var(--brand-surface-text_secondary,var(--text-secondary,#cbd5e1))}
+ .pwa-ops-row :is(.text-slate-800,.text-slate-900){color:var(--brand-surface-text,var(--text-primary,#f8fafc))} .pwa-ops-page .pwa-ops-row >td.pwa-ops-total,.pwa-ops-page .pwa-ops-row >td.pwa-ops-stock{text-align:left!important}
+ .pwa-ops-page form[method='GET']{max-width:100%}
+ .pwa-ops-page form[method='GET'] input:not([type='checkbox']),.pwa-ops-page form[method='GET'] select{font-size:16px;min-height:44px}
+}
+
+/* ==========================================================================
+   DARK MODE — kartu operasional mengikuti token gelap (bukan tetap putih
+   karena fallback --brand-surface-primary yang tidak di-override html.dark).
+   Perbaikan P1 review visual: teks pucat di kartu.
+   ========================================================================== */
+html.dark .pwa-ops-page .pwa-ops-table tbody tr.pwa-ops-row{background:var(--surface-primary,#1A231F);border-color:var(--border-primary,#3F4F47);color:var(--text-primary,#F1F5F1);box-shadow:0 3px 12px rgb(0 0 0 / 30%)}
+html.dark .pwa-ops-page .pwa-ops-row :is(.text-slate-200,.text-slate-300,.text-slate-400,.text-slate-500,.text-slate-600,.text-slate-700){color:var(--text-secondary,#C9D6CE)}
+html.dark .pwa-ops-page .pwa-ops-row :is(.text-slate-800,.text-slate-900){color:var(--text-primary,#F1F5F1)}
+html.dark .pwa-ops-page .pwa-ops-filter .pwa-ops-filter-toggle{background:var(--surface-secondary,#2A3731);border-color:var(--border-primary,#3F4F47);color:var(--text-secondary,#C9D6CE)}
+html.dark .pwa-ops-page .pwa-ops-filter .pwa-ops-filter-toggle::after{color:var(--text-tertiary,#9DB8AD)}
+html.dark .pwa-ops-page .pwa-ops-filter--active .pwa-ops-filter-toggle{color:var(--accent-primary,#5FC4D4)}
+html.dark .pwa-ops-page .pwa-ops-filter--active .pwa-ops-filter-toggle > span::after{background:var(--accent-primary,#5FC4D4)}
+html.dark .pwa-ops-page .pwa-ops-filter .pwa-ops-filter-actions{border-top-color:var(--border-primary,#3F4F47)}
+
+/* Dark mode: pastikan label form tidak pucat berlebihan */
+html.dark .pwa-ops-page label,
+html.dark .produksi-page label{color:var(--text-secondary,#C9D6CE)}
+html.dark .pwa-ops-page .text-slate-400{color:var(--text-tertiary,#9DB8AD)}
+html.dark .pwa-ops-page .text-slate-500{color:var(--text-secondary,#C9D6CE)}

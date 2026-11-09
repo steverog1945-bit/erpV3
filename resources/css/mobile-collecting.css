@@ -1,0 +1,38 @@
+.collecting-mobile-filter-toggle, .collecting-mobile-action-label {display:none}
+.collecting-mobile-filter-panel {display:contents}
+@media screen and (max-width:767.98px) {
+ .collecting-mobile-page{padding:16px 12px calc(130px + env(safe-area-inset-bottom,0px))}
+ .collecting-mobile-filter-card{margin-bottom:12px}
+ .collecting-mobile-filter-form{gap:10px;align-items:end}
+ .collecting-mobile-search{flex:1 0 100%;min-width:0}
+ .collecting-mobile-filter-toggle{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:9px 12px;border:1px solid var(--brand-surface-border,var(--border-primary));border-radius:12px;background:var(--brand-surface-secondary,var(--surface-secondary));color:var(--brand-surface-text,var(--text-primary));font-size:13px;font-weight:600;cursor:pointer}
+ .collecting-mobile-filter-active-dot{width:7px;height:7px;border-radius:50%;background:var(--brand-accent-light,currentColor)}
+ .collecting-mobile-chevron{font-size:10px;transition:transform 150ms ease}
+ .collecting-mobile-filter-toggle[aria-expanded="true"] .collecting-mobile-chevron{transform:rotate(180deg)}
+ .collecting-mobile-filter-panel{display:none;flex:1 0 100%;flex-wrap:wrap;width:100%;gap:10px}
+ .collecting-mobile-filter-panel.collecting-filter-open{display:flex}
+ .collecting-mobile-filter-panel>div{flex:1 0 100%;min-width:0}
+ .collecting-mobile-filter-form input:not([type="checkbox"]),.collecting-mobile-filter-form select{width:100%;min-height:44px;font-size:16px}
+ .collecting-mobile-filter-submit{min-height:44px}
+ .collecting-mobile-table-shell,.collecting-mobile-table-shell .modern-table-wrapper{width:100%;min-width:0;overflow:visible;border:0;box-shadow:none;background:transparent}
+ .collecting-mobile-table,.collecting-mobile-table tbody{display:block;width:100%;min-width:0}
+ .collecting-mobile-table thead{display:none}
+ .collecting-mobile-table tbody tr.collecting-order-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"invoice invoice" "consumer consumer" "progress progress" "payment work" "pickup pickup" "date date" "actions actions";gap:9px 12px;margin-bottom:10px;padding:13px 12px;border:1px solid var(--brand-surface-border,var(--border-primary));border-radius:14px;background:var(--brand-surface-primary,var(--surface-primary));box-shadow:0 3px 12px rgb(15 23 42 / 4%)}
+ .collecting-mobile-table .collecting-order-row>td{display:block;width:auto;min-width:0;padding:0;border:0;text-align:left;overflow-wrap:anywhere;line-height:1.35}
+ .collecting-mobile-table .collecting-order-row>td::before{content:attr(data-label);display:block;margin-bottom:3px;color:var(--brand-surface-text_tertiary,var(--text-tertiary));font-size:11px;font-weight:600;letter-spacing:.03em}
+ .collecting-mobile-table .collecting-sequence{display:none!important}
+ .collecting-mobile-table .collecting-invoice{grid-area:invoice;font-size:14px;font-weight:700}
+ .collecting-mobile-table .collecting-consumer{grid-area:consumer;font-size:14px}
+ .collecting-mobile-table .collecting-date{grid-area:date}
+ .collecting-mobile-table .collecting-progress{grid-area:progress}
+ .collecting-mobile-table .collecting-progress>div{max-width:100%;flex-wrap:wrap}
+ .collecting-mobile-table .collecting-payment{grid-area:payment}
+ .collecting-mobile-table .collecting-work{grid-area:work}
+ .collecting-mobile-table .collecting-pickup{grid-area:pickup}
+ .collecting-mobile-table .collecting-actions{grid-area:actions;padding-top:9px!important;border-top:1px solid var(--brand-surface-border,var(--border-primary))}
+ .collecting-mobile-table .collecting-actions::before{display:none}
+ .collecting-mobile-table .collecting-actions>div{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:8px}
+ .collecting-mobile-table .collecting-actions>div>*{display:inline-flex;align-items:center;justify-content:center;gap:6px;width:auto!important;height:auto!important;min-height:44px;padding:0 12px!important;border-radius:10px;font-size:12px}
+ .collecting-mobile-table .collecting-mobile-action-label{display:inline}
+ .collecting-mobile-table .collecting-empty-row,.collecting-mobile-table .collecting-empty-row td{display:block;width:100%}
+}

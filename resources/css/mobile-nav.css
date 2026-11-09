@@ -1,0 +1,146 @@
+/* ==========================================================================
+   MOBILE-02 - NAVIGASI BAWAH HP (<768px)
+   Pintasan ke rute yang SUDAH ADA; visibilitas setiap item dikuasai oleh
+   Blade permission yang sama (JalurLanjut::boleh) - tidak ada sistem RBAC
+   baru, tidak ada rute baru. Desktop >=768px: disembunyikan sepenuhnya
+   (0 piksel terpengaruh).
+   ========================================================================== */
+.mobile-bottom-nav {
+    display: none; /* desktop: hilang sepenuhnya */
+}
+.topbar-burger-mobile {
+    display: none;
+}
+
+@media screen and (max-width: 767.98px) {
+    .topbar {
+        min-height: 56px;
+        margin: 8px;
+        padding: 6px 8px;
+        gap: 8px;
+    }
+    #mainContent .topbar-burger,
+    #topbar-mobile-btn {
+        width: 44px;
+        height: 44px;
+        flex: 0 0 44px;
+    }
+    .topbar-burger-mobile,
+    #topbar-mobile-btn svg {
+        width: 20px;
+        height: 20px;
+        flex: 0 0 20px;
+    }
+    .topbar-burger-desktop {
+        display: none;
+    }
+    .topbar-burger-mobile {
+        display: block;
+        width: 20px;
+        height: 20px;
+    }
+    .topbar-app-name {
+        min-width: 0;
+        max-width: 38vw;
+        font-size: 13px;
+    }
+    aside#mainSidebar {
+        width: min(86vw, 320px);
+        z-index: 50;
+    }
+    #sidebarOverlay {
+        z-index: 40;
+    }
+    [data-modal-root] {
+        z-index: 60;
+    }
+
+    .mobile-bottom-nav {
+        display: flex;
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+        z-index: 30;
+        width: auto;
+        box-sizing: border-box;
+        background: var(--brand-surface-primary);
+        border: 1px solid var(--brand-surface-border);
+        border-radius: 999px;
+        box-shadow: 0 8px 28px rgb(15 23 42 / 14%);
+        padding: 7px;
+        gap: 4px;
+    }
+    html.dark .mobile-bottom-nav {
+        background: var(--brand-surface-dark_primary);
+        border-color: var(--brand-surface-dark_border);
+        box-shadow: 0 8px 28px rgb(0 0 0 / 32%);
+    }
+
+    .content-wrapper {
+        padding-bottom: calc(108px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .mobile-nav-item {
+        flex: 1 1 0;         /* Temuan review 02.1: lebar item seimbang sepanjang bar */
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        font-family: var(--brand-font-family, inherit);
+        font-size: var(--brand-label-size, 11px);
+        font-weight: var(--brand-weight-medium, 600);
+        letter-spacing: var(--brand-letter-spacing, 0.02em);
+        line-height: var(--brand-line-height, 1.2);
+        color: var(--brand-surface-text_tertiary, var(--text-tertiary, #5F7167));
+        text-decoration: none;
+        min-height: 58px;
+        padding: 5px 2px;
+        border-radius: 999px;
+        transition: color 0.15s ease;
+    }
+    /* Reset tampilan default <button>, karena "Lainnya" sekarang tombol
+       pembuka menu samping (bukan tautan) */
+    button.mobile-nav-item {
+        background: none;
+        border: 0;
+        padding: 5px 2px;
+        cursor: pointer;
+    }
+    .mobile-nav-item:hover {
+        color: var(--brand-mobile-nav-active-light);
+    }
+    .mobile-nav-item:focus-visible {
+        outline: 2px solid var(--brand-accent-light);
+        outline-offset: -2px;
+    }
+    .mobile-nav-item svg {
+        display: block;
+        flex: 0 0 22px;
+        width: 22px;
+        height: 22px;
+        color: currentColor;
+        line-height: 1;
+    }
+    .mobile-nav-item.mobile-nav-active {
+        color: var(--brand-mobile-nav-active-light);
+        background: var(--brand-accent-surface-light);
+        font-weight: 700;
+    }
+    html.dark .mobile-nav-item.mobile-nav-active {
+        background: var(--brand-accent-surface-dark);
+    }
+    .mobile-nav-label {
+        display: block;
+        white-space: nowrap;
+        line-height: 1.2;
+    }
+    body.mobile-menu-open .mobile-bottom-nav {
+        display: none;
+    }
+}
+html.dark .mobile-nav-item { color: var(--brand-mobile-nav-inactive-dark); }
+html.dark .mobile-nav-item.mobile-nav-active { color: var(--brand-mobile-nav-active-dark); }
+html.dark .mobile-nav-item:focus-visible { outline-color: var(--brand-accent-dark); }

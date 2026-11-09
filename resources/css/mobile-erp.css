@@ -1,0 +1,83 @@
+/* Fondasi presentasi lintas modul. Semua perubahan berhenti di viewport HP. */
+@media screen and (max-width: 767.98px) {
+    #mainContent,
+    .content-wrapper {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .content-wrapper > *,
+    .content-wrapper :is(form, fieldset, .grid, .flex) {
+        min-width: 0;
+    }
+
+    .content-wrapper h1 {
+        font-size: clamp(18px, 5.4vw, 22px);
+        line-height: 1.25;
+    }
+
+    .content-wrapper h2 {
+        font-size: clamp(16px, 4.8vw, 20px);
+        line-height: 1.3;
+    }
+
+    .content-wrapper :is(.modern-table-wrapper, .table-responsive, .overflow-x-auto) {
+        max-width: 100%;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .content-wrapper .modern-table {
+        min-width: 760px;
+    }
+
+    .content-wrapper :is(.modern-table th, .modern-table td) {
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+
+    .content-wrapper input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    .content-wrapper select,
+    .content-wrapper textarea {
+        font-size: 16px;
+        max-width: 100%;
+    }
+
+    .content-wrapper form label {
+        font-size: max(12px, 1em);
+        line-height: 1.35;
+    }
+
+    .content-wrapper button {
+        min-height: 44px;
+    }
+
+    .content-wrapper :is(canvas, img, video, iframe) {
+        max-width: 100%;
+    }
+
+    .content-wrapper pre,
+    .content-wrapper code {
+        overflow-wrap: anywhere;
+    }
+}
+
+@media screen and (max-width: 479.98px) {
+    .content-wrapper .flex.flex-col[class*="md:flex-row"] {
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .content-wrapper .flex.flex-col[class*="md:flex-row"] > div:first-child {
+        min-width: 0;
+    }
+
+    .content-wrapper .flex.flex-col[class*="md:flex-row"] > div.flex.flex-wrap {
+        width: 100%;
+    }
+
+    .content-wrapper .bg-white.rounded-xl.border > .p-5 {
+        padding: 14px;
+    }
+}

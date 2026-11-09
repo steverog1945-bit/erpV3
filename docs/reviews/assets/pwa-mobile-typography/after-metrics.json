@@ -1,0 +1,1550 @@
+[
+  {
+    "url": "http://127.0.0.1:8000/kasir/monitoring",
+    "viewport": {
+      "w": 1920,
+      "h": 900
+    },
+    "details": {
+      "open": false,
+      "display": "flex",
+      "flex-direction": "row",
+      "width": "1478px",
+      "box": {
+        "x": 365,
+        "y": 298,
+        "w": 1478,
+        "h": 64
+      }
+    },
+    "summary": {
+      "display": "none",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    },
+    "form": {
+      "display": "flex",
+      "flex-wrap": "wrap",
+      "gap": "16px",
+      "align-items": "flex-end",
+      "box": {
+        "x": 365,
+        "y": 298,
+        "w": 1478,
+        "h": 64
+      }
+    },
+    "fields": {
+      "display": "contents",
+      "grid-template-columns": "none",
+      "flex-wrap": "nowrap",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    },
+    "actions": {
+      "display": "flex",
+      "box": {
+        "x": 1341,
+        "y": 327,
+        "w": 84,
+        "h": 36
+      }
+    },
+    "cardBox": {
+      "x": 345,
+      "y": 278,
+      "w": 1518,
+      "h": 104
+    },
+    "fieldWrappers": [
+      {
+        "cls": "w-full md:w-40",
+        "x": 365,
+        "y": 298,
+        "w": 160,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-40",
+        "x": 541,
+        "y": 298,
+        "w": 160,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-56",
+        "x": 717,
+        "y": 298,
+        "w": 224,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 957,
+        "y": 298,
+        "w": 176,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 1149,
+        "y": 298,
+        "w": 176,
+        "h": 64
+      }
+    ],
+    "fieldRows": 1,
+    "input": {
+      "tag": "INPUT",
+      "font-size": "14px",
+      "font-weight": "400",
+      "font-family": "Inter, sans-serif",
+      "width": "160px",
+      "height": "38px"
+    },
+    "label": {
+      "font-size": "13px",
+      "font-weight": "500"
+    },
+    "table": {
+      "x": 345,
+      "y": 408,
+      "w": 1518,
+      "h": 121
+    },
+    "tableTopVsCardBottom": 26,
+    "docScrollW": 1920,
+    "docClientW": 1920,
+    "bodyText": "Monitoring Kasir\n\nDaftar order yang transaksinya sudah dibuka kasir. Order yang masih menunggu ada di Antrean Baru.\n\nScan Barcode\nAntrean Baru\n2\nOrder Dari\nOrder Sampai\nKonsumen\n-- Semua Konsumen --\nA",
+    "toggleVisible": false,
+    "filterActive": false,
+    "consoleErrors": []
+  },
+  {
+    "url": "http://127.0.0.1:8000/kasir/monitoring",
+    "viewport": {
+      "w": 1440,
+      "h": 900
+    },
+    "details": {
+      "open": false,
+      "display": "flex",
+      "flex-direction": "row",
+      "width": "998px",
+      "box": {
+        "x": 365,
+        "y": 298,
+        "w": 998,
+        "h": 116
+      }
+    },
+    "summary": {
+      "display": "none",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    },
+    "form": {
+      "display": "flex",
+      "flex-wrap": "wrap",
+      "gap": "16px",
+      "align-items": "flex-end",
+      "box": {
+        "x": 365,
+        "y": 298,
+        "w": 998,
+        "h": 116
+      }
+    },
+    "fields": {
+      "display": "contents",
+      "grid-template-columns": "none",
+      "flex-wrap": "nowrap",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    },
+    "actions": {
+      "display": "flex",
+      "box": {
+        "x": 365,
+        "y": 378,
+        "w": 84,
+        "h": 36
+      }
+    },
+    "cardBox": {
+      "x": 345,
+      "y": 278,
+      "w": 1038,
+      "h": 156
+    },
+    "fieldWrappers": [
+      {
+        "cls": "w-full md:w-40",
+        "x": 365,
+        "y": 298,
+        "w": 160,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-40",
+        "x": 541,
+        "y": 298,
+        "w": 160,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-56",
+        "x": 717,
+        "y": 298,
+        "w": 224,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 957,
+        "y": 298,
+        "w": 176,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 1149,
+        "y": 298,
+        "w": 176,
+        "h": 64
+      }
+    ],
+    "fieldRows": 1,
+    "input": {
+      "tag": "INPUT",
+      "font-size": "14px",
+      "font-weight": "400",
+      "font-family": "Inter, sans-serif",
+      "width": "160px",
+      "height": "38px"
+    },
+    "label": {
+      "font-size": "13px",
+      "font-weight": "500"
+    },
+    "table": {
+      "x": 345,
+      "y": 460,
+      "w": 1038,
+      "h": 141
+    },
+    "tableTopVsCardBottom": 26,
+    "docScrollW": 1440,
+    "docClientW": 1440,
+    "bodyText": "Monitoring Kasir\n\nDaftar order yang transaksinya sudah dibuka kasir. Order yang masih menunggu ada di Antrean Baru.\n\nScan Barcode\nAntrean Baru\n2\nOrder Dari\nOrder Sampai\nKonsumen\n-- Semua Konsumen --\nA",
+    "toggleVisible": false,
+    "filterActive": false,
+    "consoleErrors": []
+  },
+  {
+    "url": "http://127.0.0.1:8000/kasir/monitoring",
+    "viewport": {
+      "w": 1366,
+      "h": 900
+    },
+    "details": {
+      "open": false,
+      "display": "flex",
+      "flex-direction": "row",
+      "width": "924px",
+      "box": {
+        "x": 365,
+        "y": 298,
+        "w": 924,
+        "h": 144
+      }
+    },
+    "summary": {
+      "display": "none",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    },
+    "form": {
+      "display": "flex",
+      "flex-wrap": "wrap",
+      "gap": "16px",
+      "align-items": "flex-end",
+      "box": {
+        "x": 365,
+        "y": 298,
+        "w": 924,
+        "h": 144
+      }
+    },
+    "fields": {
+      "display": "contents",
+      "grid-template-columns": "none",
+      "flex-wrap": "nowrap",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    },
+    "actions": {
+      "display": "flex",
+      "box": {
+        "x": 557,
+        "y": 407,
+        "w": 84,
+        "h": 36
+      }
+    },
+    "cardBox": {
+      "x": 345,
+      "y": 278,
+      "w": 964,
+      "h": 184
+    },
+    "fieldWrappers": [
+      {
+        "cls": "w-full md:w-40",
+        "x": 365,
+        "y": 298,
+        "w": 160,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-40",
+        "x": 541,
+        "y": 298,
+        "w": 160,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-56",
+        "x": 717,
+        "y": 298,
+        "w": 224,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 957,
+        "y": 298,
+        "w": 176,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 365,
+        "y": 378,
+        "w": 176,
+        "h": 64
+      }
+    ],
+    "fieldRows": 2,
+    "input": {
+      "tag": "INPUT",
+      "font-size": "14px",
+      "font-weight": "400",
+      "font-family": "Inter, sans-serif",
+      "width": "160px",
+      "height": "38px"
+    },
+    "label": {
+      "font-size": "13px",
+      "font-weight": "500"
+    },
+    "table": {
+      "x": 345,
+      "y": 489,
+      "w": 1000,
+      "h": 141
+    },
+    "tableTopVsCardBottom": 27,
+    "docScrollW": 1366,
+    "docClientW": 1366,
+    "bodyText": "Monitoring Kasir\n\nDaftar order yang transaksinya sudah dibuka kasir. Order yang masih menunggu ada di Antrean Baru.\n\nScan Barcode\nAntrean Baru\n2\nOrder Dari\nOrder Sampai\nKonsumen\n-- Semua Konsumen --\nA",
+    "toggleVisible": false,
+    "filterActive": false,
+    "consoleErrors": []
+  },
+  {
+    "url": "http://127.0.0.1:8000/kasir/monitoring",
+    "viewport": {
+      "w": 1280,
+      "h": 900
+    },
+    "details": {
+      "open": false,
+      "display": "flex",
+      "flex-direction": "row",
+      "width": "838px",
+      "box": {
+        "x": 365,
+        "y": 319,
+        "w": 838,
+        "h": 144
+      }
+    },
+    "summary": {
+      "display": "none",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    },
+    "form": {
+      "display": "flex",
+      "flex-wrap": "wrap",
+      "gap": "16px",
+      "align-items": "flex-end",
+      "box": {
+        "x": 365,
+        "y": 319,
+        "w": 838,
+        "h": 144
+      }
+    },
+    "fields": {
+      "display": "contents",
+      "grid-template-columns": "none",
+      "flex-wrap": "nowrap",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    },
+    "actions": {
+      "display": "flex",
+      "box": {
+        "x": 557,
+        "y": 428,
+        "w": 84,
+        "h": 36
+      }
+    },
+    "cardBox": {
+      "x": 345,
+      "y": 299,
+      "w": 878,
+      "h": 184
+    },
+    "fieldWrappers": [
+      {
+        "cls": "w-full md:w-40",
+        "x": 365,
+        "y": 319,
+        "w": 160,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-40",
+        "x": 541,
+        "y": 319,
+        "w": 160,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-56",
+        "x": 717,
+        "y": 319,
+        "w": 224,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 957,
+        "y": 319,
+        "w": 176,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 365,
+        "y": 399,
+        "w": 176,
+        "h": 64
+      }
+    ],
+    "fieldRows": 2,
+    "input": {
+      "tag": "INPUT",
+      "font-size": "14px",
+      "font-weight": "400",
+      "font-family": "Inter, sans-serif",
+      "width": "160px",
+      "height": "38px"
+    },
+    "label": {
+      "font-size": "13px",
+      "font-weight": "500"
+    },
+    "table": {
+      "x": 345,
+      "y": 510,
+      "w": 1000,
+      "h": 141
+    },
+    "tableTopVsCardBottom": 27,
+    "docScrollW": 1280,
+    "docClientW": 1280,
+    "bodyText": "Monitoring Kasir\n\nDaftar order yang transaksinya sudah dibuka kasir. Order yang masih menunggu ada di Antrean Baru.\n\nScan Barcode\nAntrean Baru\n2\nOrder Dari\nOrder Sampai\nKonsumen\n-- Semua Konsumen --\nA",
+    "toggleVisible": false,
+    "filterActive": false,
+    "consoleErrors": []
+  },
+  {
+    "url": "http://127.0.0.1:8000/kasir/monitoring",
+    "viewport": {
+      "w": 1024,
+      "h": 900
+    },
+    "details": {
+      "open": false,
+      "display": "flex",
+      "flex-direction": "row",
+      "width": "582px",
+      "box": {
+        "x": 365,
+        "y": 319,
+        "w": 582,
+        "h": 144
+      }
+    },
+    "summary": {
+      "display": "none",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    },
+    "form": {
+      "display": "flex",
+      "flex-wrap": "wrap",
+      "gap": "16px",
+      "align-items": "flex-end",
+      "box": {
+        "x": 365,
+        "y": 319,
+        "w": 582,
+        "h": 144
+      }
+    },
+    "fields": {
+      "display": "contents",
+      "grid-template-columns": "none",
+      "flex-wrap": "nowrap",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    },
+    "actions": {
+      "display": "flex",
+      "box": {
+        "x": 749,
+        "y": 428,
+        "w": 84,
+        "h": 36
+      }
+    },
+    "cardBox": {
+      "x": 345,
+      "y": 299,
+      "w": 622,
+      "h": 184
+    },
+    "fieldWrappers": [
+      {
+        "cls": "w-full md:w-40",
+        "x": 365,
+        "y": 319,
+        "w": 160,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-40",
+        "x": 541,
+        "y": 319,
+        "w": 160,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-56",
+        "x": 717,
+        "y": 319,
+        "w": 224,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 365,
+        "y": 399,
+        "w": 176,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 557,
+        "y": 399,
+        "w": 176,
+        "h": 64
+      }
+    ],
+    "fieldRows": 2,
+    "input": {
+      "tag": "INPUT",
+      "font-size": "14px",
+      "font-weight": "400",
+      "font-family": "Inter, sans-serif",
+      "width": "160px",
+      "height": "38px"
+    },
+    "label": {
+      "font-size": "13px",
+      "font-weight": "500"
+    },
+    "table": {
+      "x": 345,
+      "y": 510,
+      "w": 1000,
+      "h": 141
+    },
+    "tableTopVsCardBottom": 27,
+    "docScrollW": 1024,
+    "docClientW": 1024,
+    "bodyText": "Monitoring Kasir\n\nDaftar order yang transaksinya sudah dibuka kasir. Order yang masih menunggu ada di Antrean Baru.\n\nScan Barcode\nAntrean Baru\n2\nOrder Dari\nOrder Sampai\nKonsumen\n-- Semua Konsumen --\nA",
+    "toggleVisible": false,
+    "filterActive": false,
+    "consoleErrors": []
+  },
+  {
+    "url": "http://127.0.0.1:8000/kasir/monitoring",
+    "viewport": {
+      "w": 768,
+      "h": 900
+    },
+    "details": {
+      "open": false,
+      "display": "flex",
+      "flex-direction": "row",
+      "width": "630px",
+      "box": {
+        "x": 69,
+        "y": 319,
+        "w": 630,
+        "h": 144
+      }
+    },
+    "summary": {
+      "display": "none",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    },
+    "form": {
+      "display": "flex",
+      "flex-wrap": "wrap",
+      "gap": "16px",
+      "align-items": "flex-end",
+      "box": {
+        "x": 69,
+        "y": 319,
+        "w": 630,
+        "h": 144
+      }
+    },
+    "fields": {
+      "display": "contents",
+      "grid-template-columns": "none",
+      "flex-wrap": "nowrap",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    },
+    "actions": {
+      "display": "flex",
+      "box": {
+        "x": 453,
+        "y": 428,
+        "w": 84,
+        "h": 36
+      }
+    },
+    "cardBox": {
+      "x": 49,
+      "y": 299,
+      "w": 670,
+      "h": 184
+    },
+    "fieldWrappers": [
+      {
+        "cls": "w-full md:w-40",
+        "x": 69,
+        "y": 319,
+        "w": 160,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-40",
+        "x": 245,
+        "y": 319,
+        "w": 160,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-56",
+        "x": 421,
+        "y": 319,
+        "w": 224,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 69,
+        "y": 399,
+        "w": 176,
+        "h": 64
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 261,
+        "y": 399,
+        "w": 176,
+        "h": 64
+      }
+    ],
+    "fieldRows": 2,
+    "input": {
+      "tag": "INPUT",
+      "font-size": "14px",
+      "font-weight": "400",
+      "font-family": "Inter, sans-serif",
+      "width": "160px",
+      "height": "38px"
+    },
+    "label": {
+      "font-size": "13px",
+      "font-weight": "500"
+    },
+    "table": {
+      "x": 49,
+      "y": 510,
+      "w": 1000,
+      "h": 141
+    },
+    "tableTopVsCardBottom": 27,
+    "docScrollW": 768,
+    "docClientW": 768,
+    "bodyText": "Monitoring Kasir\n\nDaftar order yang transaksinya sudah dibuka kasir. Order yang masih menunggu ada di Antrean Baru.\n\nScan Barcode\nAntrean Baru\n2\nOrder Dari\nOrder Sampai\nKonsumen\n-- Semua Konsumen --\nA",
+    "toggleVisible": false,
+    "filterActive": false,
+    "consoleErrors": []
+  },
+  {
+    "url": "http://127.0.0.1:8000/kasir/monitoring",
+    "viewport": {
+      "w": 767,
+      "h": 900
+    },
+    "details": {
+      "open": false,
+      "display": "block",
+      "flex-direction": "row",
+      "width": "653px",
+      "box": {
+        "x": 57,
+        "y": 310,
+        "w": 653,
+        "h": 54
+      }
+    },
+    "summary": {
+      "display": "flex",
+      "box": {
+        "x": 57,
+        "y": 310,
+        "w": 653,
+        "h": 44
+      }
+    },
+    "form": {
+      "display": "flex",
+      "flex-wrap": "wrap",
+      "gap": "8px",
+      "align-items": "flex-end",
+      "box": {
+        "x": 57,
+        "y": 310,
+        "w": 653,
+        "h": 54
+      }
+    },
+    "fields": {
+      "display": "none",
+      "grid-template-columns": "none",
+      "flex-wrap": "nowrap",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    },
+    "actions": {
+      "display": "inline-flex",
+      "box": {
+        "x": 57,
+        "y": 364,
+        "w": 84,
+        "h": 55
+      }
+    },
+    "cardBox": {
+      "x": 37,
+      "y": 290,
+      "w": 693,
+      "h": 94
+    },
+    "fieldWrappers": [
+      {
+        "cls": "w-full md:w-40",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-40",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-56",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    ],
+    "fieldRows": 0,
+    "input": {
+      "tag": "INPUT",
+      "font-size": "16px",
+      "font-weight": "400",
+      "font-family": "Inter, sans-serif",
+      "width": "100%",
+      "height": "38px"
+    },
+    "label": {
+      "font-size": "13px",
+      "font-weight": "500"
+    },
+    "table": {
+      "x": 36,
+      "y": 397,
+      "w": 695,
+      "h": 328
+    },
+    "tableTopVsCardBottom": 13,
+    "docScrollW": 767,
+    "docClientW": 767,
+    "bodyText": "Monitoring Kasir\n\nDaftar order yang transaksinya sudah dibuka kasir. Order yang masih menunggu ada di Antrean Baru.\n\nScan Barcode\nAntrean Baru\n2\nFilter\n26 Okt 2026\n18:28\nReguler\n#N2610-0004\nKasir: kas",
+    "toggleVisible": true,
+    "filterActive": false,
+    "consoleErrors": []
+  },
+  {
+    "url": "http://127.0.0.1:8000/kasir/monitoring",
+    "viewport": {
+      "w": 430,
+      "h": 900
+    },
+    "details": {
+      "open": false,
+      "display": "block",
+      "flex-direction": "row",
+      "width": "328px",
+      "box": {
+        "x": 51,
+        "y": 293,
+        "w": 328,
+        "h": 54
+      }
+    },
+    "summary": {
+      "display": "flex",
+      "box": {
+        "x": 51,
+        "y": 293,
+        "w": 328,
+        "h": 44
+      }
+    },
+    "form": {
+      "display": "flex",
+      "flex-wrap": "wrap",
+      "gap": "8px",
+      "align-items": "flex-end",
+      "box": {
+        "x": 51,
+        "y": 293,
+        "w": 328,
+        "h": 54
+      }
+    },
+    "fields": {
+      "display": "none",
+      "grid-template-columns": "none",
+      "flex-wrap": "nowrap",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    },
+    "actions": {
+      "display": "inline-flex",
+      "box": {
+        "x": 51,
+        "y": 347,
+        "w": 84,
+        "h": 55
+      }
+    },
+    "cardBox": {
+      "x": 37,
+      "y": 279,
+      "w": 356,
+      "h": 82
+    },
+    "fieldWrappers": [
+      {
+        "cls": "w-full md:w-40",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-40",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-56",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    ],
+    "fieldRows": 0,
+    "input": {
+      "tag": "INPUT",
+      "font-size": "16px",
+      "font-weight": "400",
+      "font-family": "Inter, sans-serif",
+      "width": "100%",
+      "height": "38px"
+    },
+    "label": {
+      "font-size": "13px",
+      "font-weight": "500"
+    },
+    "table": {
+      "x": 36,
+      "y": 374,
+      "w": 358,
+      "h": 328
+    },
+    "tableTopVsCardBottom": 13,
+    "docScrollW": 430,
+    "docClientW": 430,
+    "bodyText": "Monitoring Kasir\n\nDaftar order yang transaksinya sudah dibuka kasir. Order yang masih menunggu ada di Antrean Baru.\n\nScan Barcode\nAntrean Baru\n2\nFilter\n26 Okt 2026\n18:28\nReguler\n#N2610-0004\nKasir: kas",
+    "toggleVisible": true,
+    "filterActive": false,
+    "consoleErrors": []
+  },
+  {
+    "url": "http://127.0.0.1:8000/kasir/monitoring",
+    "viewport": {
+      "w": 390,
+      "h": 900
+    },
+    "details": {
+      "open": false,
+      "display": "block",
+      "flex-direction": "row",
+      "width": "288px",
+      "box": {
+        "x": 51,
+        "y": 293,
+        "w": 288,
+        "h": 54
+      }
+    },
+    "summary": {
+      "display": "flex",
+      "box": {
+        "x": 51,
+        "y": 293,
+        "w": 288,
+        "h": 44
+      }
+    },
+    "form": {
+      "display": "flex",
+      "flex-wrap": "wrap",
+      "gap": "8px",
+      "align-items": "flex-end",
+      "box": {
+        "x": 51,
+        "y": 293,
+        "w": 288,
+        "h": 54
+      }
+    },
+    "fields": {
+      "display": "none",
+      "grid-template-columns": "none",
+      "flex-wrap": "nowrap",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    },
+    "actions": {
+      "display": "inline-flex",
+      "box": {
+        "x": 51,
+        "y": 347,
+        "w": 84,
+        "h": 55
+      }
+    },
+    "cardBox": {
+      "x": 37,
+      "y": 279,
+      "w": 316,
+      "h": 82
+    },
+    "fieldWrappers": [
+      {
+        "cls": "w-full md:w-40",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-40",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-56",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    ],
+    "fieldRows": 0,
+    "input": {
+      "tag": "INPUT",
+      "font-size": "16px",
+      "font-weight": "400",
+      "font-family": "Inter, sans-serif",
+      "width": "100%",
+      "height": "38px"
+    },
+    "label": {
+      "font-size": "13px",
+      "font-weight": "500"
+    },
+    "table": {
+      "x": 36,
+      "y": 374,
+      "w": 318,
+      "h": 328
+    },
+    "tableTopVsCardBottom": 13,
+    "docScrollW": 390,
+    "docClientW": 390,
+    "bodyText": "Monitoring Kasir\n\nDaftar order yang transaksinya sudah dibuka kasir. Order yang masih menunggu ada di Antrean Baru.\n\nScan Barcode\nAntrean Baru\n2\nFilter\n26 Okt 2026\n18:28\nReguler\n#N2610-0004\nKasir: kas",
+    "toggleVisible": true,
+    "filterActive": false,
+    "consoleErrors": []
+  },
+  {
+    "url": "http://127.0.0.1:8000/kasir/monitoring",
+    "viewport": {
+      "w": 375,
+      "h": 900
+    },
+    "details": {
+      "open": false,
+      "display": "block",
+      "flex-direction": "row",
+      "width": "273px",
+      "box": {
+        "x": 51,
+        "y": 314,
+        "w": 273,
+        "h": 54
+      }
+    },
+    "summary": {
+      "display": "flex",
+      "box": {
+        "x": 51,
+        "y": 314,
+        "w": 273,
+        "h": 44
+      }
+    },
+    "form": {
+      "display": "flex",
+      "flex-wrap": "wrap",
+      "gap": "8px",
+      "align-items": "flex-end",
+      "box": {
+        "x": 51,
+        "y": 314,
+        "w": 273,
+        "h": 54
+      }
+    },
+    "fields": {
+      "display": "none",
+      "grid-template-columns": "none",
+      "flex-wrap": "nowrap",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    },
+    "actions": {
+      "display": "inline-flex",
+      "box": {
+        "x": 51,
+        "y": 368,
+        "w": 84,
+        "h": 55
+      }
+    },
+    "cardBox": {
+      "x": 37,
+      "y": 300,
+      "w": 301,
+      "h": 82
+    },
+    "fieldWrappers": [
+      {
+        "cls": "w-full md:w-40",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-40",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-56",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    ],
+    "fieldRows": 0,
+    "input": {
+      "tag": "INPUT",
+      "font-size": "16px",
+      "font-weight": "400",
+      "font-family": "Inter, sans-serif",
+      "width": "100%",
+      "height": "38px"
+    },
+    "label": {
+      "font-size": "13px",
+      "font-weight": "500"
+    },
+    "table": {
+      "x": 36,
+      "y": 395,
+      "w": 303,
+      "h": 345
+    },
+    "tableTopVsCardBottom": 13,
+    "docScrollW": 375,
+    "docClientW": 375,
+    "bodyText": "Monitoring Kasir\n\nDaftar order yang transaksinya sudah dibuka kasir. Order yang masih menunggu ada di Antrean Baru.\n\nScan Barcode\nAntrean Baru\n2\nFilter\n26 Okt 2026\n18:28\nReguler\n#N2610-0004\nKasir: kas",
+    "toggleVisible": true,
+    "filterActive": false,
+    "consoleErrors": []
+  },
+  {
+    "url": "http://127.0.0.1:8000/kasir/monitoring",
+    "viewport": {
+      "w": 360,
+      "h": 900
+    },
+    "details": {
+      "open": false,
+      "display": "block",
+      "flex-direction": "row",
+      "width": "258px",
+      "box": {
+        "x": 51,
+        "y": 314,
+        "w": 258,
+        "h": 54
+      }
+    },
+    "summary": {
+      "display": "flex",
+      "box": {
+        "x": 51,
+        "y": 314,
+        "w": 258,
+        "h": 44
+      }
+    },
+    "form": {
+      "display": "flex",
+      "flex-wrap": "wrap",
+      "gap": "8px",
+      "align-items": "flex-end",
+      "box": {
+        "x": 51,
+        "y": 314,
+        "w": 258,
+        "h": 54
+      }
+    },
+    "fields": {
+      "display": "none",
+      "grid-template-columns": "none",
+      "flex-wrap": "nowrap",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    },
+    "actions": {
+      "display": "inline-flex",
+      "box": {
+        "x": 51,
+        "y": 368,
+        "w": 84,
+        "h": 55
+      }
+    },
+    "cardBox": {
+      "x": 37,
+      "y": 300,
+      "w": 286,
+      "h": 82
+    },
+    "fieldWrappers": [
+      {
+        "cls": "w-full md:w-40",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-40",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-56",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    ],
+    "fieldRows": 0,
+    "input": {
+      "tag": "INPUT",
+      "font-size": "16px",
+      "font-weight": "400",
+      "font-family": "Inter, sans-serif",
+      "width": "100%",
+      "height": "38px"
+    },
+    "label": {
+      "font-size": "13px",
+      "font-weight": "500"
+    },
+    "table": {
+      "x": 36,
+      "y": 395,
+      "w": 288,
+      "h": 345
+    },
+    "tableTopVsCardBottom": 13,
+    "docScrollW": 360,
+    "docClientW": 360,
+    "bodyText": "Monitoring Kasir\n\nDaftar order yang transaksinya sudah dibuka kasir. Order yang masih menunggu ada di Antrean Baru.\n\nScan Barcode\nAntrean Baru\n2\nFilter\n26 Okt 2026\n18:28\nReguler\n#N2610-0004\nKasir: kas",
+    "toggleVisible": true,
+    "filterActive": false,
+    "consoleErrors": []
+  },
+  {
+    "url": "http://127.0.0.1:8000/kasir/monitoring",
+    "viewport": {
+      "w": 320,
+      "h": 900
+    },
+    "details": {
+      "open": false,
+      "display": "block",
+      "flex-direction": "row",
+      "width": "218px",
+      "box": {
+        "x": 51,
+        "y": 362,
+        "w": 218,
+        "h": 54
+      }
+    },
+    "summary": {
+      "display": "flex",
+      "box": {
+        "x": 51,
+        "y": 362,
+        "w": 218,
+        "h": 44
+      }
+    },
+    "form": {
+      "display": "flex",
+      "flex-wrap": "wrap",
+      "gap": "8px",
+      "align-items": "flex-end",
+      "box": {
+        "x": 51,
+        "y": 362,
+        "w": 218,
+        "h": 54
+      }
+    },
+    "fields": {
+      "display": "none",
+      "grid-template-columns": "none",
+      "flex-wrap": "nowrap",
+      "box": {
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    },
+    "actions": {
+      "display": "inline-flex",
+      "box": {
+        "x": 51,
+        "y": 416,
+        "w": 84,
+        "h": 55
+      }
+    },
+    "cardBox": {
+      "x": 37,
+      "y": 348,
+      "w": 246,
+      "h": 82
+    },
+    "fieldWrappers": [
+      {
+        "cls": "w-full md:w-40",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-40",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-56",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      },
+      {
+        "cls": "w-full md:w-44",
+        "x": 0,
+        "y": 0,
+        "w": 0,
+        "h": 0
+      }
+    ],
+    "fieldRows": 0,
+    "input": {
+      "tag": "INPUT",
+      "font-size": "16px",
+      "font-weight": "400",
+      "font-family": "Inter, sans-serif",
+      "width": "100%",
+      "height": "38px"
+    },
+    "label": {
+      "font-size": "13px",
+      "font-weight": "500"
+    },
+    "table": {
+      "x": 36,
+      "y": 443,
+      "w": 248,
+      "h": 380
+    },
+    "tableTopVsCardBottom": 13,
+    "docScrollW": 320,
+    "docClientW": 320,
+    "bodyText": "Monitoring Kasir\n\nDaftar order yang transaksinya sudah dibuka kasir. Order yang masih menunggu ada di Antrean Baru.\n\nScan Barcode\nAntrean Baru\n2\nFilter\n26 Okt 2026\n18:28\nReguler\n#N2610-0004\nKasir: kas",
+    "toggleVisible": true,
+    "filterActive": false,
+    "consoleErrors": []
+  }
+]

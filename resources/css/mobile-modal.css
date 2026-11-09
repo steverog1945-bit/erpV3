@@ -1,0 +1,66 @@
+/* ==========================================================================
+   MOBILE-01 Fase 4 - MODAL & FORM
+   Mekanisme modal existing TIDAK diganti (openModal/closeModal app.js,
+   data-modal-* tetap). Hanya posisi: di HP modal jadi lembar-bawah
+   (bottom-sheet) supaya tidak menabrak tepi viewport & keyboard.
+   ========================================================================== */
+@media screen and (max-width: 767.98px) {
+
+    /* Sangkar: semua modal tetap di dalam viewport */
+    [data-modal-root] {
+        padding: 0;
+        align-items: flex-end;        /* menempel ke bawah (Item: lembar) */
+    }
+    [data-modal-panel] {
+        max-width: 100%;
+        max-height: 94vh;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-top-left-radius: 18px;
+        border-top-right-radius: 18px;
+    }
+
+    /* Isi modal sudah di-scroll sendiri (overflow-y-auto); paddingnya
+       dirapatkan supaya kolom input lebih lega, dan ujung bawah diberi
+       ruang aman untuk gesture bar iPhone. */
+    [data-modal-panel] > div.p-5 {
+        padding: 16px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+        -webkit-overflow-scrolling: touch;
+    }
+    /* Kepala modal tetap terlihat (shrink-0 sudah dipasang); rapatkan */
+    [data-modal-panel] .px-5.py-4.px-5 {
+        padding: 12px 16px;
+    }
+
+    /* Footer modal: tombol lebar penuh saat hanya ada 1-2 tombol utama */
+    [data-modal-panel] > .border-t:first-child,
+    [data-modal-panel] > div.border-t.border-slate-200 {
+        padding: 12px 16px calc(14px + env(safe-area-inset-bottom, 0px));
+        padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* Keyboard tidak menutup field aktif: biarkan browser scroll
+       visual-viewport (adalah kubumi arepa), cukup pastikan isi modal
+       bisa menggulir dan tidak men-elimize-kan konten. */
+    [data-modal-panel] input,
+    [data-modal-panel] select,
+    [data-modal-panel] textarea {
+        font-size: 16px;              /* mencegah zoom otomatis iOS */
+    }
+
+    /* Dropdown Select2 tidak boleh keluar layar di HP (behavior select2 sama) */
+    .select2-dropdown,
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        max-width: calc(100vw - 24px);
+    }
+
+    /* SweetAlert (konfirmasi hapus/status) tetap bekerja: hanya radius
+       panel di bawah rapi menerus gaya bottom-sheet browser */
+    .swal2-popup {
+        max-height: 92vh;
+        overflow-y: auto;
+    }
+
+    /* Input angka jangan kehilangan nilai: tidak diubah sama sekali di sini;
+       aturan di atas hanya font-size (tak mengganti tipe/step/oninput). */
+}

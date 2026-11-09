@@ -1,0 +1,140 @@
+/* ==========================================================================
+   MOBILE-ALL-MODULES: Responsif lintas modul (Collecting, Jersey, Kasir,
+   Stok, Pembelian, Master, Keuangan, Laporan, Dashboard, Pengaturan, dll.)
+   Pendekatan: tabel diubah menjadi kartu ringkas melalui CSS pada
+   viewport <768px. Semua aturan berada di dalam @media. Desktop >=768px
+   tetap pada struktur tabel asli (0 perubahan).
+   ========================================================================== */
+
+@media screen and (max-width: 767.98px) {
+    /* ---------- Semua tabel ERP: overflow horizontal aman ---------- */
+    .content-wrapper .modern-table-wrapper,
+    .content-wrapper .table-responsive,
+    .content-wrapper .overflow-x-auto {
+        max-width: 100%;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* ---------- Kartu generik untuk tabel yang belum punya CSS khusus ---------- */
+    .content-wrapper .modern-table {
+        min-width: 0;
+    }
+
+    /* ---------- Form: input 16px, touch target 44px ---------- */
+    .content-wrapper input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    .content-wrapper select,
+    .content-wrapper textarea,
+    .pwa-ops-page input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    .pwa-ops-page select,
+    .pwa-ops-page textarea {
+        font-size: 16px;
+        max-width: 100%;
+        min-height: 34px;
+        padding: 4px 8px;
+    }
+
+    .content-wrapper button {
+        min-height: 44px;
+    }
+
+    /* Select2 lebih compact di mobile (override app.css select2 height) */
+    html body .select2-container--default .select2-selection--single {
+        height: 34px !important;
+        min-height: 34px !important;
+    }
+    html body .select2-container--default .select2-selection--single .select2-selection__rendered {
+        line-height: 26px !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    /* ---------- Card: padding 12-16px, radius 12-16px ---------- */
+    .content-wrapper .bg-white.rounded-xl,
+    .content-wrapper .bg-white.rounded-2xl {
+        border-radius: 12px;
+    }
+
+    /* ---------- Pagination: touch target 44px ---------- */
+    .content-wrapper .border-t.border-slate-100 a.w-8,
+    .content-wrapper .border-t.border-slate-100 span.w-8 {
+        width: 44px;
+        height: 44px;
+    }
+
+    /* ---------- Empty state: padding ringkas ---------- */
+    .content-wrapper .px-6.py-10 {
+        padding: 22px 14px;
+    }
+
+    /* ---------- Modal: bottom sheet ---------- */
+    [data-modal-root] {
+        z-index: 60;
+    }
+
+    /* ---------- Filter: gap 8-10px ---------- */
+    .content-wrapper form.flex.flex-wrap {
+        gap: 8px;
+    }
+
+    /* ---------- Badge: font 10-12px ---------- */
+    .content-wrapper .text-\[10px\] {
+        font-size: 10px;
+        line-height: 1.3;
+    }
+
+    /* ---------- Typography konsisten ---------- */
+    .content-wrapper h1 {
+        font-size: clamp(18px, 5.4vw, 22px);
+        line-height: 1.25;
+    }
+
+    .content-wrapper h2 {
+        font-size: clamp(16px, 4.8vw, 20px);
+        line-height: 1.3;
+    }
+
+    .content-wrapper h3 {
+        font-size: clamp(14px, 4.2vw, 18px);
+        line-height: 1.3;
+    }
+
+    /* ---------- Spacing konsisten ---------- */
+    .content-wrapper .mb-6 {
+        margin-bottom: 12px;
+    }
+
+    .content-wrapper .mb-8 {
+        margin-bottom: 16px;
+    }
+
+    .content-wrapper .gap-6 {
+        gap: 12px;
+    }
+
+    .content-wrapper .gap-4 {
+        gap: 8px;
+    }
+
+    /* ---------- Floating nav: clearance ---------- */
+    .content-wrapper {
+        padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* ---------- Safe area ---------- */
+    .mobile-bottom-nav {
+        padding-bottom: calc(7px + env(safe-area-inset-bottom, 0px));
+    }
+}
+
+
+    /* Select2 lebih compact di mobile */
+    @media screen and (max-width: 767.98px) {
+        .select2-container--default .select2-selection--single {
+            height: 34px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 22px !important;
+        }
+    }

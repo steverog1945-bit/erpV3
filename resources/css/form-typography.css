@@ -1,0 +1,81 @@
+/* ORION GRAFIKA — one typography system for ERP forms and filters.
+ * Avoid per-module font overrides. Preserve input names, handlers, values,
+ * calendar behavior, icons, and intentional larger money/display fields.
+ * The opened native date/month calendar itself is OS/browser UI.
+ *
+ * Cakupan: seluruh input/select/textarea/label di halaman (main, modal,
+ * filter), kecuali header/topbar/sidebar/nav/footer dan field yang sengaja
+ * besar (text-lg ke atas) atau bertanda data-typography-preserve.
+ */
+:root {
+    --erp-form-font: var(--brand-font-family, "Inter"), sans-serif;
+    --erp-form-control-size: 13px;
+    --erp-form-label-size: 13px;
+    --erp-form-line-height: 1.45;
+}
+
+@media screen {
+    html body :is(input, select, textarea):not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([data-typography-preserve]):not(header *):not(nav *):not(aside *):not(footer *):not(.topbar *):not(.sidebar *):not(.text-lg):not(.text-xl):not(.text-2xl):not(.text-3xl):not(.text-4xl) {
+        font-family: var(--erp-form-font) !important;
+        font-size: var(--erp-form-control-size) !important;
+        font-weight: 400;
+        line-height: var(--erp-form-line-height);
+        letter-spacing: normal;
+    }
+
+    /* Select2 hidden-accessible tetap dikeluarkan (dropdown-nya sendiri). */
+    body select.select2-hidden-accessible {
+        font-size: inherit !important;
+    }
+
+    html body :is(input[type="date"], input[type="month"], input[type="datetime-local"], input[type="time"]) {
+        font-family: var(--erp-form-font) !important;
+        font-variant-numeric: tabular-nums;
+    }
+
+    html body :is(input[type="date"], input[type="month"], input[type="datetime-local"], input[type="time"])::-webkit-datetime-edit {
+        font-family: var(--erp-form-font);
+        font-size: inherit;
+        font-weight: inherit;
+        line-height: inherit;
+        letter-spacing: normal;
+    }
+
+    /* Label: 13px, seragam; kecuali label khusus (.ld-label) dan preserve. */
+    html body label:not(.ld-label):not([data-typography-preserve]):not(header *):not(nav *):not(aside *):not(footer *):not(.topbar *):not(.sidebar *) {
+        font-family: var(--erp-form-font);
+        font-size: var(--erp-form-label-size) !important;
+        font-weight: 500;
+        line-height: 1.4;
+        letter-spacing: normal !important;
+        text-transform: none;
+    }
+
+    /* Select2 dropdown (sering di-append ke body) */
+    html body .select2-container--default .select2-selection--single .select2-selection__rendered,
+    html body .select2-container--default .select2-selection--multiple .select2-search__field,
+    html body .select2-container--default .select2-search--dropdown .select2-search__field,
+    html body .select2-container--default .select2-results__option,
+    body .select2-dropdown {
+        font-family: var(--erp-form-font) !important;
+        font-size: var(--erp-form-control-size) !important;
+        font-weight: 400;
+        line-height: var(--erp-form-line-height);
+        letter-spacing: normal;
+    }
+
+    /* Filter toggle compact */
+    html body .pwa-ops-page .pwa-ops-filter-toggle,
+    html body .content-wrapper :is(.spk-filter-btn, .collecting-mobile-filter-toggle) {
+        font-family: var(--erp-form-font);
+        font-size: var(--erp-form-label-size);
+        font-weight: 600;
+        line-height: 1.4;
+        letter-spacing: normal;
+    }
+}
+
+/* Mobile: 16px untuk cegah zoom iOS dan seragam dengan input lain. */
+@media screen and (max-width: 767.98px) {
+    :root { --erp-form-control-size: 13px; }
+}

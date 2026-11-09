@@ -1,0 +1,38 @@
+[
+  {
+    "viewport": "390",
+    "url": "http://127.0.0.1:8000/kasir/monitoring?tgl_mulai=2026-10-01&tgl_selesai=2026-10-31&status_filtered=1",
+    "styles": {
+      "input": {
+        "size": "16px",
+        "weight": "400",
+        "family": "Inter, sans-serif"
+      },
+      "label": {
+        "size": "13px",
+        "weight": "500"
+      },
+      "select": {
+        "size": "13px"
+      }
+    }
+  },
+  {
+    "viewport": "1366",
+    "url": "http://127.0.0.1:8000/kasir/monitoring?tgl_mulai=2026-10-01&tgl_selesai=2026-10-31&status_filtered=1",
+    "styles": {
+      "input": {
+        "size": "13px",
+        "weight": "400",
+        "family": "Inter, sans-serif"
+      },
+      "label": {
+        "size": "13px",
+        "weight": "500"
+      },
+      "select": {
+        "size": "13px"
+      }
+    }
+  }
+]

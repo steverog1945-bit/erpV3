@@ -1,0 +1,198 @@
+[
+  {
+    "viewport": "320",
+    "width": 320,
+    "styles": {
+      "dateInput": {
+        "font-family": "Inter, sans-serif",
+        "font-size": "16px",
+        "font-weight": "400",
+        "line-height": "23.2px",
+        "height": "38px"
+      },
+      "label": {
+        "font-family": "Inter, sans-serif",
+        "font-size": "13px",
+        "font-weight": "500",
+        "color": "rgb(74, 91, 83)"
+      },
+      "nativeSelect": {
+        "font-size": "16px",
+        "font-weight": "400",
+        "height": "38px"
+      },
+      "tableHeader": {
+        "font-size": "13px",
+        "font-weight": "500"
+      }
+    }
+  },
+  {
+    "viewport": "360",
+    "width": 360,
+    "styles": {
+      "dateInput": {
+        "font-family": "Inter, sans-serif",
+        "font-size": "16px",
+        "font-weight": "400",
+        "line-height": "23.2px",
+        "height": "38px"
+      },
+      "label": {
+        "font-family": "Inter, sans-serif",
+        "font-size": "13px",
+        "font-weight": "500",
+        "color": "rgb(74, 91, 83)"
+      },
+      "nativeSelect": {
+        "font-size": "16px",
+        "font-weight": "400",
+        "height": "38px"
+      },
+      "tableHeader": {
+        "font-size": "13px",
+        "font-weight": "500"
+      }
+    }
+  },
+  {
+    "viewport": "390",
+    "width": 390,
+    "styles": {
+      "dateInput": {
+        "font-family": "Inter, sans-serif",
+        "font-size": "16px",
+        "font-weight": "400",
+        "line-height": "23.2px",
+        "height": "38px"
+      },
+      "label": {
+        "font-family": "Inter, sans-serif",
+        "font-size": "13px",
+        "font-weight": "500",
+        "color": "rgb(74, 91, 83)"
+      },
+      "nativeSelect": {
+        "font-size": "16px",
+        "font-weight": "400",
+        "height": "38px"
+      },
+      "tableHeader": {
+        "font-size": "13px",
+        "font-weight": "500"
+      }
+    }
+  },
+  {
+    "viewport": "430",
+    "width": 430,
+    "styles": {
+      "dateInput": {
+        "font-family": "Inter, sans-serif",
+        "font-size": "16px",
+        "font-weight": "400",
+        "line-height": "23.2px",
+        "height": "38px"
+      },
+      "label": {
+        "font-family": "Inter, sans-serif",
+        "font-size": "13px",
+        "font-weight": "500",
+        "color": "rgb(74, 91, 83)"
+      },
+      "nativeSelect": {
+        "font-size": "16px",
+        "font-weight": "400",
+        "height": "38px"
+      },
+      "tableHeader": {
+        "font-size": "13px",
+        "font-weight": "500"
+      }
+    }
+  },
+  {
+    "viewport": "768",
+    "width": 768,
+    "styles": {
+      "dateInput": {
+        "font-family": "Inter, sans-serif",
+        "font-size": "14px",
+        "font-weight": "400",
+        "line-height": "20.3px",
+        "height": "38px"
+      },
+      "label": {
+        "font-family": "Inter, sans-serif",
+        "font-size": "13px",
+        "font-weight": "500",
+        "color": "rgb(74, 91, 83)"
+      },
+      "nativeSelect": {
+        "font-size": "14px",
+        "font-weight": "400",
+        "height": "38px"
+      },
+      "tableHeader": {
+        "font-size": "13px",
+        "font-weight": "500"
+      }
+    }
+  },
+  {
+    "viewport": "1024",
+    "width": 1024,
+    "styles": {
+      "dateInput": {
+        "font-family": "Inter, sans-serif",
+        "font-size": "14px",
+        "font-weight": "400",
+        "line-height": "20.3px",
+        "height": "38px"
+      },
+      "label": {
+        "font-family": "Inter, sans-serif",
+        "font-size": "13px",
+        "font-weight": "500",
+        "color": "rgb(74, 91, 83)"
+      },
+      "nativeSelect": {
+        "font-size": "14px",
+        "font-weight": "400",
+        "height": "38px"
+      },
+      "tableHeader": {
+        "font-size": "13px",
+        "font-weight": "500"
+      }
+    }
+  },
+  {
+    "viewport": "1366",
+    "width": 1366,
+    "styles": {
+      "dateInput": {
+        "font-family": "Inter, sans-serif",
+        "font-size": "14px",
+        "font-weight": "400",
+        "line-height": "20.3px",
+        "height": "38px"
+      },
+      "label": {
+        "font-family": "Inter, sans-serif",
+        "font-size": "13px",
+        "font-weight": "500",
+        "color": "rgb(74, 91, 83)"
+      },
+      "nativeSelect": {
+        "font-size": "14px",
+        "font-weight": "400",
+        "height": "38px"
+      },
+      "tableHeader": {
+        "font-size": "13px",
+        "font-weight": "500"
+      }
+    }
+  }
+]

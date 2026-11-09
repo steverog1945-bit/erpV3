@@ -1,0 +1,119 @@
+{
+  "desktop": {
+    "initialUrl": "http://127.0.0.1:8000/kasir/monitoring",
+    "afterSubmitUrl": "http://127.0.0.1:8000/kasir/monitoring?status_filtered=1&tgl_mulai=2026-10-01&tgl_selesai=2026-10-26&id_konsumen=&nomor_nota=&status_bayar=Lunas",
+    "filterActive": 1,
+    "detailsOpenAfterSubmit": 1,
+    "resetLinkVisible": true,
+    "tableRows": 2,
+    "afterResetUrl": "http://127.0.0.1:8000/kasir/monitoring",
+    "filterActiveAfterReset": 0,
+    "geometry": {
+      "fieldRows": 2,
+      "cardHeight": 184,
+      "tableTop": 489,
+      "inputFontSize": "14px",
+      "inputFontWeight": "400",
+      "labelFontSize": "13px"
+    }
+  },
+  "mobile": {
+    "toggleVisibleBefore": true,
+    "fieldsVisibleBefore": false,
+    "fieldsVisibleAfter": true,
+    "touchTargets": [
+      {
+        "cls": "pwa-ops-filter-toggle",
+        "w": 288,
+        "h": 44
+      },
+      {
+        "cls": "w-full bg-white border border-",
+        "w": 288,
+        "h": 44
+      },
+      {
+        "cls": "w-full bg-white border border-",
+        "w": 288,
+        "h": 44
+      },
+      {
+        "cls": "select2-filter w-full select2-",
+        "w": 1,
+        "h": 44
+      },
+      {
+        "cls": "w-full bg-white border border-",
+        "w": 288,
+        "h": 44
+      },
+      {
+        "cls": "w-full bg-white border border-",
+        "w": 288,
+        "h": 44
+      },
+      {
+        "cls": "inline-flex items-center justi",
+        "w": 84,
+        "h": 44
+      }
+    ],
+    "inputFont": "16px"
+  },
+  "smoke": [
+    {
+      "route": "/kasir/monitoring",
+      "status": 200,
+      "title": "PRINT-ERP",
+      "jsErrors": []
+    },
+    {
+      "route": "/kartu-stok",
+      "status": 200,
+      "title": "PRINT-ERP",
+      "jsErrors": []
+    },
+    {
+      "route": "/bahan-baku",
+      "status": 200,
+      "title": "PRINT-ERP",
+      "jsErrors": []
+    },
+    {
+      "route": "/pembelian-bahan",
+      "status": 200,
+      "title": "PRINT-ERP",
+      "jsErrors": []
+    },
+    {
+      "route": "/laporan/kas",
+      "status": 200,
+      "title": "PRINT-ERP",
+      "jsErrors": []
+    },
+    {
+      "route": "/jersey/keuangan",
+      "status": 500,
+      "title": "Orion Grafika",
+      "jsErrors": []
+    }
+  ],
+  "failedRequests": [
+    {
+      "url": "http://127.0.0.1:8000/dashboard",
+      "status": 500
+    },
+    {
+      "url": "http://127.0.0.1:8000/dashboard",
+      "status": 500
+    },
+    {
+      "url": "http://127.0.0.1:8000/dashboard",
+      "status": 500
+    },
+    {
+      "url": "http://127.0.0.1:8000/jersey/keuangan",
+      "status": 500
+    }
+  ]
+}
