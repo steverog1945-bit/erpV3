@@ -141,12 +141,12 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // @bolehHarga ... @else ... @endbolehHarga : tampilkan hanya untuk role yang berhak melihat harga/nilai uang.
-        \Illuminate\Support\Facades\Blade::if('bolehHarga', fn () => \App\Support\AksesHarga::bolehLihat());
+        // Batalkan Blade::if('bolehHarga') - auth() belum siap di boot time
 
         // @bolehDesain ... @else ... @endbolehDesain : tampilkan hanya untuk role yang berhak
         // MENGINPUT nilai Biaya Desain. Sengaja Terpisah dari @bolehHarga: hak ini cuma membuka
         // satu field (Biaya Desain), tidak membuka harga produk/cetak/finishing maupun halaman harga.
-        \Illuminate\Support\Facades\Blade::if('bolehDesain', fn () => \App\Support\AksesHarga::bolehInputBiayaDesain());
+        // Batalkan Blade::if('bolehDesain') - auth() belum siap di boot time
 
         // @versi($row) : kolom tersembunyi versi baris untuk optimistic locking (lihat App\Support\VersiBaris).
         \Illuminate\Support\Facades\Blade::directive('versi', fn ($e) => "<?php echo \App\Support\VersiBaris::field({$e}); ?>");

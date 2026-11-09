@@ -2,8 +2,7 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
-         colors="true"
->
+         colors="true">
     <testsuites>
         <testsuite name="Unit">
             <directory>tests/Unit</directory>
@@ -19,24 +18,11 @@
     </source>
     <php>
         <env name="APP_ENV" value="testing"/>
-        <!-- Gate B dipatikan untuk seluruh test.
-             .env produksi kini bernilai LANDING_PAGE_BUILDER_ENABLED=true
-             (Landing Page Builder menjadi homepage utama). Tanpa pin ini,
-             test akan mewarisi nilai .env dan baseline "Gate B OFF" -
-             yang diuji dozens test - ikut berubah.
-             Test yang butuh Gate B ON overriding-nya sendiri lewat
-             config(['landing_page_builder.enabled' => true]). -->
         <env name="LANDING_PAGE_BUILDER_ENABLED" value="false"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
         <env name="BROADCAST_CONNECTION" value="null"/>
         <env name="CACHE_STORE" value="array"/>
-        <!-- SQLite in-memory TIDAK dipakai - banyak migration app ini pakai
-             raw DB::statement() dengan sintaks khusus MySQL (ALTER TABLE
-             MODIFY, dst) yang tidak kompatibel dengan SQLite. Database
-             terpisah dari yang dipakai aplikasi sungguhan (lihat .env) -
-             RefreshDatabase di TestCase akan migrate:fresh ke sini tiap
-             run, jadi data production tidak pernah tersentuh. -->
         <env name="DB_CONNECTION" value="mysql"/>
         <env name="DB_HOST" value="127.0.0.1"/>
         <env name="DB_PORT" value="3306"/>
