@@ -1,17 +1,28 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>500 - Terjadi Kesalahan</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="min-h-screen bg-slate-50 flex items-center justify-center p-6">
-    <div class="max-w-md w-full text-center">
-        <div class="text-7xl font-bold text-amber-500 mb-4">500</div>
-        <h1 class="text-xl font-semibold text-slate-800 mb-2">Terjadi Kesalahan pada Server</h1>
-        <p class="text-sm text-slate-500 mb-6">Maaf, sistem sedang mengalami gangguan. Tim kami sudah diberitahu. Silakan coba lagi beberapa saat, atau hubungi Administrator jika masalah berlanjut.</p>
-        <a href="{{ url('/') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition">Kembali ke Beranda</a>
-    </div>
-</body>
-</html>
+@extends('errors.layout')
+
+@section('code', '500')
+@section('title', 'Terjadi Kesalahan')
+@section('message', 'Maaf, sistem sedang mengalami gangguan saat memproses permintaan Anda.')
+@section('hint', 'Silakan coba lagi beberapa saat. Jika masalah terus terjadi, hubungi Administrator dan sebutkan kode 500 beserta halaman yang dibuka.')
+
+@section('ikon')
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="7" rx="2"/>
+        <rect x="3" y="13" width="18" height="7" rx="2"/>
+        <path d="M7 7.5h.01M7 16.5h.01"/>
+    </svg>
+@endsection
+
+@section('primary')
+    <button type="button" class="btn btn-primary" onclick="window.location.reload()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66"/><path d="M20 3v5h-5"/></svg>
+        Coba Lagi
+    </button>
+@endsection
+
+@section('secondary')
+    <a class="btn btn-secondary" href="{{ url('/') }}">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+        Ke Beranda
+    </a>
+@endsection
