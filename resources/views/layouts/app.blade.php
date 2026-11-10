@@ -2227,8 +2227,36 @@
         window.addEventListener('beforeprint', () => { tadiGelap = document.documentElement.classList.contains('dark'); document.documentElement.classList.remove('dark'); });
         window.addEventListener('afterprint', () => { if (tadiGelap) document.documentElement.classList.add('dark'); });
     })();
-    function toggleNotif(e) { e.stopPropagation(); document.getElementById('notif-panel').classList.toggle('hidden'); }
+    function toggleNotif(e) { if (e) e.stopPropagation(); document.getElementById('notif-panel').classList.toggle('hidden'); }
     document.addEventListener('click', e => { const p = document.getElementById('notif-panel'); if (p && !p.contains(e.target)) p.classList.add('hidden'); });
+
+    // Menu profil (foto + Keluar). Sebelumnya onclick memanggil fungsi yang
+    // tidak pernah didefinisikan, jadi panel tidak pernah terbuka dan tombol
+    // Keluar tidak bisa diakses.
+    function toggleProfilMenu(e) {
+        if (e) e.stopPropagation();
+        var p = document.getElementById('profil-menu-panel');
+        var btn = document.getElementById('profil-menu-btn');
+        if (!p) return;
+        var buka = p.classList.contains('hidden');
+        p.classList.toggle('hidden');
+        if (btn) btn.setAttribute('aria-expanded', buka ? 'true' : 'false');
+    }
+    document.addEventListener('click', function (e) {
+        var p = document.getElementById('profil-menu-panel');
+        if (p && !p.contains(e.target) && !e.target.closest('#profil-menu-btn')) {
+            p.classList.add('hidden');
+            var btn = document.getElementById('profil-menu-btn'); if (btn) btn.setAttribute('aria-expanded', 'false');
+        }
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        var p = document.getElementById('profil-menu-panel');
+        if (p && !p.classList.contains('hidden')) {
+            p.classList.add('hidden');
+            var btn = document.getElementById('profil-menu-btn'); if (btn) btn.setAttribute('aria-expanded', 'false');
+        }
+    });
     renderNotif(@json($notifAwal));
     </script>
     <script>
