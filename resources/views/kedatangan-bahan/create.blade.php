@@ -326,7 +326,7 @@ function removeRow(btn) {
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#93481A',
-        cancelButtonColor: '#4A5B53',
+        cancelButtonColor: '#5D6A85',
         confirmButtonText: 'Ya, Hapus'
     }).then((result) => {
         if (result.isConfirmed) {

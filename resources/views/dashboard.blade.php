@@ -120,7 +120,7 @@
                 ['Antre', $spkAntre, $u('spk.index', ['status_spk' => 'Antre']), 'bg-amber-50/60 hover:bg-amber-50', 'text-amber-600', 'Item SPK yang menunggu dikerjakan'],
                 ['Diproses', $spkProses, $u('produksi.index'), 'bg-indigo-50/60 hover:bg-indigo-50', 'text-indigo-600', 'Item yang sedang didesain/dicetak'],
                 ['Selesai Produksi', $spkSelesai, $u('produksi.index', ['status_produksi' => 'selesai']), 'bg-emerald-50/60 hover:bg-emerald-50', 'text-emerald-600', 'Item yang sudah selesai diproduksi'],
-                ['Siap Diambil', $notaLengkap, $u('collecting.index', ['status_pengerjaan' => 'lengkap']), 'bg-teal-50/60 hover:bg-teal-50', 'text-teal-600', 'Nota yang semua itemnya sudah selesai'],
+                ['Siap Diambil', $notaLengkap, $u('collecting.index', ['status_pengerjaan' => 'lengkap']), 'bg-indigo-50/60 hover:bg-indigo-50', 'text-indigo-600', 'Nota yang semua itemnya sudah selesai'],
             ] as $i => [$judul, $n, $url, $bg, $tx, $tip])
             <a href="{{ $url }}" title="{{ $tip }}" class="group rounded-lg {{ $bg }} p-4 transition-all">
                 <p class="text-[10px] font-medium {{ $tx }} uppercase tracking-widest">{{ $i + 1 }}. {{ $judul }}</p>

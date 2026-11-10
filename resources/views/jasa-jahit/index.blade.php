@@ -668,7 +668,7 @@
                 + '<td class="px-2 py-2 text-right text-slate-600">' + b.qty + '</td>'
                 + '<td class="px-2 py-2 text-right ' + (b.sudah > 0 ? 'text-amber-600' : 'text-slate-400') + '">' + b.sudah + '</td>'
                 + '<td class="px-2 py-2 text-right"><input type="number" min="0" max="' + sisa + '" step="1" value="' + sisa + '" name="qty[' + b.id_jasa_jahit + ']" data-harga="' + b.harga + '"'
-                + ' class="w-20 text-right rounded-lg border border-slate-200 bg-[#FAFBF9] px-2 py-1.5 text-sm" oninput="hitungTotalJersey()"' + (sisa === 0 ? ' disabled' : '') + '></td>'
+                + ' class="w-20 text-right rounded-lg border border-slate-200 bg-[#F5F8FF] px-2 py-1.5 text-sm" oninput="hitungTotalJersey()"' + (sisa === 0 ? ' disabled' : '') + '></td>'
                 + '<td class="px-4 py-2 text-right text-slate-700" data-subtotal></td></tr>';
         });
         if (!d.baris.length) {

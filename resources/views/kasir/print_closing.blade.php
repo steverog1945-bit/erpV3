@@ -87,7 +87,7 @@
             </table>
 
             <div class="divider"></div>
-            <p class="sub" style="font-weight:600;color:#1a231f;margin-bottom:4px">A. Alur Kas Tunai (Laci)</p>
+            <p class="sub" style="font-weight:600;color:#0F1E3E;margin-bottom:4px">A. Alur Kas Tunai (Laci)</p>
             <table>
                 <tr><td>Saldo awal / modal</td><td class="right">{{ $rp($saldoAwal) }}</td></tr>
                 <tr><td>&nbsp;&nbsp;+ Pemasukan tunai nota</td><td class="right">{{ $rp($tunaiMasuk) }}</td></tr>
@@ -97,7 +97,7 @@
             </table>
 
             <div class="divider"></div>
-            <p class="sub" style="font-weight:600;color:#1a231f;margin-bottom:4px">B. Penghitungan Uang di Laci</p>
+            <p class="sub" style="font-weight:600;color:#0F1E3E;margin-bottom:4px">B. Penghitungan Uang di Laci</p>
             <table>
                 <tr><td>Total isi laci (dihitung kasir)</td><td class="right">{{ $rp($isiLaci) }}</td></tr>
                 <tr class="total-row {{ $kelasSelisih }}">
@@ -113,7 +113,7 @@
             </p>
 
             <div class="divider"></div>
-            <p class="sub" style="font-weight:600;color:#1a231f;margin-bottom:4px">C. Saldo Awal Sesi Berikutnya</p>
+            <p class="sub" style="font-weight:600;color:#0F1E3E;margin-bottom:4px">C. Saldo Awal Sesi Berikutnya</p>
             <table>
                 <tr class="total-row"><td>Saldo awal besok (uang yang tertinggal di laci)</td><td class="right">{{ $rp($saldoBesok) }}</td></tr>
                 <tr><td>Status rolling</td><td class="right">{{ $kas->status_rolling ?? '-' }}</td></tr>
@@ -130,7 +130,7 @@
                  selisih. Dicetak terpisah supaya operator tidak salah menghitung
                  saat menghitung isi laci. --}}
             <div class="divider"></div>
-            <p class="sub" style="font-weight:600;color:#1a231f;margin-bottom:4px">D. Pembayaran Non-Tunai (tidak ada di laci)</p>
+            <p class="sub" style="font-weight:600;color:#0F1E3E;margin-bottom:4px">D. Pembayaran Non-Tunai (tidak ada di laci)</p>
             <table>
                 <tr><td>Transfer masuk</td><td class="right">{{ $rp($transfer) }}</td></tr>
                 <tr><td>Debit masuk</td><td class="right">{{ $rp($debit) }}</td></tr>
@@ -147,7 +147,7 @@
                  cocok dan tidak ada yang perlu dijelaskan. --}}
             @if($kas->keterangan_pembukaan)
             <div class="divider"></div>
-            <p class="sub" style="font-weight:600;color:#1a231f;margin-bottom:4px">E. Catatan Pembukaan Sesi</p>
+            <p class="sub" style="font-weight:600;color:#0F1E3E;margin-bottom:4px">E. Catatan Pembukaan Sesi</p>
             <p class="sub">
                 Saldo awal sesi ini ({{ $rp($saldoAwal) }}) tidak sama dengan isi laci
                 sesi sebelumnya, jadi kasir menuliskan penjelasannya:

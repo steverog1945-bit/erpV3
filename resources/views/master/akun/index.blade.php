@@ -189,7 +189,7 @@
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#2563EB',
-            cancelButtonColor: '#FAFBF9',
+            cancelButtonColor: '#F5F8FF',
             confirmButtonText: 'Ya, Lanjutkan',
             cancelButtonText: 'Batal',
             customClass: {
@@ -210,7 +210,7 @@
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#93481A',
-            cancelButtonColor: '#FAFBF9',
+            cancelButtonColor: '#F5F8FF',
             confirmButtonText: 'Ya, Hapus',
             cancelButtonText: 'Batal',
             customClass: {

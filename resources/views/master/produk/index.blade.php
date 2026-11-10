@@ -700,7 +700,7 @@
                 : `<b>${escapeHtml(namaProduk)}</b> akan muncul lagi di pilihan produk saat membuat nota baru.`,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: mauNonaktifkan ? '#4A5B53' : '#10b981',
+            confirmButtonColor: mauNonaktifkan ? '#5D6A85' : '#10b981',
             confirmButtonText: mauNonaktifkan ? 'Ya, Nonaktifkan' : 'Ya, Aktifkan',
             cancelButtonText: 'Batal',
             customClass: {

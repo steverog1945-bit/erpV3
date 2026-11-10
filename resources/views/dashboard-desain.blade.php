@@ -31,7 +31,7 @@
             <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-1">Produksi Berjalan</div>
         </a>
         <a href="{{ route('collecting.index', ['status_pengerjaan' => 'lengkap']) }}" class="text-center group">
-            <div class="text-3xl font-medium text-teal-500 group-hover:text-teal-600 transition-colors">{{ $notaLengkap }}</div>
+            <div class="text-3xl font-medium text-indigo-500 group-hover:text-indigo-600 transition-colors">{{ $notaLengkap }}</div>
             <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-1">Siap Diambil</div>
         </a>
     </div>

@@ -521,7 +521,7 @@
             showCancelButton: true,
             confirmButtonColor: '#2563EB',
             cancelButtonColor: '#F1F5F1',
-            cancelButtonText: '<span style="color: #4A5B53">Batal</span>',
+            cancelButtonText: '<span style="color: #5D6A85">Batal</span>',
             confirmButtonText: 'Ya, Salin ke Semua',
         }).then(async (result) => {
             if (!result.isConfirmed) return;
@@ -572,7 +572,7 @@
             showCancelButton: true,
             confirmButtonColor: '#93481A',
             cancelButtonColor: '#F1F5F1',
-            cancelButtonText: '<span style="color: #4A5B53">Batal</span>',
+            cancelButtonText: '<span style="color: #5D6A85">Batal</span>',
             confirmButtonText: 'Ya, Hapus!'
         }).then(async (result) => {
             if (!result.isConfirmed) return;

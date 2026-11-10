@@ -1025,7 +1025,7 @@
             html: 'Kolomnya akan hilang dari matriks (meter & berat). <small class="text-slate-400">Data tersimpan, bisa dikembalikan lewat database bila perlu.</small>',
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#4A5B53',
+            confirmButtonColor: '#5D6A85',
             confirmButtonText: 'Ya, Nonaktifkan',
             cancelButtonText: 'Batal',
             customClass: { confirmButton: 'rounded-lg px-6 py-2.5', cancelButton: 'rounded-lg px-6 py-2.5 text-slate-600' },

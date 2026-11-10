@@ -25,7 +25,7 @@
 .jersey-mobile-form-page textarea:focus {
     outline: none;
     border-color: #2563EB;
-    box-shadow: 0 0 0 3px rgba(0,108,123,.12);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
 }
 .jersey-mobile-form-page .baris-pemain select,
 .jersey-mobile-form-page .baris-pemain input {
@@ -53,7 +53,7 @@
 }
 #file_siap_cetak:checked ~ .fsc-track { background-color: #2563EB; }
 #file_siap_cetak:checked ~ .fsc-knob { transform: translateX(20px); }
-#file_siap_cetak:focus-visible ~ .fsc-track { box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(0,108,123,.35); }
+#file_siap_cetak:focus-visible ~ .fsc-track { box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(37, 99, 235, .35); }
 </style>
 <div class="jersey-mobile-form-page w-full px-3 sm:px-5 lg:px-6 py-5">
 

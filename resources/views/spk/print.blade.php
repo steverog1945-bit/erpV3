@@ -62,7 +62,7 @@
              pada label sepanjang 10px, 1px sudah cukup untuk
              membuat huruf bersenggolan. --}}
         <div style="font-size:10px; letter-spacing:0.5px; margin-top:2px;">TRX{{ $detail->id_transaksi }}</div>
-            <div style="font-size:9px; color:#4A5B53;">Scan dengan kamera HP untuk membuka pembayaran</div>
+            <div style="font-size:9px; color:#5D6A85;">Scan dengan kamera HP untuk membuka pembayaran</div>
         </div>
 
         @if($detail->catatan_produksi)

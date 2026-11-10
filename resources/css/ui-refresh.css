@@ -34,16 +34,16 @@
 
     /* Token warna - Light mode */
     --surface-primary: var(--brand-surface-primary, #ffffff);
-    --surface-secondary: var(--brand-surface-secondary, #FAFBF9);
-    --surface-tertiary: var(--brand-surface-tertiary, #F1F5F1);
-    --border-primary: var(--brand-surface-border, #E2EAE4);
-    --border-secondary: var(--brand-surface-border_strong, #C9D6CE);
-    --text-primary: var(--brand-surface-text, #1A231F);
-    --text-secondary: var(--brand-surface-text_secondary, #3F4F47);
-    --text-tertiary: var(--brand-surface-text_tertiary, #5F7167);
+    --surface-secondary: var(--brand-surface-secondary, #F5F8FF);
+    --surface-tertiary: var(--brand-surface-tertiary, #EFF4FF);
+    --border-primary: var(--brand-surface-border, #E3E9F6);
+    --border-secondary: var(--brand-surface-border_strong, #CBD6EE);
+    --text-primary: var(--brand-surface-text, #0F1E3E);
+    --text-secondary: var(--brand-surface-text_secondary, #33415C);
+    --text-tertiary: var(--brand-surface-text_tertiary, #5D6A85);
     /* Ikon dekoratif (search, panah, dsb) adalah "non-text content":
        WCAG 1.4.11 menuntut minimal 3:1 terhadap latar, bukan 4.5:1.
-       text-slate-400 (#5F7167) hanya 2.56:1 di atas putih sehingga GAGAL,
+       text-slate-400 (#5D6A85) hanya 2.56:1 di atas putih sehingga GAGAL,
        makanya dipakai warna tersendiri yang sudah dihitung. */
     --icon-muted: #76869f;
     --accent-primary: var(--brand-accent-light, #2563EB);
@@ -58,17 +58,17 @@
     --dark-surface-tertiary: var(--brand-surface-dark_tertiary, #2A3450);
     --dark-border-primary: var(--brand-surface-dark_border, #2A3450);
     
-    --dark-text-primary: var(--brand-surface-dark_text, #F1F5F1);
-    --dark-text-secondary: var(--brand-surface-dark_text_secondary, #C9D6CE);
-    /* Disamakan dengan --text-tertiary mode gelap di app.css (#5F7167).
-       Nilai lama #4A5B53 hanya 3.75:1 di atas #1A231F, gagal untuk teks
-       kecil. Dua sistem token harus mengantar angka yang sama; kalau
+    --dark-text-primary: var(--brand-surface-dark_text, #E8ECF8);
+    --dark-text-secondary: var(--brand-surface-dark_text_secondary, #B9C3DD);
+    /* Disamakan dengan --dark-text-tertiary mode gelap di app.css (#8896B8).
+       Nilai lama hijau-kelabu hanya 3.75:1 di atas navy gelap, gagal untuk
+       teks kecil. Dua sistem token harus mengantar angka yang sama; kalau
        tidak, perbaikan di satu tempat akan dibatalkan di tempat lain. */
-    --dark-text-tertiary: var(--brand-surface-dark_text_tertiary, #9DB8AD);
-    --dark-icon-muted: #71867A;
-    --dark-accent-primary: var(--brand-accent-dark, #5FC4D4);
-    --dark-accent-hover: var(--brand-dark-accent-hover, #05818F);
-    --dark-accent-light: var(--brand-accent-surface-dark, #02363E);
+    --dark-text-tertiary: var(--brand-surface-dark_text_tertiary, #8896B8);
+    --dark-icon-muted: #8896B8;
+    --dark-accent-primary: var(--brand-accent-dark, #7FA6F5);
+    --dark-accent-hover: var(--brand-dark-accent-hover, #5B8DEF);
+    --dark-accent-light: var(--brand-accent-surface-dark, #22304F);
 
     /* Token radius - KONSISTEN */
     --radius-sm: 4px;   /* chip, badge */
@@ -492,18 +492,18 @@ html.dark ::-webkit-scrollbar-thumb {
     .card,
     .modern-table-wrapper {
         background: #fff !important;
-        border: 1px solid #E2EAE4 !important;
+        border: 1px solid #E3E9F6 !important;
         box-shadow: none !important;
     }
 
     .modern-table thead th {
         background: #fff !important;
-        border-bottom: 1.5px solid #1A231F !important;
-        color: #1A231F !important;
+        border-bottom: 1.5px solid #0F1E3E !important;
+        color: #0F1E3E !important;
     }
 
     .modern-table tbody td {
-        color: #1A231F !important;
+        color: #0F1E3E !important;
     }
 }
 
@@ -592,14 +592,14 @@ input#input-bayar-mask {
     padding-left: 48px !important;
     padding-right: 20px !important;
     border-width: 2px !important;
-    border-color: #E2EAE4 !important;
+    border-color: #E3E9F6 !important;
     background: #FFFFFF !important;
-    color: #2A3731 !important;
+    color: #1E2A4A !important;
     transition: border-color .16s ease, box-shadow .16s ease, background-color .16s ease;
 }
 
 input#input-bayar-mask::placeholder {
-    color: #9DB8AD !important;
+    color: #8896B8 !important;
 }
 
 input#input-bayar-mask:focus {
@@ -613,7 +613,7 @@ input#input-bayar-mask:focus {
 #prefix-uang-diterima {
     font-size: 19px !important;
     font-weight: 500 !important;
-    color: #55685F !important;
+    color: #3E4C74 !important;
 }
 
 input#input-bayar-mask:focus ~ #prefix-uang-diterima,
@@ -812,7 +812,7 @@ select {
 }
 
 .select2-container--open .select2-selection__arrow b {
-    border-color: #05818F transparent transparent transparent;
+    border-color: #5B8DEF transparent transparent transparent;
 }
 
 /* --- Accordion sidebar: buka-tutup tanpa lompatan --- */
@@ -883,14 +883,14 @@ button,
    tracking-widest) ditulis langsung di markup, bukan lewat komponen.
    Masalahnya dua, keduanya soal warna:
 
-     1. TDK TERBACA. Hampir semuanya memakai text-slate-400 (#5F7167).
+     1. TDK TERBACA. Hampir semuanya memakai text-slate-400 (#5D6A85).
         Di atas putih rasionya cuma 2.56:1, sedangkan WCAG AA menuntut
         4.5:1 untuk teks di bawah 18pt. Label ini 10px, jadi jelas
         termasuk teks kecil. Dibanding teks isiannya yang hitam, label
         ini praktis hilang.
 
      2. TIDAK SERAGAM dengan <x-form.group>, yang sudah memakai
-        text-slate-500 (#4A5B53, rasionya 4.76:1 dan lolos). Jadi
+        text-slate-500 (#5D6A85, rasionya 4.76:1 dan lolos). Jadi
         form yang memakai komponen dan form yang menulis label sendiri punya warna label berbeda, meski tipografinya sama persis.
 
    Arah perbaikannya hanya satu: menaikkan 169 label inline itu ke
@@ -909,11 +909,11 @@ button,
 label.text-\[10px\].uppercase,
 label.text-\[11px\].uppercase,
 legend.text-\[10px\].uppercase {
-    color: #4A5B53; /* slate-500 */
+    color: #5D6A85; /* slate-500 */
 }
 
 /* Mode gelap TIDAK diberi aturan sendiri di sini. Percobaan pertama
-   menulis `html.dark label... { color: #5F7167 }`, tapi aturan itu
+   menulis `html.dark label... { color: #5D6A85 }`, tapi aturan itu
    selalu kalah: app.css punya
        html.dark .text-slate-400, html.dark .text-slate-500
            { color: var(--text-tertiary) !important; }
@@ -1230,7 +1230,7 @@ legend.text-\[10px\].uppercase {
       padding: 25px 16px 7px !important;
       border-radius: 16px !important;
       border: 1px solid transparent !important;
-      background: #FAFBF9 !important;
+      background: #F5F8FF !important;
       font-size: 15px !important;
       font-weight: 400 !important;
       color: #1c1c1f !important;
@@ -1285,7 +1285,7 @@ legend.text-\[10px\].uppercase {
    /* Tombol cari cepat yang membungkus select tetap sejajar dengan kolom tinggi. */
    .ld .qp-grup { align-items: stretch; }
    .ld .qp-grup { gap: 8px; }
-   .ld .qp-grup .qp-tombol { width: 58px !important; height: 58px !important; border-radius: 16px !important; border: 0 !important; background: #FAFBF9 !important; color: #55555c !important; flex: 0 0 58px; }
+   .ld .qp-grup .qp-tombol { width: 58px !important; height: 58px !important; border-radius: 16px !important; border: 0 !important; background: #F5F8FF !important; color: #55555c !important; flex: 0 0 58px; }
    .ld .qp-grup .qp-tombol:hover { background: #e8ecf2 !important; color: #1c1c1f !important; }
 
    html.dark .ld input:not([type=checkbox]):not([type=radio]), html.dark .ld select, html.dark .ld textarea { background: #232327 !important; color: #f4f4f5 !important; }

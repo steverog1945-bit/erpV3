@@ -11,45 +11,6 @@ class BrandThemeService
     public const DEFAULT_PRESET = 'deep-ocean';
 
     private const PRESETS = [
-        'orion-classic' => [
-            'name' => 'Orion Classic',
-            'description' => 'Palet aplikasi saat ini dengan aksen teal yang tenang.',
-            'swatches' => ['#006C7B', '#0A4C57', '#BFD5C9', '#E8891D'],
-            'neutralRamp' => [
-                '50' => '#FAFBF9', '100' => '#F1F5F1', '200' => '#E2EAE4',
-                '300' => '#C9D6CE', '400' => '#5F7167', '500' => '#4A5B53',
-                '600' => '#55685F', '700' => '#3F4F47', '800' => '#2A3731',
-                '900' => '#1A231F', '950' => '#0D1310',
-            ],
-            'surfaces' => [
-                'page' => '#FAFBF9', 'primary' => '#FFFFFF', 'secondary' => '#FAFBF9',
-                'tertiary' => '#F1F5F1', 'border' => '#E2EAE4', 'border_strong' => '#C9D6CE',
-                'text' => '#1A231F', 'text_secondary' => '#3F4F47', 'text_tertiary' => '#5F7167',
-                'dark_primary' => '#1A231F', 'dark_secondary' => '#2A3731',
-                'dark_tertiary' => '#3F4F47', 'dark_border' => '#3F4F47',
-                'dark_text' => '#F1F5F1', 'dark_text_secondary' => '#C9D6CE', 'dark_text_tertiary' => '#9DB8AD',
-            ],
-            'sidebar' => [
-                'deep' => '#04262C', 'base' => '#063A44', 'raised' => '#0A4C57',
-                'border' => '#0F6472', 'text' => '#BFD5C9', 'muted' => '#9DB8AD',
-                'title' => '#FFFFFF', 'accent' => '#E8891D', 'warning' => '#F0A882',
-                'active' => '#116E7D', 'hover' => '#0C5A66', 'active_mark' => '#7FD0DE',
-            ],
-            'ramp' => [
-                '50' => '#EAF6F7', '100' => '#D2EBEE', '200' => '#A6D6DD',
-                '300' => '#6FBCC7', '400' => '#2E9CAB', '500' => '#04727E',
-                '600' => '#006C7B', '700' => '#005663', '800' => '#01434D',
-                '900' => '#02363E', '950' => '#012228',
-            ],
-            'accent' => [
-                'light' => '#006C7B', 'hover_light' => '#005663', 'surface_light' => '#EAF6F7',
-                'dark' => '#5FC4D4', 'hover_dark' => '#7FD0DE', 'dark_hover' => '#05818F', 'surface_dark' => '#02363E',
-            ],
-            'mobileNavigation' => [
-                'inactive_light' => '#94a3b8', 'active_light' => '#0F6472',
-                'inactive_dark' => '#9DB8AD', 'active_dark' => '#94E2B5',
-            ],
-        ],
         'copilot-light' => [
             'name' => 'Copilot Light',
             'description' => 'Palet putih, abu-abu lembut, charcoal, dan slate yang jernih.',

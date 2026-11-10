@@ -37,7 +37,7 @@ class BrandThemeServiceTest extends TestCase
         parent::tearDown();
     }
 
-    public function test_missing_or_invalid_state_falls_back_to_orion_classic(): void
+    public function test_missing_or_invalid_state_falls_back_to_the_default_preset(): void
     {
         $themes = new BrandThemeService($this->themePath);
 
@@ -59,18 +59,18 @@ class BrandThemeServiceTest extends TestCase
         self::assertSame('coastal-slate', $saved['id']);
         self::assertSame($saved['id'], $themes->current()['id']);
         self::assertSame(['preset' => 'coastal-slate'], json_decode((string) file_get_contents($this->themePath), true));
-        self::assertSame(['orion-classic', 'copilot-light', 'coastal-slate', 'deep-ocean'], array_column($themes->presets(), 'id'));
+        self::assertSame(['copilot-light', 'coastal-slate', 'deep-ocean'], array_column($themes->presets(), 'id'));
         self::assertArrayHasKey('--brand-font-family', $themes->preset('copilot-light')['variables']);
         self::assertSame('14px', $themes->preset('copilot-light')['variables']['--brand-body-size']);
         self::assertSame('12px', $themes->preset('copilot-light')['variables']['--brand-label-size']);
         self::assertSame('400', $themes->preset('copilot-light')['variables']['--brand-weight-regular']);
         self::assertSame('0', $themes->preset('copilot-light')['variables']['--brand-letter-spacing']);
-        self::assertSame('#0F6472', $themes->preset('orion-classic')['variables']['--brand-mobile-nav-active-light']);
-        self::assertArrayNotHasKey('--brand-font-family', $themes->preset('orion-classic')['variables']);
+        self::assertSame('#3F6578', $themes->preset('coastal-slate')['variables']['--brand-mobile-nav-active-light']);
+        self::assertArrayNotHasKey('--brand-font-family', $themes->preset('coastal-slate')['variables']);
         self::assertSame('#475569', $themes->preset('copilot-light')['accent']['light']);
         self::assertSame('#F8FAFC', $themes->preset('copilot-light')['surfaces']['page']);
         self::assertSame('#1F2937', $themes->preset('copilot-light')['sidebar']['base']);
-        self::assertSame('#006C7B', $themes->preset('orion-classic')['accent']['light']);
+        self::assertSame('#3F6578', $themes->preset('coastal-slate')['accent']['light']);
 
         $this->expectException(InvalidArgumentException::class);
         $themes->save('--accent-primary: url(javascript:alert(1))');

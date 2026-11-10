@@ -1,5 +1,12 @@
 <?php
 /**
+ * @OBSOLETE (2026-11) — JANGAN JALANKAN.
+ * Alat warisan era palet teal (indigo -> teal). Ramp sky/blue/teal di
+ * resources/css/app.css kini sudah dipetakan ke Command Center, dan hex
+ * literal lama sudah dibersihkan. Menjalankan ulang berkas ini akan
+ * mengembalikan biru-2563EB menjadi #006C7B dan merusak palet.
+ * Pertahankan hanya sebagai arsip sejarah codemod.
+ *
  * Petakan warna biru-ungu yang ditulis langsung ke blade dan CSS.
  *
  * Kenapa perlu: Tailwind memancarkan utility lewat var(--color-indigo-*),

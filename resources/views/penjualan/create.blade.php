@@ -1005,11 +1005,11 @@
         30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
         40%, 60% { transform: translate3d(4px, 0, 0); }
     }
-    .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #E2EAE4 transparent; }
+    .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #B9C3DD transparent; }
     .custom-scrollbar::-webkit-scrollbar { width: 4px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #E2EAE4; border-radius: 10px; }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #C9D6CE; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #B9C3DD; border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #B9C3DD; }
 
     /* Styling Select2 (tinggi, border, font, dropdown, scrollbar hasil
        pencarian) SUDAH dipindahkan ke resources/css/app.css supaya satu

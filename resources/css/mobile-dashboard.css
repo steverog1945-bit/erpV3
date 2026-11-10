@@ -108,26 +108,26 @@
        teal jatuh di latar teal (tidak terbaca). Diseleksi ulang:
        Nota Baru -> /penjualan/kasir, tombol Kasir -> /kasir/monitoring. */
     .max-w-\[1600px\] a[href$="/penjualan/kasir"] {
-        background-color: var(--brand-accent-light, #0F6472);
+        background-color: var(--brand-accent-light, #2563EB);
         color: #fff;
         min-height: 48px;
     }
     .max-w-\[1600px\] a[href$="/penjualan/kasir"] i { color: #fff; }
     .max-w-\[1600px\] a[href$="/kasir/monitoring"],
     .max-w-\[1600px\] a[href$="/spk"] {
-        border-color: var(--brand-accent-light, #0F6472);
-        color: var(--brand-accent-light, #0F6472);
+        border-color: var(--brand-accent-light, #2563EB);
+        color: var(--brand-accent-light, #2563EB);
         min-height: 48px;
     }
     .max-w-\[1600px\] a[href$="/kasir/monitoring"] i,
-    .max-w-\[1600px\] a[href$="/spk"] i { color: var(--brand-accent-light, #0F6472); }
+    .max-w-\[1600px\] a[href$="/spk"] i { color: var(--brand-accent-light, #2563EB); }
     html.dark .max-w-\[1600px\] a[href$="/kasir/monitoring"],
     html.dark .max-w-\[1600px\] a[href$="/spk"] {
-        border-color: var(--brand-accent-dark, #5FC4D4);
-        color: var(--brand-accent-dark, #5FC4D4);
+        border-color: var(--brand-accent-dark, #7FA6F5);
+        color: var(--brand-accent-dark, #7FA6F5);
     }
     html.dark .max-w-\[1600px\] a[href$="/kasir/monitoring"] i,
-    html.dark .max-w-\[1600px\] a[href$="/spk"] i { color: var(--brand-accent-dark, #5FC4D4); }
+    html.dark .max-w-\[1600px\] a[href$="/spk"] i { color: var(--brand-accent-dark, #7FA6F5); }
 
     /* 12. KPI: jarak kartu lebih rapat, angka tetap utuh & terbaca. */
     .max-w-\[1600px\] .grid.grid-cols-2[class*="xl:grid-cols-4"] {

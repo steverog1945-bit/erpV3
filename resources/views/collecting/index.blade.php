@@ -222,7 +222,7 @@
             icon: 'question',
             showCancelButton: true,
             confirmButtonColor: '#10b981',
-            cancelButtonColor: '#FAFBF9',
+            cancelButtonColor: '#F5F8FF',
             confirmButtonText: 'Ya, Sudah Diserahkan',
             cancelButtonText: 'Batal',
             customClass: {

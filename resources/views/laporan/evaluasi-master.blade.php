@@ -17,8 +17,8 @@
         .page-break { break-before: page; }
     }
     .eval-table { width: 100%; border-collapse: collapse; }
-    .eval-table th { background: #F1F5F1; color: #3F4F47; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 8px 10px; border-bottom: 1px solid #C9D6CE; }
-    .eval-table td { padding: 7px 10px; border-bottom: 1px solid #E2EAE4; font-size: 12.5px; color: #3F4F47; }
+    .eval-table th { background: #F1F5F1; color: #33415C; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 8px 10px; border-bottom: 1px solid #B9C3DD; }
+    .eval-table td { padding: 7px 10px; border-bottom: 1px solid #B9C3DD; font-size: 12.5px; color: #33415C; }
     .eval-table td.num, .eval-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
     .eval-table td.tengah, .eval-table th.tengah { text-align: center; }
     .isian { min-width: 70px; border-bottom: 1px dotted #94a3b8; }
@@ -135,7 +135,7 @@
                 </tbody>
                 @if($bahan->isNotEmpty())
                 <tfoot>
-                    <tr style="background:#FAFBF9;font-weight:700">
+                    <tr style="background:#F5F8FF;font-weight:700">
                         <td colspan="4" style="padding:8px 10px">Total {{ $bahan->count() }} bahan &middot; {{ $bahan->where('menipis', true)->count() }} menipis &middot; {{ $bahan->filter(fn ($b) => (float) $b->harga_rata_rata <= 0)->count() }} belum ada harga</td>
                         <td colspan="3"></td>
                         <td class="num">Rp {{ $rp($bahan->sum('nilai')) }}</td>
@@ -216,8 +216,8 @@
                                     <div style="display:flex;flex-wrap:wrap;gap:6px 10px">
                                         @foreach($daftar as $t)
                                             @php $mg = \App\Services\LembarEvaluasiService::margin($t->harga, $p->hpp); @endphp
-                                            <span style="display:inline-flex;align-items:baseline;gap:6px;padding:3px 10px;border:1px solid #E2EAE4;border-radius:8px;background:#FAFBF9">
-                                                <span style="font-size:10.5px;color:#4A5B53">{{ $n($t->min) }}&ndash;{{ $t->max === null || $t->max >= 9999999 ? '∞' : $n($t->max) }}</span>
+                                            <span style="display:inline-flex;align-items:baseline;gap:6px;padding:3px 10px;border:1px solid #B9C3DD;border-radius:8px;background:#F5F8FF">
+                                                <span style="font-size:10.5px;color:#5D6A85">{{ $n($t->min) }}&ndash;{{ $t->max === null || $t->max >= 9999999 ? '∞' : $n($t->max) }}</span>
                                                 <b style="font-variant-numeric:tabular-nums">{{ $rp($t->harga) }}</b>
                                                 @if($mg !== null)<span style="font-size:10px;{{ $mg < 20 ? 'color:#93481A;font-weight:700' : 'color:#94a3b8' }}">{{ $n($mg, 1) }}%</span>@endif
                                             </span>
@@ -241,9 +241,9 @@
     @endif
 
     <div class="hidden print:grid grid-cols-3 gap-10 mt-12 text-center text-[11px] text-slate-600">
-        <div>Dibuat oleh<div style="height:48px"></div><div style="border-top:1px solid #4A5B53;padding-top:4px">(............................)</div></div>
-        <div>Diperiksa oleh<div style="height:48px"></div><div style="border-top:1px solid #4A5B53;padding-top:4px">(............................)</div></div>
-        <div>Disetujui oleh<div style="height:48px"></div><div style="border-top:1px solid #4A5B53;padding-top:4px">(............................)</div></div>
+        <div>Dibuat oleh<div style="height:48px"></div><div style="border-top:1px solid #5D6A85;padding-top:4px">(............................)</div></div>
+        <div>Diperiksa oleh<div style="height:48px"></div><div style="border-top:1px solid #5D6A85;padding-top:4px">(............................)</div></div>
+        <div>Disetujui oleh<div style="height:48px"></div><div style="border-top:1px solid #5D6A85;padding-top:4px">(............................)</div></div>
     </div>
 </div>
 @endsection

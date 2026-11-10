@@ -13,9 +13,9 @@
 
     .dh-kop { display: none; }
     .dh-tabel { width: 100%; border-collapse: collapse; }
-    .dh-tabel th { background: #F1F5F1; color: #3F4F47; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 4px 6px; border-bottom: 1px solid #C9D6CE; text-align: right; }
+    .dh-tabel th { background: #F1F5F1; color: #33415C; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 4px 6px; border-bottom: 1px solid #B9C3DD; text-align: right; }
     .dh-tabel th:first-child { text-align: left; }
-    .dh-tabel td { padding: 4px 6px; border-bottom: 1px solid #E2EAE4; font-size: 11px; color: #3F4F47; }
+    .dh-tabel td { padding: 4px 6px; border-bottom: 1px solid #B9C3DD; font-size: 11px; color: #33415C; }
     .dh-tabel td.num, .dh-tabel th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
     .dh-tabel td.kosong { color: #C7D3CB; }
     .dh-blok { break-inside: avoid; page-break-inside: avoid; margin-bottom: 12px; }
@@ -23,7 +23,7 @@
     .dh-blok-info { font-size: 9.5px; color: #6f6f6f; text-transform: uppercase; letter-spacing: .04em; }
     .dh-catatan { font-size: 9.5px; color: #6f6f6f; margin-top: 2px; }
     .dh-sup { font-size: 10px; color: #6f6f6f; font-style: italic; }
-    .dh-kategori-judul { font-size: 11px; font-weight: 700; color: #2A3731; text-transform: uppercase; letter-spacing: .06em; border-bottom: 2px solid #2A3731; padding-bottom: 3px; margin: 16px 0 8px; }
+    .dh-kategori-judul { font-size: 11px; font-weight: 700; color: #1E2A4A; text-transform: uppercase; letter-spacing: .06em; border-bottom: 2px solid #1E2A4A; padding-bottom: 3px; margin: 16px 0 8px; }
 
     @media print {
         @page { size: A4 {{ $landscape ? 'landscape' : 'portrait' }}; margin: 8mm; }
@@ -180,7 +180,7 @@
 
                     {{-- Harga File Siap Cetak (produk dengan harga tersendiri per golongan, dari harga_siap_cetak) --}}
                     @if(!empty($b['barisSiapCetak']))
-                        <div class="dh-catatan mb-1 mt-3 font-medium text-[#3F4F47]">Harga File Siap Cetak</div>
+                        <div class="dh-catatan mb-1 mt-3 font-medium text-[#33415C]">Harga File Siap Cetak</div>
                         <table class="dh-tabel">
                             <thead>
                                 <tr>

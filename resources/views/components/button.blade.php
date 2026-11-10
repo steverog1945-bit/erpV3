@@ -11,12 +11,12 @@
 
     $variants = [
         'primary'   => 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm',
-        'secondary' => 'bg-[var(--surface-secondary,#F1F5F9)] hover:bg-[var(--surface-tertiary,#E2E8F0)] text-[var(--text-primary,#1A231F)] border border-[var(--border-primary,#E2EAE4)]',
+        'secondary' => 'bg-[var(--surface-secondary,#EFF3FB)] hover:bg-[var(--surface-tertiary,#E3E9F6)] text-[var(--text-primary,#0F1E3E)] border border-[var(--border-primary,#B9C3DD)]',
         'success'   => 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm',
         'warning'   => 'bg-amber-500 hover:bg-amber-600 text-white shadow-sm',
         'danger'    => 'bg-rose-500 hover:bg-rose-600 text-white shadow-sm',
-        'outline'   => 'bg-transparent border border-[var(--border-primary,#CBD5E1)] text-[var(--text-primary,#1A231F)] hover:bg-[var(--surface-secondary,#F8FAFC)]',
-        'ghost'     => 'bg-transparent text-[var(--text-secondary,#475569)] hover:text-[var(--text-primary,#0F172A)] hover:bg-[var(--surface-secondary,#F1F5F9)]',
+        'outline'   => 'bg-transparent border border-[var(--border-primary,#CBD6EE)] text-[var(--text-primary,#0F1E3E)] hover:bg-[var(--surface-secondary,#F8FAFC)]',
+        'ghost'     => 'bg-transparent text-[var(--text-secondary,#475569)] hover:text-[var(--text-primary,#0F172A)] hover:bg-[var(--surface-secondary,#EFF3FB)]',
     ];
 
     $sizes = [

@@ -26,7 +26,7 @@ Dokumen ini merangkum hasil audit penuh aplikasi (V2 berjalan = referensi logika
 
 ### 1b. Halaman error & permukaan publik bergaya berbeda-beda
 - Semua halaman `errors/*` memuat **`cdn.tailwindcss.com`** (sudah diganti mandiri di build terbaru, lihat commit `d2398278`), dan kini didesain ulang penuh di commit tersebut. **V3 hilang 4 berkas error page** (`layout`, `405`, `419`, `429`).
-- Publik (landing & `/masuk`) memakai palet **ROYAL INDIGO** (`#15143F` deep night, `#2E318E` royal indigo, `#4D55F8` electric violet, CTA `#FF6B17`). Offline.html memakai teal Orion Classic (`#006C7B`). App ERP memakai deep-ocean (`#146A80`). Tiga identitas dalam satu produk.
+- Publik (landing & `/masuk`) memakai palet **ROYAL INDIGO** (`#15143F` deep night, `#2E318E` royal indigo, `#4D55F8` electric violet, CTA `#FF6B17`). Offline.html kini navy Command Center (`#0F1E3E` + tombol `#2563EB`). App ERP memakai preset `deep-ocean` (dipasarkan sebagai **Command Center**). Palet teal `orion-classic` sudah dihapus dari `BrandThemeService` (2026-11); preset tersisa: `copilot-light`, `coastal-slate`, `deep-ocean`.
 - Sidebar berisi blok "Status Kas" besar, lekukan aktif bergaya "notch", puluhan SVG inline beragam stroke, campur ikon FA/emoji/SVG. Tidak ada footer aplikasi, tidak ada breadcrumb (dihaki subtitle "Jalur / Halaman" manual).
 
 ### 1c. Tampilan tidak konsisten antar halaman

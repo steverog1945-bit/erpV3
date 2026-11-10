@@ -3,30 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Offline - ORION GRAFIKA</title>
+    <meta name="theme-color" content="#0F1E3E">
+    <meta name="color-scheme" content="dark">
+    <title>Offline - Orion Grafika</title>
     <style>
         body {
             margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
-            background: #1A231F; color: #BFD5C9; font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            text-align: center; padding: 24px;
+            background: #0F1E3E; color: #B9C3DD; font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            text-align: center; padding: 24px; -webkit-font-smoothing: antialiased;
         }
-        .kartu { max-width: 360px; }
-        .ikon { font-size: 48px; margin-bottom: 16px; }
-        h1 { color: #fff; font-size: 22px; margin: 0 0 8px; }
-        p { line-height: 1.6; margin: 0 0 20px; font-size: 15px; }
+        .kartu { max-width: 380px; }
+        .ikon { width: 56px; height: 56px; margin: 0 auto 18px; border-radius: 16px; background: #1C2436; border: 1px solid #2A3450; display: grid; place-items: center; color: #7FA6F5; }
+        .ikon svg { width: 26px; height: 26px; }
+        h1 { color: #E8ECF8; font-size: 21px; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 10px; }
+        p { line-height: 1.6; margin: 0 0 22px; font-size: 14.5px; }
         button {
-            background: #006C7B; color: #fff; border: 0; border-radius: 8px;
-            padding: 12px 24px; font-size: 15px; font-weight: 600; cursor: pointer;
+            background: #2563EB; color: #fff; border: 0; border-radius: 10px;
+            padding: 12px 26px; font-size: 14.5px; font-weight: 600; font-family: inherit; cursor: pointer;
+            transition: background .15s ease;
         }
-        button:hover { background: #005663; }
+        button:hover { background: #1D4ED8; }
+        button:focus-visible { outline: 2px solid #7FA6F5; outline-offset: 2px; }
+        .meta { margin-top: 18px; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #6B7799; }
+        @media (prefers-reduced-motion: reduce) { button { transition: none; } }
     </style>
 </head>
 <body>
     <div class="kartu">
-        <div class="ikon">&#128268;</div>
+        <div class="ikon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 9.5L5.8 12.2a5 5 0 0 0 7.07 7.07l2.7-2.7"/><path d="M15.5 14.5L18.2 11.8a5 5 0 0 0-7.07-7.07l-2.7 2.7"/><path d="M13.5 10.5l-3 3"/></svg>
+        </div>
         <h1>Sedang Offline</h1>
-        <p>Koneksi internet terputus. Data transaksi terbaru hanya tersedia saat tersambung. Coba sambungkan ulang lalu muat ulang halaman.</p>
-        <button onclick="location.reload()">Coba Lagi</button>
+        <p>Koneksi internet terputus. Data transaksi terbaru hanya tersedia saat tersambung. Sambungkan ulang lalu muat ulang halaman ini.</p>
+        <button type="button" onclick="location.reload()">Coba Lagi</button>
+        <div class="meta">Orion Grafika ERP &middot; Pusat Operasi</div>
     </div>
 </body>
 </html>

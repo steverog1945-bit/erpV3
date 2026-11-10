@@ -178,7 +178,7 @@
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#93481A',
-            cancelButtonColor: '#FAFBF9',
+            cancelButtonColor: '#F5F8FF',
             confirmButtonText: 'Ya, Hapus',
             cancelButtonText: 'Batal',
             customClass: {

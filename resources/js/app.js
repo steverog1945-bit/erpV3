@@ -26,7 +26,7 @@ window.deleteConfirm = function (formId) {
         text: "Data yang dihapus tidak dapat dikembalikan!",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#4f46e5',
+        confirmButtonColor: '#2563EB',
         cancelButtonColor: '#f1f5f9',
         cancelButtonText: '<span style="color:#64748b">Batal</span>',
         confirmButtonText: 'Ya, Hapus!',

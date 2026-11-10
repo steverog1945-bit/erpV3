@@ -490,7 +490,7 @@
             showCancelButton: true,
             confirmButtonColor: '#93481A',
             cancelButtonColor: '#F1F5F1',
-            cancelButtonText: '<span style="color: #4A5B53">Batal</span>',
+            cancelButtonText: '<span style="color: #5D6A85">Batal</span>',
             confirmButtonText: 'Ya, Hapus!'
         }).then(async (result) => {
             if (!result.isConfirmed) return;
@@ -526,7 +526,7 @@
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#93481A',
-            cancelButtonColor: '#FAFBF9',
+            cancelButtonColor: '#F5F8FF',
             confirmButtonText: 'Ya, Hapus',
             cancelButtonText: 'Batal',
             customClass: {

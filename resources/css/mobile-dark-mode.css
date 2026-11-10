@@ -17,7 +17,7 @@ html.dark :is(
     .jersey-mobile-form-page,
     .jersey-finance-mobile-page
 ) :is(.text-slate-200, .text-slate-300, .text-slate-400, .text-slate-500, .text-slate-600, .text-slate-700) {
-    color: var(--brand-surface-dark_text_secondary, var(--text-secondary, #C9D6CE));
+    color: var(--brand-surface-dark_text_secondary, var(--text-secondary, #B9C3DD));
 }
 
 html.dark :is(
@@ -30,7 +30,7 @@ html.dark :is(
     .jersey-mobile-form-page,
     .jersey-finance-mobile-page
 ) :is(.text-slate-800, .text-slate-900) {
-    color: var(--brand-surface-dark_text, var(--text-primary, #F1F5F1));
+    color: var(--brand-surface-dark_text, var(--text-primary, #E8ECF8));
 }
 
 /* Chip/badge latar slate di kartu gelap: permukaan diubah ke token gelap,
@@ -68,87 +68,87 @@ html.dark :is(
    token gelap yang sama dengan pwa-ops.
    ========================================================================== */
 html.dark .produksi-workqueue-table tbody tr:not(.produksi-empty-row) {
-    background: var(--surface-primary, #1A231F);
-    border-color: var(--border-primary, #3F4F47);
-    color: var(--text-primary, #F1F5F1);
+    background: var(--surface-primary, #0F1E3E);
+    border-color: var(--border-primary, #33415C);
+    color: var(--text-primary, #E8ECF8);
 }
 html.dark .produksi-workqueue-table tbody td {
-    color: var(--text-primary, #F1F5F1);
+    color: var(--text-primary, #E8ECF8);
 }
 html.dark .produksi-workqueue-table tbody td::before {
-    color: var(--text-tertiary, #9DB8AD);
+    color: var(--text-tertiary, #8896B8);
 }
 html.dark .produksi-workqueue-table .produksi-work-name {
-    color: var(--text-primary, #F1F5F1);
+    color: var(--text-primary, #E8ECF8);
 }
 html.dark .produksi-workqueue-table .produksi-work-number,
 html.dark .produksi-workqueue-table .produksi-division {
-    color: var(--text-tertiary, #9DB8AD);
+    color: var(--text-tertiary, #8896B8);
 }
 html.dark .produksi-workqueue-table thead {
-    background: var(--surface-secondary, #2A3731);
-    border-color: var(--border-primary, #3F4F47);
+    background: var(--surface-secondary, #1E2A4A);
+    border-color: var(--border-primary, #33415C);
 }
 
-/* Baris "kosong" memakai permukaan putih yang sama, plus teks #4A5B53 yang
+/* Baris "kosong" memakai permukaan putih yang sama, plus teks #5D6A85 yang
    gagal keterbacaan di latar gelap. */
 html.dark .produksi-workqueue-table .produksi-empty-row,
 html.dark .spk-workqueue-table .spk-empty-row {
-    background: var(--surface-primary, #1A231F);
+    background: var(--surface-primary, #0F1E3E);
 }
 html.dark .produksi-workqueue-table .produksi-empty-row td,
 html.dark .spk-workqueue-table .spk-empty-row td {
-    color: var(--text-secondary, #C9D6CE);
+    color: var(--text-secondary, #B9C3DD);
 }
 
 html.dark .spk-workqueue-table tbody tr:not(.spk-empty-row) {
-    background: var(--surface-primary, #1A231F);
-    border-color: var(--border-primary, #3F4F47);
-    color: var(--text-primary, #F1F5F1);
+    background: var(--surface-primary, #0F1E3E);
+    border-color: var(--border-primary, #33415C);
+    color: var(--text-primary, #E8ECF8);
 }
 html.dark .spk-workqueue-table tbody td {
-    color: var(--text-primary, #F1F5F1);
+    color: var(--text-primary, #E8ECF8);
 }
 html.dark .spk-workqueue-table tbody td::before {
-    color: var(--text-tertiary, #9DB8AD);
+    color: var(--text-tertiary, #8896B8);
 }
 html.dark .spk-workqueue-table thead {
-    background: var(--surface-secondary, #2A3731);
-    border-color: var(--border-primary, #3F4F47);
+    background: var(--surface-secondary, #1E2A4A);
+    border-color: var(--border-primary, #33415C);
 }
 
 html.dark .collecting-mobile-table tbody tr.collecting-order-row {
-    background: var(--surface-primary, #1A231F);
-    border-color: var(--border-primary, #3F4F47);
-    color: var(--text-primary, #F1F5F1);
+    background: var(--surface-primary, #0F1E3E);
+    border-color: var(--border-primary, #33415C);
+    color: var(--text-primary, #E8ECF8);
 }
 html.dark .collecting-mobile-table .collecting-order-row > td {
-    color: var(--text-primary, #F1F5F1);
+    color: var(--text-primary, #E8ECF8);
 }
 html.dark .collecting-mobile-table .collecting-order-row > td::before {
-    color: var(--text-tertiary, #9DB8AD);
+    color: var(--text-tertiary, #8896B8);
 }
 
 html.dark .jersey-orders-mobile-table tbody tr.jersey-orders-row {
-    background: var(--surface-primary, #1A231F);
-    border-color: var(--border-primary, #3F4F47);
-    color: var(--text-primary, #F1F5F1);
+    background: var(--surface-primary, #0F1E3E);
+    border-color: var(--border-primary, #33415C);
+    color: var(--text-primary, #E8ECF8);
 }
 html.dark .jersey-orders-mobile-table .jersey-orders-row > td {
-    color: var(--text-primary, #F1F5F1);
+    color: var(--text-primary, #E8ECF8);
 }
 html.dark .jersey-orders-mobile-table .jersey-orders-row > td::before {
-    color: var(--text-tertiary, #9DB8AD);
+    color: var(--text-tertiary, #8896B8);
 }
 
 html.dark .jersey-finance-mobile-table tbody tr.jersey-finance-row {
-    background: var(--surface-primary, #1A231F);
-    border-color: var(--border-primary, #3F4F47);
-    color: var(--text-primary, #F1F5F1);
+    background: var(--surface-primary, #0F1E3E);
+    border-color: var(--border-primary, #33415C);
+    color: var(--text-primary, #E8ECF8);
 }
 html.dark .jersey-finance-mobile-table .jersey-finance-row > td {
-    color: var(--text-primary, #F1F5F1);
+    color: var(--text-primary, #E8ECF8);
 }
 html.dark .jersey-finance-mobile-table .jersey-finance-row > td::before {
-    color: var(--text-tertiary, #9DB8AD);
+    color: var(--text-tertiary, #8896B8);
 }

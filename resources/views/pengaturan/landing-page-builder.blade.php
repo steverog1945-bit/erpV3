@@ -59,11 +59,11 @@
             --lpb-surface-raised: #ffffff;
             --lpb-workspace: #F1F5F1;
             --lpb-canvas-bg: #ffffff;
-            --lpb-border: #E2EAE4;
-            --lpb-border-strong: #C9D6CE;
-            --lpb-text: #1A231F;
-            --lpb-text-secondary: #3F4F47;
-            --lpb-text-tertiary: #4A5B53;
+            --lpb-border: #B9C3DD;
+            --lpb-border-strong: #B9C3DD;
+            --lpb-text: #0F1E3E;
+            --lpb-text-secondary: #33415C;
+            --lpb-text-tertiary: #5D6A85;
             --lpb-text-muted: #94a3b8;
             --lpb-accent: #2563EB;
             --lpb-accent-hover: #1D4ED8;
@@ -96,18 +96,18 @@
             --lpb-transition: 160ms cubic-bezier(.23, 1, .32, 1);
         }
         html.dark #lpb-root {
-            --lpb-surface: #1A231F;
-            --lpb-surface-raised: #2A3731;
+            --lpb-surface: #0F1E3E;
+            --lpb-surface-raised: #1E2A4A;
             --lpb-workspace: #0b1220;
-            --lpb-canvas-bg: #2A3731;
-            --lpb-border: #3F4F47;
-            --lpb-border-strong: #3F4F47;
+            --lpb-canvas-bg: #1E2A4A;
+            --lpb-border: #33415C;
+            --lpb-border-strong: #33415C;
             --lpb-text: #F1F5F1;
-            --lpb-text-secondary: #C9D6CE;
+            --lpb-text-secondary: #B9C3DD;
             --lpb-text-tertiary: #94a3b8;
-            --lpb-text-muted: #4A5B53;
-            --lpb-accent-subtle: #012228;
-            --lpb-accent-border: #01434D;
+            --lpb-text-muted: #5D6A85;
+            --lpb-accent-subtle: #0F1E3E;
+            --lpb-accent-border: #1C2436;
             --lpb-success-subtle: rgba(5, 150, 105, .14);
             --lpb-warning-subtle: rgba(217, 119, 6, .14);
             --lpb-danger-subtle: rgba(225, 29, 72, .14);
@@ -256,7 +256,7 @@
         #lpb-root .lpb-template-btn:hover:not(:disabled) {
             background: var(--lpb-accent-subtle);
             border-color: var(--lpb-accent);
-            box-shadow: 0 2px 8px rgba(38, 120, 142, .25);
+            box-shadow: 0 2px 8px rgba(91, 141, 239, .25);
         }
         #lpb-root .lpb-template-btn:focus-visible { outline: 2px solid var(--lpb-accent); outline-offset: 2px; }
         #lpb-root .lpb-template-btn:disabled { opacity: .5; cursor: not-allowed; }
@@ -1439,7 +1439,7 @@
                   confirmButtonColor: o.bahaya === false ? '#2563EB' : '#93481A',
                   confirmButtonText: o.setuju || 'Ya, Lanjutkan',
                   cancelButtonColor: '#F1F5F1',
-                  cancelButtonText: '<span style="color:#4A5B53">Batal</span>',
+                  cancelButtonText: '<span style="color:#5D6A85">Batal</span>',
                   reverseButtons: true,
                   focusCancel: true,
                   allowOutsideClick: false,
@@ -1588,7 +1588,7 @@
     var SAVE_STATUS_STYLE = {
         saved:   { color: '#059669', background: '#ecfdf5', border: 'transparent', icon: 'check' },
         saving:  { color: '#d97706', background: '#FEF6EA', border: 'transparent', icon: 'spinner' },
-        unsaved: { color: '#d97706', background: '#ffffff', border: '#E2EAE4',  icon: 'warn' },
+        unsaved: { color: '#d97706', background: '#ffffff', border: '#B9C3DD',  icon: 'warn' },
         error:   { color: '#93481A', background: '#fff1f2', border: 'transparent', icon: 'error' }
     };
     var SAVE_STATUS_TEXT = {

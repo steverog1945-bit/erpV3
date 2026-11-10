@@ -238,6 +238,86 @@
         .sidebar-kas-status * { color: var(--pro-ink-2) !important; }
     }
 
+    /* ===== MEGA MENU (ala Canva) — desktop >=1024px ===== */
+    #proMega { display: none; }
+    @media (min-width: 1024px) {
+        /* Panel lama (#mainSidebar) digantikan di desktop oleh #proMega;
+           #mainSidebar tetap hidup untuk Ctrl+K (palette) & RBAC, hanya
+           tidak ditampilkan. */
+        #mainSidebar.terbuka { display: none !important; }
+        #proMega {
+            position: fixed; z-index: 40;
+            top: calc(var(--bar1-h) + var(--bar2-h) + 12px);
+            left: 50%; transform: translate(-50%, 0);
+            width: min(1240px, calc(100% - 32px));
+            max-height: min(76vh, 680px);
+            display: none; flex-direction: column; overflow: hidden;
+            background: var(--pro-surface); border: 1px solid var(--pro-border-2);
+            border-radius: var(--pro-radius); box-shadow: var(--pro-shadow-xl);
+        }
+        #proMega.terbuka { display: flex; animation: proMegaIn .24s cubic-bezier(.22,1,.36,1) both; }
+        @keyframes proMegaIn {
+            from { opacity: 0; transform: translate(-50%, -14px) scale(.985); }
+            to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+        }
+        .promega-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 320px minmax(0, 1fr); }
+
+        /* Rail kiri: kartu "featured" */
+        .promega-rail { background: var(--pro-bg); border-right: 1px solid var(--pro-border); padding: 16px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
+        .promega-rail-label { font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--pro-ink-3); padding: 2px 4px 4px; }
+        .promega-card {
+            position: relative; display: flex; align-items: center; gap: 13px;
+            padding: 14px; border-radius: 14px; text-decoration: none; color: #fff;
+            transition: transform .16s ease, box-shadow .16s ease; overflow: hidden;
+        }
+        .promega-card:hover { transform: translateY(-1px); box-shadow: var(--pro-shadow-md); }
+        .promega-card:active { transform: none; }
+        .promega-card.tone-blue { background: #2563EB; }
+        .promega-card.tone-navy { background: #152347; }
+        .promega-card.tone-emerald { background: #0E9F6E; }
+        .promega-card::after {
+            content: ""; position: absolute; right: -34px; top: -34px; width: 120px; height: 120px;
+            border-radius: 999px; background: rgba(255,255,255,.12); pointer-events: none;
+        }
+        .promega-card-icon { flex: 0 0 46px; width: 46px; height: 46px; border-radius: 12px; background: rgba(255,255,255,.17); display: grid; place-items: center; }
+        .promega-card-icon svg { width: 23px; height: 23px; stroke: #fff; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+        .promega-card-text { min-width: 0; }
+        .promega-card-title { display: block; font-size: 14.5px; font-weight: 600; letter-spacing: -0.01em; color: #fff; }
+        .promega-card-desc { display: block; margin-top: 2px; font-size: 10.5px; color: rgba(255,255,255,.8); line-height: 1.35; }
+        .promega-card-arrow { flex: 0 0 auto; margin-left: auto; opacity: .8; }
+
+        /* Kolom tautan kanan (gaya Canva: grid rata, teks polos) */
+        .promega-content { overflow-y: auto; padding: 14px 18px 12px; }
+        .promega-grid { columns: 150px; column-gap: 20px; }
+        .promega-group { break-inside: avoid; margin-bottom: 14px; min-width: 0; }
+        .promega-group-title {
+            font-size: 10px; font-weight: 600; letter-spacing: .13em; text-transform: uppercase;
+            color: var(--pro-ink-3); border-bottom: 1px solid var(--pro-border);
+            padding: 3px 2px 8px; margin-bottom: 6px;
+        }
+        .promega-links { display: flex; flex-direction: column; gap: 1px; }
+        .promega-link {
+            display: block; padding: 6px 8px; margin: 0 -8px; border-radius: 8px;
+            font-size: 12.5px; line-height: 1.35; color: var(--pro-ink-2);
+            text-decoration: none; transition: background .12s ease, color .12s ease;
+            overflow-wrap: anywhere;
+        }
+        /* Tautan polos ala Canva: ikon sidebar disembunyikan. */
+        .promega-link svg { display: none; }
+        .promega-link:hover { background: #F4F8FF; color: var(--pro-accent-hover); }
+        .promega-link.is-active { background: var(--pro-accent-soft); color: var(--pro-accent-hover); font-weight: 600; }
+
+        .promega-foot {
+            flex: 0 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+            border-top: 1px solid var(--pro-border); padding: 9px 20px;
+            font-size: 9px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--pro-ink-3);
+        }
+        .promega-foot kbd { background: var(--pro-bg); border: 1px solid var(--pro-border-2); border-radius: 4px; padding: 1px 6px; font-size: 9px; color: var(--pro-ink-2); font-family: inherit; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        #proMega.terbuka, #mainSidebar.terbuka, .content-wrapper { animation: none !important; }
+    }
+
     /* ===== MAIN + TOPBAR ===== */
     main#mainContent {
         display: flex; flex-direction: column; width: 100%; min-width: 0; min-height: 100vh;
@@ -1299,6 +1379,55 @@
         </div>
         </aside>
 
+        {{-- Mega menu desktop ala Canva: rail featured kiri + kolom tautan
+             polos kanan. Isi dirakit dari #mainSidebar (RBAC satu sumber).
+             Di <1024px elemen ini tidak pernah tampil (lihat CSS); yang
+             dipakai drawer #mainSidebar. --}}
+        <div id="proMega" role="dialog" aria-modal="false" aria-label="Menu utama" aria-hidden="true">
+            <div class="promega-body">
+                <div class="promega-rail" id="proMegaRail">
+                    <span class="promega-rail-label">Akses Cepat</span>
+                    <a class="promega-card tone-blue" href="{{ url('/penjualan/kasir') }}" data-href-suffix="/penjualan/kasir">
+                        <span class="promega-card-icon">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4V7z"/><path d="M12 9v.01M12 15v.01M9 12v.01M15 12v.01"/></svg>
+                        </span>
+                        <span class="promega-card-text">
+                            <span class="promega-card-title">Kasir</span>
+                            <span class="promega-card-desc">Buka transaksi penjualan baru</span>
+                        </span>
+                        <svg class="promega-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+                    </a>
+                    <a class="promega-card tone-navy" href="{{ url('/kasir/monitoring') }}" data-href-suffix="/kasir/monitoring">
+                        <span class="promega-card-icon">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="4" width="19" height="12.5" rx="2"/><path d="M9 20.5h6M12 16.5v4"/><path d="M7 12l2.5-2.5 2.5 2.5 4.5-4.5"/></svg>
+                        </span>
+                        <span class="promega-card-text">
+                            <span class="promega-card-title">Monitoring Kasir</span>
+                            <span class="promega-card-desc">Pantau transaksi &amp; kas hari ini</span>
+                        </span>
+                        <svg class="promega-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+                    </a>
+                    <a class="promega-card tone-emerald" href="{{ url('/spk') }}" data-href-suffix="/spk">
+                        <span class="promega-card-icon">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4.5" width="14" height="17" rx="2"/><path d="M9 4.5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2M9.5 11h5M9.5 15h5M9.5 19h3"/></svg>
+                        </span>
+                        <span class="promega-card-text">
+                            <span class="promega-card-title">Surat Perintah Kerja</span>
+                            <span class="promega-card-desc">Kelola perintah produksi &amp; prioritas</span>
+                        </span>
+                        <svg class="promega-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+                    </a>
+                </div>
+                <div class="promega-content">
+                    <div class="promega-grid" id="proMegaGrid"></div>
+                </div>
+            </div>
+            <div class="promega-foot">
+                <span>Orion Grafika ERP &middot; Pusat Operasi</span>
+                <span>Node JKT-HQ-01 &middot; <kbd>Esc</kbd> menutup</span>
+            </div>
+        </div>
+
         <main id="mainContent">
     <header class="pro-topbar">
         <div class="pro-bar1">
@@ -1453,7 +1582,7 @@
                 </a>
             @endforeach
             <span class="pro-live"><i class="pro-live-dot" aria-hidden="true"></i>Data langsung</span>
-            <button type="button" class="pro-menu-btn" id="menuPanelBtn" onclick="toggleMenuPanel()" aria-expanded="false" aria-controls="mainSidebar">
+            <button type="button" class="pro-menu-btn" id="menuPanelBtn" onclick="toggleMenuPanel()" aria-expanded="false" aria-controls="proMega mainSidebar">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
                 Semua Menu
             </button>
@@ -2093,14 +2222,87 @@
     })();
     </script>
     <script>
-        // Visual Refresh v2: panel menu (pengganti sidebar). Satu fungsi
-        // untuk desktop & mobile: desktop = popover di bawah topbar,
-        // mobile = drawer kiri penuh (CSS @media 1023px).
+        // Panel menu ala Canva (#proMega) dibangun dari #mainSidebar supaya
+        // RBAC tetap satu sumber kebenaran (palette Ctrl+K & drawer mobile
+        // juga membaca dari sana). Dipanggil sekali saja.
+        function buildProMega() {
+            if (window.__proMegaBuilt) return;
+            window.__proMegaBuilt = true;
+
+            var grid = document.getElementById('proMegaGrid');
+            var nav = document.querySelector('#mainSidebar nav');
+            if (!grid || !nav) return;
+
+            function buatGrup(judul, links) {
+                if (!links.length) return;
+                var grup = document.createElement('div');
+                grup.className = 'promega-group';
+                var h = document.createElement('div');
+                h.className = 'promega-group-title';
+                h.textContent = judul;
+                var body = document.createElement('div');
+                body.className = 'promega-links';
+                links.forEach(function (a) {
+                    var c = a.cloneNode(true);
+                    c.removeAttribute('class');
+                    c.className = 'promega-link' + (a.classList.contains('sb-active') ? ' is-active' : '');
+                    c.removeAttribute('title');
+                    body.appendChild(c);
+                });
+                grup.appendChild(h);
+                grup.appendChild(body);
+                grid.appendChild(grup);
+            }
+
+            // Tautan di luar grup (Dashboard, Kelola Postingan, Eksekutif, Audit)
+            var luar = [];
+            for (var n = nav.firstElementChild; n && !(n.classList && n.classList.contains('menu-group-toggle')); n = n.nextElementSibling) {
+                if (n.tagName === 'A') luar.push(n);
+            }
+            buatGrup('Beranda', luar);
+
+            nav.querySelectorAll('.menu-group-toggle').forEach(function (t) {
+                var span = t.querySelector('span');
+                var judul = (span ? span.textContent : t.textContent).trim();
+                var items = t.nextElementSibling;
+                if (!items || !items.classList.contains('menu-group-items')) return;
+                var links = Array.prototype.slice.call(items.querySelectorAll('a[href]'));
+                buatGrup(judul, links);
+            });
+
+            // Featured rail: kartu hanya tampil bila rutenya ada di sidebar
+            // (hanya ada bila role punya hak akses).
+            var rail = document.getElementById('proMegaRail');
+            if (rail) {
+                rail.querySelectorAll('[data-href-suffix]').forEach(function (card) {
+                    var suffix = card.getAttribute('data-href-suffix');
+                    if (!nav.querySelector('a[href$="' + suffix + '"]')) card.remove();
+                });
+                if (!rail.querySelector('.promega-card')) rail.style.display = 'none';
+            }
+        }
+
         function toggleMenuPanel() {
-            const panel = document.getElementById('mainSidebar');
+            if (window.matchMedia('(min-width: 1024px)').matches) buildProMega();
+
+            const desktop = window.matchMedia('(min-width: 1024px)').matches;
+            const utama = document.getElementById(desktop ? 'proMega' : 'mainSidebar');
+            const lain  = document.getElementById(desktop ? 'mainSidebar' : 'proMega');
             const overlay = document.getElementById('sidebarOverlay');
             const btn = document.getElementById('menuPanelBtn');
-            const buka = !panel.classList.contains('terbuka');
+
+            // Tutup panel mana pun yang sedang terbuka (bukan sekadar toggle
+            // menurut breakpoint saat ini), lalu buka panel yang sesuai bila
+            // memang belum ada yang terbuka.
+            const sedangTerbuka = [utama, lain].find(p => p && p.classList.contains('terbuka'));
+            const buka = !sedangTerbuka;
+            const panel = sedangTerbuka || utama;
+            if (!panel) return;
+
+            if (lain && lain !== panel && lain.classList.contains('terbuka')) {
+                lain.classList.remove('terbuka');
+                lain.setAttribute('aria-hidden', 'true');
+            }
 
             if (buka) {
                 panel.classList.add('terbuka');
@@ -2109,6 +2311,8 @@
                 overlay.setAttribute('aria-hidden', 'false');
                 document.body.classList.add('menu-panel-open');
                 if (btn) btn.setAttribute('aria-expanded', 'true');
+                const fokus = panel.querySelector('a[href], button');
+                if (fokus) fokus.focus();
             } else {
                 panel.classList.remove('terbuka');
                 panel.setAttribute('aria-hidden', 'true');
@@ -2127,7 +2331,12 @@
 
         // Esc menutup panel (sama seperti modal).
         document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && document.getElementById('mainSidebar')?.classList.contains('terbuka')) toggleMenuPanel();
+            if (e.key !== 'Escape') return;
+            const terbuka = ['proMega', 'mainSidebar'].some(function (id) {
+                const p = document.getElementById(id);
+                return p && p.classList.contains('terbuka');
+            });
+            if (terbuka) toggleMenuPanel();
         });
 
         // Tooltip native (title) di tiap link menu - satu-satunya cara tahu
