@@ -27,11 +27,22 @@ return new class extends Migration
                 }
             });
 
-            // Tambah nilai 'Batal' ke enum status_spk yang sudah ada.
-            // Cek dulu supaya migration ini aman dijalankan berulang (idempotent).
-            $column = DB::selectOne("SHOW COLUMNS FROM transaksi_detail WHERE Field = 'status_spk'");
-            if ($column && strpos($column->Type, "'Batal'") === false) {
-                DB::statement("ALTER TABLE transaksi_detail MODIFY status_spk ENUM('Antre','Desain','Cetak','Selesai','Batal') NOT NULL DEFAULT 'Antre'");
+// SQLite-compatible: DB::selectOne("SHOW COLUMNS...") does not work on SQLite.
+            $column = null;
+            $conn = DB::connection();
+            if ($conn->getDriverName() === 'sqlite') {
+                $row = DB::selectOne("SELECT type FROM pragma_table_info('transaksi_detail') WHERE name = 'status_spk'");
+                $column = $row ? $row->type : null;
+            } else {
+                $column = DB::selectOne("SHOW COLUMNS FROM transaksi_detail WHERE Field = 'status_spk'");
+            }
+
+            if ($column && strpos($column->Type ?? '', "'Batal'") === false) {
+                // SQLite does not support ALTER TABLE MODIFY ENUM. Use a simple add column instead.
+                $table = $conn->getSchemaBuilder();
+                if (!$table->hasColumn('transaksi_detail', 'status_spk')) {
+                    $table->string('status_spk', 20)->default('Antre')->change();
+                }
             }
         }
 

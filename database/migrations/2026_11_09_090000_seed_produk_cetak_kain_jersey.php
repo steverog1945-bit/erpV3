@@ -29,10 +29,70 @@ return new class extends Migration
         $idSatuanRoll = (int) DB::table('satuan')->where('nama_satuan', 'roll')->value('id_satuan');
         $idSatuanM2 = (int) DB::table('satuan')->where('nama_satuan', 'm2')->value('id_satuan');
         $idSatuanKg = (int) DB::table('satuan')->where('nama_satuan', 'kg')->value('id_satuan');
-        $idMesin = (int) DB::table('mesin')->where('nama_mesin', 'LAINNYA')->value('id_mesin')
-            ?: (int) DB::table('mesin')->value('id_mesin');
-        $idKategori = (int) DB::table('kategori')->where('nama_kategori', 'Lain-lain')->value('id_kategori')
-            ?: (int) DB::table('kategori')->value('id_kategori');
+        $idMesin = (int) DB::table('mesin')->where('nama_mesin', 'LAINNYA')->value('id_mesin');
+                if (!$idMesin) {
+                    $mesin = DB::table('mesin')->first();
+                    $idMesin = $mesin ? (int) $mesin->id_mesin : 1;
+                    if (!$mesin) {
+                        DB::table('mesin')->insert([
+                            'nama_mesin' => 'LAINNYA',
+                            'tipe_mesin' => 'Lainnya',
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                        $idMesin = 1;
+                    }
+                }
+                $idKategori = (int) DB::table('kategori')->where('nama_kategori', 'Lain-lain')->value('id_kategori');
+                if (!$idKategori) {
+                    $kategori = DB::table('kategori')->first();
+                    $idKategori = $kategori ? (int) $kategori->id_kategori : 1;
+                    if (!$kategori) {
+                                        DB::table('kategori')->insert([
+                                            'nama_kategori' => 'Lain-lain',
+                                            'kode_kategori' => substr('lain-lain', 0, 5),
+                                            'created_at' => now(),
+                                            'updated_at' => now(),
+                                        ]);
+                        $idKategori = 1;
+                    }
+                }
+                $idSatuanRoll = (int) DB::table('satuan')->where('nama_satuan', 'roll')->value('id_satuan');
+                if (!$idSatuanRoll) {
+                    $satuan = DB::table('satuan')->where('nama_satuan', 'roll')->first();
+                    $idSatuanRoll = $satuan ? (int) $satuan->id_satuan : 1;
+                    if (!$satuan) {
+                        DB::table('satuan')->insert([
+                            'nama_satuan' => 'roll',
+                            'nilai_konversi' => 1,
+                        ]);
+                        $idSatuanRoll = 1;
+                    }
+                }
+                $idSatuanM2 = (int) DB::table('satuan')->where('nama_satuan', 'm2')->value('id_satuan');
+                if (!$idSatuanM2) {
+                    $satuan = DB::table('satuan')->where('nama_satuan', 'm2')->first();
+                    $idSatuanM2 = $satuan ? (int) $satuan->id_satuan : 1;
+                    if (!$satuan) {
+                        DB::table('satuan')->insert([
+                            'nama_satuan' => 'm2',
+                            'nilai_konversi' => 1,
+                        ]);
+                        $idSatuanM2 = 1;
+                    }
+                }
+                $idSatuanKg = (int) DB::table('satuan')->where('nama_satuan', 'kg')->value('id_satuan');
+                if (!$idSatuanKg) {
+                    $satuan = DB::table('satuan')->where('nama_satuan', 'kg')->first();
+                    $idSatuanKg = $satuan ? (int) $satuan->id_satuan : 1;
+                    if (!$satuan) {
+                        DB::table('satuan')->insert([
+                            'nama_satuan' => 'kg',
+                            'nilai_konversi' => 1,
+                        ]);
+                        $idSatuanKg = 1;
+                    }
+                }
 
         $daftarBahan = [
             [
@@ -86,16 +146,20 @@ return new class extends Migration
 
         $idProduk = DB::table('produk')->where('nama_produk', 'Cetak Kain Jersey')->value('id_produk');
         if (!$idProduk) {
-            $idProduk = DB::table('produk')->insertGetId([
+            $produkData = [
                 'nama_produk' => 'Cetak Kain Jersey',
                 'metode_hitung' => 'ukuran',
                 'min_order' => 1.0,
-                'min_luas_total' => 1.0,
                 'status' => 'aktif',
                 'keterangan' => 'Jasa cetak kain jersey sublim; BOM: sublime paper + kain Brazil KT 190-200. Harga diatur di Price List.',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ]);
+            ];
+            $schema = DB::connection()->getSchemaBuilder();
+            if ($schema->hasColumn('produk', 'min_luas_total')) {
+                $produkData['min_luas_total'] = 1.0;
+            }
+            $idProduk = DB::table('produk')->insertGetId($produkData);
             AuditLogger::log('created', 'produk', $idProduk, null, ['nama' => 'Cetak Kain Jersey'], "Produk Cetak Kain Jersey didaftarkan (id {$idProduk}) lewat migrasi, BOM sublime paper + kain Brazil.");
         }
 
