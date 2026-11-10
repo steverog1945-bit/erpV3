@@ -161,7 +161,7 @@
 
     #sidebarOverlay {
         display: none; position: fixed; inset: 0; z-index: 38;
-        background: rgba(9, 15, 30, .42);
+        background: rgba(9, 15, 30, .32);
     }
     #sidebarOverlay.terbuka { display: block; }
 
