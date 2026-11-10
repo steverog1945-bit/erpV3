@@ -1,4 +1,4 @@
-/* ORION GRAFIKA — operational table cards: scoped and mobile-only. */
+/* ORION GRAFIKA â€” operational table cards: scoped and mobile-only. */
 .pwa-ops-mobile-only{display:none}
 /* Filter collapsible ala SPK/Produksi (mobile: <details> buka/tutup).
    Desktop >=768px harus kembali ke baris filter horizontal seperti
@@ -94,18 +94,18 @@
 }
 
 /* ==========================================================================
-   DARK MODE � kartu operasional mengikuti token gelap (bukan tetap putih
+   DARK MODE — kartu operasional mengikuti token gelap (bukan tetap putih
    karena fallback --brand-surface-primary yang tidak di-override html.dark).
    Perbaikan P1 review visual: teks pucat di kartu.
    ========================================================================== */
-html.dark .pwa-ops-page .pwa-ops-table tbody tr.pwa-ops-row{background:var(--surface-primary,#1A231F);border-color:var(--border-primary,#3F4F47);color:var(--text-primary,#F1F5F1);box-shadow:0 3px 12px rgb(0 0 0 / 30%)}
+html.dark .pwa-ops-page .pwa-ops-table tbody tr.pwa-ops-row{background:var(--surface-primary,#1C2436);border-color:var(--border-primary,#2A3450);color:var(--text-primary,#F1F5F1);box-shadow:0 3px 12px rgb(0 0 0 / 30%)}
 html.dark .pwa-ops-page .pwa-ops-row :is(.text-slate-200,.text-slate-300,.text-slate-400,.text-slate-500,.text-slate-600,.text-slate-700){color:var(--text-secondary,#C9D6CE)}
 html.dark .pwa-ops-page .pwa-ops-row :is(.text-slate-800,.text-slate-900){color:var(--text-primary,#F1F5F1)}
-html.dark .pwa-ops-page .pwa-ops-filter .pwa-ops-filter-toggle{background:var(--surface-secondary,#2A3731);border-color:var(--border-primary,#3F4F47);color:var(--text-secondary,#C9D6CE)}
+html.dark .pwa-ops-page .pwa-ops-filter .pwa-ops-filter-toggle{background:var(--surface-secondary,#222C44);border-color:var(--border-primary,#2A3450);color:var(--text-secondary,#C9D6CE)}
 html.dark .pwa-ops-page .pwa-ops-filter .pwa-ops-filter-toggle::after{color:var(--text-tertiary,#9DB8AD)}
 html.dark .pwa-ops-page .pwa-ops-filter--active .pwa-ops-filter-toggle{color:var(--accent-primary,#5FC4D4)}
 html.dark .pwa-ops-page .pwa-ops-filter--active .pwa-ops-filter-toggle > span::after{background:var(--accent-primary,#5FC4D4)}
-html.dark .pwa-ops-page .pwa-ops-filter .pwa-ops-filter-actions{border-top-color:var(--border-primary,#3F4F47)}
+html.dark .pwa-ops-page .pwa-ops-filter .pwa-ops-filter-actions{border-top-color:var(--border-primary,#2A3450)}
 
 /* Dark mode: pastikan label form tidak pucat berlebihan */
 html.dark .pwa-ops-page label,

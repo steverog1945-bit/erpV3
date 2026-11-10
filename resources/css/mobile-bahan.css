@@ -130,8 +130,8 @@
         color: var(--brand-surface-text_tertiary, #64748b);
     }
     html.dark #bulk-delete-form thead {
-        background: var(--brand-surface-dark_secondary, #2A3731);
-        border-bottom-color: var(--brand-surface-dark_border, #3F4F47);
+        background: var(--brand-surface-dark_secondary, #222C44);
+        border-bottom-color: var(--brand-surface-dark_border, #2A3450);
     }
     html.dark #bulk-delete-form thead th:first-child::after { color: var(--brand-surface-dark_text_tertiary, #9DB8AD); }
 
@@ -164,8 +164,8 @@
         filter: grayscale(0.35);
     }
     html.dark #bulk-delete-form tbody tr {
-        background: var(--brand-surface-dark_secondary, #2A3731);
-        border-color: var(--brand-surface-dark_border, #3F4F47);
+        background: var(--brand-surface-dark_secondary, #222C44);
+        border-color: var(--brand-surface-dark_border, #2A3450);
     }
 
     /* Label kolom di setiap sel (diambil dari data-label) */
@@ -329,7 +329,7 @@
     html.dark #bulk-delete-form td:nth-child(6),
     html.dark #bulk-delete-form td:nth-child(7),
     html.dark #bulk-delete-form td:nth-child(8) {
-        border-top-color: var(--brand-surface-dark_border, #3F4F47);
+        border-top-color: var(--brand-surface-dark_border, #2A3450);
     }
 
     /* The card-corner action button occupies the top-right 40px; keep the
@@ -427,7 +427,7 @@
     }
     html.dark .mobile-bahan-actions > summary {
         color: var(--brand-surface-dark_text_secondary, #C9D6CE);
-        background: var(--brand-surface-dark_tertiary, #3F4F47);
+        background: var(--brand-surface-dark_tertiary, #2A3450);
     }
 
     @media screen and (max-width: 767.98px) {
@@ -439,8 +439,8 @@
         }
     }
     html.dark .mobile-bahan-action-menu {
-        border-color: var(--brand-surface-dark_border, #3F4F47);
-        background: var(--brand-surface-dark_secondary, #2A3731);
+        border-color: var(--brand-surface-dark_border, #2A3450);
+        background: var(--brand-surface-dark_secondary, #222C44);
     }
 
     /* Pagination: target sentuh memadat */
@@ -710,8 +710,8 @@
         box-shadow: 0 2px 8px rgb(15 23 42 / 4%);
     }
     html.dark #bulk-delete-form tbody > tr:not(:has(td[colspan])) {
-        border-color: var(--brand-surface-dark_border, #3F4F47);
-        background: var(--brand-surface-dark_secondary, #2A3731);
+        border-color: var(--brand-surface-dark_border, #2A3450);
+        background: var(--brand-surface-dark_secondary, #222C44);
     }
     #bulk-delete-form tbody > tr:not(:has(td[colspan])) > td {
         display: flex;

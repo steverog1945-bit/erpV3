@@ -53,10 +53,10 @@
     /* Token warna - Dark mode */
     
     
-    --dark-surface-primary: var(--brand-surface-dark_primary, #1A231F);
-    --dark-surface-secondary: var(--brand-surface-dark_secondary, #2A3731);
-    --dark-surface-tertiary: var(--brand-surface-dark_tertiary, #3F4F47);
-    --dark-border-primary: var(--brand-surface-dark_border, #3F4F47);
+    --dark-surface-primary: var(--brand-surface-dark_primary, #1C2436);
+    --dark-surface-secondary: var(--brand-surface-dark_secondary, #222C44);
+    --dark-surface-tertiary: var(--brand-surface-dark_tertiary, #2A3450);
+    --dark-border-primary: var(--brand-surface-dark_border, #2A3450);
     
     --dark-text-primary: var(--brand-surface-dark_text, #F1F5F1);
     --dark-text-secondary: var(--brand-surface-dark_text_secondary, #C9D6CE);

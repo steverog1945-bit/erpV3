@@ -26,9 +26,9 @@ Dibuat 2026-11-10 atas perintah owner: "rombak total, Command Center, topbar, an
 - Teks `#E8ECF8` / `#B9C3DD` / `#8A96B8`; aksen `#5B8DEF` (hover `#7FA6F5`), soft `#22304F`.
 
 ## Skala & bentuk
-- Radius: chip `4px`, input/tombol/ikon `8px`, card/panel/tabel `10px`. Jangan pakai radius >16px.
+- Radius: chip `6px`, input/tombol/ikon `8-10px`, blok dalam `12px`, card/panel/tabel/modal `16px` (acu ke referensi Command Center).
 - Spacing: skala 4/8/12/16/24/32px. Padding kartu 16-20px; form row gap 12px.
-- Shadow: tidak untuk kartu biasa; hanya untuk elemen "terangkat" (panel, modal, popover), max 2 lapis lembut biru-navy.
+- Shadow: `--pro-shadow-sm` (kartu biasa), `--pro-shadow-md` (hover/angkat), `--pro-shadow-lg/xl` (panel terangkat: palette, modal, mega menu). Flat by default.
 - Tipografi: Inter (self-hosted, `public/vendor/fonts/inter*.woff2`); basis 13px untuk data; judul halaman 20-24px/600; angka 18-28px/600 tabular.
 - Weight hanya 400/500/600. Tidak ada 700+ kecuali judul besar.
 
@@ -40,7 +40,7 @@ Dibuat 2026-11-10 atas perintah owner: "rombak total, Command Center, topbar, an
 ## Komponen kanonik
 - Tombol: 1 primary biru, outline, ghost; `x-button` = satu-satunya API (varian primary = `#2563EB`).
 - Input/select: putih, border `#E3E9F6`, focus ring biru; tinggi 38px (form), match dengan Select2 global.
-- Card: putih/dark-surface, border tegas, radius 10px, padding konsisten.
+- Card: putih/dark-surface, border tipis tegas `#E3E9F6`, radius 16px, padding konsisten, shadow-sm.
 - Tabel: header uppercase 11px, baris 44px, hover lembut, kolom uang rata kanan.
 - Badge: dot + teks, warna status saja (hijau/kuning/merah/biru), bukan dekorasi.
 - Toast/Dialog: SweetAlert2 global; `window.Swal` mixin di layout; jangan inline `confirm()`.
@@ -48,6 +48,7 @@ Dibuat 2026-11-10 atas perintah owner: "rombak total, Command Center, topbar, an
 ## Motion (MOTION dial: 1)
 - Masuk: transisi singkat 150-220ms ease `cubic-bezier(.22,1,.36,1)`; tidak ada bounce, tidak ada infinite pulse kecuali `.live-dot` kecil.
 - Panel menu/modal: spring halus via framer-motion di palette & CSS transition pada panel menu.
+- Fade antarhalaman: `.content-wrapper` animasi `proContentIn` .34s; keluar `pv2-leaving` .18s ease-out (dihormati reduced-motion).
 - `prefers-reduced-motion`: matikan semua.
 
 ## Anti-slop (diringkas, wajib)
@@ -63,4 +64,4 @@ Dibuat 2026-11-10 atas perintah owner: "rombak total, Command Center, topbar, an
 - Aturan mobile `<768px` terpisah; zero-diff desktop untuk modul yang belum ditembus.
 
 ## Status
-- 2026-11-10: shell diterapkan (topbar 2 baris, palette React, Ctrl+K). Kartu radius 10px & border tegas, shadow halus. Ramp Tailwind `indigo` digeser ke biru Command Center sehingga seluruh halaman otomatis ikut tanpa re-theme manual.
+- 2026-11-10 (V3): topbar 2 baris + mega menu grid (accordion hanya mobile), kartu radius 16px, background ice dengan radial wash lembut, font smoothing (antialiased + grayscale), feature-settings cv11/ss01, fade in/out antarhalaman. Ramp Tailwind `indigo` digeser ke biru Command Center sehingga seluruh halaman otomatis ikut tanpa re-theme manual.

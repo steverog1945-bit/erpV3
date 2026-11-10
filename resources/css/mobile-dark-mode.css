@@ -1,5 +1,5 @@
 /* ==========================================================================
-   DARK MODE READABILITY — GLOBAL (lintas modul kartu/tabel operasional)
+   DARK MODE READABILITY â€” GLOBAL (lintas modul kartu/tabel operasional)
    Peta kelas Tailwind slate abu-abu ke token tema saat html.dark supaya
    SEMUA teks di kartu operasional tetap terbaca pada keempat tema brand.
    Scope disengaja: hanya kontainer kartu/tabel latar gelap-atau-halaman
@@ -44,7 +44,7 @@ html.dark :is(
     .jersey-mobile-form-page,
     .jersey-finance-mobile-page
 ) :is(.bg-slate-50, .bg-slate-100, .bg-slate-200) {
-    background-color: var(--brand-surface-dark_tertiary, var(--surface-tertiary, #3F4F47));
+    background-color: var(--brand-surface-dark_tertiary, var(--surface-tertiary, #2A3450));
 }
 
 html.dark :is(
@@ -56,7 +56,7 @@ html.dark :is(
     .jersey-mobile-form-page,
     .jersey-finance-mobile-page
 ) :is(.border-slate-50, .border-slate-100, .border-slate-200, .divide-slate-50 > :not([hidden]) ~ :not([hidden])) {
-    border-color: var(--brand-surface-dark_border, var(--border-primary, #3F4F47));
+    border-color: var(--brand-surface-dark_border, var(--border-primary, #2A3450));
 }
 
 /* ==========================================================================
