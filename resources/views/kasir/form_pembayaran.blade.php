@@ -899,7 +899,7 @@
                 title: 'Saldo Deposit Tidak Cukup',
                 text: 'Jumlah bayar melebihi saldo deposit yang tersedia (Rp ' + formatRupiah(saldoDepositTersedia) + ').',
                 icon: 'error',
-                confirmButtonColor: '#006C7B',
+                confirmButtonColor: '#2563EB',
             });
         }
     });

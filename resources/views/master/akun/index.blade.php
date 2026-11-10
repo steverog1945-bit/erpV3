@@ -188,7 +188,7 @@
             html: `Akun <b>${escHtml(namaAkun)}</b> akan di${sedangAktif ? 'nonaktifkan' : 'aktifkan'}.`,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#006C7B',
+            confirmButtonColor: '#2563EB',
             cancelButtonColor: '#FAFBF9',
             confirmButtonText: 'Ya, Lanjutkan',
             cancelButtonText: 'Batal',

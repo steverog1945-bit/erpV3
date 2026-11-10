@@ -26,7 +26,7 @@
         .toolbar { text-align: center; margin-bottom: 18px; padding: 12px; background: #FAFBF9; border: 1px solid #E2EAE4; border-radius: 12px; }
         .toolbar .pilih { display: inline-flex; gap: 6px; margin-right: 12px; vertical-align: middle; }
         .toolbar .pilih a { padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 700; text-decoration: none; color: #3F4F47; background: #fff; border: 1px solid #E2EAE4; }
-        .toolbar .pilih a.aktif { background: #EAF6F7; color: #006C7B; border-color: #B6E4EC; }
+        .toolbar .pilih a.aktif { background: #EFF4FF; color: #2563EB; border-color: #DDE9FF; }
         .toolbar .info-kertas { display: block; margin-top: 8px; font-size: 11px; color: #94a3b8; }
         @media print { .toolbar { display: none !important; } }
     </style>

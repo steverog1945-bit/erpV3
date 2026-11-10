@@ -519,7 +519,7 @@
             html: `Seluruh tier harga golongan <b>${escHtml(namaGolongan)}</b> akan disalin ke SEMUA golongan lain untuk produk ini.<br><small class="text-slate-400">Tier harga yang sudah ada di golongan lain akan DIGANTI TOTAL, bukan digabung.</small>`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#006C7B',
+            confirmButtonColor: '#2563EB',
             cancelButtonColor: '#F1F5F1',
             cancelButtonText: '<span style="color: #4A5B53">Batal</span>',
             confirmButtonText: 'Ya, Salin ke Semua',

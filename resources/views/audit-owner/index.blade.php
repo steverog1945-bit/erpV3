@@ -75,7 +75,7 @@
         box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04);
         transition: border-color 140ms cubic-bezier(0.23, 1, 0.32, 1), box-shadow 140ms cubic-bezier(0.23, 1, 0.32, 1), background 140ms cubic-bezier(0.23, 1, 0.32, 1);
     }
-    .lembar-input:focus { outline: none; border-color: #006C7B; box-shadow: 0 0 0 3px #D2EBEE; background: #ffffff; }
+    .lembar-input:focus { outline: none; border-color: #2563EB; box-shadow: 0 0 0 3px #D2EBEE; background: #ffffff; }
     html.dark .lembar-input { background: #01434D; border-color: #0A4C57; color: #E2EAE4; }
     html.dark .lembar-input:focus { background: #01434D; border-color: #5FC4D4; box-shadow: 0 0 0 3px #2a3560; }
 
@@ -93,8 +93,8 @@
     .lembar-btn:active { transform: scale(0.97); }
     html.dark .lembar-btn { background: #01434D; border-color: #0A4C57; color: #E2EAE4; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); }
     html.dark .lembar-btn:hover { background: #1f2c49; border-color: #4a5a7d; }
-    .lembar-btn-utama { background: #006C7B; border-color: #005663; color: #fff; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.18); }
-    .lembar-btn-utama:hover { background: #005663; border-color: #01434D; }
+    .lembar-btn-utama { background: #2563EB; border-color: #1D4ED8; color: #fff; box-shadow: 0 1px 2px rgba(15, 23, 42, 0.18); }
+    .lembar-btn-utama:hover { background: #1D4ED8; border-color: #01434D; }
     html.dark .lembar-btn-utama { background: #04727E; color: #fff; }
 
     /* Pil status kecil di judul panel */

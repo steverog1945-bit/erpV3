@@ -22,7 +22,7 @@
        packages/ui/src/styles/theme.css repo sst/opencode):
          teks utama #171717, teks sekunder #6f6f6f, teks tersier #8f8f8f,
          garis #e5e5e5, aksen #034cff, sukses #2dba26, kritis #ed4831.
-       Sebelumnya dokumen cetak memakai indigo (#006C7B) dan abu-abu
+       Sebelumnya dokumen cetak memakai indigo (#2563EB) dan abu-abu
        kebiruan yang tidak ada di palet itu sama sekali. Untuk dokumen
        yang keluar dari printer, warna yang tidak ada di palet berarti
        tinta yang tidak disengaja.

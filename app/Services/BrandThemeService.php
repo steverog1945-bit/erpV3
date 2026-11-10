@@ -8,7 +8,7 @@ use RuntimeException;
 
 class BrandThemeService
 {
-    public const DEFAULT_PRESET = 'orion-classic';
+    public const DEFAULT_PRESET = 'deep-ocean';
 
     private const PRESETS = [
         'orion-classic' => [
@@ -137,42 +137,42 @@ class BrandThemeService
             ],
         ],
         'deep-ocean' => [
-            'name' => 'Deep Ocean',
-            'description' => 'Aksen biru laut yang lebih dalam dengan kontras tegas.',
-            'swatches' => ['#146A80', '#3996A9', '#CFE7EC', '#56B8CD'],
+            'name' => 'Command Center',
+            'description' => 'Biru tenang di atas latar ice, netral navy. Default ERP.',
+            'swatches' => ['#2563EB', '#1E3A8A', '#EFF4FF', '#0F1E3E'],
             'neutralRamp' => [
-                '50' => '#F4F9FA', '100' => '#E9F5F7', '200' => '#CFE7EC',
-                '300' => '#A4D2DB', '400' => '#64838B', '500' => '#4A6871',
-                '600' => '#405D66', '700' => '#34515A', '800' => '#263F47',
-                '900' => '#1A3037', '950' => '#102126',
+                '50' => '#F7F9FE', '100' => '#EFF3FB', '200' => '#E3E9F6',
+                '300' => '#CBD6EE', '400' => '#8A96B8', '500' => '#5D6A85',
+                '600' => '#3E4C74', '700' => '#2B3654', '800' => '#1E2740',
+                '900' => '#141A29', '950' => '#0D111F',
             ],
             'surfaces' => [
-                'page' => '#F4F9FA', 'primary' => '#FFFFFF', 'secondary' => '#F4F9FA',
-                'tertiary' => '#E9F5F7', 'border' => '#CFE7EC', 'border_strong' => '#A4D2DB',
-                'text' => '#1A3037', 'text_secondary' => '#34515A', 'text_tertiary' => '#4A6871',
-                'dark_primary' => '#1A3037', 'dark_secondary' => '#263F47',
-                'dark_tertiary' => '#34515A', 'dark_border' => '#405D66',
-                'dark_text' => '#F4F9FA', 'dark_text_secondary' => '#CFE7EC', 'dark_text_tertiary' => '#A4D2DB',
+                'page' => '#E9EEFA', 'primary' => '#FFFFFF', 'secondary' => '#F5F8FF',
+                'tertiary' => '#EFF4FF', 'border' => '#E3E9F6', 'border_strong' => '#CBD6EE',
+                'text' => '#0F1E3E', 'text_secondary' => '#3E4C74', 'text_tertiary' => '#5D6A85',
+                'dark_primary' => '#1C2436', 'dark_secondary' => '#222C44',
+                'dark_tertiary' => '#2A3450', 'dark_border' => '#3A4767',
+                'dark_text' => '#E8ECF8', 'dark_text_secondary' => '#B9C3DD', 'dark_text_tertiary' => '#8A96B8',
             ],
             'sidebar' => [
-                'deep' => '#102126', 'base' => '#1A3037', 'raised' => '#263F47',
-                'border' => '#34515A', 'text' => '#CFE7EC', 'muted' => '#A4D2DB',
-                'title' => '#FFFFFF', 'accent' => '#56B8CD', 'warning' => '#F0A882',
-                'active' => '#11586B', 'hover' => '#104653', 'active_mark' => '#56B8CD',
+                'deep' => '#0D111F', 'base' => '#141A29', 'raised' => '#1C2436',
+                'border' => '#2A3450', 'text' => '#B9C3DD', 'muted' => '#8A96B8',
+                'title' => '#FFFFFF', 'accent' => '#5B8DEF', 'warning' => '#F0A882',
+                'active' => '#22304F', 'hover' => '#1C2436', 'active_mark' => '#5B8DEF',
             ],
             'ramp' => [
-                '50' => '#E9F5F7', '100' => '#CFE7EC', '200' => '#A4D2DB',
-                '300' => '#70B5C3', '400' => '#3996A9', '500' => '#1F7C93',
-                '600' => '#146A80', '700' => '#11586B', '800' => '#104653',
-                '900' => '#0C343D', '950' => '#071F25',
+                '50' => '#EFF4FF', '100' => '#DDE9FF', '200' => '#BDD3FF',
+                '300' => '#8FB4F8', '400' => '#5B8DEF', '500' => '#2563EB',
+                '600' => '#1D4ED8', '700' => '#1E40AF', '800' => '#1E3A8A',
+                '900' => '#172554', '950' => '#0F1E3E',
             ],
             'accent' => [
-                'light' => '#146A80', 'hover_light' => '#11586B', 'surface_light' => '#E9F5F7',
-                'dark' => '#56B8CD', 'hover_dark' => '#78C9D9', 'dark_hover' => '#3A9DB3', 'surface_dark' => '#103744',
+                'light' => '#2563EB', 'hover_light' => '#1D4ED8', 'surface_light' => '#EFF4FF',
+                'dark' => '#5B8DEF', 'hover_dark' => '#7FA6F5', 'dark_hover' => '#1E40AF', 'surface_dark' => '#22304F',
             ],
             'mobileNavigation' => [
-                'inactive_light' => '#4A6871', 'active_light' => '#146A80',
-                'inactive_dark' => '#A4D2DB', 'active_dark' => '#56B8CD',
+                'inactive_light' => '#3E4C74', 'active_light' => '#2563EB',
+                'inactive_dark' => '#8A96B8', 'active_dark' => '#5B8DEF',
             ],
         ],
     ];

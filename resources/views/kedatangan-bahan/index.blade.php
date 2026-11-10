@@ -207,7 +207,7 @@
             html: `Konfirmasi barang <b>${escapeHtml(noSj)}</b> telah diterima.<br><small class="text-rose-500 font-medium uppercase underline">Stok bertambah otomatis!</small>`,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#006C7B',
+            confirmButtonColor: '#2563EB',
             confirmButtonText: 'Ya, Selesaikan!',
             customClass: { popup: 'rounded-2xl' }
         }).then((result) => {

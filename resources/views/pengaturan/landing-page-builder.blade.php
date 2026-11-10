@@ -65,10 +65,10 @@
             --lpb-text-secondary: #3F4F47;
             --lpb-text-tertiary: #4A5B53;
             --lpb-text-muted: #94a3b8;
-            --lpb-accent: #006C7B;
-            --lpb-accent-hover: #005663;
-            --lpb-accent-subtle: #EAF6F7;
-            --lpb-accent-border: #B6E4EC;
+            --lpb-accent: #2563EB;
+            --lpb-accent-hover: #1D4ED8;
+            --lpb-accent-subtle: #EFF4FF;
+            --lpb-accent-border: #DDE9FF;
             /* Palet resmi ORION — ROYAL INDIGO (token lokal builder) */
             --orion-deep-night: #15143F;
             --orion-royal-indigo: #2E318E;
@@ -1436,7 +1436,7 @@
                   html: pesan,
                   icon: o.ikon || 'warning',
                   showCancelButton: true,
-                  confirmButtonColor: o.bahaya === false ? '#006C7B' : '#93481A',
+                  confirmButtonColor: o.bahaya === false ? '#2563EB' : '#93481A',
                   confirmButtonText: o.setuju || 'Ya, Lanjutkan',
                   cancelButtonColor: '#F1F5F1',
                   cancelButtonText: '<span style="color:#4A5B53">Batal</span>',
@@ -1461,7 +1461,7 @@
                   title: judul,
                   html: pesan,
                   icon: o.ikon || 'info',
-                  confirmButtonColor: '#006C7B',
+                  confirmButtonColor: '#2563EB',
                   confirmButtonText: o.setuju || 'Mengerti',
                   allowOutsideClick: true
               }).then(function () {});

@@ -272,7 +272,7 @@
             html: `Komisi belum dibayar untuk <b>${escHtml(nama)}</b> pada periode ini sebesar <b>Rp ${Math.round(nominal).toLocaleString('id-ID')}</b> akan dicatat sebagai pengeluaran Kas Kecil (kategori Komisi Desainer).`,
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#006C7B',
+            confirmButtonColor: '#2563EB',
             confirmButtonText: 'Ya, Bayar',
             cancelButtonText: 'Batal',
             customClass: { confirmButton: 'rounded-lg px-6 py-2.5', cancelButton: 'rounded-lg px-6 py-2.5 text-slate-600' },

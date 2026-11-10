@@ -1680,7 +1680,7 @@
                     text: @json($lanjut['teks'] ?? ''),
                     showConfirmButton: {{ !empty($lanjut['url']) ? 'true' : 'false' }},
                     confirmButtonText: @json($lanjut['tombol'] ?? 'Lanjut'),
-                    confirmButtonColor: '#006C7B', showCloseButton: true
+                    confirmButtonColor: '#2563EB', showCloseButton: true
                 }).then(r => { if (r.isConfirmed) window.location.href = @json($lanjut['url'] ?? '#'); });
             @else
                 Toast.fire({ icon: 'success', title: "{{ session('success') }}" });
@@ -1752,7 +1752,7 @@
                         position: 'top-end',
                         showConfirmButton: true,
                         confirmButtonText: 'Lihat List',
-                        confirmButtonColor: '#006C7B',
+                        confirmButtonColor: '#2563EB',
                         timer: 10000,
                         timerProgressBar: true,
                     }).then((result) => {

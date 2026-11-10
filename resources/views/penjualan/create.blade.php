@@ -160,7 +160,7 @@
                 <div class="flex items-center justify-between mb-1.5 ml-1 mr-1 gap-2">
                     <label for="id_konsumen" class="text-[10px] font-medium text-slate-400 uppercase tracking-widest truncate">Cari Pelanggan</label>
                     <button type="button" onclick="openModal('konsumen-baru')" title="Daftarkan pelanggan baru"
-                        class="text-[#006C7B] hover:text-[#005560] font-medium text-[11px] flex items-center gap-1 shrink-0">
+                        class="text-[#2563EB] hover:text-[#1D4ED8] font-medium text-[11px] flex items-center gap-1 shrink-0">
                         <i class="fas fa-plus text-[9px]"></i> Baru
                     </button>
                 </div>
@@ -340,7 +340,7 @@
         {{-- ---------- 01: Produk & Pengaturan ---------- --}}
         <div class="min-w-0">
             <div class="flex items-start gap-2.5 mb-3.5">
-                <span class="w-6 h-6 shrink-0 rounded-full bg-[#006C7B] text-white text-[11px] font-semibold flex items-center justify-center">01</span>
+                <span class="w-6 h-6 shrink-0 rounded-full bg-[#2563EB] text-white text-[11px] font-semibold flex items-center justify-center">01</span>
                 <div class="min-w-0 pt-0.5">
                     <p class="text-[13px] font-medium text-slate-800 leading-tight">Produk &amp; Pengaturan</p>
                     <p class="text-[11px] text-slate-400 leading-tight">Pilih sesuai pesanan</p>
@@ -435,7 +435,7 @@
                     <label for="input_catatan_produksi" class="block text-[10px] font-medium text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Catatan Produksi</label>
                     <textarea id="input_catatan_produksi" rows="1" tabindex="5"
                               placeholder="Tulis catatan ... (opsional)"
-                              class="w-full h-[38px] min-h-[38px] resize-none bg-white border border-slate-200 rounded-lg px-3 py-2 text-[13px] leading-none text-slate-700 focus:border-[#006C7B] focus:ring-2 focus:ring-[#006C7B]/15 transition-colors"></textarea>
+                              class="w-full h-[38px] min-h-[38px] resize-none bg-white border border-slate-200 rounded-lg px-3 py-2 text-[13px] leading-none text-slate-700 focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/15 transition-colors"></textarea>
                 </div>
             </div>
         </div>
@@ -443,7 +443,7 @@
         {{-- ---------- 02: Detail Desain & Ukuran ---------- --}}
         <div class="min-w-0">
             <div class="flex items-start gap-2.5 mb-3.5">
-                <span class="w-6 h-6 shrink-0 rounded-full bg-[#006C7B] text-white text-[11px] font-semibold flex items-center justify-center">02</span>
+                <span class="w-6 h-6 shrink-0 rounded-full bg-[#2563EB] text-white text-[11px] font-semibold flex items-center justify-center">02</span>
                 <div class="min-w-0 pt-0.5">
                     <p class="text-[13px] font-medium text-slate-800 leading-tight">Detail Desain &amp; Ukuran</p>
                     <p class="text-[11px] text-slate-400 leading-tight">Upload file lebih dulu</p>
@@ -467,8 +467,8 @@
                             <img id="thumbnail_berkas" src="{{ asset('default-thumbnail.png') }}" alt="Berkas desain" class="hidden absolute inset-0 w-full h-full object-contain opacity-50">
                         </div>
                         <label for="input_thumbnail"
-                               class="flex-1 min-w-0 flex flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-slate-300 bg-white hover:border-[#006C7B] hover:bg-[#006C7B]/5 cursor-pointer transition-colors px-3 py-2 text-center">
-                            <i class="fas fa-cloud-arrow-up text-[#006C7B] text-base"></i>
+                               class="flex-1 min-w-0 flex flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-slate-300 bg-white hover:border-[#2563EB] hover:bg-[#2563EB]/5 cursor-pointer transition-colors px-3 py-2 text-center">
+                            <i class="fas fa-cloud-arrow-up text-[#2563EB] text-base"></i>
                             <span class="text-[11px] font-medium text-slate-700">Pilih File</span>
                             <span id="thumbnail_nama" class="text-[10px] text-slate-400 truncate max-w-full block w-full">Gambar (JPG, PNG, WEBP, GIF, BMP) atau PDF (otomatis jadi gambar) atau CDR/AI/EPS - maks 10 MB, dokumen maks 39 MB</span>
                         </label>
@@ -505,15 +505,15 @@
                     <div class="grid grid-cols-3 gap-2.5">
                         <div>
                             <label class="block text-[10px] font-medium text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Panjang (cm)</label>
-                            <input type="number" id="input_p" onchange="hitungSubtotal()" tabindex="7" class="w-full bg-white border border-slate-200 rounded-lg py-2 px-2 text-[13px] font-medium text-slate-700 text-center focus:border-[#006C7B] focus:ring-2 focus:ring-[#006C7B]/15">
+                            <input type="number" id="input_p" onchange="hitungSubtotal()" tabindex="7" class="w-full bg-white border border-slate-200 rounded-lg py-2 px-2 text-[13px] font-medium text-slate-700 text-center focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/15">
                         </div>
                         <div>
                             <label class="block text-[10px] font-medium text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Lebar (cm)</label>
-                            <input type="number" id="input_l" onchange="hitungSubtotal()" tabindex="7" class="w-full bg-white border border-slate-200 rounded-lg py-2 px-2 text-[13px] font-medium text-slate-700 text-center focus:border-[#006C7B] focus:ring-2 focus:ring-[#006C7B]/15">
+                            <input type="number" id="input_l" onchange="hitungSubtotal()" tabindex="7" class="w-full bg-white border border-slate-200 rounded-lg py-2 px-2 text-[13px] font-medium text-slate-700 text-center focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/15">
                         </div>
                         <div>
                             <label class="block text-[10px] font-medium text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Qty</label>
-                            <input type="number" id="input_qty_ukuran" onchange="hitungSubtotal()" tabindex="7" class="w-full bg-white border border-slate-200 rounded-lg py-2 px-2 text-[13px] font-medium text-slate-700 text-center focus:border-[#006C7B] focus:ring-2 focus:ring-[#006C7B]/15" value="1">
+                            <input type="number" id="input_qty_ukuran" onchange="hitungSubtotal()" tabindex="7" class="w-full bg-white border border-slate-200 rounded-lg py-2 px-2 text-[13px] font-medium text-slate-700 text-center focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/15" value="1">
                         </div>
                     </div>
                     <p id="note_ukuran" class="hidden mt-2 text-[11px] font-medium text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 leading-snug">
@@ -523,7 +523,7 @@
 
                 <div id="wrapper_qty" class="hidden">
                     <label class="block text-[10px] font-medium text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Jumlah Unit</label>
-                    <input type="number" id="input_qty_biasa" onchange="hitungSubtotal()" class="w-full bg-white border border-slate-200 rounded-lg py-2.5 px-3 text-[13px] font-medium text-slate-700 text-center focus:border-[#006C7B] focus:ring-2 focus:ring-[#006C7B]/15" value="1">
+                    <input type="number" id="input_qty_biasa" onchange="hitungSubtotal()" class="w-full bg-white border border-slate-200 rounded-lg py-2.5 px-3 text-[13px] font-medium text-slate-700 text-center focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/15" value="1">
                 </div>
             </div>
         </div>
@@ -557,16 +557,16 @@
      /unit pindah ke kanan atas supaya tidak dibaca sebagai bagian dari
      nominal besar - pemisahan posisi itu yang membuatoperator tidak salah
      mengira total sudah termasuk harga satuan. --}}
-                <div class="mt-4 rounded-xl bg-[#006C7B]/[0.06] border border-[#006C7B]/15 px-4 py-3.5 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+                <div class="mt-4 rounded-xl bg-[#2563EB]/[0.06] border border-[#2563EB]/15 px-4 py-3.5 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
                     <div class="min-w-0">
-                        <p class="text-[10px] font-medium text-[#006C7B] uppercase tracking-widest">Harga Estimasi</p>
-                        <h2 id="display_subtotal" class="text-3xl font-medium text-[#006C7B] tracking-tight leading-tight tabular-nums">Rp 0</h2>
+                        <p class="text-[10px] font-medium text-[#2563EB] uppercase tracking-widest">Harga Estimasi</p>
+                        <h2 id="display_subtotal" class="text-3xl font-medium text-[#2563EB] tracking-tight leading-tight tabular-nums">Rp 0</h2>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
                         <p id="status_hitung" class="hidden text-amber-700 text-xs font-medium"><i class="fas fa-circle-notch fa-spin mr-1"></i> Menghitung...</p>
                         <span id="badge_promo" hidden class="inline-flex items-center rounded-md bg-rose-600 px-2 py-0.5 text-[10px] font-medium text-white">Harga promo</span>
-                        <p id="display_qty" hidden class="rounded-lg border border-[#006C7B]/25 bg-white px-2.5 py-1 text-[#006C7B] text-xs font-medium tabular-nums"></p>
-                        <p id="display_harga" class="rounded-lg border border-[#006C7B]/25 bg-white px-2.5 py-1 text-[#006C7B] text-xs font-medium tabular-nums">Rp 0 /unit</p>
+                        <p id="display_qty" hidden class="rounded-lg border border-[#2563EB]/25 bg-white px-2.5 py-1 text-[#2563EB] text-xs font-medium tabular-nums"></p>
+                        <p id="display_harga" class="rounded-lg border border-[#2563EB]/25 bg-white px-2.5 py-1 text-[#2563EB] text-xs font-medium tabular-nums">Rp 0 /unit</p>
                     </div>
                 </div>
 
@@ -939,13 +939,13 @@
                     <div class="flex justify-between items-center mb-5">
                         <div>
                             <p class="text-slate-400 text-[10px] font-medium uppercase tracking-widest mb-1">Total Pembayaran</p>
-                            <h2 id="grand_total" class="text-3xl font-medium text-[#006C7B] tracking-tight leading-none">Rp 0</h2>
+                            <h2 id="grand_total" class="text-3xl font-medium text-[#2563EB] tracking-tight leading-none">Rp 0</h2>
                         </div>
                         <button onclick="resetCart()" title="Kosongkan keranjang" class="w-11 h-11 flex items-center justify-center bg-white border border-slate-200 text-slate-400 hover:text-rose-500 hover:border-rose-200 rounded-xl transition-all">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                         </button>
                     </div>
-                    <button type="button" onclick="simpanTransaksi(this)" class="w-full inline-flex items-center justify-center gap-2 py-4 bg-[#006C7B] hover:bg-[#005560] text-white rounded-xl font-medium text-xs uppercase tracking-wider shadow-sm transition-colors active:scale-[0.99]">
+                    <button type="button" onclick="simpanTransaksi(this)" class="w-full inline-flex items-center justify-center gap-2 py-4 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-xl font-medium text-xs uppercase tracking-wider shadow-sm transition-colors active:scale-[0.99]">
                         @if($notaEdit)
                             <i class="fas fa-save"></i> Simpan Koreksi Nota {{ $notaEdit->nomor_nota }}
                         @elseif($notaSusulan)
@@ -3260,10 +3260,10 @@ let hitungUlangMenunggu = false;
                             ${item.nama_file ? `<p class="text-xs text-slate-500 mt-0.5 truncate">${escapeHtml(item.nama_file)}</p>` : ''}
                         </div>
                         <div class="flex shrink-0 gap-0.5">
-                            <button type="button" onclick="editItem(${index})" title="Ubah item ini" aria-label="Ubah ${escapeHtml(item.nama_produk)}" class="w-8 h-8 flex items-center justify-center rounded-lg text-amber-600 hover:bg-amber-50 focus-visible:ring-2 focus-visible:ring-[#006C7B] focus-visible:ring-offset-1 transition-colors">
+                            <button type="button" onclick="editItem(${index})" title="Ubah item ini" aria-label="Ubah ${escapeHtml(item.nama_produk)}" class="w-8 h-8 flex items-center justify-center rounded-lg text-amber-600 hover:bg-amber-50 focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-1 transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                             </button>
-                            <button type="button" onclick="hapusItem(${index})" title="Hapus item ini" aria-label="Hapus ${escapeHtml(item.nama_produk)}" class="w-8 h-8 flex items-center justify-center rounded-lg text-red-700 hover:bg-red-50 focus-visible:ring-2 focus-visible:ring-[#006C7B] focus-visible:ring-offset-1 transition-colors">
+                            <button type="button" onclick="hapusItem(${index})" title="Hapus item ini" aria-label="Hapus ${escapeHtml(item.nama_produk)}" class="w-8 h-8 flex items-center justify-center rounded-lg text-red-700 hover:bg-red-50 focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-1 transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a2 2 0 00-1-1h-4a2 2 0 00-1 1v3M4 7h16"></path></svg>
                             </button>
                         </div>

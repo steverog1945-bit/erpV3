@@ -24,7 +24,7 @@
 .jersey-mobile-form-page select:focus,
 .jersey-mobile-form-page textarea:focus {
     outline: none;
-    border-color: #006C7B;
+    border-color: #2563EB;
     box-shadow: 0 0 0 3px rgba(0,108,123,.12);
 }
 .jersey-mobile-form-page .baris-pemain select,
@@ -51,7 +51,7 @@
     box-shadow: 0 1px 2px rgba(0,0,0,.20), 0 2px 5px rgba(0,0,0,.12);
     transition: transform .2s cubic-bezier(.4,0,.2,1);
 }
-#file_siap_cetak:checked ~ .fsc-track { background-color: #006C7B; }
+#file_siap_cetak:checked ~ .fsc-track { background-color: #2563EB; }
 #file_siap_cetak:checked ~ .fsc-knob { transform: translateX(20px); }
 #file_siap_cetak:focus-visible ~ .fsc-track { box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(0,108,123,.35); }
 </style>

@@ -46,9 +46,9 @@
        text-slate-400 (#5F7167) hanya 2.56:1 di atas putih sehingga GAGAL,
        makanya dipakai warna tersendiri yang sudah dihitung. */
     --icon-muted: #76869f;
-    --accent-primary: var(--brand-accent-light, #006C7B);
-    --accent-hover: var(--brand-accent-hover-light, #005663);
-    --accent-light: var(--brand-accent-surface-light, #EAF6F7);
+    --accent-primary: var(--brand-accent-light, #2563EB);
+    --accent-hover: var(--brand-accent-hover-light, #1D4ED8);
+    --accent-light: var(--brand-accent-surface-light, #EFF4FF);
 
     /* Token warna - Dark mode */
     
@@ -603,7 +603,7 @@ input#input-bayar-mask::placeholder {
 }
 
 input#input-bayar-mask:focus {
-    border-color: #006C7B !important;
+    border-color: #2563EB !important;
     background: #FFFFFF !important;
     box-shadow: 0 0 0 4px rgb(0 108 123 / 0.12) !important;
     outline: none !important;
@@ -618,7 +618,7 @@ input#input-bayar-mask:focus {
 
 input#input-bayar-mask:focus ~ #prefix-uang-diterima,
 #prefix-uang-diterima:focus-within {
-    color: #006C7B !important;
+    color: #2563EB !important;
 }
 
 input[class*="pr-9"],
@@ -1129,7 +1129,7 @@ legend.text-\[10px\].uppercase {
       transition: transform 140ms cubic-bezier(0.23, 1, 0.32, 1), background-color 150ms ease, border-color 150ms ease;
    }
    .swal2-popup .swal2-actions button:active { transform: scale(0.97); }
-   .swal2-popup .swal2-actions button:focus-visible { outline: 2px solid #006C7B !important; outline-offset: 2px !important; }
+   .swal2-popup .swal2-actions button:focus-visible { outline: 2px solid #2563EB !important; outline-offset: 2px !important; }
 
    /* Batal: putih bergaris, teks gelap. */
    .swal2-popup .swal2-cancel {
@@ -1182,7 +1182,7 @@ legend.text-\[10px\].uppercase {
       transition: background-color 150ms ease;
    }
    .swal2-popup .swal2-close:hover { background: #dedee2 !important; color: #000000 !important; }
-   .swal2-popup .swal2-close:focus-visible { outline: 2px solid #006C7B !important; outline-offset: 2px !important; }
+   .swal2-popup .swal2-close:focus-visible { outline: 2px solid #2563EB !important; outline-offset: 2px !important; }
 
    /* Toast (notifikasi singkat di pojok): kartu yang sama, versi ringkas. */
    .swal2-popup.swal2-toast {

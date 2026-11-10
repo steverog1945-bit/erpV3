@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (hasil.error) {
                 csvPemainTampilkanHasil(card, `Import CSV dibatalkan - tidak ada baris yang diubah.\n${hasil.error}`, true);
                 if (typeof Swal !== 'undefined') {
-                    Swal.fire({ icon: 'error', title: 'CSV belum sesuai template', text: 'Perbaiki baris yang ditandai lalu import ulang. Detail per baris ada di bawah tabel pemain.', confirmButtonColor: '#006C7B' });
+                    Swal.fire({ icon: 'error', title: 'CSV belum sesuai template', text: 'Perbaiki baris yang ditandai lalu import ulang. Detail per baris ada di bawah tabel pemain.', confirmButtonColor: '#2563EB' });
                 }
                 return;
             }
