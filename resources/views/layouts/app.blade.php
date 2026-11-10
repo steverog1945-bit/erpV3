@@ -56,7 +56,7 @@
         })();
     </script>
     
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/palette.jsx'])
 
     {{-- Aset pihak ketiga dilayani sendiri, bukan dari CDN.
          Alasannya bukan sekadar kecepatan: setiap permintaan ke domain
@@ -116,429 +116,148 @@
     </script>
     
     <style>
+    /* =====================================================
+       VISUAL REFRESH V2 (2026-11) — Command Center shell
+       Sumber kebenaran tunggal untuk shell. App-wide utilities
+       (card, tabel, dll) tetap di app.css.
+       ===================================================== */
     :root {
-        --sidebar-width: 288px; --sidebar-width-collapsed: 96px;
-
-        /* Palet dopelycolors 01: Desert B35A20, Zest E8891D, Sea Mist BFD5C9,
-           Niagara 05A3A4, Mosque 006373. Diturunkan menjadi tangga latar gelap
-           plus teks terang. Rasio WCAG tiap pasangan tertera di sebelah nilainya. */
-        --or-9:  var(--brand-sidebar-deep, #04262C);   /* latar terdalam */
-        --or-8:  var(--brand-sidebar-base, #063A44);    /* latar sidebar */
-        --or-7:  var(--brand-sidebar-raised, #0A4C57);  /* latar surface */
-        --or-6:  var(--brand-sidebar-border, #0F6472);  /* garis tegas */
-
-        --or-teks:        var(--brand-sidebar-text, #BFD5C9);
-        --or-teks-lembut: var(--brand-sidebar-muted, #9DB8AD);
-        --or-judul:       var(--brand-sidebar-title, #FFFFFF);
-        --or-aksen:       var(--brand-sidebar-accent, #E8891D);
-        --or-peringatan:  var(--brand-sidebar-warning, #F0A882);
+        --pro-bg: #E9EEFA;
+        --pro-surface: #FFFFFF;
+        --pro-border: #E3E9F6;
+        --pro-border-2: #CBD6EE;
+        --pro-ink: #0F1E3E;
+        --pro-ink-2: #3E4C74;
+        --pro-ink-3: #5D6A85;
+        --pro-accent: #2563EB;
+        --pro-accent-hover: #1D4ED8;
+        --pro-accent-soft: #E3EBFF;
+        --pro-radius: 10px;
+        --pro-shadow: none;
+        --bar1-h: 60px;
+        --bar2-h: 46px;
     }
-    body { font-family: var(--brand-font-family, 'Inter'), sans-serif; color: var(--text-primary); scroll-behavior: smooth; background-color: var(--brand-surface-page, #FAFBF9); overflow-x: hidden; }
+    html.dark { --pro-bg: #141A29; --pro-surface: #1C2436; --pro-border: #2A3450; --pro-border-2: #3A4767; --pro-ink: #E8ECF8; --pro-ink-2: #B9C3DD; --pro-ink-3: #8A96B8; --pro-accent: #5B8DEF; --pro-accent-hover: #7FA6F5; --pro-accent-soft: #22304F; }
+
+    body { font-family: var(--brand-font-family, 'Inter'), sans-serif; color: var(--text-primary, var(--pro-ink)); background: var(--pro-bg); overflow-x: hidden; }
+
     #sidebarOverlay {
-        display: none;
-        position: fixed;
-        inset: 0;
-        z-index: 40;
-        background: rgba(13, 19, 16, .56);
+        display: none; position: fixed; inset: 0; z-index: 38;
+        background: rgba(9, 15, 30, .45); backdrop-filter: blur(2px);
     }
+    #sidebarOverlay.terbuka { display: block; }
 
-    /* Sidebar mengikuti referensi (screenshot 2026-10-25): latar gelap
-       Mosque #063A44, teks Sea Mist #BFD5C9, judul putih, aksen Zest
-       #E8891D. Berlaku SAMA di light maupun dark mode (sidebar selalu
-       gelap, sesuai referensi) - tidak boleh berubah warna saat tema
-       berganti. Brand theme DB tidak boleh menimpa palet sidebar. */
-    aside {
-        width: var(--sidebar-width);
-        background: var(--brand-sidebar-base, #063A44) !important;
-        color: var(--brand-sidebar-text, #BFD5C9) !important;
-        position: fixed;
-        top: 0; bottom: 0; left: 0;
-        z-index: 50;
-        transition: width 220ms cubic-bezier(0.23, 1, 0.32, 1), transform 220ms cubic-bezier(0.23, 1, 0.32, 1);
-        display: flex;
-        flex-direction: column;
-        border-right: 1px solid var(--brand-sidebar-deep, #04262C) !important;
-        box-shadow: none;
+    /* ===== MENU PANEL (pengganti sidebar) ===== */
+    #mainSidebar {
+        position: fixed; z-index: 40; background: var(--pro-surface);
+        top: calc(var(--bar1-h) + var(--bar2-h) + 8px); left: 14px; right: 14px;
+        max-height: 72vh; overflow-y: auto; border: 1px solid var(--pro-border-2);
+        border-radius: var(--pro-radius); box-shadow: 0 18px 44px rgba(15,30,62,.14);
+        padding: 12px 14px; display: none; columns: 215px; column-gap: 14px;
     }
+    #mainSidebar.terbuka { display: block; animation: proPanelIn .18s cubic-bezier(.22,1.2,.36,1); }
+    @keyframes proPanelIn { from { opacity: 0; transform: translateY(-8px) scale(.985); } to { opacity: 1; transform: none; } }
+    #mainSidebar nav { display: contents; }
+    #mainSidebar .menu-group-toggle { break-after: avoid; break-inside: avoid; }
+    #mainSidebar .menu-group-items { break-inside: avoid; }
 
-    html.dark aside,
-    html:not(.dark) aside {
-        background: var(--brand-sidebar-base, #063A44) !important;
-        border-right-color: var(--brand-sidebar-deep, #04262C) !important;
-        color: var(--brand-sidebar-text, #BFD5C9) !important;
+    #mainSidebar a, #mainSidebar button.menu-group-toggle { color: var(--pro-ink-2); text-decoration: none; }
+    #mainSidebar a {
+        display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 8px;
+        font-size: 13px; font-weight: 400; break-inside: avoid; border-left: 3px solid transparent;
     }
-
-    /* Judul brand & teks menu mengikuti token sidebar (bisa terang/gelap via tema) */
-    aside .sidebar-brand-title,
-    aside .sidebar-title,
-    aside h1, aside h2, aside h3 { color: var(--brand-sidebar-title, #FFFFFF) !important; }
-
-    aside a, aside button, aside nav span:not(.notif-badge):not(.chip), aside nav div:not(.notif-badge):not(.chip) { color: var(--brand-sidebar-text, #BFD5C9) !important; }
-    /* Badge angka & chip kosongkan pengecualian nama: warnanya harus ikut
-       token badge sendiri (TOKEN BADGE, app.css) supaya selalu terbaca di
-       kedua mode sidebar tanpa larik color !important induknya. */
-
-    aside a.sb-active, aside a.active, aside .menu-active,
-    aside nav a[aria-current="page"] {
-        color: var(--brand-sidebar-title, #FFFFFF) !important;
-        background: rgba(232, 137, 29, 0.14) !important;
-        border-left: 3px solid var(--brand-sidebar-accent, #E8891D) !important;
+    #mainSidebar a:hover { background: var(--pro-accent-soft); color: var(--pro-accent-hover); }
+    #mainSidebar a.sb-active, #mainSidebar a.group.sb-active {
+        background: var(--pro-accent-soft); color: var(--pro-accent-hover); border-left-color: var(--pro-accent); font-weight: 600;
     }
-
-    aside a:hover, aside button:hover { color: var(--brand-sidebar-title, #FFFFFF) !important; background: rgba(191, 213, 201, 0.08); }
-
-    aside .menu-group-toggle { color: var(--brand-sidebar-muted, #9DB8AD) !important; }
-
-    /* Mode terang (tombol "Mode Sidebar"): sidebar terang bergaya Copilot.
-       Blok ini ditempatkan SETELAH palet gelap sehingga menang seri kaskade;
-       <style> ini adalah CSS terakhir di <head>, sehingga tak ada rule
-       !important lain yang menimpa latar palet terang. */
-    html[data-sidebar-mode="light"] aside {
-        background: #F3F4F6 !important;
-        border-right-color: #D1D5DB !important;
-        color: #1F2937 !important;
+    #mainSidebar a.sb-active svg { color: var(--pro-accent-hover); }
+    #mainSidebar .menu-group-toggle {
+        display: flex; align-items: center; gap: 8px; width: 100%; text-align: left;
+        padding: 10px 12px 6px; font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+        color: var(--pro-ink-3); font-weight: 600; margin-top: 4px; border: 0; background: transparent;
     }
-    html[data-sidebar-mode="light"] aside .sidebar-brand-title,
-    html[data-sidebar-mode="light"] aside .sidebar-title,
-    html[data-sidebar-mode="light"] aside h1, html[data-sidebar-mode="light"] aside h2,
-    html[data-sidebar-mode="light"] aside h3 { color: #111827 !important; }
-    html[data-sidebar-mode="light"] aside a, html[data-sidebar-mode="light"] aside button,
-    html[data-sidebar-mode="light"] aside nav span:not(.chip):not(.notif-badge), html[data-sidebar-mode="light"] aside nav div:not(.chip):not(.notif-badge) { color: #374151 !important; }
-    html[data-sidebar-mode="light"] aside .menu-group-toggle { color: #6B7280 !important; }
-    html[data-sidebar-mode="light"] aside a:hover, html[data-sidebar-mode="light"] aside button:hover {
-        color: #111827 !important;
-        background: rgba(71, 85, 105, 0.08);
-    }
-    html[data-sidebar-mode="light"] aside .rail-icon {
-        color: #4B5563 !important;
-        background: rgba(0, 0, 0, 0.04) !important;
-    }
-    html[data-sidebar-mode="light"] aside a.sb-active, html[data-sidebar-mode="light"] aside a.active,
-    html[data-sidebar-mode="light"] aside .menu-active,
-    html[data-sidebar-mode="light"] aside nav a[aria-current="page"] { color: #111827 !important; }
-    /* Tab aktif (bentuk menempel ke tepi kanan) pakai --tab; mode terang
-       memakai abu-abu muda agar teks gelap di atasnya tetap terbaca. */
-    html[data-sidebar-mode="light"]:not(.dark) body:not(.sidebar-collapsed) #mainSidebar nav a.group:hover { --tab: #EBEDF0; }
-    html[data-sidebar-mode="light"]:not(.dark) body:not(.sidebar-collapsed) #mainSidebar nav a.group.sb-active { --tab: #DDE0E8; }
-    html.dark[data-sidebar-mode="light"] body:not(.sidebar-collapsed) #mainSidebar nav a.group:hover { --tab: #EBEDF0; }
-    html.dark[data-sidebar-mode="light"] body:not(.sidebar-collapsed) #mainSidebar nav a.group.sb-active { --tab: #DDE0E8; }
-    html[data-sidebar-mode="light"] #mainSidebar nav a.group.sb-active { border-left: none !important; }
-    html[data-sidebar-mode="light"] aside nav > a.sb-active svg,
-    html[data-sidebar-mode="light"] aside nav > a.sb-active i { color: #9A5410 !important; }
-    html[data-sidebar-mode="light"] aside .rail-icon {
-        color: #4B5563 !important;
-        background: rgba(0, 0, 0, 0.04) !important;
-    }
-
-    /* Kotak status kasir: di latar terang latar putih + teks gelap agar tetap
-       terbaca (versi terbuka peringatan diberi aksen amber tua). */
-    html[data-sidebar-mode="light"] aside .sidebar-kas-status {
-        background: #FFFFFF !important;
-        border-color: #D1D5DB !important;
-        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
-    }
-    html[data-sidebar-mode="light"] aside .sidebar-kas-status * { color: #374151 !important; }
-    html[data-sidebar-mode="light"] aside .sidebar-kas-status [class*="text-amber"] { color: #B45309 !important; }
-    html[data-sidebar-mode="light"] aside .sidebar-kas-status [class*="text-emerald"] { color: #047857 !important; }
+    #mainSidebar .menu-group-toggle:hover { color: var(--pro-ink); }
+    #mainSidebar .menu-group-toggle > i.fa-chevron-down { margin-left: auto; }
+    #mainSidebar .notif-badge { display: inline-flex; align-items: center; justify-content: center; margin-left: 6px; }
+    #sidebarBrandHeader { display: flex; align-items: center; gap: 12px; padding: 8px 12px 14px; border-bottom: 1px solid var(--pro-border); margin-bottom: 8px; grid-column: 1 / -1; }
+    #sidebarBrandHeader .logo-full { max-height: 30px; width: auto; }
+    #sidebarBrandHeader .logo-crop img { height: 30px; }
+    .sidebar-kas-status { display: flex; align-items: center; gap: 12px; border: 1px solid var(--pro-border); border-radius: 10px; padding: 10px 12px; margin: 8px 0; background: var(--pro-bg); column-span: all; }
+    .sidebar-kas-status * { color: var(--pro-ink-2) !important; }
+    #sidebarBrandHeader { column-span: all; }
+    #sidebarBrandHeader .lg\:hidden { display: inline-flex; }
 
     @media (max-width: 1023px) {
-        aside { transform: translateX(-100%); }
-        aside.mobile-open { transform: translateX(0); }
-        main { margin-left: 0 !important; }
-    }
-
-    /* Collapse desktop = ICON-ONLY, bukan sidebar hilang total (dulu
-       translateX(-100%) penuh - melanggar prinsip "sidebar tetap harus
-       terlihat, minimal ikonnya"). Teks menu/group-header/subtitle brand
-       disembunyikan lewat selector generik (bukan nambah class di setiap
-       baris menu - menu di file ini ada puluhan baris, nambah class satu-
-       satu terlalu berisiko salah satu kelewat) - dipilih berdasarkan
-       struktur HTML yang memang sudah konsisten (span di dalam <a> nav,
-       div label group pakai tracking-[0.2em]).) */
-    body.sidebar-collapsed aside { width: var(--sidebar-width-collapsed); }
-    body.sidebar-collapsed main { margin-left: var(--sidebar-width-collapsed); }
-    body.sidebar-collapsed aside nav { padding-left: 14px; padding-right: 14px; }
-    body.sidebar-collapsed aside nav > a,
-    /* Grup menu "datar": judul grup disembunyikan & isinya selalu terbuka (role dengan sedikit menu). Mode rel ikon tidak terpengaruh. */
-    body:not(.sidebar-collapsed) aside .grup-datar-header { display: none !important; }
-    body:not(.sidebar-collapsed) aside .menu-group-items.grup-datar { display: block !important; }
-    body.sidebar-collapsed aside .menu-group-toggle { justify-content: center; }
-    body.sidebar-collapsed aside nav > a { padding: 14px 0; }
-    body.sidebar-collapsed aside nav > a span { display: none; }
-    body.sidebar-collapsed aside nav > a svg { width: 26px; height: 26px; }
-    body.sidebar-collapsed aside .menu-group-items { display: none !important; }
-    body.sidebar-collapsed aside .menu-group-toggle > span,
-    body.sidebar-collapsed aside .menu-group-toggle > i.fa-chevron-down { display: none; }
-    body.sidebar-collapsed aside .menu-group-toggle { padding: 14px 0; margin-top: 6px; border-radius: 14px; border-top: 1px solid rgba(255,255,255,0.07); border-radius: 0; }
-    body.sidebar-collapsed aside .sidebar-brand-text,
-    body.sidebar-collapsed aside .sidebar-text-label { display: none; }
-    body.sidebar-collapsed aside .sidebar-kas-status { justify-content: center; }
-    body.sidebar-collapsed aside #sidebarBrandHeader { padding: 18px 10px; }
-    body.sidebar-collapsed aside #sidebarCollapseToggle i { transform: rotate(180deg); }
-
-    /* Ikon grup (hanya tampil pada rel ringkas) */
-    aside .menu-group-toggle .rail-icon { display: none; }
-    body.sidebar-collapsed aside .menu-group-toggle .rail-icon {
-        display: inline-flex; align-items: center; justify-content: center;
-        width: 52px; height: 52px; border-radius: 16px; font-size: 21px;
-        color: #C9D6CE; background: rgba(255,255,255,0.05);
-        transition: background .2s, color .2s, transform .2s;
-    }
-    body.sidebar-collapsed aside .menu-group-toggle:hover .rail-icon,
-    body.sidebar-collapsed aside .menu-group-toggle.flyout-open .rail-icon { background: rgba(255,255,255,0.14); color: #fff; transform: translateY(-1px); }
-    body.sidebar-collapsed aside .menu-group-toggle.has-active .rail-icon {
-        background: var(--brand-sidebar-active, #116E7D); color: #fff;
-    }
-
-    /* Tampilan lebar: penanda grup yang berisi halaman aktif.
-       Judul grup aktif memakai --or-judul (putih) supaya jelas berbeda dari
-       grup lain yang Sea Mist redup. Warna lama #2A3731 hanya menghasilkan
-       rasio 1.18:1 di atas #063A44, artinya judul grup praktis tak terlihat.
-       Jangan dikembalikan tanpa mengukur ulang. */
-    aside .menu-group-toggle.has-active > span { color: var(--or-judul); }
-    html.dark aside .menu-group-toggle.has-active > span { color: var(--or-judul); }
-    aside .menu-group-toggle.has-active > span::after {
-        content: ''; display: inline-block; width: 6px; height: 6px; margin-left: 8px; border-radius: 999px;
-        background: var(--brand-sidebar-active_mark, #7FD0DE); vertical-align: middle;
-    }
-    aside nav > a.sb-active::before {
-        content: ''; position: absolute; left: -14px; top: 22%;         bottom: 22%; width: 4px; border-radius: 0 4px 4px 0; background: var(--brand-sidebar-active_mark, #7FD0DE);
-    }
-    body.sidebar-collapsed aside nav > a.sb-active::before { left: -14px; }
-    aside .menu-group-items a.sb-active::before { content: none; }
-
-    /* Menu aktif dan menu yang disorot: tab yang menempel ke tepi kanan sidebar, sisi kiri membulat, dengan lekukan
-       cekung di atas dan bawahnya (mengikuti referensi pemilik). Lekukan dibuat dari bayangan berwarna padat (bukan
-       gradien); warna tab dan lekukan berasal dari satu variabel --tab supaya selalu sama. Hanya CSS, tanpa skrip.
-       Mode ringkas (rel ikon) tidak memakai bentuk ini. */
-    body:not(.sidebar-collapsed) #mainSidebar nav a.group {
-        --tab: transparent;
-        margin-right: -16px; /* nav ber-padding 16px: tab menyentuh tepi kanan area menu */
-        border-radius: 12px 0 0 12px;
-        transition: color .14s ease;
-    }
-    body:not(.sidebar-collapsed) #mainSidebar nav a.group:hover { --tab: var(--brand-sidebar-hover, #0C5A66); }
-    body:not(.sidebar-collapsed) #mainSidebar nav a.group.sb-active { --tab: var(--brand-sidebar-active, #116E7D); }
-    html.dark body:not(.sidebar-collapsed) #mainSidebar nav a.group:hover { --tab: var(--brand-sidebar-hover, #0C5A66); }
-    html.dark body:not(.sidebar-collapsed) #mainSidebar nav a.group.sb-active { --tab: var(--brand-sidebar-active, #116E7D); }
-    body:not(.sidebar-collapsed) #mainSidebar nav a.group:hover,
-    body:not(.sidebar-collapsed) #mainSidebar nav a.group.sb-active { background: var(--tab) !important; }
-    /* Lekukan atas (pseudo milik tautan) dan bawah (pseudo milik label teksnya, yang diposisikan terhadap tautan). */
-    body:not(.sidebar-collapsed) #mainSidebar nav a.group::after,
-    body:not(.sidebar-collapsed) #mainSidebar nav a.group > span:first-of-type::after {
-        content: ''; position: absolute; right: 0; width: 14px; height: 14px; pointer-events: none;
-    }
-    body:not(.sidebar-collapsed) #mainSidebar nav a.group::after {
-        bottom: 100%; border-bottom-right-radius: 14px; box-shadow: 7px 7px 0 7px var(--tab);
-    }
-    body:not(.sidebar-collapsed) #mainSidebar nav a.group > span:first-of-type::after {
-        top: 100%; border-top-right-radius: 14px; box-shadow: 7px -7px 0 7px var(--tab);
-    }
-
-    /* Flyout grup & tooltip untuk rel ringkas */
-    #railFlyout, #railTip { position: fixed; z-index: 70; display: none; }
-    #railFlyout {
-        min-width: 250px; max-width: 300px; max-height: 78vh; overflow-y: auto; padding: 10px;
-        background: var(--brand-surface-dark_primary, #1A231F); border: 1px solid var(--brand-surface-dark_border, #3F4F47); border-radius: 18px;
-        box-shadow: 0 24px 60px rgba(2,6,23,0.45);
-    }
-    #railFlyout .fly-title { padding: 6px 12px 10px; font-size: 11px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: #94a3b8; }
-    #railFlyout a { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; color: #E2EAE4; font-size: 14px; font-weight: 500; text-decoration: none; }
-    #railFlyout a:hover { background: rgba(255,255,255,0.1); color: #fff; }
-    #railFlyout a.fly-active { background: var(--brand-accent-light, #006C7B); color: #fff; }
-    #railFlyout a svg { width: 20px; height: 20px; flex-shrink: 0; color: #94a3b8; }
-    #railFlyout a:hover svg, #railFlyout a.fly-active svg { color: #fff; }
-    #railTip {
-        padding: 8px 14px; border-radius: 10px; background: #1A231F; color: #fff; font-size: 13px; font-weight: 500;
-        box-shadow: 0 10px 30px rgba(2,6,23,0.4); border: 1px solid rgba(255,255,255,0.1); white-space: nowrap; pointer-events: none;
-    }
-
-    /* Logo perusahaan - OpenCode Desktop: clean, no effects */
-    .sidebar-logo { position: relative; display: flex; align-items: center; justify-content: center; max-width: 100%; text-decoration: none; }
-    .sidebar-logo .logo-full { display: block; width: auto; height: auto; object-fit: contain; }
-    .sidebar-logo .logo-icon { display: none; }
-    .sidebar-logo.logo-kecil .logo-full { max-height: 32px; max-width: 140px; }
-    .sidebar-logo.logo-sedang .logo-full { max-height: 40px; max-width: 180px; }
-    .sidebar-logo.logo-besar .logo-full { max-height: 52px; max-width: 200px; }
-
-    /* Gaya polos: tanpa efek */
-    .sidebar-logo.logo-gaya-polos { padding: 6px 10px; }
-    .sidebar-logo.logo-gaya-polos img { position: relative; z-index: 1; }
-    /* Gaya kaca: subtle */
-    .sidebar-logo.logo-gaya-kaca { padding: 8px 12px; border-radius: 8px; background: var(--brand-surface-secondary, #FAFBF9); border: 1px solid var(--brand-surface-border, #E2EAE4); }
-    html.dark .sidebar-logo.logo-gaya-kaca { background: var(--brand-surface-dark_secondary, #2A3731); border-color: var(--brand-surface-dark_border, #3F4F47); }
-    /* Gaya putih */
-    .sidebar-logo.logo-gaya-putih { padding: 10px 16px; border-radius: 16px; background: var(--brand-surface-primary, #fff); border: 1px solid var(--brand-surface-border, #E2EAE4); }
-
-    /* Mode ringkas */
-    body.sidebar-collapsed aside .sidebar-logo .logo-full { display: none; }
-    body.sidebar-collapsed aside .sidebar-logo .logo-icon { display: block; }
-    body.sidebar-collapsed aside .sidebar-logo .logo-ikon-file { width: 52px; height: 52px; object-fit: contain; }
-    /* Potong otomatis: tampilkan bagian kiri logo (biasanya lambang) */
-    body.sidebar-collapsed aside .sidebar-logo .logo-crop { display: block; width: 46px; height: 54px; overflow: hidden; position: relative; z-index: 1; }
-    body.sidebar-collapsed aside .sidebar-logo .logo-crop img { height: 54px; width: auto; max-width: none; display: block; }
-    body.sidebar-collapsed aside .sidebar-logo .logo-penuh { max-width: 60px; max-height: 46px; object-fit: contain; }
-    /* Logo tampil apa adanya saat menu disembunyikan: tanpa bayangan gelap di belakangnya. */
-    body.sidebar-collapsed aside .sidebar-logo.logo-gaya-polos img,
-    body.sidebar-collapsed aside .sidebar-logo .logo-icon img { filter: none; }
-    body.sidebar-collapsed aside .sidebar-logo.logo-gaya-kaca,
-    body.sidebar-collapsed aside .sidebar-logo.logo-gaya-putih { padding: 8px; border-radius: 16px; }
-
-    /* MAIN - satu-satunya definisi (sebelumnya didefinisikan ulang & bentrok
-       di style block kedua di bagian bawah file ini) */
-    main {
-        margin-left: var(--sidebar-width);
-        min-height: 100vh;
-        padding: 32px 24px;
-        background: var(--brand-surface-page, #FAFBF9);
-        transition: margin-left 0.3s ease, all 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        min-width: 0;
-        width: 100%;
-    }
-
-    /* Topbar sebelumnya tidak pernah punya definisi CSS sama sekali (class
-       "topbar" tidak dipakai di manapun selain di sini) - burger icon &
-       judul cuma numpang di elemen tanpa padding/tinggi/alignment eksplisit,
-       jadinya terlihat "nempel asal" alih-alih menyatu dengan header. */
-    .notif-badge { margin-left: auto; min-width: 1.15rem; height: 1.15rem; padding: 0 .3rem; line-height: 1; border-radius: 9999px; color: var(--notif-fg, #fff); background: var(--notif-neutral, #4A5B53); font-size: 10px; font-weight: 600; letter-spacing: .02em; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    /* Badge angka mengikuti token tema global (TOKEN BADGE di app.css):
-       light pakai latar gelap + teks putih, dark otomatis dibalik. Bentuk
-       lebih kecil/ramping dari sebelumnya supaya tidak terlihat mengganggu. */
-    .notif-badge.rose { background: var(--notif-danger, #93481A); color: var(--notif-danger-fg, #fff); }
-    .notif-badge.indigo { background: var(--notif-info, #006C7B); color: var(--notif-info-fg, #fff); }
-    .notif-badge.amber { background: var(--notif-warning, #E8891D); color: var(--notif-warning-fg, #1F2937); }
-    /* Badge selalu rata di kolom kanan yang sama: link menu (badge) & judul grup (badge + panah). */
-    aside .menu-group-toggle { justify-content: flex-start; padding-right: .875rem; }
-    aside .menu-group-toggle > i.fa-chevron-down { margin-left: auto; width: 1.5rem; text-align: center; }
-    aside .menu-group-toggle > .notif-badge { margin-left: auto; margin-right: .25rem; }
-    aside .menu-group-toggle > .notif-badge + i.fa-chevron-down { margin-left: 0; }
-    #badge-notif { min-width: 1.5rem; text-align: center; padding: 0 .375rem !important; height: 1.25rem; line-height: 1.25rem; animation: none !important; }
-    body.sidebar-collapsed .notif-badge { position: absolute; top: 2px; right: 4px; margin: 0; min-width: 1rem; height: 1rem; font-size: 9px; }
-    .topbar {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 10px 20px;
-        border-bottom: 1px solid var(--brand-surface-border, #E2EAE4);
-        background: var(--brand-surface-primary, #ffffff);
-    }
-
-    /* Topbar mobile - sebelumnya sama persis dengan desktop (padding 18px
-       24px, nama aplikasi full text tanpa batas lebar) - di layar sempit
-       ini gampang mepet/tabrakan dengan avatar & tombol logout di kanan.
-       Dirapatkan + judul dibatasi lebar & dipotong elipsis supaya topbar
-       tetap satu baris rapi di HP sekecil apa pun. */
-    @media (max-width: 639px) {
-        .topbar { padding: 10px 14px; gap: 8px; }
-        .topbar-app-name { font-size: 13px; max-width: 38vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .topbar-burger { width: 36px; height: 36px; }
-
-        /* Topbar mobile: satu tombol "lainnya" menggantikan deretan tombol.
-           Di bawah sm, deretan tombol disembunyikan dan kontrol yang sama
-           dipindah ke panel turun. Di sm ke atas panel disembunyikan dan
-           deretan tombol tampil seperti biasa. */
-        #topbar-mobile-panel { display: contents; }
-        #topbar-mobile-panel > div { display: none !important; }
-        #topbar-mobile-isi { position: absolute; right: 0; top: 100%; margin-top: 8px;
-            width: 240px; border-radius: 16px; background: var(--brand-surface-primary, #fff);
-            border: 1px solid var(--brand-surface-border, #E2EAE4); box-shadow: 0 12px 32px rgb(15 23 42 / .12);
-            z-index: 60; overflow: hidden; }
-        #topbar-mobile-isi.terbuka { display: block; }
-        #topbar-mobile-isi button,
-        #topbar-mobile-isi form { width: 100%; }
-        #topbar-mobile-isi button { display: flex; align-items: center; gap: 12px;
-            padding: 12px 16px; font-size: 13px; color: var(--brand-surface-text_secondary, #2A3731);
-            background: transparent; border: 0; text-align: left; }
-        #topbar-mobile-isi button:hover { background: var(--brand-surface-tertiary, #F1F5F1); }
-        #topbar-mobile-isi .profil { display: flex; align-items: center; gap: 12px;
-            padding: 12px 16px; border-top: 1px solid var(--brand-surface-border, #E2EAE4); }
-        #topbar-mobile-isi .profil span { min-width: 0; }
-        #topbar-mobile-isi .profil b { display: block; font-size: 13px; font-weight: 500;
-            color: var(--brand-surface-text_secondary, #2A3731); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        #topbar-mobile-isi .profil small { display: block; font-size: 10px; font-weight: 500;
-            color: var(--brand-surface-text_tertiary, #4A5B53); text-transform: uppercase; letter-spacing: .04em; }
-        #topbar-mobile-isi form { border-top: 1px solid var(--brand-surface-border, #E2EAE4); }
-        #topbar-mobile-isi form button { color: #93481A; }
-        #topbar-mobile-isi form button:hover { background: #FAF0EA; }
-    }
-    html.dark #topbar-mobile-isi {
-        background: var(--brand-surface-dark_secondary, #2A3731);
-        border-color: var(--brand-surface-dark_border, #3F4F47);
-    }
-    html.dark #topbar-mobile-isi button:not(form button),
-    html.dark #topbar-mobile-isi .profil b { color: var(--brand-surface-dark_text, #F1F5F1); }
-    html.dark #topbar-mobile-isi .profil small { color: var(--brand-surface-dark_text_tertiary, #9DB8AD); }
-    html.dark #topbar-mobile-isi .profil,
-    html.dark #topbar-mobile-isi form { border-color: var(--brand-surface-dark_border, #3F4F47); }
-    html.dark #topbar-mobile-isi button:not(form button):hover { background: var(--brand-surface-dark_tertiary, #3F4F47); }
-
-    /* Wadah konten halaman. Sengaja TIDAK diberi warna/card/shadow di sini -
-       setiap halaman sudah membangun container & card putihnya sendiri,
-       jadi wrapper ini murni pengatur lebar, bukan pembungkus visual. */
-    .content-wrapper {
-        width: 100%;
-        max-width: 100vw;
-        margin: 0 auto;
-    }
-
-    /* Kurangi ruang luar pada laptop tanpa mengecilkan kontrol atau teks. */
-    @media screen and (min-width: 768px) and (max-width: 1440px),
-           screen and (min-width: 768px) and (max-height: 800px) {
-        #mainContent { padding: 20px 16px; }
-        #mainContent > .topbar { padding: 10px 16px; margin: 8px; }
-        #mainContent > .content-wrapper > .max-w-\[1600px\].py-10 {
-            padding-top: 24px;
-            padding-bottom: 24px;
+        #mainSidebar {
+            top: 0; left: 0; right: auto; bottom: 0; width: min(320px, 85vw); max-height: none; height: 100dvh;
+            border: 0; border-right: 1px solid var(--pro-border-2); border-radius: 0; box-shadow: none;
+            overflow-y: auto; grid-template-columns: 1fr; animation: proDrawerIn .22s cubic-bezier(.22,1.2,.36,1);
         }
+        @keyframes proDrawerIn { from { transform: translateX(-100%); } to { transform: none; } }
+        #mainSidebar .lg\:hidden { display: flex; }
+        #mainSidebar .menu-group-toggle > i.fa-chevron-down { font-size: 11px; }
     }
 
-    /* Sisa design tokens (.modern-table, .card, .chip-*, .modern-nav, dst)
-       dipindahkan ke resources/css/app.css supaya diproses satu jalur oleh
-       Tailwind (beberapa rule di sana memakai @apply yang HANYA berfungsi
-       lewat pipeline itu, tidak bisa jalan dari <style> inline seperti ini). */
-
-    /* SIDEBAR SCROLL FIX: aside punya tinggi tetap (top:0;bottom:0) dan nav
-       di dalamnya sekarang berisi puluhan menu (SPK, Produksi, Collecting,
-       Laporan, Harga Promo, dst semuanya ditambahkan seiring waktu) - tanpa
-       overflow di sini, menu-menu di bagian bawah (System Control, Laporan,
-       bahkan Logout) terpotong habis oleh viewport dan sama sekali tidak
-       bisa dijangkau, oleh role manapun termasuk Administrator. nav diberi
-       flex:1 supaya mengisi sisa tinggi aside (setelah header & status kas),
-       lalu overflow-y:auto supaya sisanya bisa discroll di dalam sidebar
-       sendiri tanpa menggeser halaman utama. */
-    #mainSidebar nav {
-        flex: 1 1 auto;
-        min-height: 0;
-        overflow-y: auto;
+    /* ===== MAIN + TOPBAR ===== */
+    main#mainContent {
+        display: flex; flex-direction: column; width: 100%; min-width: 0; min-height: 100vh;
+        background: var(--pro-bg);
     }
-    #mainSidebar nav::-webkit-scrollbar { width: 6px; }
-    #mainSidebar nav::-webkit-scrollbar-track { background: transparent; }
-    #mainSidebar nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 999px; }
-    #mainSidebar nav::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
-</style>
+    .content-wrapper { width: 100%; flex: 1; }
+
+    .pro-topbar {
+        position: sticky; top: 0; z-index: 30; background: var(--pro-surface);
+        border-bottom: 1px solid var(--pro-border);
+    }
+    .pro-bar1 { display: flex; align-items: center; gap: 14px; height: var(--bar1-h); padding: 0 16px; }
+    .pro-bar2 { display: flex; align-items: center; gap: 4px; height: var(--bar2-h); padding: 0 16px; border-top: 1px solid var(--pro-border); overflow-x: auto; scrollbar-width: none; }
+    .pro-bar2::-webkit-scrollbar { display: none; }
+
+    .pro-logo { display: flex; align-items: center; gap: 11px; text-decoration: none; flex: 0 0 auto; }
+    .pro-wordmark { font-size: 16px; font-weight: 600; letter-spacing: -0.02em; color: var(--pro-ink); line-height: 1.05; }
+    .pro-wordmark small { display: block; font-size: 8.5px; letter-spacing: .26em; color: var(--pro-ink-3); font-weight: 600; margin-top: 3px; }
+
+    .pro-search { display: flex; align-items: center; gap: 9px; height: 36px; border: 1px solid var(--pro-border-2); background: var(--pro-bg); border-radius: 8px; padding: 0 11px; color: var(--pro-ink-3); flex: 1; max-width: 440px; font-size: 12px; transition: border-color .15s, box-shadow .15s; }
+    .pro-search:hover { border-color: var(--pro-accent); }
+    .pro-search kbd { margin-left: auto; background: var(--pro-surface); border: 1px solid var(--pro-border-2); border-radius: 5px; font-size: 9px; padding: 2px 6px; color: var(--pro-ink-2); }
+
+    .pro-icon-btn { width: 37px; height: 37px; border: 1px solid var(--pro-border); background: var(--pro-surface); border-radius: 8px; display: grid; place-items: center; color: var(--pro-ink-2); transition: all .15s; position: relative; }
+    .pro-icon-btn:hover { border-color: var(--pro-border-2); color: var(--pro-ink); transform: translateY(-1px); }
+    .pro-icon-btn .notif-total { position: absolute; top: -5px; right: -5px; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 999px; background: var(--pro-accent); color: #fff; font-size: 8px; font-weight: 700; display: grid; place-items: center; border: 2px solid var(--pro-surface); }
+
+    .pro-tab { display: inline-flex; align-items: center; gap: 7px; height: 31px; padding: 0 13px; border-radius: 8px; border: 1px solid transparent; background: transparent; font-size: 11.5px; font-weight: 500; color: var(--pro-ink-2); white-space: nowrap; text-decoration: none; transition: all .15s; }
+    .pro-tab:hover { background: var(--pro-accent-soft); color: var(--pro-accent-hover); }
+    .pro-tab.aktif { background: var(--pro-accent-soft); border-color: #C9D8FF; color: var(--pro-accent-hover); font-weight: 600; }
+    html[data-theme="b"] .pro-tab.aktif, html.dark .pro-tab.aktif { border-color: #2F3E66; }
+    .pro-tab svg { opacity: .8; }
+
+    .pro-menu-btn { display: inline-flex; align-items: center; gap: 8px; height: 31px; padding: 0 14px; border-radius: 8px; border: 1px solid var(--pro-border-2); background: var(--pro-surface); color: var(--pro-ink-2); font-size: 11.5px; font-weight: 600; margin-left: auto; white-space: nowrap; }
+    .pro-menu-btn:hover { border-color: var(--pro-accent); color: var(--pro-accent-hover); }
+    .pro-meta { font-size: 9.5px; letter-spacing: .08em; color: var(--pro-ink-3); white-space: nowrap; padding: 0 4px; }
+    @media (max-width: 860px) { .pro-search { display: none; } .pro-meta { display: none; } }
+
+    /* Footer aplikasi */
+    .pro-footer { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 9px 16px; border-top: 1px solid var(--pro-border); background: var(--pro-surface); font-size: 8.5px; letter-spacing: .1em; color: var(--pro-ink-3); }
+
+    .modern-nav, .modern-table-wrapper, .chip, .card { border-radius: var(--pro-radius); }
+    .notif-badge { --tw-shadow: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+    </style>
     
 </head>
 <body class="text-slate-900">
-    <script>
-        // Terapkan state collapse SEBELUM sidebar dirender (bukan nunggu
-        // DOMContentLoaded) supaya tidak ada kedipan "kebuka lebar dulu baru
-        // menyempit" tiap pindah halaman (app ini full page reload antar
-        // route, jadi state collapse harus dipasang secepat mungkin di
-        // setiap load, bukan cuma sekali di SPA).
-        try {
-            if (window.innerWidth >= 1024 && localStorage.getItem('sidebarCollapsed') === '1') {
-                document.body.classList.add('sidebar-collapsed');
-            }
-        } catch (e) {}
-    </script>
+    {{-- Visual Refresh v2: sidebar dihapus, navigasi di topbar. State
+         "sidebar-collapsed" lama tidak dipakai lagi, jadi skrip anti-kedip
+         dihapus pula. --}}
 
-    <div id="sidebarOverlay" onclick="toggleMobileMenu()" aria-hidden="true"></div>
+    <div id="sidebarOverlay" onclick="toggleMenuPanel()" aria-hidden="true"></div>
 
     <div class="flex min-h-screen">
-        <aside id="mainSidebar">
-            <div id="sidebarBrandHeader" class="relative px-4 py-4 border-b border-white/10 flex items-center justify-center">
+        <aside id="mainSidebar" aria-hidden="true" aria-label="Menu utama">
+            <div id="sidebarBrandHeader" class="relative">
                 @php
                     $logoUkuran = in_array($appSetting->logo_ukuran, ['kecil', 'sedang', 'besar'], true) ? $appSetting->logo_ukuran : 'sedang';
                     $logoGaya = in_array($appSetting->logo_gaya, ['polos', 'kaca', 'putih'], true) ? $appSetting->logo_gaya : 'polos';
@@ -567,11 +286,13 @@
                             @endif
                         </span>
                     @else
-                        <span class="logo-full text-4xl leading-none">-�</span>
-                        <span class="logo-icon text-3xl leading-none">-�</span>
+                        <span class="logo-full" style="display:flex;align-items:center;gap:9px;text-decoration:none">
+                            <svg width="30" height="30" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="7" fill="#1D4ED8"/><circle cx="13.4" cy="15.6" r="3.4" fill="#22D3EE"/><circle cx="18" cy="11" r="3.4" fill="#F43F5E"/><circle cx="22.6" cy="15.6" r="3.4" fill="#FACC15"/></svg>
+                            <span style="font-size:14px;font-weight:600;color:#0F1E3E;letter-spacing:-0.02em">Orion Grafika</span>
+                        </span>
                     @endif
                 </a>
-                <button onclick="toggleMobileMenu()" class="lg:hidden absolute top-3 right-3 w-9 h-9 rounded-full bg-white/10 text-slate-200 hover:bg-white/20 sidebar-brand-text" aria-label="Tutup menu">
+                <button onclick="toggleMenuPanel()" class="lg:hidden absolute top-3 right-3 w-9 h-9 rounded-full hover:bg-slate-100 text-slate-500 transition-colors" aria-label="Tutup menu">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -1541,258 +1262,169 @@
 </div>
 @endif
 </nav>
-        <div class="px-4 py-3 border-t border-white/10">
-            <button type="button" id="sidebarModeToggle" onclick="toggleSidebarMode()" class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-[11px] font-medium uppercase tracking-wider text-or-teks/80 hover:bg-white/10 hover:text-or-judul transition-all" title="Ubah tampilan sidebar (gelap/terang)">
-                <i class="fas fa-circle-half-stroke text-xs"></i>
-                <span class="sidebar-text-label">Mode Sidebar</span>
-            </button>
-        </div>
         </aside>
 
-        <main id="mainContent" class="transition-all duration-300">
-    <div class="topbar sticky top-0 shadow-sm z-30 justify-between">
-        <div class="flex items-center gap-3 min-w-0">
-            <button id="sidebarCollapseToggle" onclick="toggleSidebar()" class="topbar-burger w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 transition-all shrink-0" title="Sembunyikan/tampilkan menu">
-                <i class="fas fa-bars topbar-burger-desktop" aria-hidden="true"></i>
-                <svg class="topbar-burger-mobile" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
-                    <path d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
-            </button>
-            <span class="topbar-app-name font-medium text-slate-700 truncate">{{ $appSetting->nama_aplikasi }}</span>
-        </div>
+        <main id="mainContent">
+    <header class="pro-topbar">
+        <div class="pro-bar1">
+            <a href="{{ url('/dashboard') }}" class="pro-logo" title="{{ $appSetting->nama_aplikasi }}">
+                <svg width="34" height="34" viewBox="0 0 36 36" aria-hidden="true"><defs><linearGradient id="proCube" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3B82F6"/><stop offset="1" stop-color="#1D4ED8"/></linearGradient></defs><rect width="36" height="36" rx="8" fill="url(#proCube)"/><circle cx="13.4" cy="15.6" r="3.4" fill="#22D3EE"/><circle cx="18" cy="11" r="3.4" fill="#F43F5E"/><circle cx="22.6" cy="15.6" r="3.4" fill="#FACC15"/></svg>
+                <span class="pro-wordmark">Orion Grafika<small>ERP PERCETAKAN</small></span>
+            </a>
 
-        <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-            {{--
-                Di layar sempit, deretan tombol di kanan topbar tidak muat:
-                lima tombol 36px ditambah celah sudah 212px, dan itu belum
-                termasuk nama aplikasi di sisi kiri. Sebelumnya semuanya
-                tetap ditampilkan sehingga nama aplikasi terpotong dan
-                tombolnya berdesakan.
-
-                Sekarang di bawah breakpoint sm hanya satu tombol "lainnya"
-                yang tampil. Kontrol yang sama dipindah ke panel turun, jadi
-                tidak ada fitur yang hilang - hanya dipindah tempat. Di sm ke
-                atas, panel disembunyikan dan deretan tombol tampil seperti
-                biasa, jadi tampilan desktop tidak berubah sama sekali. --}}
-            <button type="button" id="topbar-mobile-btn" onclick="toggleTopbarMobile()"
-                    class="sm:hidden w-9 h-9 flex items-center justify-center rounded-xl bg-slate-50 text-slate-500 hover:bg-slate-100 transition-all"
-                    title="Menu lainnya" aria-label="Menu lainnya" aria-expanded="false">
-                <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle>
-                </svg>
+            <button type="button" class="pro-search" onclick="bukaPalette()" aria-label="Cari menu, Ctrl K">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+                <span>Cari menu, nota, bahan...</span>
+                <kbd>Ctrl K</kbd>
             </button>
 
-            <div id="topbar-mobile-panel" class="contents">
-            <div class="hidden sm:flex items-center gap-2 sm:gap-3 shrink-0">
-            {{-- Pemicu command palette.
-
-                 Tombol ini ada supaya jalan pintas bisa ditemukan tanpa
-                 perlu tahu dulu: hanya dengan melihat "Ctrl K" di dalam
-                 kotak, orang akan mencoba menekannya. Kalau palette hanya
-                 bisa dibuka lewat Ctrl+K tanpa petunjuk apa pun, fitur
-                 yang bagus jadi tidak pernah dipakai.
-
-                 Di layar sempit tombolnya tetap ada, hanya teks dan
-                 label keyboard disembunyikan sehingga jadi ikon saja.
-                 Versi sebelumnya disembunyikan penuh di bawah 640px dengan
-                 alasan "di HP tidak ada ruang" - tapi di HP juga tidak
-                 ada keyboard, jadi Ctrl+K mustahil ditekan dan palette
-                 jadi tidak bisa dibuka sama sekali. Tombol ikon hanya
-                 36px, muat di topbar mana pun. --}}
-            <button type="button" onclick="bukaPalette()"
-                    class="palette-pemicu flex items-center gap-2 h-9 pl-3 pr-2 rounded-lg bg-slate-50 border border-slate-200 text-slate-400 hover:border-slate-300 hover:bg-slate-100 transition-colors"
-                    title="Cari menu (Ctrl+K)" aria-label="Cari menu">
-                <i class="fas fa-search text-xs shrink-0"></i>
-                <span class="text-[12px] hidden sm:inline">Cari menu</span>
-                <kbd class="text-[10px] font-medium text-slate-400 bg-white border border-slate-200 rounded px-1 py-0.5 hidden sm:inline">Ctrl K</kbd>
-            </button>
-
-            {{-- Dark mode: hanya Administrator --}}
-            @if(str_starts_with((string) (optional(Auth::user()->role)->nama_role ?? ''), 'Administrator'))
-            <button type="button" id="tema-toggle" onclick="ubahTema()" class="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-50 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 transition-all" title="Ganti ke mode gelap" aria-label="Ganti mode gelap atau terang">
-                <i class="fas fa-moon" id="tema-ikon"></i>
-            </button>
-            @endif
-            {{-- Garis card: tampil untuk semua role (preferensi tampilan personal) --}}
-            <button type="button" id="gariscard-toggle" onclick="ubahGarisCard()" class="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-50 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 transition-all" title="Garis card: tampil/sembunyikan" aria-label="Ganti garis tepi card">
-                <i class="fas fa-border-all" id="gariscard-ikon"></i>
-            </button>
-            @php $notifAwal = \App\Services\NotifikasiService::untuk(Auth::user()); @endphp
-            <div class="relative">
-                <button type="button" id="notif-btn" onclick="toggleNotif(event)" class="relative w-9 h-9 flex items-center justify-center rounded-xl bg-slate-50 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 transition-all" title="Notifikasi & pekerjaan masuk">
-                    <i class="fas fa-bell"></i>
-                    <span id="notif-total" class="hidden absolute -top-1 -right-1 min-w-[1.1rem] h-[1.1rem] px-1 rounded-full text-[10px] font-medium items-center justify-center ring-2 ring-white" style="background: var(--notif-danger, #93481A); color: var(--notif-danger-fg, #fff);"></span>
-                </button>
-                <div id="notif-panel" class="hidden absolute right-0 mt-2 w-80 max-w-[90vw] bg-white rounded-2xl shadow-2xl border border-slate-100 z-50 overflow-hidden">
-                    <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
-                        <span class="text-sm font-medium text-slate-700">Pekerjaan masuk</span>
-                        <span id="notif-total-teks" class="text-[11px] font-medium text-slate-400"></span>
-                    </div>
-                    <div id="notif-list" class="max-h-[60vh] overflow-y-auto divide-y divide-slate-50"></div>
-                </div>
-            </div>
-            @php $namaTampil = optional(Auth::user()->karyawan)->nama_karyawan ?? Auth::user()->username; @endphp
-            <div class="relative sm:block" id="profil-menu-wrap">
-                <button type="button" onclick="toggleProfilMenu()" class="flex items-center gap-2 pl-2 pr-3 h-9 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-all" aria-haspopup="true" aria-expanded="false" id="profil-menu-btn" title="Profil &amp; Keluar">
-                    @if(Auth::user()->foto_profil)
-                        <img id="profil-pill-avatar" src="{{ url('/storage/profil/' . Auth::user()->foto_profil) }}" class="w-7 h-7 rounded-full object-cover shrink-0" alt="Foto profil">
-                    @else
-                        <div id="profil-pill-avatar" class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-medium text-xs shrink-0">
-                            {{ strtoupper(substr($namaTampil, 0, 1)) }}
-                        </div>
-                    @endif
-                    <span class="text-[12px] font-medium text-slate-700 max-w-[8rem] truncate">{{ $namaTampil }}</span>
-                    <i class="fas fa-chevron-down text-[9px] text-slate-400"></i>
-                </button>
-                <div id="profil-menu-panel" class="hidden absolute right-0 mt-2 w-64 rounded-2xl bg-white border border-slate-200 shadow-xl z-50 overflow-hidden">
-                    <div class="px-4 py-4 border-b border-slate-100 flex items-center gap-3">
-                        <div class="relative shrink-0">
-                            @if(Auth::user()->foto_profil)
-                                <img id="profil-avatar-img" src="{{ url('/storage/profil/' . Auth::user()->foto_profil) }}" alt="Foto profil" class="w-12 h-12 rounded-full object-cover ring-2 ring-indigo-100">
-                            @else
-                                <div id="profil-avatar-inisial" class="w-12 h-12 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-medium text-base">{{ strtoupper(substr($namaTampil, 0, 1)) }}</div>
-                                <img id="profil-avatar-img" src="" alt="Foto profil" class="w-12 h-12 rounded-full object-cover ring-2 ring-indigo-100 hidden">
-                            @endif
-                            <label for="profil-foto-input" class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px] cursor-pointer hover:bg-indigo-700 shadow" title="Ganti foto">
-                                <i class="fas fa-camera"></i>
-                            </label>
-                            <input type="file" id="profil-foto-input" accept="image/jpeg,image/png,image/webp" class="hidden">
-                        </div>
-                        <div class="min-w-0 flex-1">
-                            <div class="text-[12px] font-medium text-slate-700 truncate">{{ $namaTampil }}</div>
-                            <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wide truncate">{{ optional(Auth::user()->role)->nama_role }}</div>
-                            <div id="profil-foto-status" class="text-[10px] text-slate-400 mt-1">Klik ikon kamera untuk ganti foto.</div>
-                        </div>
-                    </div>
-                    <form action="{{ url('logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 text-[13px] text-rose-600 hover:bg-rose-50 transition-colors">
-                            <i class="fas fa-sign-out-alt w-4"></i> Keluar Sistem
-                        </button>
-                    </form>
-                </div>
-                <script>
-                (function () {
-                    var input = document.getElementById('profil-foto-input');
-                    var status = document.getElementById('profil-foto-status');
-                    if (!input) return;
-                    input.addEventListener('change', function () {
-                        var file = input.files && input.files[0];
-                        if (!file) return;
-                        var tipeOk = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'].indexOf(file.type) !== -1;
-                        if (file.size > 2 * 1024 * 1024) { status.textContent = 'Foto terlalu besar (' + Math.round(file.size / 1024 / 1024 * 10) / 10 + ' MB). Maksimal 2 MB.'; return; }
-                        if (!tipeOk) { status.textContent = 'Format foto harus JPG, PNG, atau WebP.'; return; }
-                        var fd = new FormData();
-                        fd.append('foto', file);
-                        fd.append('_token', (document.querySelector('meta[name="csrf-token"]') || {}).content || '');
-                        status.textContent = 'Mengunggah...';
-                        // ambil csrf dari form logout kalau meta tidak ada
-                        if (!fd.get('_token')) {
-                            var t = document.querySelector('input[name="_token"]');
-                            if (t) fd.set('_token', t.value);
-                        }
-                        fetch('{{ route("profil.foto.upload") }}', { method: 'POST', body: fd, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
-                            .then(function (r) {
-                                if (r.ok) return r.json();
-                                if (r.status === 419) { throw new Error('Sesi berakhir. Muat ulang halaman (F5), masuk kembali, lalu coba lagi.'); }
-                                if (r.status === 401) { throw new Error('Sesi berakhir. Muat ulang halaman (F5), masuk kembali, lalu coba lagi.'); }
-                                return r.json().then(function (d) {
-                                    var pesan = (d && d.errors && d.errors.foto && d.errors.foto[0]) || (d && d.message);
-                                    if (!pesan) pesan = 'Upload gagal (kode ' + r.status + ').';
-                                    throw new Error(pesan);
-                                }, function () {
-                                    throw new Error('Upload gagal (kode ' + r.status + '). Foto harus format jpg/png/webp, ukuran maksimal 2 MB.');
-                                });
-                            })
-                            .then(function (d) {
-                                if (!d || !d.ok) { status.textContent = (d && d.message) ? d.message : 'Upload tidak berhasil. Coba lagi atau muat ulang halaman.'; return; }
-                                var img = document.getElementById('profil-avatar-img');
-                                var ini = document.getElementById('profil-avatar-inisial');
-                                if (img) { img.src = d.url + '?t=' + Date.now(); img.classList.remove('hidden'); }
-                                if (ini) ini.classList.add('hidden');
-                                // update avatar di topbar pill juga
-                                var pillAvatar = document.getElementById('profil-pill-avatar');
-                                if (pillAvatar) {
-                                    if (pillAvatar.tagName === 'DIV') {
-                                        var img = document.createElement('img');
-                                        img.id = 'profil-pill-avatar';
-                                        img.className = 'w-7 h-7 rounded-full object-cover shrink-0';
-                                        img.alt = 'Foto profil';
-                                        img.src = d.url + '?t=' + Date.now();
-                                        pillAvatar.parentNode.replaceChild(img, pillAvatar);
-                                    } else {
-                                        pillAvatar.src = d.url + '?t=' + Date.now();
-                                    }
-                                }
-                                status.textContent = 'Foto diperbarui.';
-                                input.value = '';
-                            })
-                            .catch(function (e) { status.textContent = (e && e.message) ? e.message : 'Upload tidak berhasil. Periksa koneksi lalu coba lagi.'; });
-                    });
-                })();
-                </script>
-            </div>
-            <script>
-            function toggleProfilMenu() {
-                var p = document.getElementById('profil-menu-panel');
-                if (p) p.classList.toggle('hidden');
-            }
-            document.addEventListener('click', function (e) {
-                var w = document.getElementById('profil-menu-wrap');
-                var p = document.getElementById('profil-menu-panel');
-                if (w && p && !w.contains(e.target)) p.classList.add('hidden');
-            });
-            </script>
-            </div>{{-- /baris desktop --}}
-            </div>{{-- /#topbar-mobile-panel.
-                 Penutup ini wajib ada SEBELUM #topbar-mobile-isi dibuka. Tanpa
-                 penutup ini, #topbar-mobile-isi menjadi anak #topbar-mobile-panel,
-                 dan aturan "#topbar-mobile-panel > div { display: none !important }"
-                 ikut menimpanya - tombol "lainnya" menambahkan kelas "terbuka"
-                 dengan benar, tapi panel tetap tersembunyi karena aturan !important
-                 itu menang atas "#topbar-mobile-isi.terbuka { display: block }". --}}
-
-            {{--
-                Isi panel mobile. Sama persis dengan deretan tombol di atas,
-                hanya dibungkus label supaya bisa dibaca tanpa menebak ikon.
-                Disusun ulang lewat CSS saat panel terbuka. --}}
-            <div id="topbar-mobile-isi" class="hidden absolute right-0 top-full mt-2 w-60 rounded-2xl bg-white border border-slate-200 shadow-xl z-50 overflow-hidden">
-                <button type="button" onclick="bukaPalette()" class="w-full flex items-center gap-3 px-4 py-3 text-[13px] text-slate-600 hover:bg-slate-50 transition-colors">
-                    <i class="fas fa-search w-4 text-slate-400"></i> Cari menu
-                </button>
+            <div style="margin-left:auto; display:flex; align-items:center; gap:8px">
+                {{-- Dark mode: hanya Administrator --}}
                 @if(str_starts_with((string) (optional(Auth::user()->role)->nama_role ?? ''), 'Administrator'))
-                <button type="button" onclick="ubahTema()" class="w-full flex items-center gap-3 px-4 py-3 text-[13px] text-slate-600 hover:bg-slate-50 transition-colors">
-                    <i class="fas fa-moon w-4 text-slate-400"></i> Ganti tema
+                <button type="button" id="tema-toggle" onclick="ubahTema()" class="pro-icon-btn" title="Ganti ke mode gelap" aria-label="Ganti mode gelap atau terang">
+                    <i class="fas fa-moon" id="tema-ikon"></i>
                 </button>
                 @endif
-                <button type="button" onclick="toggleNotif(event)" class="w-full flex items-center gap-3 px-4 py-3 text-[13px] text-slate-600 hover:bg-slate-50 transition-colors">
-                    <i class="fas fa-bell w-4 text-slate-400"></i> Notifikasi
-                </button>
-                <div class="profil flex items-center gap-3 px-4 py-3 border-t border-slate-100">
-                    <span class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-medium text-sm shrink-0">{{ strtoupper(substr($namaTampil, 0, 1)) }}</span>
-                    <span class="min-w-0">
-                        <span class="block text-[13px] font-medium text-slate-700 truncate">{{ $namaTampil }}</span>
-                        <span class="block text-[10px] font-medium text-slate-400 uppercase tracking-wide">{{ optional(Auth::user()->role)->nama_role }}</span>
-                    </span>
-                </div>
-                <form action="{{ url('logout') }}" method="POST" class="border-t border-slate-100">
-                    @csrf
-                    <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 text-[13px] text-rose-600 hover:bg-rose-50 transition-colors">
-                        <i class="fas fa-sign-out-alt w-4"></i> Keluar Sistem
+                {{-- Notifikasi & pekerjaan masuk --}}
+                @php $notifAwal = \App\Services\NotifikasiService::untuk(Auth::user()); @endphp
+                <div style="position:relative">
+                    <button type="button" id="notif-btn" onclick="toggleNotif(event)" class="pro-icon-btn" title="Notifikasi & pekerjaan masuk" aria-label="Notifikasi">
+                        <i class="fas fa-bell"></i>
+                        <span id="notif-total" class="notif-total hidden"></span>
                     </button>
-                </form>
+                    <div id="notif-panel" class="hidden absolute right-0 mt-2 w-80 max-w-[90vw] bg-white rounded-xl shadow-lg border border-slate-200 z-50 overflow-hidden" style="box-shadow:0 18px 44px rgba(15,30,62,.14)">
+                        <div class="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
+                            <span class="text-[11px] font-semibold tracking-widest text-slate-500 uppercase">Pekerjaan masuk</span>
+                            <span id="notif-total-teks" class="text-[11px] font-medium text-slate-400"></span>
+                        </div>
+                        <div id="notif-list" class="max-h-[60vh] overflow-y-auto divide-y divide-slate-100"></div>
+                    </div>
+                </div>
+                {{-- Profil --}}
+                @php $namaTampil = optional(Auth::user()->karyawan)->nama_karyawan ?? Auth::user()->username; @endphp
+                <div class="relative sm:block" id="profil-menu-wrap">
+                    <button type="button" onclick="toggleProfilMenu()" class="flex items-center gap-2 pl-1.5 pr-2.5 h-10 rounded-lg border border-slate-200 bg-white hover:border-slate-300 transition-all" aria-haspopup="true" aria-expanded="false" id="profil-menu-btn" title="Profil &amp; Keluar">
+                        @if(Auth::user()->foto_profil)
+                            <img id="profil-pill-avatar" src="{{ url('/storage/profil/' . Auth::user()->foto_profil) }}" class="w-8 h-8 rounded-md object-cover shrink-0" alt="Foto profil">
+                        @else
+                            <div id="profil-pill-avatar" class="w-8 h-8 rounded-md flex items-center justify-center font-semibold text-[11px] shrink-0" style="background:#E3EBFF;color:#1D4ED8">{{ strtoupper(substr($namaTampil, 0, 1)) }}</div>
+                        @endif
+                        <span class="text-[12px] font-medium text-slate-700 max-w-[9rem] truncate hidden xs:inline sm:inline">{{ $namaTampil }}</span>
+                        <i class="fas fa-chevron-down text-[9px] text-slate-400"></i>
+                    </button>
+                    <div id="profil-menu-panel" class="hidden absolute right-0 mt-2 w-64 rounded-xl bg-white border border-slate-200 z-50 overflow-hidden" style="box-shadow:0 18px 44px rgba(15,30,62,.14)">
+                        <div class="px-4 py-4 border-b border-slate-100 flex items-center gap-3">
+                            <div class="relative shrink-0">
+                                @if(Auth::user()->foto_profil)
+                                    <img id="profil-avatar-img" src="{{ url('/storage/profil/' . Auth::user()->foto_profil) }}" alt="Foto profil" class="w-12 h-12 rounded-md object-cover">
+                                @else
+                                    <div id="profil-avatar-inisial" class="w-12 h-12 rounded-md flex items-center justify-center font-semibold text-base" style="background:#E3EBFF;color:#1D4ED8">{{ strtoupper(substr($namaTampil, 0, 1)) }}</div>
+                                    <img id="profil-avatar-img" src="" alt="Foto profil" class="w-12 h-12 rounded-md object-cover hidden">
+                                @endif
+                                <label for="profil-foto-input" class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center text-[10px] cursor-pointer text-white" style="background:#2563EB" title="Ganti foto">
+                                    <i class="fas fa-camera"></i>
+                                </label>
+                                <input type="file" id="profil-foto-input" accept="image/jpeg,image/png,image/webp" class="hidden">
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <div class="text-[12px] font-semibold text-slate-800 truncate">{{ $namaTampil }}</div>
+                                <div class="text-[9.5px] font-medium text-slate-400 uppercase tracking-wide truncate">{{ optional(Auth::user()->role)->nama_role }}</div>
+                                <div id="profil-foto-status" class="text-[9.5px] text-slate-400 mt-1">Klik ikon kamera untuk ganti foto.</div>
+                            </div>
+                        </div>
+                        <form action="{{ url('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 text-[13px] text-rose-700 hover:bg-rose-50 transition-colors">
+                                <i class="fas fa-sign-out-alt w-4"></i> Keluar Sistem
+                            </button>
+                        </form>
+                    </div>
+                    <script>
+                    (function () {
+                        var input = document.getElementById('profil-foto-input');
+                        var status = document.getElementById('profil-foto-status');
+                        if (!input) return;
+                        input.addEventListener('change', function () {
+                            var file = input.files && input.files[0];
+                            if (!file) return;
+                            var tipeOk = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'].indexOf(file.type) !== -1;
+                            if (file.size > 2 * 1024 * 1024) { status.textContent = 'Foto terlalu besar (' + Math.round(file.size / 1024 / 1024 * 10) / 10 + ' MB). Maksimal 2 MB.'; return; }
+                            if (!tipeOk) { status.textContent = 'Format foto harus JPG, PNG, atau WebP.'; return; }
+                            var fd = new FormData();
+                            fd.append('foto', file);
+                            fd.append('_token', (document.querySelector('meta[name="csrf-token"]') || {}).content || '');
+                            status.textContent = 'Mengunggah...';
+                            if (!fd.get('_token')) {
+                                var t = document.querySelector('input[name="_token"]');
+                                if (t) fd.set('_token', t.value);
+                            }
+                            fetch('{{ route("profil.foto.upload") }}', { method: 'POST', body: fd, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                                .then(function (r) {
+                                    if (r.ok) return r.json();
+                                    if (r.status === 419 || r.status === 401) { throw new Error('Sesi berakhir. Muat ulang halaman (F5), masuk kembali, lalu coba lagi.'); }
+                                    return r.json().then(function (d) {
+                                        var pesan = (d && d.errors && d.errors.foto && d.errors.foto[0]) || (d && d.message);
+                                        if (!pesan) pesan = 'Upload gagal (kode ' + r.status + ').';
+                                        throw new Error(pesan);
+                                    }, function () {
+                                        throw new Error('Upload gagal (kode ' + r.status + '). Foto harus format jpg/png/webp, ukuran maksimal 2 MB.');
+                                    });
+                                })
+                                .then(function (d) {
+                                    if (!d || !d.ok) { status.textContent = (d && d.message) ? d.message : 'Upload tidak berhasil. Coba lagi atau muat ulang halaman.'; return; }
+                                    var img = document.getElementById('profil-avatar-img');
+                                    var ini = document.getElementById('profil-avatar-inisial');
+                                    if (img) { img.src = d.url + '?t=' + Date.now(); img.classList.remove('hidden'); }
+                                    if (ini) ini.classList.add('hidden');
+                                    var pillAvatar = document.getElementById('profil-pill-avatar');
+                                    if (pillAvatar) {
+                                        if (pillAvatar.tagName === 'DIV') {
+                                            var img2 = document.createElement('img');
+                                            img2.id = 'profil-pill-avatar';
+                                            img2.className = 'w-8 h-8 rounded-md object-cover shrink-0';
+                                            img2.alt = 'Foto profil';
+                                            img2.src = d.url + '?t=' + Date.now();
+                                            pillAvatar.parentNode.replaceChild(img2, pillAvatar);
+                                        } else {
+                                            pillAvatar.src = d.url + '?t=' + Date.now();
+                                        }
+                                    }
+                                    status.textContent = 'Foto diperbarui.';
+                                    input.value = '';
+                                })
+                                .catch(function (e) { status.textContent = (e && e.message) ? e.message : 'Upload tidak berhasil. Periksa koneksi lalu coba lagi.'; });
+                        });
+                    })();
+                    </script>
+                </div>
             </div>
-            </div>{{-- /#topbar-mobile-isi + kelompok kanan topbar.
-                 Tanpa penutup kedua ini, kelompok kanan tidak pernah tertutup
-                 sehingga .content-wrapper menjadi anak .topbar - isi halaman
-                 ikut terlipat ke dalam topbar dan tingginya membengkak
-                 mengikuti konten. Dibuktikan dengan penghitungan tag:
-                 14 pembuka melawan 13 penutup. Catatan: penghitungan total
-                 saja tidak cukup - pelacak kedalaman di tools/_kedalaman.php
-                 menunjukkan baris ini membuat kedalaman -1, artinya ini
-                 penutup EKSTRA yang menutup <main> lebih awal sehingga
-                 .content-wrapper jatuh ke dalam <body>. Dihapus. --}}
-    </div>
+        </div>
+
+        <div class="pro-bar2" role="tablist" aria-label="Modul">
+            @php
+                $proTabs = [
+                    ['label' => 'Dasbor', 'url' => url('/dashboard'), 'active' => Request::is('dashboard', 'dashboard/*'), 'icon' => 'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z'],
+                    ['label' => 'Kasir', 'url' => url('/penjualan/kasir'), 'active' => Request::is('penjualan/kasir', 'penjualan/kasir/*'), 'icon' => 'M6 3h12v18l-2-1.4-2 1.4-2-1.4L10 21l-2-1.4L6 21zM9.5 8.5h5M9.5 12.5h5'],
+                    ['label' => 'Produksi', 'url' => url('/spk'), 'active' => Request::is('spk', 'spk/*'), 'icon' => 'M4 9h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM8 9V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3'],
+                    ['label' => 'Bahan Baku', 'url' => url('/bahan-baku'), 'active' => Request::is('bahan-baku', 'bahan-baku/*'), 'icon' => 'M4 6h16M4 12h16M4 18h16'],
+                    ['label' => 'Laporan', 'url' => url('/laporan/order'), 'active' => Request::is('laporan/*'), 'icon' => 'M5 19h14M7.5 16l4-8 4 5 3-7.5'],
+                    ['label' => 'Pengaturan', 'url' => url('/pengaturan-aplikasi'), 'active' => Request::is('pengaturan-aplikasi', 'pengaturan-aplikasi/*'), 'icon' => 'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm8.5 4a7.6 7.6 0 0 0-.1-1.3l2-1.5-2-3.4-2.3 1a7.9 7.9 0 0 0-2.2-1.2L15.6 2H8.4l-.3 2.6a7.9 7.9 0 0 0-2.2 1.2l-2.3-1-2 3.4 2 1.5a7.6 7.6 0 0 0 0 2.6l-2 1.5 2 3.4 2.3-1a7.9 7.9 0 0 0 2.2 1.2l.3 2.6h7.2l.3-2.6a7.9 7.9 0 0 0 2.2-1.2l2.3 1 2-3.4-2-1.5c.1-.4.1-.9.1-1.3z'],
+                ];
+            @endphp
+            @foreach($proTabs as $tab)
+                <a href="{{ $tab['url'] }}" role="tab" aria-selected="{{ $tab['active'] ? 'true' : 'false' }}" class="pro-tab {{ $tab['active'] ? 'aktif' : '' }}">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ $tab['icon'] }}"/></svg>
+                    {{ $tab['label'] }}
+                </a>
+            @endforeach
+            <button type="button" class="pro-menu-btn" id="menuPanelBtn" onclick="toggleMenuPanel()" aria-expanded="false" aria-controls="mainSidebar">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                Semua Menu
+            </button>
+            <span class="pro-meta">ERP CORE v1.0</span>
+        </div>
+    </header>
+    @include('partials.command-palette')
 
     <div class="content-wrapper">
          @yield('content')
@@ -1836,6 +1468,7 @@
             <span class="mobile-nav-label">Lainnya</span>
         </button>
     </nav>
+    <footer class="pro-footer"><span>ORION GRAFIKA ERP &middot; PUSAT OPERASI</span><span>TOPOLOGI&nbsp;&nbsp;SLA KEAMANAN&nbsp;&nbsp;ERP CORE v1.0</span></footer>
 </main>
     </div>
     {{-- jQuery dan Select2 dilayani sendiri (lihat catatan aset di <head>).
@@ -2015,7 +1648,6 @@
     @include('partials.rupiah-format-script')
     @include('partials.quick-picker')
     @include('partials.tooltip-script')
-    @include('partials.command-palette')
     <script>
         // Filter konsisten di SELURUH aplikasi: memilih nilai pada dropdown di dalam form GET (filter/pencarian)
         // langsung menerapkan filter - tidak perlu klik tombol atau memilih dua kali. Termasuk dropdown select2
@@ -2398,53 +2030,42 @@
     })();
     </script>
     <script>
-        // Toggle Sidebar Desktop - collapse ke ICON-ONLY (bukan hilang total,
-        // lihat rule body.sidebar-collapsed di <style>), disimpan ke
-        // localStorage supaya pilihan user tidak reset tiap pindah halaman
-        // (aplikasi ini full page reload antar route, bukan SPA).
-        function toggleSidebar() {
-            if (window.innerWidth >= 1024) {
-                const collapsed = document.body.classList.toggle('sidebar-collapsed');
-                try { localStorage.setItem('sidebarCollapsed', collapsed ? '1' : '0'); } catch (e) {}
-            } else {
-                toggleMobileMenu();
-            }
-        }
-
-        function toggleSidebarMode() {
-            var html = document.documentElement;
-            var light = !html.hasAttribute('data-sidebar-mode') || html.getAttribute('data-sidebar-mode') !== 'light';
-            // toggle: jika sedang light -> dark, sebaliknya
-            if (html.getAttribute('data-sidebar-mode') === 'light') {
-                html.removeAttribute('data-sidebar-mode');
-                try { localStorage.setItem('sidebarMode', 'dark'); } catch (e) {}
-            } else {
-                html.setAttribute('data-sidebar-mode', 'light');
-                try { localStorage.setItem('sidebarMode', 'light'); } catch (e) {}
-            }
-        }
-
-        // Toggle Sidebar Mobile
-        // Esc menutup menu samping di layar kecil (sama seperti modal).
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape' && document.getElementById('mainSidebar')?.classList.contains('mobile-open')) toggleMobileMenu();
-        });
-        function toggleMobileMenu() {
-            const sidebar = document.getElementById('mainSidebar');
+        // Visual Refresh v2: panel menu (pengganti sidebar). Satu fungsi
+        // untuk desktop & mobile: desktop = popover di bawah topbar,
+        // mobile = drawer kiri penuh (CSS @media 1023px).
+        function toggleMenuPanel() {
+            const panel = document.getElementById('mainSidebar');
             const overlay = document.getElementById('sidebarOverlay');
+            const btn = document.getElementById('menuPanelBtn');
+            const buka = !panel.classList.contains('terbuka');
 
-            if (sidebar.classList.contains('mobile-open')) {
-                sidebar.classList.remove('mobile-open');
-                document.body.classList.remove('mobile-menu-open');
-                overlay.setAttribute('aria-hidden', 'true');
-                $(overlay).fadeOut();
-            } else {
-                sidebar.classList.add('mobile-open');
-                document.body.classList.add('mobile-menu-open');
+            if (buka) {
+                panel.classList.add('terbuka');
+                panel.setAttribute('aria-hidden', 'false');
+                overlay.classList.add('terbuka');
                 overlay.setAttribute('aria-hidden', 'false');
-                $(overlay).fadeIn();
+                document.body.classList.add('menu-panel-open');
+                if (btn) btn.setAttribute('aria-expanded', 'true');
+            } else {
+                panel.classList.remove('terbuka');
+                panel.setAttribute('aria-hidden', 'true');
+                overlay.classList.remove('terbuka');
+                overlay.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('menu-panel-open');
+                if (btn) btn.setAttribute('aria-expanded', 'false');
             }
         }
+
+        // Kompatibilitas: pemanggil lama (mobile-bottom-nav "Lainnya",
+        // tombol tutup di sidebar) tetap bekerja.
+        function toggleMobileMenu() { toggleMenuPanel(); }
+        function toggleSidebar() { toggleMenuPanel(); }
+        function toggleSidebarMode() { return; }
+
+        // Esc menutup panel (sama seperti modal).
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && document.getElementById('mainSidebar')?.classList.contains('terbuka')) toggleMenuPanel();
+        });
 
         // Tooltip native (title) di tiap link menu - satu-satunya cara tahu
         // nama menu saat ikon-only tanpa mengetik ulang ratusan baris label

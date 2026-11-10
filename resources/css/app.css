@@ -59,17 +59,17 @@
     --color-slate-950: #0D1310;
 
     /* Utama: teal. Menjadi warna semua tombol utama dan tautan. */
-    --color-indigo-50:  #EAF6F7;
-    --color-indigo-100: #D2EBEE;
-    --color-indigo-200: #A6D6DD;
-    --color-indigo-300: #6FBCC7;
-    --color-indigo-400: #2E9CAB;
-    --color-indigo-500: #04727E;
-    --color-indigo-600: #006C7B;
-    --color-indigo-700: #005663;
-    --color-indigo-800: #01434D;
-    --color-indigo-900: #02363E;
-    --color-indigo-950: #012228;
+    --color-indigo-50:  #EFF4FF;
+    --color-indigo-100: #DDE9FF;
+    --color-indigo-200: #BDD3FF;
+    --color-indigo-300: #8FB4F8;
+    --color-indigo-400: #5B8DEF;
+    --color-indigo-500: #2563EB;
+    --color-indigo-600: #1D4ED8;
+    --color-indigo-700: #1E40AF;
+    --color-indigo-800: #1E3A8A;
+    --color-indigo-900: #172554;
+    --color-indigo-950: #0F1E3E;
 
     /* Peringatan: Zest #E8891D */
     --color-amber-50:  #FEF6EA;
@@ -1418,3 +1418,113 @@ html.dark .hero-postingan { box-shadow: none; }
 
     .cetak-kaki { display: flex !important; justify-content: space-between; margin-top: 8mm; padding-top: 3pt; border-top: .6pt solid #1A231F; font-family: 'Lora', Georgia, serif; font-size: 8pt; letter-spacing: .06em; color: #3F4F47; }
 }
+/* ==========================================================================
+   VISUAL REFRESH V2 (2026-11) - Command Center
+   Kartu lebih tegas & kotak, shadow diperhalus, fokus biru tunggal.
+   ========================================================================== */
+:root {
+    --pro-accent: #2563EB;
+    --pro-accent-hover: #1D4ED8;
+    --pro-accent-soft: #EFF4FF;
+    --pro-border: #E3E9F6;
+    --pro-border-2: #CBD6EE;
+    --pro-radius: 10px;
+}
+
+/* Kartu: kotak & tegas. Semua permukaan berkartu menyusul token ini. */
+.x-card, .card, .modern-card, .panel, .table-card, .pro-card,
+.modern-table-wrapper {
+    border-radius: var(--pro-radius) !important;
+    border: 1px solid var(--pro-border) !important;
+    background: #FFFFFF;
+    box-shadow: 0 1px 2px rgba(15, 30, 62, .05) !important;
+}
+.modern-table-wrapper { overflow: hidden; }
+
+/* Radius besar menyimpang: media kontrol tetap kecil, permukaan besar dibatasi. */
+.rounded-3xl { border-radius: 12px !important; }
+.rounded-2xl { border-radius: 10px !important; }
+.rounded-xl { border-radius: 8px !important; }
+
+/* Shadow besar diperhalus: hanya untuk elemen yang benar-benar di atas kanvas. */
+.shadow-2xl { box-shadow: 0 16px 40px rgba(15, 30, 62, .18) !important; }
+.shadow-xl { box-shadow: 0 12px 32px rgba(15, 30, 62, .14) !important; }
+.shadow-lg { box-shadow: 0 8px 22px rgba(15, 30, 62, .10) !important; }
+
+/* Fokus: satu cincin, seluruh aplikasi. */
+*:focus-visible {
+    outline: 2px solid var(--pro-accent) !important;
+    outline-offset: 2px !important;
+    border-radius: 4px;
+}
+
+::selection { background: #C9DCFF; }
+
+/* ===== COMMAND PALETTE (React + framer-motion) ===== */
+.cmdk {
+    position: fixed; inset: 0; z-index: 100; display: flex;
+    align-items: flex-start; justify-content: center; padding: 11vh 16px 16px;
+    font-family: 'Inter', sans-serif;
+}
+.cmdk-backdrop { position: absolute; inset: 0; background: rgba(9, 15, 30, .42); backdrop-filter: blur(2px); }
+.cmdk-panel {
+    position: relative; width: min(560px, 100%);
+    background: #FFFFFF; border: 1px solid var(--pro-border-2);
+    border-radius: 12px; overflow: hidden;
+    box-shadow: 0 24px 60px rgba(9, 15, 30, .30), 0 2px 6px rgba(9, 15, 30, .10);
+    display: flex; flex-direction: column; max-height: 68vh;
+}
+.cmdk-input-row {
+    display: flex; align-items: center; gap: 10px;
+    height: 50px; padding: 0 16px;
+    border-bottom: 1px solid var(--pro-border);
+    color: #5D6A85;
+}
+.cmdk-input-row input {
+    flex: 1; border: 0; outline: 0; background: transparent;
+    font-size: 14px; color: #0F1E3E; height: 100%;
+}
+.cmdk-input-row input::placeholder { color: #8A96B8; }
+.cmdk-input-row kbd {
+    background: #F1F5FB; border: 1px solid var(--pro-border-2); border-radius: 5px;
+    font-size: 9.5px; padding: 2px 7px; color: #3E4C74; font-family: inherit;
+}
+.cmdk-list { overflow-y: auto; padding: 8px; flex: 1; min-height: 0; }
+.cmdk-group {
+    padding: 10px 12px 5px; font-size: 9.5px; font-weight: 600;
+    letter-spacing: .16em; text-transform: uppercase; color: #8A96B8;
+}
+.cmdk-item {
+    display: flex; width: 100%; align-items: center; gap: 11px;
+    border: 1px solid transparent; background: transparent; text-align: left;
+    padding: 9px 12px; border-radius: 8px; color: #3E4C74;
+    font-size: 12.5px; transition: background .12s ease, color .12s ease;
+}
+.cmdk-item:hover { background: #F5F8FF; color: #1D4ED8; }
+.cmdk-item.aktif { background: var(--pro-accent-soft); color: #1D4ED8; border-color: #C9DCFF; }
+.cmdk-item-icon { width: 18px; display: flex; align-items: center; justify-content: center; color: #8A96B8; flex: 0 0 auto; }
+.cmdk-item-icon svg { width: 17px; height: 17px; }
+.cmdk-item.aktif .cmdk-item-icon { color: #1D4ED8; }
+.cmdk-item-label { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cmdk-item-page { font-size: 9px; color: #8A96B8; letter-spacing: .06em; }
+.cmdk-empty { padding: 32px 20px; text-align: center; color: #5D6A85; font-size: 12.5px; }
+.cmdk-empty small { display: block; margin-top: 4px; color: #8A96B8; font-size: 11px; }
+.cmdk-kaki {
+    display: flex; align-items: center; gap: 16px; height: 36px;
+    padding: 0 16px; border-top: 1px solid var(--pro-border);
+    background: #F7F9FE; font-size: 9.5px; color: #5D6A85;
+}
+.cmdk-kaki kbd { background: #fff; border: 1px solid var(--pro-border-2); border-radius: 4px; padding: 1px 6px; font-size: 9px; color: #3E4C74; }
+.cmdk-hitung { margin-left: auto; font-variant-numeric: tabular-nums; }
+
+html.dark .cmdk-panel { background: #1C2436; border-color: #2A3450; }
+html.dark .cmdk-input-row { border-color: #2A3450; color: #8A96B8; }
+html.dark .cmdk-input-row input { color: #E8ECF8; }
+html.dark .cmdk-list { background: #1C2436; }
+html.dark .cmdk-item { color: #B9C3DD; }
+html.dark .cmdk-item:hover { background: #22304F; color: #9DBDFF; }
+html.dark .cmdk-item.aktif { background: #22304F; color: #9DBDFF; border-color: #31456F; }
+html.dark .cmdk-kaki { background: #171F30; border-color: #2A3450; color: #8A96B8; }
+html.dark .cmdk-kaki kbd { background: #232D45; border-color: #2A3450; color: #B9C3DD; }
+html.dark .cmdk-input-row kbd { background: #232D45; border-color: #2A3450; color: #B9C3DD; }
+html.dark .cmdk-group { color: #6B7799; }
