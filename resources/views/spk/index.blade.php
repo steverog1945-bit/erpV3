@@ -60,7 +60,7 @@
                 <input type="date" name="tgl_dari"
                        value="{{ $tunggakanAktif ? '' : (request('tgl_dari') ?? $tglDari->toDateString()) }}"
                        @if($tunggakanAktif) disabled @endif
-                       class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                       class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
             </div>
 
             <div class="spk-filter-date w-full md:w-44" data-spk-date>
@@ -68,7 +68,7 @@
                 <input type="date" name="tgl_sampai"
                        value="{{ $tunggakanAktif ? '' : (request('tgl_sampai') ?? $tglSampai->toDateString()) }}"
                        @if($tunggakanAktif) disabled @endif
-                       class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                       class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
             </div>
 
             <div class="spk-filter-status w-full md:w-48">

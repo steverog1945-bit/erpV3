@@ -58,7 +58,7 @@
                     {{-- SUMBER PEMBELIAN: langsung ke supplier, atau lewat platform toko online (daftar dari Master Platform Belanja) --}}
                     <div class="mt-6 pt-6 border-t border-slate-100">
                         <x-form.group label="Sumber Pembelian" dalam>
-                            <select name="id_platform" id="id_platform" onchange="toggleInfoOnline()" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 shadow-inner">
+                            <select name="id_platform" id="id_platform" onchange="toggleInfoOnline()" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 ">
                                 <option value="">Langsung / Offline (supplier)</option>
                                 @foreach($platforms as $pl)
                                     <option value="{{ $pl->id }}" {{ (old('id_platform') ?? ($kedatangan->id_platform ?? '')) == $pl->id ? 'selected' : '' }}>{{ $pl->nama }}{{ $pl->aktif ? '' : ' (nonaktif)' }}</option>
@@ -122,7 +122,7 @@
                                         </td>
                                         <td class="px-2 py-2">
                                             <input type="number" name="qty[]" step="0.01" value="{{ angka_polos($d->qty, 4) }}"
-                                                class="w-full bg-slate-50 border-transparent rounded-xl p-4 font-medium text-slate-700 text-center text-[11px] focus:bg-white focus:ring-2 focus:ring-indigo-500/20 transition-all" required>
+                                                class="w-full bg-slate-50 border-transparent rounded-xl p-4 font-medium text-slate-700 text-center text-[11px] focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all" required>
                                         </td>
                                         <td class="px-2 py-2 text-center">
                                             <div class="satuan-display flex items-center justify-center bg-indigo-50/50 text-indigo-600 text-[10px] font-medium uppercase py-4 rounded-xl border border-indigo-100/50">
@@ -175,7 +175,7 @@
         </td>
         <td class="px-2 py-2">
             <input type="number" name="qty[]" step="0.01"
-                class="w-full bg-slate-50 border-transparent rounded-xl p-4 font-medium text-slate-700 text-center text-[11px] focus:bg-white focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                class="w-full bg-slate-50 border-transparent rounded-xl p-4 font-medium text-slate-700 text-center text-[11px] focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
                 placeholder="0.00" required>
         </td>
         <td class="px-2 py-2 text-center">

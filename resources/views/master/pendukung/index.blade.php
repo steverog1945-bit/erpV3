@@ -5,7 +5,7 @@
     
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
         <div class="flex items-center gap-3 mb-6">
-            <span class="text-2xl">⚙️</span>
+            <i class="fas fa-cog text-2xl text-slate-600" aria-hidden="true"></i>
             <h2 class="text-xl font-medium text-slate-800">Daftar Mesin</h2>
         </div>
         
@@ -42,7 +42,7 @@
 
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 h-fit">
         <div class="flex items-center gap-3 mb-6">
-            <span class="text-2xl">🏷️</span>
+            <i class="fas fa-tag text-2xl text-slate-600" aria-hidden="true"></i>
             <h2 class="text-xl font-medium text-slate-800">Kategori Bahan</h2>
         </div>
         

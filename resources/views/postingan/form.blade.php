@@ -39,7 +39,7 @@
                         <x-form.input type="text" name="judul" value="{{ old('judul', $post->judul) }}" required maxlength="200" placeholder="Judul yang jelas dan singkat" class="!text-lg !font-medium" />
                     </x-form.group>
                     <x-form.group label="Ringkasan (tampil di daftar; kosongkan untuk otomatis)" class="mt-4" dalam>
-                        <textarea name="ringkasan" rows="2" maxlength="300" placeholder="Satu-dua kalimat pembuka..." class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">{{ old('ringkasan', $post->ringkasan) }}</textarea>
+                        <textarea name="ringkasan" rows="2" maxlength="300" placeholder="Satu-dua kalimat pembuka..." class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">{{ old('ringkasan', $post->ringkasan) }}</textarea>
                     </x-form.group>
                 </x-card>
 

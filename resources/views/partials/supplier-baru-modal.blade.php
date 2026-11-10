@@ -9,7 +9,7 @@
         </x-form.group>
         <x-form.group label="Alamat Lengkap" dalam>
             <textarea id="new_supplier_alamat" placeholder="Jl. Raya Percetakan No. 1..."
-                      class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 shadow-inner"></textarea>
+                      class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 "></textarea>
         </x-form.group>
 
         <x-button onclick="saveSupplierBaru()" class="w-full">

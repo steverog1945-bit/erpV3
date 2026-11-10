@@ -63,7 +63,7 @@
                     <x-form.group label="Logo Perusahaan" name="logo" help="PNG/JPG/WEBP, maks 2MB. Kosongkan kalau tidak ingin mengubah." dalam>
                         <input type="file" name="logo" accept="image/png,image/jpeg,image/webp"
                             onchange="previewLogoAplikasi(this)"
-                            class="w-full bg-slate-50 border-none rounded-xl py-2.5 px-4 text-xs font-medium text-slate-600 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-indigo-600 file:text-white">
+                            class="w-full bg-white border border-slate-200 rounded-md py-2 px-4 text-xs font-medium text-slate-600 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-indigo-600 file:text-white">
                     </x-form.group>
                 </div>
 
@@ -116,7 +116,7 @@
                             </div>
                             <x-form.group label="Logo Ikon (opsional, persegi)" name="logo_ikon" help="Dipakai saat sidebar diringkas. PNG/JPG/WEBP, maks 1MB." dalam>
                                 <input type="file" name="logo_ikon" accept="image/png,image/jpeg,image/webp"
-                                    class="w-full bg-slate-50 border-none rounded-xl py-2.5 px-4 text-xs font-medium text-slate-600 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-indigo-600 file:text-white">
+                                    class="w-full bg-white border border-slate-200 rounded-md py-2 px-4 text-xs font-medium text-slate-600 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-indigo-600 file:text-white">
                             </x-form.group>
                             @if($setting->logo_ikon_path)
                                 <div class="flex items-center gap-3 ml-2">
@@ -135,7 +135,7 @@
                 </x-form.group>
 
                 <x-form.group label="Alamat" name="alamat" dalam>
-                    <textarea name="alamat" rows="3" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">{{ old('alamat', $setting->alamat) }}</textarea>
+                    <textarea name="alamat" rows="3" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">{{ old('alamat', $setting->alamat) }}</textarea>
                 </x-form.group>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

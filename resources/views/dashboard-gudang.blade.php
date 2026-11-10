@@ -37,7 +37,7 @@
     {{-- BAHAN PERLU PERHATIAN (Habis/Menipis) --}}
     <div class="bg-white rounded-lg border border-slate-100 shadow-sm overflow-hidden">
         <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
-            <h3 class="text-sm font-medium text-slate-800">⚠️ Perlu Pengadaan</h3>
+            <h3 class="text-sm font-medium text-slate-800"><i class="fas fa-exclamation-triangle text-amber-500 mr-1.5" aria-hidden="true"></i>Perlu Pengadaan</h3>
             <a href="{{ route('laporan.stok-bahan') }}" class="text-[10px] font-medium text-indigo-500 uppercase tracking-widest hover:underline">Lihat Laporan</a>
         </div>
         <div class="divide-y divide-slate-50">

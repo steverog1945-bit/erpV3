@@ -349,7 +349,7 @@
 
             <div class="space-y-2.5">
                 <x-form.group label="Kategori">
-                    <select id="filter_kategori" onchange="filterProduk(this.value)" autocomplete="off" tabindex="2" @if($notaEdit) disabled @endif class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                    <select id="filter_kategori" onchange="filterProduk(this.value)" autocomplete="off" tabindex="2" @if($notaEdit) disabled @endif class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                         <option value="all">Semua Kategori</option>
                         @foreach($kategori as $kat)
                             <option value="{{ $kat->id_kategori }}">{{ $kat->nama_kategori }}</option>
@@ -589,7 +589,7 @@
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-3 gap-y-2.5">
                     <div>
                         <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Finishing</label>
-                        <select id="select_finishing" onchange="onFinishingChange()" class="w-full bg-slate-50 border-none rounded-lg py-2.5 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                        <select id="select_finishing" onchange="onFinishingChange()" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                             <option value="">-- Tanpa Finishing --</option>
                             @foreach($finishing as $f)
                                 <option value="{{ $f->id_finishing }}" data-harga="{{ $f->harga_default ?? 0 }}" data-minimum="{{ $f->minimum_charge ?? 0 }}" data-metode="{{ $f->metode_hitung }}" data-kategori="{{ $f->id_kategori ?? '' }}">{{ $f->nama_finishing }}</option>
@@ -598,30 +598,30 @@
                     </div>
                     <div>
                         <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Spek Finishing</label>
-                        <select id="input_status_finishing" onchange="onStatusFinishingChange()" disabled class="w-full bg-slate-50 border-none rounded-lg py-2.5 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner disabled:opacity-40 disabled:cursor-not-allowed">
+                        <select id="input_status_finishing" onchange="onStatusFinishingChange()" disabled class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500  disabled:opacity-40 disabled:cursor-not-allowed">
                             <option value="Standar">Standar</option>
                             <option value="Custom">Custom</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Catatan Finishing</label>
-                        <input type="text" id="input_catatan_finishing" maxlength="255" placeholder="mis. Doff" class="w-full bg-slate-50 border-none rounded-lg py-2.5 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                        <input type="text" id="input_catatan_finishing" maxlength="255" placeholder="mis. Doff" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                     </div>
                     {{-- Biaya Cetak = komponen UTAMA subtotal (Cetak + Desain + Finishing, lihat hitungSubtotal()). Mengikuti Harga x Qty
                          sampai operator mengetik manual (cetakManualEdit). --}}
                     <div>
                         <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Biaya Cetak (Rp)</label>
-                        <input type="text" inputmode="numeric" id="input_cetak" @unlessbolehHarga readonly @endbolehHarga onchange="hitungSubtotal()" class="w-full bg-slate-50 border-none rounded-lg py-2.5 px-3 text-sm font-medium text-slate-600 text-right focus:ring-2 focus:ring-indigo-500/20 shadow-inner format-ribuan" value="0">
+                        <input type="text" inputmode="numeric" id="input_cetak" @unlessbolehHarga readonly @endbolehHarga onchange="hitungSubtotal()" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 text-right focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500  format-ribuan" value="0">
                     </div>
                     {{-- Jumlah pcs finishing hanya untuk finishing metode 'quantity' (mis. Pasang Mata Ayam) - kasir wajib cek/sesuaikan. --}}
                     <div id="wrapper_qty_finishing" class="hidden">
                         <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Jumlah Pcs Finishing</label>
-                        <input type="number" min="1" id="input_qty_finishing" onchange="onQtyFinishingManualChange()" class="w-full bg-slate-50 border-none rounded-lg py-2.5 px-3 text-sm font-medium text-slate-600 text-right focus:ring-2 focus:ring-indigo-500/20 shadow-inner" value="1">
+                        <input type="number" min="1" id="input_qty_finishing" onchange="onQtyFinishingManualChange()" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 text-right focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 " value="1">
                     </div>
                     {{-- Biaya Finishing hanya muncul begitu jenis Finishing dipilih (lihat onFinishingChange()). --}}
                     <div id="wrapper_biaya_finishing" class="hidden">
                         <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Biaya Finishing (Rp)</label>
-                        <input type="text" inputmode="numeric" id="input_finishing_biaya" @unlessbolehHarga readonly @endbolehHarga onchange="hitungSubtotal()" class="w-full bg-slate-50 border-none rounded-lg py-2.5 px-3 text-sm font-medium text-slate-600 text-right focus:ring-2 focus:ring-indigo-500/20 shadow-inner format-ribuan" value="0">
+                        <input type="text" inputmode="numeric" id="input_finishing_biaya" @unlessbolehHarga readonly @endbolehHarga onchange="hitungSubtotal()" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 text-right focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500  format-ribuan" value="0">
                     </div>
                     
                     {{-- Panel Potong Manual LINEAR_GRID.
@@ -637,11 +637,11 @@
                     <div id="panel_linear_grider" class="hidden col-span-full grid grid-cols-3 gap-2 mt-1 px-3 py-2 bg-indigo-50 border border-indigo-100 rounded-xl">
                         <div>
                             <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-wider mb-1 ml-1">Lebar Potong (cm)</label>
-                            <input type="number" step="0.1" inputmode="decimal" id="input_lebar_potong" class="w-full bg-white border-none rounded-lg py-2 px-2 text-xs font-medium text-slate-700 text-center shadow-inner focus:ring-2 focus:ring-indigo-500/20" min="0" value="0" onchange="segarkanBiayaPotongManual()">
+                            <input type="number" step="0.1" inputmode="decimal" id="input_lebar_potong" class="w-full bg-white border-none rounded-lg py-2 px-2 text-xs font-medium text-slate-700 text-center shadow-inner focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500" min="0" value="0" onchange="segarkanBiayaPotongManual()">
                         </div>
                         <div>
                             <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-wider mb-1 ml-1">Tinggi Potong (cm)</label>
-                            <input type="number" step="0.1" inputmode="decimal" id="input_tinggi_potong" class="w-full bg-white border-none rounded-lg py-2 px-2 text-xs font-medium text-slate-700 text-center shadow-inner focus:ring-2 focus:ring-indigo-500/20" min="0" value="0" onchange="segarkanBiayaPotongManual()">
+                            <input type="number" step="0.1" inputmode="decimal" id="input_tinggi_potong" class="w-full bg-white border-none rounded-lg py-2 px-2 text-xs font-medium text-slate-700 text-center shadow-inner focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500" min="0" value="0" onchange="segarkanBiayaPotongManual()">
                         </div>
                         <div>
                             <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-wider mb-1 ml-1">Jarak (cm) - belum dipakai</label>
@@ -662,11 +662,11 @@
                         <div class="col-span-3 grid grid-cols-2 gap-2 pt-2 border-t border-indigo-100">
                             <div>
                                 <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-wider mb-1 ml-1">Lebar Media (cm)</label>
-                                <input type="number" step="0.1" inputmode="decimal" id="input_lebar_media_potong" class="w-full bg-white border-none rounded-lg py-2 px-2 text-xs font-medium text-slate-700 text-center shadow-inner focus:ring-2 focus:ring-indigo-500/20" min="0" value="0" onchange="segarkanBiayaPotongManual()">
+                                <input type="number" step="0.1" inputmode="decimal" id="input_lebar_media_potong" class="w-full bg-white border-none rounded-lg py-2 px-2 text-xs font-medium text-slate-700 text-center shadow-inner focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500" min="0" value="0" onchange="segarkanBiayaPotongManual()">
                             </div>
                             <div>
                                 <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-wider mb-1 ml-1">Tinggi Media (cm)</label>
-                                <input type="number" step="0.1" inputmode="decimal" id="input_tinggi_media_potong" class="w-full bg-white border-none rounded-lg py-2 px-2 text-xs font-medium text-slate-700 text-center shadow-inner focus:ring-2 focus:ring-indigo-500/20" min="0" value="0" onchange="segarkanBiayaPotongManual()">
+                                <input type="number" step="0.1" inputmode="decimal" id="input_tinggi_media_potong" class="w-full bg-white border-none rounded-lg py-2 px-2 text-xs font-medium text-slate-700 text-center shadow-inner focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500" min="0" value="0" onchange="segarkanBiayaPotongManual()">
                             </div>
                         </div>
                         <p class="col-span-3 text-[10px] leading-snug text-indigo-700/90">
@@ -685,15 +685,15 @@
                     <div id="panel_jahit_keping" class="hidden col-span-full grid grid-cols-3 gap-2 mt-1 px-3 py-2 bg-indigo-50 border border-indigo-100 rounded-xl">
                         <div>
                             <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-wider mb-1 ml-1">Lebar Barang Jahit (cm)</label>
-                            <input type="number" step="0.1" inputmode="decimal" id="input_lebar_jahit" class="w-full bg-white border-none rounded-lg py-2 px-2 text-xs font-medium text-slate-700 text-center shadow-inner focus:ring-2 focus:ring-indigo-500/20" min="0" value="0" onchange="segarkanBiayaJahitKeping()">
+                            <input type="number" step="0.1" inputmode="decimal" id="input_lebar_jahit" class="w-full bg-white border-none rounded-lg py-2 px-2 text-xs font-medium text-slate-700 text-center shadow-inner focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500" min="0" value="0" onchange="segarkanBiayaJahitKeping()">
                         </div>
                         <div>
                             <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-wider mb-1 ml-1">Panjang Barang Jahit (cm)</label>
-                            <input type="number" step="0.1" inputmode="decimal" id="input_panjang_jahit" class="w-full bg-white border-none rounded-lg py-2 px-2 text-xs font-medium text-slate-700 text-center shadow-inner focus:ring-2 focus:ring-indigo-500/20" min="0" value="0" onchange="segarkanBiayaJahitKeping()">
+                            <input type="number" step="0.1" inputmode="decimal" id="input_panjang_jahit" class="w-full bg-white border-none rounded-lg py-2 px-2 text-xs font-medium text-slate-700 text-center shadow-inner focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500" min="0" value="0" onchange="segarkanBiayaJahitKeping()">
                         </div>
                         <div>
                             <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-wider mb-1 ml-1">Jumlah Keping</label>
-                            <input type="number" step="1" inputmode="numeric" id="input_keping_jahit" class="w-full bg-white border-none rounded-lg py-2 px-2 text-xs font-medium text-slate-700 text-center shadow-inner focus:ring-2 focus:ring-indigo-500/20" min="1" value="1" onchange="segarkanBiayaJahitKeping()">
+                            <input type="number" step="1" inputmode="numeric" id="input_keping_jahit" class="w-full bg-white border-none rounded-lg py-2 px-2 text-xs font-medium text-slate-700 text-center shadow-inner focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500" min="1" value="1" onchange="segarkanBiayaJahitKeping()">
                         </div>
                         <div class="col-span-3 flex items-center gap-2">
                             <button type="button" onclick="document.getElementById('hint_jahit_keping').classList.toggle('hidden')" class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-600 text-[10px] font-bold flex items-center justify-center hover:bg-indigo-200" title="Petunjuk hitungan jahit">?</button>
@@ -736,7 +736,7 @@
                     {{-- Biaya Desain disembunyikan default; muncul lewat tombol "+ Biaya Desain" (tampilkanBiayaDesain()). --}}
                     <div id="wrapper_biaya_desain" class="hidden">
                         <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Biaya Desain (Rp)</label>
-                        <input type="text" inputmode="numeric" id="input_desain" @unlessbolehDesain readonly @endbolehDesain onchange="hitungSubtotal()" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 text-right focus:ring-2 focus:ring-indigo-500/20 shadow-inner format-ribuan" value="0">
+                        <input type="text" inputmode="numeric" id="input_desain" @unlessbolehDesain readonly @endbolehDesain onchange="hitungSubtotal()" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 text-right focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500  format-ribuan" value="0">
                     </div>
                     {{-- Desainer yang menerapkan biaya desain (untuk monitoring & komisi/bagi hasil) --}}
                     <div id="wrapper_desainer" class="hidden" title="Operator desain yang mengerjakan desain ini - dipakai untuk laporan biaya &amp; komisi desain">
@@ -754,7 +754,7 @@
                                 <span class="ml-auto text-[11px] font-normal text-slate-400 shrink-0">otomatis (Anda)</span>
                             </div>
                         @else
-                            <select id="input_desainer" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                            <select id="input_desainer" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                                 <option value="">-- Tanpa Desainer --</option>
                                 @foreach($desainerList as $ds)
                                     <option value="{{ $ds->id_user }}" {{ (int) $desainerDefault === (int) $ds->id_user ? 'selected' : '' }}>{{ $ds->nama }}</option>

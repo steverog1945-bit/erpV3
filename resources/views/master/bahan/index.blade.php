@@ -19,7 +19,7 @@
                 <div class="relative">
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
                     <input type="text" name="search" value="{{ request('search') }}"
-                           class="w-full bg-slate-50 border-none rounded-xl py-2.5 pl-10 pr-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner"
+                           class="w-full bg-white border border-slate-200 rounded-md py-2 pl-10 pr-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 "
                            placeholder="Ketik SKU atau Nama Bahan...">
                 </div>
             </div>
@@ -46,7 +46,7 @@
             <div class="w-full sm:w-40">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-1.5 ml-2">Harga (HPP)</label>
                 <select name="harga"
-                        class="w-full bg-slate-50 border-none rounded-xl py-2.5 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner appearance-none cursor-pointer">
+                        class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500  appearance-none cursor-pointer">
                     <option value="">Semua</option>
                     <option value="kosong" {{ request('harga') == 'kosong' ? 'selected' : '' }}>Belum ada harga</option>
                 </select>
@@ -55,7 +55,7 @@
             <div class="w-full sm:w-44">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-1.5 ml-2">Urutan</label>
                 <select name="sort"
-                        class="w-full bg-slate-50 border-none rounded-xl py-2.5 px-3 text-sm font-medium text-indigo-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner appearance-none cursor-pointer">
+                        class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-indigo-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500  appearance-none cursor-pointer">
                     <option value="nama_bahan" {{ request('sort', 'nama_bahan') == 'nama_bahan' ? 'selected' : '' }}>Abjad (A-Z)</option>
                     <option value="stok" {{ request('sort') == 'stok' ? 'selected' : '' }}>Stok Terendah</option>
                     <option value="created_at" {{ request('sort') == 'created_at' ? 'selected' : '' }}>Terbaru</option>

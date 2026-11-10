@@ -19,7 +19,7 @@
                 <div class="relative">
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
                     <input type="text" name="search" value="{{ request('search') }}"
-                           class="w-full bg-slate-50 border-none rounded-xl py-3 pl-12 pr-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner"
+                           class="w-full bg-white border border-slate-200 rounded-md py-2 pl-12 pr-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 "
                            placeholder="Ketik nama golongan...">
                 </div>
             </div>
@@ -100,7 +100,7 @@
         <x-form.group label="Keterangan Singkat" name="keterangan"
                       help="Dipakai sebagai catatan saat memilih golongan. Boleh dikosongkan." dalam>
             <textarea name="keterangan" placeholder="Contoh: Pelanggan dengan harga khusus"
-                      class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-normal text-slate-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"></textarea>
+                      class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-normal text-slate-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"></textarea>
         </x-form.group>
         <x-slot:footer>
             <x-button type="button" variant="secondary" onclick="closeModal('golongan-tambah')">Batal</x-button>
@@ -124,7 +124,7 @@
         </x-form.group>
         <x-form.group label="Keterangan Singkat" name="keterangan" dalam>
             <textarea name="keterangan" id="edit_keterangan"
-                      class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-normal text-slate-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"></textarea>
+                      class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-normal text-slate-900 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"></textarea>
         </x-form.group>
         <x-slot:footer>
             <x-button type="button" variant="secondary" onclick="closeModal('golongan-edit')">Batal</x-button>

@@ -247,7 +247,7 @@
         <div>
             <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Scan pakai alat scanner</label>
             <input type="text" id="input-scan-manual" placeholder="Arahkan scanner ke sini lalu tembak..." autocomplete="off"
-                class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-center tracking-widest focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-center tracking-widest focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
             <p class="text-[11px] text-slate-400 mt-1.5 ml-2">Kolom ini otomatis aktif - tinggal scan, tidak perlu klik dulu.</p>
         </div>
 

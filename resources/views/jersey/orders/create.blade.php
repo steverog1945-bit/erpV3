@@ -137,7 +137,7 @@
                                         <span class="ml-auto text-[11px] font-normal text-slate-400 shrink-0">otomatis (Anda)</span>
                                     </div>
                                 @else
-                                    <select id="input_desainer_jersey" name="id_desainer" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                                    <select id="input_desainer_jersey" name="id_desainer" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                                         <option value="">-- Tanpa Desainer --</option>
                                         @foreach($desainerList as $ds)
                                             <option value="{{ $ds->id_user }}" {{ (int) $desainerDefault === (int) $ds->id_user ? 'selected' : '' }}>{{ $ds->nama }}</option>
@@ -212,14 +212,14 @@
                             <x-form.input type="text" inputmode="numeric" name="discount" value="{{ old('discount', 0) }}" class="format-ribuan" />
                         </x-form.group>
                         <x-form.group label="Mode Diskon">
-                            <select id="mode-diskon" onchange="toggleModeDiskon()" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20">
+                            <select id="mode-diskon" onchange="toggleModeDiskon()" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                                 <option value="manual">Manual (Rp total)</option>
                                 <option value="tier">Dari tier harga (potongan per pcs)</option>
                             </select>
                         </x-form.group>
                         <div id="wrapper-diskon-tier" class="hidden space-y-2">
                             <x-form.group label="Potongan per pcs dari tier (Rp)">
-                                <input type="text" id="potongan-per-pcs" inputmode="numeric" class="format-ribuan w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20" placeholder="mis. 20.000">
+                                <input type="text" id="potongan-per-pcs" inputmode="numeric" class="format-ribuan w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500" placeholder="mis. 20.000">
                             </x-form.group>
                             <button type="button" onclick="terapkanDiskonDariTier()" class="w-full py-2 rounded-xl bg-indigo-50 text-indigo-600 text-xs font-medium uppercase tracking-widest hover:bg-indigo-100">Terapkan ke Diskon</button>
                             <p class="text-[10px] text-slate-400">Diskon = potongan per pcs x total qty barang. Mis. tier 80.000, potongan 20.000, qty 10 -> diskon Rp 200.000.</p>
@@ -232,7 +232,7 @@
                             <x-form.input type="text" inputmode="numeric" name="deposit" value="{{ old('deposit', 0) }}" class="format-ribuan" />
                         </x-form.group>
                         <x-form.group label="Catatan Umum Order">
-                            <textarea name="notes" rows="2" class="w-full bg-slate-50 border-none rounded-xl py-2.5 px-4 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">{{ old('notes') }}</textarea>
+                            <textarea name="notes" rows="2" class="w-full bg-white border border-slate-200 rounded-md py-2 px-4 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">{{ old('notes') }}</textarea>
                         </x-form.group>
                     </div>
                 </x-card>
@@ -258,15 +258,15 @@
         <div class="grid grid-cols-2 gap-2">
             <div class="col-span-2">
                 <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-widest mb-1">Nama <span class="text-rose-500">*</span></label>
-                <input id="mc-nama" type="text" class="w-full bg-slate-50 border-none rounded-lg py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner" placeholder="Nama lengkap / nama tim">
+                <input id="mc-nama" type="text" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 " placeholder="Nama lengkap / nama tim">
             </div>
             <div>
                 <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-widest mb-1">No. HP</label>
-                <input id="mc-telp" type="text" class="w-full bg-slate-50 border-none rounded-lg py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner" placeholder="08xx">
+                <input id="mc-telp" type="text" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 " placeholder="08xx">
             </div>
             <div>
                 <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-widest mb-1">Golongan <span class="text-rose-500">*</span></label>
-                <select id="mc-golongan" class="w-full bg-slate-50 border-none rounded-lg py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <select id="mc-golongan" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                     @foreach($golonganList ?? [] as $g)
                         <option value="{{ $g->id_golongan }}">{{ $g->nama_golongan }}</option>
                     @endforeach

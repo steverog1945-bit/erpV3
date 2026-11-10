@@ -20,7 +20,7 @@
                 <div class="relative">
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
                     <input type="text" name="search" value="{{ request('search') }}"
-                           class="w-full bg-slate-50 border-none rounded-xl py-3 pl-12 pr-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner"
+                           class="w-full bg-white border border-slate-200 rounded-md py-2 pl-12 pr-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 "
                            placeholder="Ketik nama atau kontak...">
                 </div>
             </div>
@@ -106,7 +106,7 @@
 
             <x-form.group label="Alamat Lengkap" name="alamat" dalam>
                 <textarea name="alamat" placeholder="Jl. Raya Percetakan No. 1..."
-                          class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 shadow-inner"></textarea>
+                          class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 "></textarea>
             </x-form.group>
 
             <div class="pt-4 flex gap-3">
@@ -130,7 +130,7 @@
 
             <x-form.group label="Alamat Lengkap" dalam>
                 <textarea name="alamat" id="edit_alamat"
-                          class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 shadow-inner"></textarea>
+                          class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 "></textarea>
             </x-form.group>
 
             <div class="pt-4 flex gap-3">

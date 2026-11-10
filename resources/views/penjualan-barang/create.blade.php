@@ -86,14 +86,14 @@
                     <div class="flex gap-2">
                         <div class="flex-1">
                             <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Qty</label>
-                            <input type="number" id="input_qty_bahan" min="0.01" step="0.01" value="1" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-center focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                            <input type="number" id="input_qty_bahan" min="0.01" step="0.01" value="1" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-center focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                         </div>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end mt-4">
                     <div class="md:col-span-3">
                         <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Harga Satuan (Rp) - manual, sesuaikan harga bahan saat ini</label>
-                        <input type="text" inputmode="numeric" id="input_harga_bahan" placeholder="0" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium focus:ring-2 focus:ring-indigo-500/20 shadow-inner format-ribuan">
+                        <input type="text" inputmode="numeric" id="input_harga_bahan" placeholder="0" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500  format-ribuan">
                     </div>
                     <x-button type="button" onclick="tambahBahanKeDaftar()" class="w-full">
                         <i class="fas fa-plus"></i> Tambah ke Daftar
@@ -147,18 +147,18 @@
                     </div>
                     <div>
                         <label class="block text-[10px] font-medium text-slate-400 mb-2 ml-2" id="label_qty_jasa">Qty</label>
-                        <input type="number" id="input_qty_jasa" min="0.01" step="0.01" value="1" oninput="hitungQtyJasa()" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-center focus:ring-2 focus:ring-emerald-500/20 shadow-inner">
+                        <input type="number" id="input_qty_jasa" min="0.01" step="0.01" value="1" oninput="hitungQtyJasa()" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-center focus:ring-2 focus:ring-emerald-500/20 ">
                     </div>
                 </div>
                 {{-- Ukuran untuk jasa bersatuan luas (m2, cm2) atau panjang (m, cm), mengikuti tipe satuan di Master Satuan. --}}
                 <div id="blok_ukuran_jasa" class="hidden grid grid-cols-1 md:grid-cols-4 gap-4 items-end mt-4">
                     <div>
                         <label class="block text-[10px] font-medium text-slate-400 mb-2 ml-2" id="label_p_jasa">Panjang</label>
-                        <input type="number" id="input_p_jasa" min="0" step="0.01" oninput="hitungQtyJasa()" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-center focus:ring-2 focus:ring-emerald-500/20 shadow-inner">
+                        <input type="number" id="input_p_jasa" min="0" step="0.01" oninput="hitungQtyJasa()" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-center focus:ring-2 focus:ring-emerald-500/20 ">
                     </div>
                     <div id="wrap_l_jasa">
                         <label class="block text-[10px] font-medium text-slate-400 mb-2 ml-2" id="label_l_jasa">Lebar</label>
-                        <input type="number" id="input_l_jasa" min="0" step="0.01" oninput="hitungQtyJasa()" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-center focus:ring-2 focus:ring-emerald-500/20 shadow-inner">
+                        <input type="number" id="input_l_jasa" min="0" step="0.01" oninput="hitungQtyJasa()" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-center focus:ring-2 focus:ring-emerald-500/20 ">
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-[10px] font-medium text-slate-400 mb-2 ml-2">Total dihitung</label>
@@ -168,11 +168,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end mt-4">
                     <div class="md:col-span-2">
                         <label class="block text-[10px] font-medium text-slate-400 mb-2 ml-2">Harga Satuan (Rp) - terisi dari master, bisa diubah</label>
-                        <input type="text" inputmode="numeric" id="input_harga_jasa" placeholder="0" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium focus:ring-2 focus:ring-emerald-500/20 shadow-inner format-ribuan">
+                        <input type="text" inputmode="numeric" id="input_harga_jasa" placeholder="0" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium focus:ring-2 focus:ring-emerald-500/20  format-ribuan">
                     </div>
                     <div>
                         <label class="block text-[10px] font-medium text-slate-400 mb-2 ml-2">Biaya (operasional + tinta)</label>
-                        <div id="info_biaya_jasa" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-500">-</div>
+                        <div id="info_biaya_jasa" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-500">-</div>
                     </div>
                     <x-button type="button" onclick="tambahJasaKeDaftar()" class="w-full">
                         <i class="fas fa-plus"></i> Tambah ke Daftar
@@ -185,21 +185,21 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-start">
                     <div class="md:col-span-2">
                         <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Nama Barang / Jasa</label>
-                        <input type="text" id="input_nama_custom" placeholder="mis. Spanduk bekas, jasa titipan, dll" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium focus:ring-2 focus:ring-amber-500/20 shadow-inner">
+                        <input type="text" id="input_nama_custom" placeholder="mis. Spanduk bekas, jasa titipan, dll" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium focus:ring-2 focus:ring-amber-500/20 ">
                     </div>
                     <div>
                         <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Qty</label>
-                        <input type="number" id="input_qty_custom" min="0.01" step="0.01" value="1" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-center focus:ring-2 focus:ring-amber-500/20 shadow-inner">
+                        <input type="number" id="input_qty_custom" min="0.01" step="0.01" value="1" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-center focus:ring-2 focus:ring-amber-500/20 ">
                     </div>
                     <div>
                         <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Satuan</label>
-                        <input type="text" id="input_satuan_custom" value="Pcs" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-center focus:ring-2 focus:ring-amber-500/20 shadow-inner">
+                        <input type="text" id="input_satuan_custom" value="Pcs" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-center focus:ring-2 focus:ring-amber-500/20 ">
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end mt-4">
                     <div class="md:col-span-3">
                         <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Harga Satuan (Rp) - manual</label>
-                        <input type="text" inputmode="numeric" id="input_harga_custom" placeholder="0" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium focus:ring-2 focus:ring-amber-500/20 shadow-inner format-ribuan">
+                        <input type="text" inputmode="numeric" id="input_harga_custom" placeholder="0" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium focus:ring-2 focus:ring-amber-500/20  format-ribuan">
                     </div>
                     <x-button type="button" onclick="tambahCustomKeDaftar()" variant="warning" class="w-full">
                         <i class="fas fa-plus"></i> Tambah ke Daftar

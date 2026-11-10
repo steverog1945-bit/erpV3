@@ -25,7 +25,7 @@
     <div id="tab-panel-tipe" class="jersey-tab-panel">
         <x-card>
             <form id="form-add-tipe" class="flex flex-col sm:flex-row gap-3 mb-6 bg-indigo-50/40 p-4 rounded-2xl border border-indigo-100">
-                <div class="flex-1"><input type="text" name="name" required placeholder="Nama tipe produk (mis. Jersey, Celana, Sublime Lainnya)" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20"></div>
+                <div class="flex-1"><input type="text" name="name" required placeholder="Nama tipe produk (mis. Jersey, Celana, Sublime Lainnya)" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"></div>
                 <label class="flex items-center gap-2 text-xs font-medium text-slate-500 bg-white border border-slate-200 rounded-xl py-3 px-4 whitespace-nowrap cursor-pointer">
                     <input type="checkbox" name="has_sleeve_collar" checked class="rounded text-indigo-600 focus:ring-indigo-500/20">
                     Punya Lengan &amp; Kerah
@@ -51,7 +51,7 @@
     <div id="tab-panel-kategori" class="jersey-tab-panel hidden">
         <x-card>
             <form id="form-add-kategori" class="flex flex-col sm:flex-row gap-3 mb-6 bg-indigo-50/40 p-4 rounded-2xl border border-indigo-100">
-                <div class="flex-1"><input type="text" name="name" required placeholder="Nama kategori (mis. Jersey Futsal)" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20"></div>
+                <div class="flex-1"><input type="text" name="name" required placeholder="Nama kategori (mis. Jersey Futsal)" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"></div>
                 <x-button type="submit" variant="success">Tambah</x-button>
             </form>
             @include('jersey.master._filter-toolbar', ['searchId' => 'search-kategori', 'statusId' => 'filter-status-kategori', 'placeholder' => 'Cari nama kategori...'])
@@ -72,11 +72,11 @@
     <div id="tab-panel-ukuran" class="jersey-tab-panel hidden">
         <x-card>
             <form id="form-add-ukuran" class="grid grid-cols-1 md:grid-cols-6 gap-3 mb-6 bg-indigo-50/40 p-4 rounded-2xl border border-indigo-100">
-                <input type="text" name="name" required placeholder="Nama ukuran (mis. XXL)" class="bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20">
-                <input type="number" name="sort_order" placeholder="Urutan tampil" class="bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20">
-                <select name="kelompok" class="bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20"><option value="dewasa">Dewasa</option><option value="anak">Anak</option></select>
-                <input type="text" inputmode="numeric" name="price_surcharge" placeholder="Tambahan harga (Rp)" class="format-ribuan bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20">
-                <input type="number" step="0.5" min="-90" max="100" name="selisih_persen" placeholder="Selisih harga % (mis. -20)" class="bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20">
+                <input type="text" name="name" required placeholder="Nama ukuran (mis. XXL)" class="bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+                <input type="number" name="sort_order" placeholder="Urutan tampil" class="bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+                <select name="kelompok" class="bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"><option value="dewasa">Dewasa</option><option value="anak">Anak</option></select>
+                <input type="text" inputmode="numeric" name="price_surcharge" placeholder="Tambahan harga (Rp)" class="format-ribuan bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+                <input type="number" step="0.5" min="-90" max="100" name="selisih_persen" placeholder="Selisih harga % (mis. -20)" class="bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                 <x-button type="submit" variant="success">Tambah Ukuran</x-button>
             </form>
             @include('jersey.master._filter-toolbar', ['searchId' => 'search-ukuran', 'statusId' => 'filter-status-ukuran', 'placeholder' => 'Cari nama ukuran...'])
@@ -97,7 +97,7 @@
     <div id="tab-panel-bahan" class="jersey-tab-panel hidden">
         <x-card>
             <form id="form-add-bahan" class="flex flex-col sm:flex-row gap-3 mb-6 bg-indigo-50/40 p-4 rounded-2xl border border-indigo-100">
-                <div class="flex-1"><input type="text" name="name" required placeholder="Nama bahan (mis. Dryfit)" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20"></div>
+                <div class="flex-1"><input type="text" name="name" required placeholder="Nama bahan (mis. Dryfit)" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"></div>
                 <x-button type="submit" variant="success">Tambah</x-button>
                 <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 text-slate-500 text-[10px] font-medium cursor-help shrink-0 self-center" title="Daftar bahan riil (mis. Dryfit, Cotton Combed) yang dipilih saat membuat baris barang di order - bukan lagi diketik bebas.">?</span>
             </form>
@@ -121,7 +121,7 @@
                 @foreach($materials as $m)
                 <div class="py-3 flex flex-wrap items-center gap-3 {{ $m->is_active ? '' : 'opacity-50' }}">
                     <span class="w-40 text-sm font-medium text-slate-700">{{ $m->name }}</span>
-                    <select onchange="sinkronBahanJersey({{ $m->id }}, this.value)" class="flex-1 min-w-[240px] bg-slate-50 border-none rounded-xl py-2.5 px-4 text-sm shadow-inner">
+                    <select onchange="sinkronBahanJersey({{ $m->id }}, this.value)" class="flex-1 min-w-[240px] bg-white border border-slate-200 rounded-md py-2 px-4 text-sm ">
                         <option value="">- Belum disinkronkan -</option>
                         @foreach($bahanGudang as $bg)
                             <option value="{{ $bg->id_bahan }}" {{ (int) $m->id_bahan === (int) $bg->id_bahan ? 'selected' : '' }}>{{ $bg->nama_bahan }} ({{ $bg->kode_bahan }})</option>
@@ -142,8 +142,8 @@
     <div id="tab-panel-lengan" class="jersey-tab-panel hidden">
         <x-card>
             <form id="form-add-lengan" class="flex flex-col sm:flex-row gap-3 mb-6 bg-indigo-50/40 p-4 rounded-2xl border border-indigo-100">
-                <div class="flex-1"><input type="text" name="name" required placeholder="Nama tipe lengan (mis. 3/4 Lengan)" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20"></div>
-                <div class="sm:w-48"><input type="text" inputmode="numeric" name="price_surcharge" placeholder="Tambahan harga (Rp)" class="format-ribuan w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20"></div>
+                <div class="flex-1"><input type="text" name="name" required placeholder="Nama tipe lengan (mis. 3/4 Lengan)" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"></div>
+                <div class="sm:w-48"><input type="text" inputmode="numeric" name="price_surcharge" placeholder="Tambahan harga (Rp)" class="format-ribuan w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"></div>
                 <x-button type="submit" variant="success">Tambah</x-button>
                 <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 text-slate-500 text-[10px] font-medium cursor-help shrink-0 self-center" title="Tipe lengan riil (mis. Pendek, Panjang, 3/4) yang dipilih saat membuat order - dipakai sebagai acuan estimasi bahan, bukan lagi pilihan tetap.">?</span>
             </form>
@@ -165,8 +165,8 @@
     <div id="tab-panel-kerah" class="jersey-tab-panel hidden">
         <x-card>
             <form id="form-add-kerah" class="flex flex-col sm:flex-row gap-3 mb-6 bg-indigo-50/40 p-4 rounded-2xl border border-indigo-100">
-                <div class="flex-1"><input type="text" name="name" required placeholder="Nama tipe kerah (mis. V-Neck)" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20"></div>
-                <div class="sm:w-48"><input type="text" inputmode="numeric" name="price_surcharge" placeholder="Tambahan harga (Rp)" class="format-ribuan w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20"></div>
+                <div class="flex-1"><input type="text" name="name" required placeholder="Nama tipe kerah (mis. V-Neck)" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"></div>
+                <div class="sm:w-48"><input type="text" inputmode="numeric" name="price_surcharge" placeholder="Tambahan harga (Rp)" class="format-ribuan w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"></div>
                 <x-button type="submit" variant="success">Tambah</x-button>
                 <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 text-slate-500 text-[10px] font-medium cursor-help shrink-0 self-center" title="Tipe kerah riil (mis. O-Neck, V-Neck) yang dipilih saat membuat order - dipakai sebagai acuan estimasi bahan, bukan lagi diketik bebas.">?</span>
             </form>
@@ -188,12 +188,12 @@
     <div id="tab-panel-estimasi" class="jersey-tab-panel hidden">
         <x-card>
             <form id="form-add-komponen" class="flex flex-col sm:flex-row gap-3 mb-3 bg-indigo-50/40 p-4 rounded-2xl border border-indigo-100">
-                <div class="flex-1"><input type="text" name="name" required placeholder="Nama komponen baru (mis. Kerah)" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20"></div>
-                <select name="jersey_product_type_id" class="sm:w-44 bg-white border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20">
+                <div class="flex-1"><input type="text" name="name" required placeholder="Nama komponen baru (mis. Kerah)" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"></div>
+                <select name="jersey_product_type_id" class="sm:w-44 bg-white border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                     <option value="">-- Semua Tipe Produk --</option>
                     @foreach($productTypes->where('is_active', true) as $pt)<option class="opsi-tipe" value="{{ $pt->id }}">{{ $pt->name }}</option>@endforeach
                 </select>
-                <select name="jersey_category_id" class="sm:w-44 bg-white border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20">
+                <select name="jersey_category_id" class="sm:w-44 bg-white border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                     <option value="">-- Semua Kategori --</option>
                     @foreach($categories->where('is_active', true) as $cat)<option class="opsi-kategori" value="{{ $cat->id }}">{{ $cat->name }}</option>@endforeach
                 </select>
@@ -229,7 +229,7 @@
                             <td class="p-1" data-component-td="{{ $comp->id }}">
                                 <input type="number" step="0.01" min="0" value="{{ $nilaiUsage }}"
                                     onchange="simpanEstimasi({{ $s->id }}, {{ $comp->id }}, 'meter', this.value)"
-                                    class="input-meter-cell w-20 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20">
+                                    class="input-meter-cell w-20 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                             </td>
                             @endforeach
                             <td class="p-2.5 text-center font-medium text-indigo-600 bg-indigo-50/40 total-meter-cell">{{ $totalPerSize[$s->id]['meter_text'] }}</td>
@@ -262,7 +262,7 @@
                             <td class="p-1" data-component-td-berat="{{ $comp->id }}">
                                 <input type="number" step="1" min="0" value="{{ $nilaiBerat }}"
                                     onchange="simpanEstimasi({{ $s->id }}, {{ $comp->id }}, 'weight', this.value)"
-                                    class="input-berat-cell w-20 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20">
+                                    class="input-berat-cell w-20 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                             </td>
                             @endforeach
                             <td class="p-2.5 text-center font-medium text-indigo-600 bg-indigo-50/40 total-berat-cell">{{ $totalPerSize[$s->id]['berat_text'] }}</td>
@@ -299,10 +299,10 @@
                                 <td class="p-1" data-type-td="{{ $st->id }}">
                                     <input type="number" step="0.01" min="0" value="{{ $u->usage_meter ?? '' }}" placeholder="m"
                                         onchange="simpanEstimasiLengan({{ $s->id }}, {{ $st->id }}, 'meter', this.value)"
-                                        class="w-16 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20 mb-1">
+                                        class="w-16 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 mb-1">
                                     <input type="number" step="1" min="0" value="{{ $u->usage_weight_gram ?? '' }}" placeholder="g"
                                         onchange="simpanEstimasiLengan({{ $s->id }}, {{ $st->id }}, 'weight', this.value)"
-                                        class="w-16 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20">
+                                        class="w-16 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                                 </td>
                                 @endforeach
                             </tr>
@@ -336,10 +336,10 @@
                                 <td class="p-1" data-type-td="{{ $ct->id }}">
                                     <input type="number" step="0.01" min="0" value="{{ $u->usage_meter ?? '' }}" placeholder="m"
                                         onchange="simpanEstimasiKerah({{ $s->id }}, {{ $ct->id }}, 'meter', this.value)"
-                                        class="w-16 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20 mb-1">
+                                        class="w-16 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 mb-1">
                                     <input type="number" step="1" min="0" value="{{ $u->usage_weight_gram ?? '' }}" placeholder="g"
                                         onchange="simpanEstimasiKerah({{ $s->id }}, {{ $ct->id }}, 'weight', this.value)"
-                                        class="w-16 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20">
+                                        class="w-16 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                                 </td>
                                 @endforeach
                             </tr>
@@ -359,50 +359,50 @@
             <form id="form-add-harga" class="grid grid-cols-1 md:grid-cols-6 gap-3 mb-6 bg-indigo-50/40 p-4 rounded-2xl border border-indigo-100">
                 <div class="md:col-span-2">
                     <label class="block text-[9px] font-medium text-indigo-600 uppercase tracking-widest mb-1.5">Bahan</label>
-                    <select name="jersey_material_id" id="harga-select-bahan" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20">
+                    <select name="jersey_material_id" id="harga-select-bahan" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                         <option value="">-- Semua Bahan --</option>
                         @foreach($materials->where('is_active', true) as $m)<option class="opsi-bahan" value="{{ $m->id }}">{{ $m->name }}</option>@endforeach
                     </select>
                 </div>
                 <div class="md:col-span-2">
                     <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-widest mb-1.5">Tipe Produk</label>
-                    <select name="jersey_product_type_id" id="harga-select-tipe" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20">
+                    <select name="jersey_product_type_id" id="harga-select-tipe" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                         <option value="">-- Semua Tipe --</option>
                         @foreach($productTypes->where('is_active', true) as $pt)<option class="opsi-tipe" value="{{ $pt->id }}">{{ $pt->name }}</option>@endforeach
                     </select>
                 </div>
                 <div class="md:col-span-2">
                     <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-widest mb-1.5">Kategori</label>
-                    <select name="jersey_category_id" id="harga-select-kategori" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20">
+                    <select name="jersey_category_id" id="harga-select-kategori" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                         <option value="">-- Semua Kategori --</option>
                         @foreach($categories->where('is_active', true) as $cat)<option class="opsi-kategori" value="{{ $cat->id }}">{{ $cat->name }}</option>@endforeach
                     </select>
                 </div>
                 <div>
                     <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-widest mb-1.5">Kelompok</label>
-                    <select name="kelompok" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20">
+                    <select name="kelompok" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                         <option value="dewasa">Dewasa</option>
                         <option value="anak">Anak</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-widest mb-1.5">Golongan (opsional)</label>
-                    <select name="id_golongan" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20">
+                    <select name="id_golongan" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                         <option value="">-- Semua Golongan --</option>
                         @foreach(\App\Models\GolonganKonsumen::orderBy('nama_golongan')->get() as $g)<option value="{{ $g->id_golongan }}">{{ $g->nama_golongan }}</option>@endforeach
                     </select>
                 </div>
                 <div>
                     <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-widest mb-1.5">Qty Min</label>
-                    <input type="number" name="qty_min" placeholder="1" required min="1" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20">
+                    <input type="number" name="qty_min" placeholder="1" required min="1" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                 </div>
                 <div>
                     <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-widest mb-1.5">Qty Max</label>
-                    <input type="number" name="qty_max" placeholder="~ (kosongkan)" min="1" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20">
+                    <input type="number" name="qty_max" placeholder="~ (kosongkan)" min="1" class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                 </div>
                 <div class="md:col-span-2">
                     <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-widest mb-1.5">Harga per Pcs (Rp)</label>
-                    <input type="text" inputmode="numeric" name="price" placeholder="0" required class="format-ribuan w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20">
+                    <input type="text" inputmode="numeric" name="price" placeholder="0" required class="format-ribuan w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                 </div>
                 <div class="md:col-span-2 flex items-end">
                     <x-button type="submit" variant="success" class="w-full">
@@ -412,15 +412,15 @@
                 </div>
             </form>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-                <select id="filter-harga-bahan" class="bg-white border border-slate-200 rounded-xl py-2.5 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20">
+                <select id="filter-harga-bahan" class="bg-white border border-slate-200 rounded-xl py-2.5 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                     <option value="">Semua Bahan</option>
                     @foreach($materials->where('is_active', true) as $m)<option class="opsi-bahan" value="{{ $m->id }}">{{ $m->name }}</option>@endforeach
                 </select>
-                <select id="filter-harga-tipe" class="bg-white border border-slate-200 rounded-xl py-2.5 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20">
+                <select id="filter-harga-tipe" class="bg-white border border-slate-200 rounded-xl py-2.5 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                     <option value="">Semua Tipe</option>
                     @foreach($productTypes->where('is_active', true) as $pt)<option class="opsi-tipe" value="{{ $pt->id }}">{{ $pt->name }}</option>@endforeach
                 </select>
-                <select id="filter-harga-kategori" class="bg-white border border-slate-200 rounded-xl py-2.5 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20">
+                <select id="filter-harga-kategori" class="bg-white border border-slate-200 rounded-xl py-2.5 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                     <option value="">Semua Kategori</option>
                     @foreach($categories->where('is_active', true) as $cat)<option class="opsi-kategori" value="{{ $cat->id }}">{{ $cat->name }}</option>@endforeach
                 </select>
@@ -447,7 +447,7 @@
             <input type="hidden" id="edit-simple-entity">
             <input type="hidden" id="edit-simple-id">
             <div class="ld">
-                <input placeholder=" " type="text" id="edit-simple-name" required class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <input placeholder=" " type="text" id="edit-simple-name" required class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                 <label class="ld-label" for="edit-simple-name">Nama<span class="ld-wajib" aria-hidden="true">*</span></label>
             </div>
             <div id="edit-simple-has-sleeve-collar-wrapper" class="hidden">
@@ -457,7 +457,7 @@
                 </label>
             </div>
             <div id="edit-simple-price-surcharge-wrapper" class="ld hidden">
-                <input placeholder=" " type="text" inputmode="numeric" id="edit-simple-price-surcharge" class="format-ribuan w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <input placeholder=" " type="text" inputmode="numeric" id="edit-simple-price-surcharge" class="format-ribuan w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                 <label class="ld-label" for="edit-simple-price-surcharge">Tambahan Harga (Rp)</label>
             </div>
             <div class="pt-2 flex gap-3">
@@ -472,14 +472,14 @@
             <input type="hidden" id="edit-komponen-scope-id">
             <p class="text-xs text-slate-400">Kosongkan supaya komponen ini berlaku untuk semua barang. Isi salah satu/keduanya supaya komponen ini cuma dihitung &amp; ditampilkan di SPK barang dengan Tipe Produk/Kategori yang cocok.</p>
             <div class="ld">
-                <select id="edit-komponen-scope-tipe" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <select id="edit-komponen-scope-tipe" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                     <option value="">-- Semua Tipe Produk --</option>
                     @foreach($productTypes->where('is_active', true) as $pt)<option class="opsi-tipe" value="{{ $pt->id }}">{{ $pt->name }}</option>@endforeach
                 </select>
                 <label class="ld-label" for="edit-komponen-scope-tipe">Tipe Produk</label>
             </div>
             <div class="ld">
-                <select id="edit-komponen-scope-kategori" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <select id="edit-komponen-scope-kategori" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                     <option value="">-- Semua Kategori --</option>
                     @foreach($categories->where('is_active', true) as $cat)<option class="opsi-kategori" value="{{ $cat->id }}">{{ $cat->name }}</option>@endforeach
                 </select>
@@ -496,23 +496,23 @@
         <form id="form-edit-ukuran" class="space-y-4">
             <input type="hidden" id="edit-ukuran-id">
             <div class="ld">
-                <input placeholder=" " type="text" id="edit-ukuran-name" required class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <input placeholder=" " type="text" id="edit-ukuran-name" required class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                 <label class="ld-label" for="edit-ukuran-name">Nama<span class="ld-wajib" aria-hidden="true">*</span></label>
             </div>
             <div class="ld">
-                <input placeholder=" " type="number" id="edit-ukuran-sort" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <input placeholder=" " type="number" id="edit-ukuran-sort" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                 <label class="ld-label" for="edit-ukuran-sort">Urutan Tampil</label>
             </div>
             <div class="ld">
-                <select id="edit-ukuran-kelompok" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner"><option value="dewasa">Dewasa</option><option value="anak">Anak</option></select>
+                <select id="edit-ukuran-kelompok" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 "><option value="dewasa">Dewasa</option><option value="anak">Anak</option></select>
                 <label class="ld-label" for="edit-ukuran-kelompok">Kelompok</label>
             </div>
             <div class="ld">
-                <input type="number" step="0.5" min="-90" max="100" id="edit-ukuran-percent" placeholder="mis. -20 untuk diskon 20%" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <input type="number" step="0.5" min="-90" max="100" id="edit-ukuran-percent" placeholder="mis. -20 untuk diskon 20%" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                 <label class="ld-label" for="edit-ukuran-percent">Selisih Harga (%) dari harga tier</label>
             </div>
             <div class="ld">
-                <input placeholder=" " type="text" inputmode="numeric" id="edit-ukuran-surcharge" class="format-ribuan w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <input placeholder=" " type="text" inputmode="numeric" id="edit-ukuran-surcharge" class="format-ribuan w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                 <label class="ld-label" for="edit-ukuran-surcharge">Tambahan Harga (Rp)</label>
             </div>
             <div class="pt-2 flex gap-3">
@@ -526,7 +526,7 @@
         <form id="form-edit-harga" class="space-y-4">
             <input type="hidden" id="edit-harga-id">
             <div class="ld">
-                <select id="edit-harga-bahan" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <select id="edit-harga-bahan" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                     <option value="">-- Semua Bahan --</option>
                     @foreach($materials->where('is_active', true) as $m)<option class="opsi-bahan" value="{{ $m->id }}">{{ $m->name }}</option>@endforeach
                 </select>
@@ -534,14 +534,14 @@
             </div>
             <div class="grid grid-cols-2 gap-3">
                 <div class="ld">
-                    <select id="edit-harga-tipe" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                    <select id="edit-harga-tipe" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                         <option value="">-- Semua --</option>
                         @foreach($productTypes->where('is_active', true) as $pt)<option class="opsi-tipe" value="{{ $pt->id }}">{{ $pt->name }}</option>@endforeach
                     </select>
                     <label class="ld-label" for="edit-harga-tipe">Tipe Produk</label>
                 </div>
                 <div class="ld">
-                    <select id="edit-harga-kategori" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                    <select id="edit-harga-kategori" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                         <option value="">-- Semua --</option>
                         @foreach($categories->where('is_active', true) as $cat)<option class="opsi-kategori" value="{{ $cat->id }}">{{ $cat->name }}</option>@endforeach
                     </select>
@@ -550,16 +550,16 @@
             </div>
             <div class="grid grid-cols-2 gap-3">
                 <div class="ld">
-                    <input placeholder=" " type="number" id="edit-harga-qty-min" min="1" required class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                    <input placeholder=" " type="number" id="edit-harga-qty-min" min="1" required class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                     <label class="ld-label" for="edit-harga-qty-min">Qty Min<span class="ld-wajib" aria-hidden="true">*</span></label>
                 </div>
                 <div class="ld">
-                    <input type="number" id="edit-harga-qty-max" min="1" placeholder="~ (kosongkan)" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                    <input type="number" id="edit-harga-qty-max" min="1" placeholder="~ (kosongkan)" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                     <label class="ld-label" for="edit-harga-qty-max">Qty Max</label>
                 </div>
             </div>
             <div class="ld">
-                <input placeholder=" " type="text" inputmode="numeric" id="edit-harga-price" required class="format-ribuan w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <input placeholder=" " type="text" inputmode="numeric" id="edit-harga-price" required class="format-ribuan w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                 <label class="ld-label" for="edit-harga-price">Harga per Pcs (Rp)<span class="ld-wajib" aria-hidden="true">*</span></label>
             </div>
             <div class="pt-2 flex gap-3">
@@ -758,10 +758,10 @@
                 <td class="p-1" data-type-td="${row.id}">
                     <input type="number" step="0.01" min="0" value="" placeholder="m"
                         onchange="${fnName}(${sizeId}, ${row.id}, 'meter', this.value)"
-                        class="w-16 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20 mb-1">
+                        class="w-16 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 mb-1">
                     <input type="number" step="1" min="0" value="" placeholder="g"
                         onchange="${fnName}(${sizeId}, ${row.id}, 'weight', this.value)"
-                        class="w-16 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20">
+                        class="w-16 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                 </td>`);
         });
     }
@@ -999,7 +999,7 @@
                 <td class="p-1" data-component-td="${data.row.id}">
                     <input type="number" step="0.01" min="0" value=""
                         onchange="simpanEstimasi(${sizeId}, ${data.row.id}, 'meter', this.value)"
-                        class="input-meter-cell w-20 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20">
+                        class="input-meter-cell w-20 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                 </td>`);
         });
 
@@ -1014,7 +1014,7 @@
                 <td class="p-1" data-component-td-berat="${data.row.id}">
                     <input type="number" step="1" min="0" value=""
                         onchange="simpanEstimasi(${sizeId}, ${data.row.id}, 'weight', this.value)"
-                        class="input-berat-cell w-20 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20">
+                        class="input-berat-cell w-20 bg-slate-50 border-none rounded-lg p-2 text-xs text-center focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                 </td>`);
         });
     });

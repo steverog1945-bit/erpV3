@@ -56,7 +56,7 @@
                          tag komponen terbukti membuat input tidak dirender - pola
                          input polos ini yang dipakai qty/harga dan tampil normal. --}}
                     <input type="date" name="tanggal" value="{{ old('tanggal', $pr ? $pr->tanggal->toDateString() : now()->toDateString()) }}" required
-                        class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner"
+                        class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 "
                         {{ $editable ? '' : 'readonly' }} />
                 </x-form.group>
                 <x-form.group label="Rencana supplier (opsional)" name="id_supplier_rencana" dalam>
@@ -69,7 +69,7 @@
                 </x-form.group>
                 <x-form.group label="Catatan (opsional)" name="catatan" dalam>
                     <input type="text" name="catatan" value="{{ old('catatan', $pr->catatan ?? '') }}" placeholder="Mis. stok Flexi Korea tinggal 15 m2"
-                        class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner"
+                        class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 "
                         {{ $editable ? '' : 'readonly' }} />
                 </x-form.group>
             </div>

@@ -33,7 +33,7 @@
         <form method="GET" action="{{ route('laporan.stok-bahan') }}" class="flex flex-wrap items-end gap-4">
             <div class="flex-1 min-w-[220px]">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Cari Bahan</label>
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Nama atau kode bahan..." class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Nama atau kode bahan..." class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
             </div>
             <div class="w-full md:w-52">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Kategori</label>

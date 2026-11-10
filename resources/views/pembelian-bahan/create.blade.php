@@ -44,7 +44,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <x-form.group label="No. Surat Jalan" dalam>
                     <div class="relative group cursor-pointer" onclick="openModal('sj-picker')" role="button" tabindex="-1" onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openModal('sj-picker'); }">
-                        <input type="text" id="display_no_sj" readonly class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner pr-11 cursor-pointer" placeholder="Pilih SJ...">
+                        <input type="text" id="display_no_sj" readonly class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500  pr-11 cursor-pointer" placeholder="Pilih SJ...">
                         <input type="hidden" name="id_kedatangan" id="id_kedatangan">
                         <i class="fas fa-search absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 group-hover:text-indigo-500"></i>
                     </div>
@@ -68,7 +68,7 @@
                 <x-form.group label="Voucher / Diskon Platform (Rp)" dalam><x-form.input type="text" inputmode="numeric" name="voucher" id="voucher" value="0" class="format-ribuan" oninput="calculateGrandTotal()" /></x-form.group>
 
                 <x-form.group label="Opsi Pajak" dalam>
-                    <div class="bg-slate-50 rounded-xl p-3 flex items-center justify-between shadow-inner h-[46px]">
+                    <div class="bg-white border border-slate-200 rounded-md p-3 flex items-center justify-between  h-[46px]">
                         <span class="text-xs font-medium text-slate-500 uppercase">PPN 11%</span>
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" id="tax_toggle" name="include_pajak" class="sr-only peer" onchange="calculateGrandTotal()">
@@ -240,20 +240,20 @@
                             <input type="hidden" name="id_bahan[]" value="${Number(item.id_bahan)}">
                         </td>
                         <td class="px-4 py-6 text-center">
-                            <input type="number" name="qty[]" step="0.01" value="${item.qty}" oninput="calculateGrandTotal()" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner w-24 text-center">
+                            <input type="number" name="qty[]" step="0.01" value="${item.qty}" oninput="calculateGrandTotal()" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500  w-24 text-center">
                             <p class="text-[10px] font-medium text-slate-400 mt-1.5 uppercase tracking-widest">${escHtml(item.satuan || 'Pcs')}</p>
                         </td>
                         <td class="px-4 py-6">
-                            <input type="text" inputmode="numeric" name="harga[]" value="" placeholder="0" oninput="calculateGrandTotal()" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner format-ribuan">
+                            <input type="text" inputmode="numeric" name="harga[]" value="" placeholder="0" oninput="calculateGrandTotal()" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500  format-ribuan">
                         </td>
                         <td class="px-4 py-6 space-y-2">
                             <div>
                                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-1 ml-1">Diskon</label>
-                                <input type="text" inputmode="numeric" name="diskon[]" placeholder="0" value="" oninput="calculateGrandTotal()" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner format-ribuan">
+                                <input type="text" inputmode="numeric" name="diskon[]" placeholder="0" value="" oninput="calculateGrandTotal()" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500  format-ribuan">
                             </div>
                             <div>
                                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-1 ml-1">Potongan</label>
-                                <input type="text" inputmode="numeric" name="potongan[]" placeholder="0" value="" oninput="calculateGrandTotal()" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner format-ribuan">
+                                <input type="text" inputmode="numeric" name="potongan[]" placeholder="0" value="" oninput="calculateGrandTotal()" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500  format-ribuan">
                             </div>
                         </td>
                         <td class="px-6 py-6 text-right">

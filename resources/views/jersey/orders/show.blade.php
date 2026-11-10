@@ -252,7 +252,7 @@
                         <span class="ml-auto text-[11px] font-normal text-slate-400 shrink-0">otomatis (Anda)</span>
                     </div>
                 @else
-                    <select name="id_desainer" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                    <select name="id_desainer" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                         <option value="">-- Tanpa Desainer --</option>
                         @foreach($desainerList as $ds)
                             <option value="{{ $ds->id_user }}" @selected((int) $order->id_desainer === (int) $ds->id_user)>{{ $ds->nama }}</option>
@@ -268,10 +268,10 @@
             </x-form.group>
             @bolehHarga
             <x-form.group label="Diskon (Rp)">
-                <input type="text" inputmode="numeric" name="discount" value="{{ number_format($order->discount, 0, ',', '.') }}" class="format-ribuan w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <input type="text" inputmode="numeric" name="discount" value="{{ number_format($order->discount, 0, ',', '.') }}" class="format-ribuan w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
             </x-form.group>
             <x-form.group label="Mode Diskon">
-                <select id="mode-diskon" onchange="toggleModeDiskon()" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <select id="mode-diskon" onchange="toggleModeDiskon()" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                     <option value="manual">Manual (Rp total)</option>
                     <option value="tier">Dari tier harga (potongan per pcs)</option>
                 </select>
@@ -279,7 +279,7 @@
             <div id="wrapper-diskon-tier" class="hidden md:col-span-3">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                     <x-form.group label="Potongan per pcs dari tier (Rp)">
-                        <input type="text" id="potongan-per-pcs" inputmode="numeric" class="format-ribuan w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner" placeholder="mis. 20.000">
+                        <input type="text" id="potongan-per-pcs" inputmode="numeric" class="format-ribuan w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 " placeholder="mis. 20.000">
                     </x-form.group>
                     <div class="flex items-end">
                         <button type="button" onclick="terapkanDiskonDariTier()" class="w-full py-3 rounded-xl bg-indigo-50 text-indigo-600 text-xs font-medium uppercase tracking-widest hover:bg-indigo-100">Terapkan</button>
@@ -289,12 +289,12 @@
             </div>
             <input type="hidden" id="total-qty-order" value="{{ $order->lines->sum(fn($l) => $l->sizeQuantities->sum('quantity') ?: $l->qty) }}">
             <x-form.group label="Biaya Tambahan (Rp)">
-                <input type="text" inputmode="numeric" name="additional_charge" value="{{ number_format($order->additional_charge, 0, ',', '.') }}" class="format-ribuan w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <input type="text" inputmode="numeric" name="additional_charge" value="{{ number_format($order->additional_charge, 0, ',', '.') }}" class="format-ribuan w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
             </x-form.group>
             @endbolehHarga
             <div class="md:col-span-3">
                 <x-form.group label="Catatan">
-                    <textarea name="notes" rows="2" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">{{ $order->notes }}</textarea>
+                    <textarea name="notes" rows="2" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">{{ $order->notes }}</textarea>
                 </x-form.group>
             </div>
             <div class="md:col-span-3 flex justify-end">
@@ -379,7 +379,7 @@
                 </x-form.group>
                 <x-form.group label="Jumlah (Rp)" dalam>
                     <input type="text" inputmode="numeric" name="jumlah_display" id="pembayaran-jumlah-display" required
-                        class="format-ribuan w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner"
+                        class="format-ribuan w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 "
                         placeholder="0">
                     <input type="hidden" name="jumlah" id="pembayaran-jumlah">
                 </x-form.group>
@@ -407,7 +407,7 @@
                 <p class="bukti-status text-[10px] mt-1"></p>
             </div>
             <x-form.group label="Keterangan (opsional)" class="mb-4" dalam>
-                <input type="text" name="keterangan" placeholder="mis. Cicilan ke-2" class="w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <input type="text" name="keterangan" placeholder="mis. Cicilan ke-2" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
             </x-form.group>
             <div class="pt-2 flex gap-3">
                 <button type="button" onclick="closeModal('tambah-pembayaran')" class="flex-1 py-3 rounded-xl bg-slate-100 text-slate-500 text-xs font-medium uppercase">Batal</button>

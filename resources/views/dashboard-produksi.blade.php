@@ -37,7 +37,7 @@
     </a>
     <a href="{{ route('spk.index', ['urgent_only' => 1]) }}" class="bg-white p-6 rounded-lg border border-slate-100 shadow-sm hover:shadow-md transition text-center group">
         <div class="text-3xl font-medium text-rose-500 group-hover:text-rose-600 transition-colors">{{ $urgentAktif }}</div>
-        <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-1">🔥 Urgent Aktif</div>
+        <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-1"><i class="fas fa-fire text-rose-500 mr-1" aria-hidden="true"></i>Urgent Aktif</div>
     </a>
 </div>
 
@@ -55,7 +55,7 @@
                 <div class="flex items-center gap-2 flex-wrap">
                     <span class="text-[13px] font-medium text-slate-700 uppercase">{{ $s->nama_file }}</span>
                     @if($s->status_urgent)
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-medium uppercase tracking-wider bg-rose-50 text-rose-600 border border-rose-100">🔥 Urgent</span>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-medium uppercase tracking-wider bg-rose-50 text-rose-600 border border-rose-100"><i class="fas fa-fire text-rose-500 mr-1" aria-hidden="true"></i>Urgent</span>
                     @endif
                 </div>
                 <div class="text-[11px] text-slate-400">{{ $s->nomor_nota }} &middot; {{ $s->nama_konsumen }} &middot; {{ $s->divisi }} &middot; Qty {{ angka($s->qty, 4) }}</div>
@@ -73,21 +73,21 @@
 {{-- ELEMEN PENDUKUNG - akses cepat ke halaman kerja sehari-hari. --}}
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
     <a href="{{ route('spk.index', ['status_spk' => 'Antre']) }}" class="bg-white p-6 rounded-lg border border-slate-100 shadow-sm hover:shadow-md hover:border-indigo-200 transition flex items-center gap-4">
-        <div class="bg-amber-100 p-3 rounded-lg text-2xl">📋</div>
+        <div class="bg-amber-100 p-3 rounded-lg"><i class="fas fa-clipboard-list text-2xl text-amber-600" aria-hidden="true"></i></div>
         <div>
             <h4 class="text-sm font-medium text-slate-800">Ambil Pekerjaan</h4>
             <p class="text-[11px] text-slate-400">Lihat & ambil SPK yang masih Antre</p>
         </div>
     </a>
     <a href="{{ route('produksi.index') }}" class="bg-white p-6 rounded-lg border border-slate-100 shadow-sm hover:shadow-md hover:border-indigo-200 transition flex items-center gap-4">
-        <div class="bg-indigo-100 p-3 rounded-lg text-2xl">🖨️</div>
+        <div class="bg-indigo-100 p-3 rounded-lg"><i class="fas fa-print text-2xl text-indigo-600" aria-hidden="true"></i></div>
         <div>
             <h4 class="text-sm font-medium text-slate-800">Proses Produksi</h4>
             <p class="text-[11px] text-slate-400">Update qty cetak & tandai selesai</p>
         </div>
     </a>
     <a href="{{ route('finishing.index') }}" class="bg-white p-6 rounded-lg border border-slate-100 shadow-sm hover:shadow-md hover:border-indigo-200 transition flex items-center gap-4">
-        <div class="bg-emerald-100 p-3 rounded-lg text-2xl">✂️</div>
+        <div class="bg-emerald-100 p-3 rounded-lg"><i class="fas fa-scissors text-2xl text-emerald-600" aria-hidden="true"></i></div>
         <div>
             <h4 class="text-sm font-medium text-slate-800">Finishing</h4>
             <p class="text-[11px] text-slate-400">Kelola tahap finishing produk</p>

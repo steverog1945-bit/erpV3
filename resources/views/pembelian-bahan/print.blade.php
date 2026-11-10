@@ -38,7 +38,7 @@
             <a href="{{ route('pembelian-bahan.cetak', [$pembelian->id_pembelian, 'a4']) }}" class="{{ $format === 'a4' ? 'aktif' : '' }}" title="Kertas A4 biasa (210 x 297 mm)">Kertas A4</a>
             <a href="{{ route('pembelian-bahan.cetak', [$pembelian->id_pembelian, 'continuous']) }}" class="{{ $format === 'continuous' ? 'aktif' : '' }}" title="Kertas sambung dot-matrix (9,5 x 11 inci)">Continuous Form</a>
         </span>
-        <button onclick="window.print()" style="margin:0">🖨️ Cetak</button>
+        <button onclick="window.print()" style="margin:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg> Cetak</button>
         <span class="info-kertas">Format terpilih: <b>{{ $format === 'continuous' ? 'Continuous Form 9,5 x 11 inci' : 'A4 (210 x 297 mm)' }}</b> - atur juga ukuran kertas yang sama di dialog cetak browser.</span>
     </div>
 

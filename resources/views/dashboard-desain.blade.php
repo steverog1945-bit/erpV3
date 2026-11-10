@@ -40,7 +40,7 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
     <div class="bg-white p-6 rounded-lg border border-slate-100 shadow-sm hover:shadow-md transition">
         <div class="flex items-center gap-4">
-            <div class="bg-emerald-100 p-3 rounded-lg text-2xl">✅</div>
+            <div class="bg-emerald-100 p-3 rounded-lg"><i class="fas fa-check-circle text-2xl text-emerald-600" aria-hidden="true"></i></div>
             <div>
                 <p class="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Selesai Produksi</p>
                 <h3 class="text-lg font-medium text-slate-900">{{ $spkSelesai }} item</h3>
@@ -49,7 +49,7 @@
     </div>
     <div class="bg-white p-6 rounded-lg border border-slate-100 shadow-sm hover:shadow-md transition">
         <div class="flex items-center gap-4">
-            <div class="bg-orange-100 p-3 rounded-lg text-2xl">🔥</div>
+            <div class="bg-orange-100 p-3 rounded-lg"><i class="fas fa-fire text-2xl text-orange-600" aria-hidden="true"></i></div>
             <div>
                 <p class="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Item Urgent Aktif</p>
                 <h3 class="text-lg font-medium text-slate-900">{{ $urgentAktif }}</h3>
@@ -93,7 +93,7 @@
     {{-- PERLU PERHATIAN (URGENT) --}}
     <div class="bg-white rounded-lg border border-slate-100 shadow-sm overflow-hidden">
         <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
-            <h3 class="text-sm font-medium text-slate-800">🔥 Perlu Perhatian</h3>
+            <h3 class="text-sm font-medium text-slate-800"><i class="fas fa-fire text-rose-500 mr-1.5" aria-hidden="true"></i>Perlu Perhatian</h3>
             <a href="{{ route('spk.index', ['urgent_only' => 1]) }}" class="text-[10px] font-medium text-indigo-500 uppercase tracking-widest hover:underline">Semua</a>
         </div>
         <div class="divide-y divide-slate-50">

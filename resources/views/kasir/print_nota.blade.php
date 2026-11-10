@@ -190,7 +190,7 @@
     </div>
 
     <div class="no-print" style="display:flex;gap:8px;justify-content:center;margin-top:12px;">
-        <button onclick="window.print()">🖨️ Cetak</button>
+        <button onclick="window.print()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg> Cetak</button>
         <a href="{{ route('kasir.kelola') }}" style="display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;background:#64748b;color:#fff;font-size:13px;text-decoration:none;">← Kembali ke Monitoring Kasir</a>
     </div>
 </body>

@@ -192,7 +192,7 @@
 
                     <div id="wrapper-bank" class="hidden mt-5">
                         <label class="block text-[11px] font-medium text-slate-400 mb-2">Rekening Tujuan</label>
-                        <select name="id_bank" id="input-bank" class="w-full bg-slate-50 border-none rounded-2xl py-3 px-4 text-sm font-medium text-slate-600 shadow-inner focus:ring-2 focus:ring-indigo-500/20">
+                        <select name="id_bank" id="input-bank" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600  focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                             <option value="">-- Pilih Rekening --</option>
                             @foreach($banks as $b)
                                 <option value="{{ $b->id_bank }}">{{ $b->nama_bank }} - {{ $b->nomor_rekening }} ({{ $b->atas_nama }})</option>
@@ -342,7 +342,7 @@
                  Biaya Cetak jadi komponen utama). --}}
             <div>
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2">Biaya Cetak</label>
-                <input type="text" id="ch-cetak" class="format-ribuan-modal w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <input type="text" id="ch-cetak" class="format-ribuan-modal w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
             </div>
 
             {{-- Biaya Desain/Finishing disembunyikan default, cuma muncul kalau
@@ -351,11 +351,11 @@
                  selaras dengan penjualan/create.blade.php. --}}
             <div id="ch-wrapper-desain" class="hidden">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2">Biaya Desain</label>
-                <input type="text" id="ch-desain" class="format-ribuan-modal w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <input type="text" id="ch-desain" class="format-ribuan-modal w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
             </div>
             <div id="ch-wrapper-finishing" class="hidden">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2">Biaya Finishing</label>
-                <input type="text" id="ch-finishing" class="format-ribuan-modal w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 shadow-inner">
+                <input type="text" id="ch-finishing" class="format-ribuan-modal w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
             </div>
             <div class="flex flex-wrap gap-x-4 gap-y-1">
                 <button type="button" id="ch-btn-tambah-desain" onclick="tampilkanChBiaya('desain')" class="text-indigo-500 hover:text-indigo-700 text-[10px] font-medium uppercase tracking-widest underline underline-offset-4 decoration-dotted">

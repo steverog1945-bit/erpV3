@@ -3,7 +3,7 @@
 @section('content')
 <div id="new-data-alert" class="hidden fixed top-10 left-1/2 -translate-x-1/2 z-[100]">
     <button onclick="location.reload()" class="bg-amber-500 text-white px-8 py-4 rounded-2xl shadow-2xl font-medium text-sm flex items-center gap-3 animate-bounce border-4 border-white">
-        <span class="text-xl">📩</span> <span id="text-count">ADA PESANAN BARU!</span>
+        <i class="fas fa-inbox text-amber-100 text-lg" aria-hidden="true"></i> <span id="text-count">ADA PESANAN BARU!</span>
     </button>
 </div>
 
@@ -29,13 +29,13 @@
                 <p class="text-lg font-medium text-slate-800">Rp {{ number_format($t->total_bayar, 0, ',', '.') }}</p>
             </div>
             <a href="{{ url('/kasir/bayar-form/'.$t->id_transaksi) }}" class="bg-slate-900 group-hover:bg-indigo-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center transition-all shadow-sm">
-                <span class="text-xl">💰</span>
+                <i class="fas fa-money-bill text-white text-lg" aria-hidden="true"></i>
             </a>
         </div>
     </div>
     @empty
     <div class="col-span-full py-20 text-center">
-        <div class="text-6xl mb-4">☕</div>
+        <i class="fas fa-mug-hot text-5xl text-slate-300 mb-4" aria-hidden="true"></i>
         <p class="text-slate-400 font-medium italic text-sm">Belum ada pesanan baru. Waktunya istirahat sejenak.</p>
     </div>
     @endforelse
