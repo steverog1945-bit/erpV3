@@ -1,6 +1,6 @@
 {{--
     Header perusahaan bersama untuk semua dokumen print (nota, closing kas,
-    SPK) - sebelumnya cuma <h1>PRINT-ERP</h1> hardcode, tidak ada logo/
+    SPK) - sebelumnya cuma <h1>nama aplikasi</h1> hardcode, tidak ada logo/
     alamat. Include dengan variabel $docTitle (judul dokumen, mis. "Nota
     Penjualan") - $format harus sudah ada di scope pemanggil.
 --}}

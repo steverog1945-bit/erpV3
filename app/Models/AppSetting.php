@@ -46,7 +46,7 @@ class AppSetting extends Model
     public static function current(): self
     {
         return Cache::rememberForever('app_settings_current', function () {
-            return self::first() ?? self::create(['nama_aplikasi' => 'PRINT-ERP']);
+            return self::first() ?? self::create(['nama_aplikasi' => 'Orion Grafika']);
         });
     }
 

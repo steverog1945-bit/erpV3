@@ -19,7 +19,7 @@ return new class extends Migration
         if (!Schema::hasTable('app_settings')) {
             Schema::create('app_settings', function (Blueprint $table) {
                 $table->id();
-                $table->string('nama_aplikasi')->default('PRINT-ERP');
+                $table->string('nama_aplikasi')->default('Orion Grafika');
                 $table->text('alamat')->nullable();
                 $table->string('telepon')->nullable();
                 $table->string('email')->nullable();
@@ -28,7 +28,7 @@ return new class extends Migration
             });
 
             DB::table('app_settings')->insert([
-                'nama_aplikasi' => 'PRINT-ERP',
+                'nama_aplikasi' => 'Orion Grafika',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

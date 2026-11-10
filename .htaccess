@@ -1,0 +1,59 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+    RewriteEngine On
+
+    # ------------------------------------------------------------------
+    # BLOKIR BERKAS INTERNAL (audit Fase 0, C-1)
+    # Aplikasi dilayani dari folder proyek (bukan public/), jadi tanpa
+    # aturan ini Apache menyajikan langsung file apa pun yang ada:
+    # .env, dump *.sql, backups/, storage/logs, composer.json, dst.
+    # Semua di bawah dibalas 403. Folder public/ punya .htaccess sendiri
+    # dan TIDAK terpengaruh (aset, build, storage-link tetap jalan).
+    # ------------------------------------------------------------------
+    # 1) Berkas/folder tersembunyi (.env, .git, dst) - kecuali .well-known
+    RewriteRule (^|/)\.(?!well-known(/|$)) - [F,L]
+    # 2) Folder kode, data, dan cadangan di root proyek
+    RewriteRule ^(app|bootstrap|config|database|routes|resources|tests|docs|scripts|vendor|node_modules|storage|backups|\.claude)(/|$) - [F,L,NC]
+    # 3) Ekstensi sensitif di mana pun di luar public/
+    RewriteRule ^(?!public/).*\.(sql|log|ini|md|lock|json|txt|bak|dump|sh|bat|cmd|ps1|yml|yaml|xml|dist|env|zip|gz|7z|rar|tar|old|orig|swp)$ - [F,L,NC]
+    
+    # 4) Skrip internal & berkas kerja di root
+    RewriteRule ^(artisan|phpunit\.xml|vite\.config\.js)$ - [F,L,NC]
+    # 5) Skrip PHP di luar public/ TIDAK BOLEH dieksekusi lewat browser.
+    #
+    #    Celah ini nyata dan sudah exploited: front controller di bawah hanya
+    #    mengambil alih berkas yang TIDAK ada di disk (RewriteCond !-f), jadi
+    #    setiap .php yang tersimpan di root akan dieksekusi Apache langsung.
+    #    Aturan 3 di atas tidak menangkap .php, dan menambahkannya ke daftar
+    #    ekstensi terlarang pun TIDAK akan menutup celah ini - .php bukan
+    #    sekadar berkas data, dia berkas yang dijalankan.
+    #
+    #    Dikonfirmasi dengan eksekusi nyata: _update_harga.php dipanggil lewat
+    #    HTTP dan menulis ke database operasional oriondb.
+    #
+    #    Pengecualian hanya index.php (front controller) dan apa pun di bawah
+    #    public/, yang punya .htaccess sendiri.
+    
+    RewriteRule ^(?!public/)(?!index\.php$).*\.php$ - [F,L,NC]
+
+    # Handle Authorization Header
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Handle X-XSRF-Token Header
+    RewriteCond %{HTTP:x-xsrf-token} .
+    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Send Requests To Front Controller...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
