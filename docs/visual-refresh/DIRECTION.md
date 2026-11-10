@@ -1,7 +1,17 @@
-# Orion Grafika — Gambaran Aplikasi Laravel yang Lebih Profesional
+# Orion Grafika, Gambaran Aplikasi Laravel yang Lebih Profesional
 
-Status: **DRAFT ARAH VISUAL — menunggu keputusan owner (bukan implementasi).**
-Tanggal: 2026-11-10 · Cabang: `visual/pro-direction` · Repo: `steverog1945-bit/erpV3`
+Status: **V2 SIAP DIREVIEW** (bukan implementasi penuh di aplikasi). Arah terpilih owner: **Command Center** (lihat UPDATE di bawah).
+Repo: `steverog1945-bit/erpV3` · Cabang: `visual/pro-direction`
+
+## UPDATE 2026-11-10 (pemilik, arah final)
+Pemilik menolak arah Tema A/B dan memilih **rombak total** dengan dua gambar referensi (dasbor logistik gaya "command center", light, biru). Keputusan yang sudah diambil & dibangun:
+- Sidebar **dihapus dari desain**, navigasi pindah ke **topbar 2 baris** (utilitas + tab modul), seperti aplikasi desktop.
+- Palet: halaman ice (`#E9EEFA` wash), kartu putih `#FFFFFF`, tinta navy `#0F1E3E`, aksen biru `#2563EB` (hover `#1D4ED8`), border `#E3E9F6`. Bukan teal, bukan violet, bukan gradient pelangi.
+- Layar yang dibangun di `PREVIEW.html`: **Dasbor** (KPI + gauge SVG animasi, siklus produksi 5 tahap dengan Stage 05 aktif, panel Efisiensi/Hambatan/Peta Hub, antrean prioritas), **Pesanan** (tabel padat ala referensi: rute + progress, pill prioritas & status pipeline, pagination), **Masuk** (split-screen navy).
+- Animasi memakai CSS/JS yang setara framer-motion (spring stiffness ~260–400, damping ~18–24; stagger 90–140ms; gauge sweep; reduced-motion dihormati). framer-motion asli hanya berjalan di React, sedangkan aplikasi ini Blade + jQuery tanpa React; skill `framer-motion-animator` dipakai sebagai panduan fisika dan koreografi. Implementasi literal framer-motion menuntut migrasi island React, belum dilakukan, perlu persetujuan terpisah.
+- Anti-slop di semua lini (mode DURING): tanpa emoji, tanpa em dash, copy Bahasa Indonesia lugas, badge hanya status nyata, kontras AA, semua kontrol berfungsi (diverifikasi via klik otomatis: ⌘K, Escape, hub selector, notif, stage, subtab, toast, login).
+- Angka di layar = **sintetis**, diberi label "PREVIEW KONSEP · DATA SINTETIS" di concept bar; bukan metrik nyata (R-17/R-38).
+- Kode aplikasi (`app/`, `resources/`, `routes/`, `database/`, `.env`) belum disentuh. Migrasi penuh ke V3 dilakukan bertahap setelah persetujuan pemilik.
 
 Dokumen ini merangkum hasil audit penuh aplikasi (V2 berjalan = referensi logika & struktur; V3 = target visual), lalu menyajikan arah desain profesional yang diusulkan. **Tidak ada kode aplikasi, database, atau `.env` yang berubah.** Lihat `PREVIEW.html` di folder yang sama untuk mockup interaktif (pilih tema & layar).
 
@@ -11,20 +21,20 @@ Dokumen ini merangkum hasil audit penuh aplikasi (V2 berjalan = referensi logika
 
 ### 1a. Duplikasi & token berceceran (tidak ada satu kebenaran)
 - Tiga lapis token hidup bersamaan: `BrandThemeService` (preset `orion-classic` / `copilot-light` / `coastal-slate` / **aktif: `deep-ocean`**), `resources/css/app.css` (`@theme` + ratusan aturan `html.dark … !important`), dan `resources/css/ui-refresh.css` (token OpenCode). Nilai light/dark ditulis 3× dengan fallback berbeda; `.card` ada di dua file dengan radius berbeda; aturan `.rounded-2xl→8px` vs `.rounded-3xl→3px !important` bertabrakan.
-- Mekanisme `!important` massal: huruf kapital dimatikan paksa, `.text-xs/[8–12px]` dipaksa jadi 13px — markup berbohong, CSS yang menang. Sulit dipelihara.
-- Preset `indigo-600` yang tampil ≠ token teal aplikasi (nama token "indigo" berisi ramp teal/slate — warisan rename).
+- Mekanisme `!important` massal: huruf kapital dimatikan paksa, `.text-xs/[8–12px]` dipaksa jadi 13px, markup berbohong, CSS yang menang. Sulit dipelihara.
+- Preset `indigo-600` yang tampil ≠ token teal aplikasi (nama token "indigo" berisi ramp teal/slate, warisan rename).
 
 ### 1b. Halaman error & permukaan publik bergaya berbeda-beda
-- Semua halaman `errors/*` memuat **`cdn.tailwindcss.com`** (sudah diganti mandiri di build terbaru — lihat commit `d2398278`), dan kini didesain ulang penuh di commit tersebut. **V3 hilang 4 berkas error page** (`layout`, `405`, `419`, `429`).
+- Semua halaman `errors/*` memuat **`cdn.tailwindcss.com`** (sudah diganti mandiri di build terbaru, lihat commit `d2398278`), dan kini didesain ulang penuh di commit tersebut. **V3 hilang 4 berkas error page** (`layout`, `405`, `419`, `429`).
 - Publik (landing & `/masuk`) memakai palet **ROYAL INDIGO** (`#15143F` deep night, `#2E318E` royal indigo, `#4D55F8` electric violet, CTA `#FF6B17`). Offline.html memakai teal Orion Classic (`#006C7B`). App ERP memakai deep-ocean (`#146A80`). Tiga identitas dalam satu produk.
 - Sidebar berisi blok "Status Kas" besar, lekukan aktif bergaya "notch", puluhan SVG inline beragam stroke, campur ikon FA/emoji/SVG. Tidak ada footer aplikasi, tidak ada breadcrumb (dihaki subtitle "Jalur / Halaman" manual).
 
 ### 1c. Tampilan tidak konsisten antar halaman
-- Padding vertikal py-5/6/10; lebar container 1600px/6xl/5xl/3xl/90vw; tombol primer 3 warna berbeda di source (`x-button primary` = amber dengan fallback `#4F46E5`, `bg-indigo-600` ad hoc, `bg-[#006C7B]` hardcode); input "shadow-inner + border-none + bg-slate-50" (pola lama) vs token input (border 1px putih/radius 6px) vs label mengambang `.ld` (radius 16px/58px, bahasa ketiga) — tiga dialek isian; Swal radius 28px; radius source `rounded-2xl` di mana-mana tapi efektif 8px karena `!important`.
+- Padding vertikal py-5/6/10; lebar container 1600px/6xl/5xl/3xl/90vw; tombol primer 3 warna berbeda di source (`x-button primary` = amber dengan fallback `#4F46E5`, `bg-indigo-600` ad hoc, `bg-[#006C7B]` hardcode); input "shadow-inner + border-none + bg-slate-50" (pola lama) vs token input (border 1px putih/radius 6px) vs label mengambang `.ld` (radius 16px/58px, bahasa ketiga), tiga dialek isian; Swal radius 28px; radius source `rounded-2xl` di mana-mana tapi efektif 8px karena `!important`.
 - Teks tertiary `#5F7167` gagal kontras AA untuk teks kecil; ada 13px paksaan; print CSS duplikat di laporan; laporan/akuntansi satu file dua identitas (layar/cetak).
 
-### 1d. V3 (target) — snapshot penuh V2, belum jalan
-- Laravel 12, 229 migrasi, ~200 blade, 84 controller / 80 model / 43 service; routes identik V2; `public/build` ada (artefak lokal); CI tidak ada; README masih skeleton Laravel; **`.env` V3 rusak** (parse error — 500) dan **`.env.sqlite.bak` ada di disk tanpa gitignore**; `public/storage-old2` **masih tersimpan di history git erpV3** (data unggahan pelanggan — lihat §5); root penuh ±43 laporan markdown & folder agen (`anti-slop*`, `skills*`).
+### 1d. V3 (target), snapshot penuh V2, belum jalan
+- Laravel 12, 229 migrasi, ~200 blade, 84 controller / 80 model / 43 service; routes identik V2; `public/build` ada (artefak lokal); CI tidak ada; README masih skeleton Laravel; **`.env` V3 rusak** (parse error, 500) dan **`.env.sqlite.bak` ada di disk tanpa gitignore**; `public/storage-old2` **masih tersimpan di history git erpV3** (data unggahan pelanggan, lihat §5); root penuh ±43 laporan markdown & folder agen (`anti-slop*`, `skills*`).
 
 ---
 
@@ -35,13 +45,13 @@ Dokumen ini merangkum hasil audit penuh aplikasi (V2 berjalan = referensi logika
 3. **Keakraban yang diraih, bukan kejutan.** Pola ERP standar done well: sidebar, topbar + breadcrumb + ⌘K, tabel, form, toast/dialog, print.
 4. **Token tunggal, tanpa `!important`.** Radius 4/6/8, skala spacing 4/8/12/16/24/32, bobot 400/500, Inter self-hosted, kontras AA (min 4.5:1 teks).
 5. **Desktop ≥768px baseline; mobile <768px di `@media (max-width: 767.98px)`** (aturan proyek). Zero-diff desktop per rilis.
-6. **Aksesibilitas struktural:** focus-visible ring accent, prefers-reduced-motion, dark mode via token (bukan ratusan `html.dark`), icon sprite tunggal (SVG stroke 1.5) — tanpa emoji & tanpa FA penuh.
+6. **Aksesibilitas struktural:** focus-visible ring accent, prefers-reduced-motion, dark mode via token (bukan ratusan `html.dark`), icon sprite tunggal (SVG stroke 1.5), tanpa emoji & tanpa FA penuh.
 
 ---
 
-## 3. Arah visual yang diusulkan — pilih SATU (keputusan owner)
+## 3. Arah visual yang diusulkan, pilih SATU (keputusan owner)
 
-| | **TEMA A — "Deep Ocean Pro"** (evolusi, risiko rendah) | **TEMA B — "Royal Indigo Pro"** (satu identitas, rekomendasi) |
+| | **TEMA A, "Deep Ocean Pro"** (evolusi, risiko rendah) | **TEMA B, "Royal Indigo Pro"** (satu identitas, rekomendasi) |
 |---|---|---|
 | Sidebar | `#102126` → `#1A3037` (deep teal-navy), aksen `#56B8CD` | `#15143F` (deep night), aksen `#4D55F8` (electric violet) |
 | Aksi utama | `#146A80` (teal-deep), hover `#0E5563`, teks putih | `#4D55F8`, hover `#2E318E` (royal indigo), teks putih |
@@ -51,9 +61,9 @@ Dokumen ini merangkum hasil audit penuh aplikasi (V2 berjalan = referensi logika
 | Publik (landing/login/errors/offline) | menyesuaikan ke teal-navy | **sudah** ROYAL INDIGO (tinggal disatukan) |
 | Karakter | kalem, utilitarian, konservatif | lebih modern & brandable (sesuai publik yang sudah ada) |
 | Biaya migrasi | kecil (token saja) | kecil–sedang (token + publik sudah cocok) |
-| Risiko | identitas publik tetap beda (dua dunia) | penyatuan mengubah nuansa app — perlu persetujuan owner |
+| Risiko | identitas publik tetap beda (dua dunia) | penyatuan mengubah nuansa app, perlu persetujuan owner |
 
-Rekomendasi: **Tema B**, karena permukaan publik sudah memakai ROYAL INDIGO dan errors terbaru sudah didesain ulang dengan warna teal; mengunify ke satu keluarga menghapus "tiga aplikasi dalam satu". Kerangka (layout) identik untuk keduanya — yang berubah hanya token. Keduanya tersedia di PREVIEW.html (tombol di kanan atas).
+Rekomendasi: **Tema B**, karena permukaan publik sudah memakai ROYAL INDIGO dan errors terbaru sudah didesain ulang dengan warna teal; mengunify ke satu keluarga menghapus "tiga aplikasi dalam satu". Kerangka (layout) identik untuk keduanya, yang berubah hanya token. Keduanya tersedia di PREVIEW.html (tombol di kanan atas).
 
 Nilai yang dipakai bersama (kedua tema):
 ```
@@ -63,7 +73,7 @@ spacing: 4 · 8 · 12 · 16 · 24 · 32 · konten max 1600px · form max 720px �
 tabel: row 44px · header uppercase 11px · hover lembut · sticky header · kolom uang kanan rata
 komponen: 1 tombol (primary/subtle/ghost) · 1 input · 1 kartu · 1 tabel · 1 badge (dot) · 1 empty state · 1 dialog (8px)
 ikon: SVG stroke 1.5, satu set (sprite) · fokus: outline 2px accent + ring soft
-dark: token penuh (--surface-*, --text-*, --border-*, --accent-*) — tanpa !important override
+dark: token penuh (--surface-*, --text-*, --border-*, --accent-*), tanpa !important override
 ```
 
 ---
@@ -91,12 +101,12 @@ dark: token penuh (--surface-*, --text-*, --border-*, --accent-*) — tanpa !imp
 ## 5. Keputusan yang HANYA bisa diambil owner (blokir implementasi)
 
 1. **Tema A atau Tema B** untuk penyatuan identitas.
-2. **`public/storage-old2` di repo `erpV3`**: file penghapusan ratusan aset unggahan pelanggan (order thumbnails, logo, .cdr) **masih ada di history commit awal erpV3** (GitHub). Pilihan: (a) biarkan history, catat risiko; (b) purge history + force-push (koordinat ion GitHub, koordinasi semua clone); (c) pindahkan erpV3 ke repo privat atau hapus repo & buat ulang. **Belum ada yang dikerjakan — menunggu keputusan.**
-3. **`.env.sqlite.bak`** (berisi kemungkinan kredensial) di disk V3 — belum di-commit, tapi rawan. Perlu keputusan hapus/arsip (tidak disentuh agen).
-4. **Kelayakan menjalankan V3**: `.env` rusak (parse error) — perbaikan `.env` hanya oleh owner (agen dilarang membaca/mengubah `.env`). Untuk melihat hasil refresh, minimal V3 butuh `.env` uji (sqlite sintetis + `APP_KEY`) dari owner, atau review lewat PREVIEW.html/screenshot statis.
-5. **Pemulihan 4 error page yang hilang di V3** (`layout`, `405`, `419`, `429`) — usul: disalin dari V2 saat tahap refresh (file hanya tampilan, bukan logika).
+2. **`public/storage-old2` di repo `erpV3`**: file penghapusan ratusan aset unggahan pelanggan (order thumbnails, logo, .cdr) **masih ada di history commit awal erpV3** (GitHub). Pilihan: (a) biarkan history, catat risiko; (b) purge history + force-push (koordinat ion GitHub, koordinasi semua clone); (c) pindahkan erpV3 ke repo privat atau hapus repo & buat ulang. **Belum ada yang dikerjakan, menunggu keputusan.**
+3. **`.env.sqlite.bak`** (berisi kemungkinan kredensial) di disk V3, belum di-commit, tapi rawan. Perlu keputusan hapus/arsip (tidak disentuh agen).
+4. **Kelayakan menjalankan V3**: `.env` rusak (parse error), perbaikan `.env` hanya oleh owner (agen dilarang membaca/mengubah `.env`). Untuk melihat hasil refresh, minimal V3 butuh `.env` uji (sqlite sintetis + `APP_KEY`) dari owner, atau review lewat PREVIEW.html/screenshot statis.
+5. **Pemulihan 4 error page yang hilang di V3** (`layout`, `405`, `419`, `429`), usul: disalin dari V2 saat tahap refresh (file hanya tampilan, bukan logika).
 6. **CI di V3** (build Vite) belum ada; usul tambah workflow build seperti V2.
-7. **README V3** masih skeleton Laravel — usul tulis README ERP + panduan DB sintetis.
+7. **README V3** masih skeleton Laravel, usul tulis README ERP + panduan DB sintetis.
 
 ---
 

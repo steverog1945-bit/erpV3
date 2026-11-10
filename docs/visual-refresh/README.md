@@ -1,14 +1,14 @@
-# Visual Refresh — Konsep (2026-11)
+# Visual Refresh, Konsep (2026-11)
 
-STATUS: **DRAFT ARAH — menunggu keputusan owner. Bukan kode aplikasi.**
+STATUS: **DRAFT ARAH, menunggu keputusan owner. Bukan kode aplikasi.**
 
 ## Isi folder
-- `DIRECTION.md` — hasil audit penuh aplikasi + arah visual yang diusulkan
+- `DIRECTION.md`, hasil audit penuh aplikasi + arah visual yang diusulkan
   (dua tema, rencana fase, keputusan yang menunggu owner).
-- `PREVIEW.html` — mockup interaktif: pilih tema (Tema A "Deep Ocean Pro" /
+- `PREVIEW.html`, mockup interaktif: pilih tema (Tema A "Deep Ocean Pro" /
   Tema B "Royal Indigo Pro", default B) dan layar (Masuk, Dasbor, Kasir,
   Master Bahan). Data di dalamnya sintetis.
-- `vendor/` — salinan lokal Inter (SIL OFL) supaya preview tampil sama di
+- `vendor/`, salinan lokal Inter (SIL OFL) supaya preview tampil sama di
   semua mesin tanpa dependensi ke folder lain.
 
 ## Cara membuka
@@ -20,4 +20,4 @@ STATUS: **DRAFT ARAH — menunggu keputusan owner. Bukan kode aplikasi.**
 - Tidak mengubah `app/`, `resources/`, `routes/`, `database/`, `.env`, atau
   file aplikasi lain. Hanya folder `docs/visual-refresh/`.
 - Implementasi nyata (bila disetujui) dilakukan bertahap di V3 sesuai
-  §6 DIRECTION.md — tetap tidak menyentuh `.env` & database.
+  §6 DIRECTION.md, tetap tidak menyentuh `.env` & database.
