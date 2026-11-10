@@ -32,10 +32,12 @@
     <meta name="robots" content="noindex, nofollow">
     <title>@yield('judul', 'Masuk - ' . $appSetting->nama_aplikasi)</title>
 
-    {{-- PWA: manifest + ikon agar app bisa dipasang dari halaman login juga. --}}
+    {{-- PWA: halaman login selalu gelap (#15143F), jadi theme-color dibuat
+         sama untuk kedua skema - sebelumnya skema terang memaksa #F7F7FD
+         (bilah terang di atas halaman gelap = tidak sepadan). --}}
     <link rel="manifest" href="{{ route('pwa.manifest') }}">
     <meta name="theme-color" content="#15143F" media="(prefers-color-scheme: dark)">
-    <meta name="theme-color" content="#F7F7FD" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#15143F" media="(prefers-color-scheme: light)">
     <link rel="apple-touch-icon" href="{{ asset('icons/apple-touch-icon.png') }}">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
