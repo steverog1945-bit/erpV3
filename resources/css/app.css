@@ -1423,6 +1423,7 @@ html.dark .hero-postingan { box-shadow: none; }
    Kartu lebih tegas & kotak, shadow diperhalus, fokus biru tunggal.
    ========================================================================== */
 :root {
+    --pro-surface: #FFFFFF;
     --pro-accent: #2563EB;
     --pro-accent-hover: #1D4ED8;
     --pro-accent-soft: #EFF4FF;
@@ -1436,7 +1437,7 @@ html.dark .hero-postingan { box-shadow: none; }
 .modern-table-wrapper {
     border-radius: var(--pro-radius) !important;
     border: 1px solid var(--pro-border) !important;
-    background: #FFFFFF;
+    background: var(--pro-surface, #FFFFFF);
     box-shadow: 0 1px 2px rgba(15, 30, 62, .05) !important;
 }
 .modern-table-wrapper { overflow: hidden; }
@@ -1517,6 +1518,7 @@ html.dark .hero-postingan { box-shadow: none; }
 .cmdk-kaki kbd { background: #fff; border: 1px solid var(--pro-border-2); border-radius: 4px; padding: 1px 6px; font-size: 9px; color: #3E4C74; }
 .cmdk-hitung { margin-left: auto; font-variant-numeric: tabular-nums; }
 
+html.dark { --pro-surface: #1C2436; --pro-border: #2A3450; --pro-border-2: #3A4767; }
 html.dark .cmdk-panel { background: #1C2436; border-color: #2A3450; }
 html.dark .cmdk-input-row { border-color: #2A3450; color: #8A96B8; }
 html.dark .cmdk-input-row input { color: #E8ECF8; }
