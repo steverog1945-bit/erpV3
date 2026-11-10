@@ -169,43 +169,49 @@
     @media (min-width: 1024px) {
         #mainSidebar {
             position: fixed; z-index: 40; background: var(--pro-surface);
-            top: calc(var(--bar1-h) + var(--bar2-h) + 10px); left: 16px; right: 16px;
-            max-height: 74vh; overflow-y: auto; border: 1px solid var(--pro-border-2);
+            top: calc(var(--bar1-h) + var(--bar2-h) + 12px); left: 50%;
+            transform: translate(-50%, 0);
+            max-width: 1240px; width: calc(100% - 32px);
+            max-height: 78vh; overflow-y: auto; border: 1px solid var(--pro-border-2);
             border-radius: var(--pro-radius); box-shadow: var(--pro-shadow-xl);
-            padding: 16px 18px 18px; display: none; columns: 224px; column-gap: 18px;
+            padding: 16px 20px 14px; display: none; columns: 236px; column-gap: 14px;
         }
-        #mainSidebar.terbuka { display: block; animation: proPanelIn .2s cubic-bezier(.22,1,.36,1); }
+        #mainSidebar.terbuka { display: block; animation: proPanelIn .22s cubic-bezier(.22,1,.36,1) both; }
         #mainSidebar nav { display: contents; }
         /* Semua grup tampil; accordion dimatikan di desktop. */
         #mainSidebar .menu-group-items { display: block !important; break-inside: avoid; }
         #mainSidebar .menu-group-toggle {
             pointer-events: none; break-after: avoid; break-inside: avoid;
             text-align: left; display: flex; align-items: center; gap: 8px;
-            padding: 14px 10px 7px; border: 0; border-bottom: 1px solid var(--pro-border);
-            background: transparent; margin: 2px 0 4px;
+            padding: 11px 6px 7px; border: 0; border-bottom: 1px solid #EDF2F9;
+            background: transparent; margin: 12px 0 4px;
             font-size: 12.5px; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--pro-ink);
         }
-        #mainSidebar .menu-group-toggle:first-of-type { padding-top: 4px; }
+        #mainSidebar .menu-group-toggle:first-of-type { margin-top: 0; }
         #mainSidebar .menu-group-toggle > i.fa-chevron-down { display: none; }
         #mainSidebar .menu-group-toggle .notif-badge { margin-left: auto; }
+        #mainSidebar .notif-grup, #mainSidebar .menu-panel-foot kbd { letter-spacing: 0; }
         #mainSidebar .notif-grup { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 18px; padding: 0 6px; border-radius: 999px; background: var(--pro-accent); color: #fff; font-size: 9px; font-weight: 700; margin-left: auto; }
         #mainSidebar a {
             display: flex; align-items: center; gap: 11px; padding: 8px 10px; border-radius: 10px;
             font-size: 13px; font-weight: 400; color: var(--pro-ink-2); text-decoration: none;
             break-inside: avoid; border-left: 0; transition: background .12s ease, color .12s ease;
         }
-        #mainSidebar a svg { width: 18px; height: 18px; flex: 0 0 auto; opacity: .85; }
-        #mainSidebar a:hover { background: var(--pro-accent-soft); color: var(--pro-accent-hover); }
+        #mainSidebar a svg { width: 18px; height: 18px; flex: 0 0 auto; opacity: .8; }
+        #mainSidebar a:hover { background: #F4F8FF; color: var(--pro-accent-hover); }
+        #mainSidebar a:hover svg { opacity: 1; color: var(--pro-accent-hover); }
         #mainSidebar a.sb-active, #mainSidebar a.group.sb-active { background: var(--pro-accent-soft); color: var(--pro-accent-hover); font-weight: 600; box-shadow: inset 0 0 0 1px #C9D9FB; }
         #mainSidebar a.sb-active svg { color: var(--pro-accent-hover); opacity: 1; }
-        #sidebarBrandHeader { display: flex; align-items: center; gap: 12px; padding: 2px 10px 14px; border-bottom: 1px solid var(--pro-border); margin-bottom: 12px; column-span: all; }
-        #sidebarBrandHeader .logo-full { max-height: 28px; width: auto; }
-        #sidebarBrandHeader .logo-crop img { height: 28px; }
+        #sidebarBrandHeader { display: flex; align-items: center; gap: 12px; padding: 2px 6px 12px; border-bottom: 1px solid var(--pro-border); margin-bottom: 14px; column-span: all; }
+        .sidebar-brandchip { display: flex; align-items: center; gap: 10px; text-decoration: none; min-width: 0; }
+        .brandchip-logo { display: block; height: 30px; width: auto; max-width: 200px; max-height: 30px; object-fit: contain; }
         #sidebarBrandHeader .lg\:hidden { display: flex; }
-        .sidebar-kas-status { display: flex; align-items: center; gap: 12px; border: 1px solid var(--pro-border); border-radius: var(--pro-radius-md); padding: 10px 12px; margin: 0 0 12px; background: var(--pro-bg); column-span: all; }
+        .sidebar-kas-status { display: flex; align-items: center; gap: 12px; border: 1px solid var(--pro-border); border-radius: var(--pro-radius-md); padding: 10px 12px; margin: 0 0 14px; background: var(--pro-bg); column-span: all; }
         .sidebar-kas-status * { color: var(--pro-ink-2) !important; }
+        .menu-panel-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; border-top: 1px solid var(--pro-border); margin-top: 12px; padding: 10px 6px 0; font-size: 9.5px; color: var(--pro-ink-3); letter-spacing: .02em; column-span: all; }
+        .menu-panel-foot kbd { background: var(--pro-bg); border: 1px solid var(--pro-border-2); border-radius: 4px; padding: 1px 6px; font-size: 9px; color: var(--pro-ink-2); font-family: inherit; }
     }
-    @keyframes proPanelIn { from { opacity: 0; transform: translateY(-10px) scale(.98); } to { opacity: 1; transform: none; } }
+    @keyframes proPanelIn { from { opacity: 0; transform: translate(-50%, -12px) scale(.985); } to { opacity: 1; transform: translate(-50%, 0) scale(1); } }
 
     /* Mobile & tablet: drawer kiri, accordion tetap aktif */
     @media (max-width: 1023px) {
@@ -225,8 +231,9 @@
         #mainSidebar .menu-group-toggle { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; padding: 12px 12px 7px; border: 0; background: transparent; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--pro-ink-3); font-weight: 600; }
         #mainSidebar .menu-group-toggle > i.fa-chevron-down { margin-left: auto; transition: transform .16s ease; }
         #mainSidebar .menu-group-items.hidden { display: none; }
-        #sidebarBrandHeader { display: flex; align-items: center; gap: 12px; padding: 4px 8px 14px; border-bottom: 1px solid var(--pro-border); margin-bottom: 10px; }
-        #sidebarBrandHeader .logo-full { max-height: 28px; width: auto; }
+        #sidebarBrandHeader { display: flex; align-items: center; gap: 12px; padding: 4px 8px 12px; border-bottom: 1px solid var(--pro-border); margin-bottom: 10px; }
+        .sidebar-brandchip { display: flex; align-items: center; gap: 10px; text-decoration: none; min-width: 0; }
+        .brandchip-logo { display: block; height: 28px; width: auto; max-width: 170px; max-height: 28px; object-fit: contain; }
         .sidebar-kas-status { display: flex; align-items: center; gap: 12px; border: 1px solid var(--pro-border); border-radius: var(--pro-radius-md); padding: 10px 12px; margin: 0 0 10px; background: var(--pro-bg); }
         .sidebar-kas-status * { color: var(--pro-ink-2) !important; }
     }
@@ -250,8 +257,8 @@
         position: sticky; top: 0; z-index: 30; background: var(--pro-surface);
         border-bottom: 1px solid var(--pro-border);
     }
-    .pro-bar1 { display: flex; align-items: center; gap: 14px; height: var(--bar1-h); padding: 0 16px; }
-    .pro-bar2 { display: flex; align-items: center; gap: 4px; height: var(--bar2-h); padding: 0 16px; overflow-x: auto; scrollbar-width: none; }
+    .pro-bar1 { display: flex; align-items: center; gap: 14px; height: var(--bar1-h); padding: 0 18px; }
+    .pro-bar2 { display: flex; align-items: center; gap: 6px; height: var(--bar2-h); padding: 0 18px; overflow-x: auto; scrollbar-width: none; }
     .pro-bar2::-webkit-scrollbar { display: none; }
 
     .pro-logo { display: flex; align-items: center; gap: 11px; text-decoration: none; flex: 0 0 auto; }
@@ -263,19 +270,22 @@
     .pro-search:focus-within { border-color: var(--pro-accent); box-shadow: 0 0 0 3px var(--pro-accent-ring); }
     .pro-search kbd { margin-left: auto; background: var(--pro-surface); border: 1px solid var(--pro-border-2); border-radius: 5px; font-size: 9px; padding: 2px 6px; color: var(--pro-ink-2); }
 
-    .pro-icon-btn { width: 37px; height: 37px; border: 1px solid var(--pro-border); background: var(--pro-surface); border-radius: 10px; display: grid; place-items: center; color: var(--pro-ink-2); transition: all .15s; position: relative; }
+    .pro-icon-btn { width: 38px; height: 38px; border: 1px solid var(--pro-border); background: var(--pro-surface); border-radius: 10px; display: grid; place-items: center; color: var(--pro-ink-2); transition: all .15s; position: relative; }
     .pro-icon-btn:hover { border-color: var(--pro-border-2); color: var(--pro-ink); transform: translateY(-1px); }
-    .pro-icon-btn .notif-total { position: absolute; top: -5px; right: -5px; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 999px; background: var(--pro-accent); color: #fff; font-size: 8px; font-weight: 700; display: grid; place-items: center; border: 2px solid var(--pro-surface); }
+    .pro-icon-btn .notif-total { position: absolute; top: -5px; right: -5px; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 999px; background: #DC2626; color: #fff; font-size: 8px; font-weight: 700; display: grid; place-items: center; border: 2px solid var(--pro-surface); }
 
-    .pro-tab { display: inline-flex; align-items: center; gap: 7px; height: 33px; padding: 0 14px; border-radius: 10px; border: 1px solid transparent; background: transparent; font-size: 12px; font-weight: 500; color: var(--pro-ink-2); white-space: nowrap; text-decoration: none; transition: all .15s; }
-    .pro-tab:hover { background: var(--pro-accent-soft); color: var(--pro-accent-hover); }
+    .pro-tab { display: inline-flex; align-items: center; gap: 7px; height: 32px; padding: 0 16px; border-radius: 8px; border: 1px solid transparent; background: transparent; font-size: 12px; font-weight: 500; color: var(--pro-ink-2); white-space: nowrap; text-decoration: none; transition: all .15s; }
+    .pro-tab:hover { background: #F2F6FF; color: var(--pro-accent-hover); }
     .pro-tab.aktif { background: var(--pro-accent-soft); border-color: #C9D8FF; color: var(--pro-accent-hover); font-weight: 600; }
     html.dark .pro-tab.aktif { border-color: #2F3E66; }
     .pro-tab svg { opacity: .85; }
 
-    .pro-menu-btn { display: inline-flex; align-items: center; gap: 8px; height: 33px; padding: 0 15px; border-radius: 10px; border: 1px solid var(--pro-border-2); background: var(--pro-surface); color: var(--pro-ink-2); font-size: 12px; font-weight: 600; margin-left: auto; white-space: nowrap; transition: border-color .15s, color .15s; }
-    .pro-menu-btn:hover { border-color: var(--pro-accent); color: var(--pro-accent-hover); }
-    .pro-meta { font-size: 9px; letter-spacing: .14em; color: var(--pro-ink-3); white-space: nowrap; padding: 0 4px; }
+    .pro-menu-btn { display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--pro-border-2); background: var(--pro-surface); color: var(--pro-ink-2); font-size: 12px; font-weight: 600; margin-left: auto; white-space: nowrap; transition: all .15s; }
+    .pro-menu-btn:hover { border-color: var(--pro-accent); color: var(--pro-accent-hover); background: #F7FAFF; }
+    .pro-meta { font-size: 9.5px; letter-spacing: .1em; color: var(--pro-ink-3); white-space: nowrap; padding: 0 4px; text-transform: none; }
+    .pro-live { display: inline-flex; align-items: center; gap: 7px; height: 26px; padding: 0 11px; border: 1px solid var(--pro-border); background: var(--pro-surface); border-radius: 999px; font-size: 10px; font-weight: 500; color: var(--pro-ink-2); white-space: nowrap; }
+    .pro-live-dot { display: block; width: 6px; height: 6px; border-radius: 999px; background: #0E9F6E; animation: proLive 2.4s ease-in-out infinite; }
+    @keyframes proLive { 0%, 100% { box-shadow: 0 0 0 0 rgba(14, 159, 110, .45); } 50% { box-shadow: 0 0 0 4px rgba(14, 159, 110, 0); } }
     @media (max-width: 860px) { .pro-search { display: none; } .pro-meta { display: none; } }
 
     /* Footer aplikasi */
@@ -304,37 +314,13 @@
         <aside id="mainSidebar" aria-hidden="true" aria-label="Menu utama">
             <div id="sidebarBrandHeader" class="relative">
                 @php
-                    $logoUkuran = in_array($appSetting->logo_ukuran, ['kecil', 'sedang', 'besar'], true) ? $appSetting->logo_ukuran : 'sedang';
-                    $logoGaya = in_array($appSetting->logo_gaya, ['polos', 'kaca', 'putih'], true) ? $appSetting->logo_gaya : 'polos';
-                    $logoRingkas = $appSetting->logo_ringkas === 'penuh' ? 'penuh' : 'potong';
                     $urlLogo = $appSetting->logo_path ? asset('storage/' . $appSetting->logo_path) : null;
                 @endphp
-                <a href="{{ url('/dashboard') }}" class="sidebar-logo logo-{{ $logoUkuran }} logo-gaya-{{ $logoGaya }}" title="{{ $appSetting->nama_aplikasi }}">
+                <a href="{{ url('/dashboard') }}" class="sidebar-brandchip" title="{{ $appSetting->nama_aplikasi }}">
                     @if($urlLogo)
-                        {{-- width/height ditulis eksplisit supaya browser bisa
-                             menyiapkan ruang gambar sebelum file selesai dimuat.
-                             Tanpa itu, sidebar melompat begitu logo tiba - dan
-                             karena logo ada di setiap halaman, lompat itu
-                             terlihat di setiap navigasi. Rasio 600:238 mengikuti
-                             file yang sudah dikecilkan; lihat catatan di
-                             atas mengenai alasannya. --}}
-                        <img class="logo-full" src="{{ $urlLogo }}" width="600" height="238"
-                             alt="Logo {{ $appSetting->nama_aplikasi }}"
-                             decoding="async" fetchpriority="high">
-                        <span class="logo-icon">
-                            @if($appSetting->logo_ikon_path)
-                                <img class="logo-ikon-file" src="{{ asset('storage/' . $appSetting->logo_ikon_path) }}" alt="" decoding="async">
-                            @elseif($logoRingkas === 'potong')
-                                <span class="logo-crop"><img src="{{ $urlLogo }}" width="600" height="238" alt="" decoding="async"></span>
-                            @else
-                                <img class="logo-penuh" src="{{ $urlLogo }}" width="600" height="238" alt="" decoding="async">
-                            @endif
-                        </span>
+                        <img src="{{ $urlLogo }}" alt="Logo {{ $appSetting->nama_aplikasi }}" width="600" height="238" class="brandchip-logo" decoding="async" fetchpriority="high">
                     @else
-                        <span class="logo-full" style="display:flex;align-items:center;gap:9px;text-decoration:none">
-                            <svg width="30" height="30" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="7" fill="#1D4ED8"/><circle cx="13.4" cy="15.6" r="3.4" fill="#22D3EE"/><circle cx="18" cy="11" r="3.4" fill="#F43F5E"/><circle cx="22.6" cy="15.6" r="3.4" fill="#FACC15"/></svg>
-                            <span style="font-size:14px;font-weight:600;color:#0F1E3E;letter-spacing:-0.02em">Orion Grafika</span>
-                        </span>
+                        <svg width="30" height="30" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="7" fill="#1D4ED8"/><circle cx="13.4" cy="15.6" r="3.4" fill="#22D3EE"/><circle cx="18" cy="11" r="3.4" fill="#F43F5E"/><circle cx="22.6" cy="15.6" r="3.4" fill="#FACC15"/></svg>
                     @endif
                 </a>
                 <button onclick="toggleMenuPanel()" class="lg:hidden absolute top-3 right-3 w-9 h-9 rounded-full hover:bg-slate-100 text-slate-500 transition-colors" aria-label="Tutup menu">
@@ -1307,6 +1293,10 @@
 </div>
 @endif
 </nav>
+        <div class="menu-panel-foot">
+            <span>Orion Grafika ERP &middot; Node JKT-HQ-01</span>
+            <span><kbd>Esc</kbd> untuk menutup</span>
+        </div>
         </aside>
 
         <main id="mainContent">
@@ -1462,11 +1452,12 @@
                     {{ $tab['label'] }}
                 </a>
             @endforeach
+            <span class="pro-live"><i class="pro-live-dot" aria-hidden="true"></i>Data langsung</span>
             <button type="button" class="pro-menu-btn" id="menuPanelBtn" onclick="toggleMenuPanel()" aria-expanded="false" aria-controls="mainSidebar">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
                 Semua Menu
             </button>
-            <span class="pro-meta">ERP CORE v1.0</span>
+            <span class="pro-meta">Node JKT-HQ-01 &middot; ERP Core v1.0</span>
         </div>
     </header>
     @include('partials.command-palette')

@@ -1537,3 +1537,29 @@ html.dark .cmdk-kaki { background: #171F30; border-color: #2A3450; color: #8A96B
 html.dark .cmdk-kaki kbd { background: #232D45; border-color: #2A3450; color: #B9C3DD; }
 html.dark .cmdk-input-row kbd { background: #232D45; border-color: #2A3450; color: #B9C3DD; }
 html.dark .cmdk-group { color: #6B7799; }
+/* ==========================================================================
+   VISUAL REFRESH V3 (2026-11) - Tabel ala Command Center
+   Kepala tabel mikro uppercase, hairline #EDF1FA, radius 12, hover #FAFCFF.
+   ========================================================================== */
+.modern-table-wrapper { border-radius: var(--pro-radius-md) !important; }
+.modern-table { min-width: 0 !important; }
+.modern-table th, .modern-table td { font-variant-numeric: tabular-nums; }
+.modern-table th {
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: .1em !important;
+    text-transform: uppercase !important;
+    color: var(--pro-ink-3) !important;
+    background: #F7F9FE !important;
+    padding: 10px 14px !important;
+    border-bottom: 1px solid var(--pro-border) !important;
+}
+.modern-table td {
+    padding: 11px 14px !important;
+    border-bottom: 1px solid #EDF1FA !important;
+    color: var(--pro-ink-2) !important;
+    font-size: 13px !important;
+}
+.modern-table tbody tr { transition: background-color .12s ease; }
+.modern-table tbody tr:hover { background: #FAFCFF !important; }
+.modern-table tbody tr.is-active { background: #F0F6FF !important; box-shadow: inset 3px 0 0 var(--pro-accent) !important; }
