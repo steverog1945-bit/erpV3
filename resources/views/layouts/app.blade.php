@@ -164,6 +164,13 @@
         background: rgba(9, 15, 30, .32);
     }
     #sidebarOverlay.terbuka { display: block; }
+    /* Desktop: overlay tidak dipakai mega menu (tanpa dim ala Canva).
+       Kalau tetap tampil, ia menutupi tombol topbar (topbar z-30 < overlay
+       z-38) sehingga kursor kehilangan hover dan panel berkedip. Tutup
+       lewat klik-di-luar (lihat toggleMenuPanel). */
+    @media (min-width: 1024px) {
+        #sidebarOverlay, #sidebarOverlay.terbuka { display: none !important; }
+    }
 
     /* ===== MENU PANEL (mega menu) ===== */
     @media (min-width: 1024px) {
@@ -369,6 +376,11 @@
 
     .pro-menu-btn { display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--pro-border-2); background: var(--pro-surface); color: var(--pro-ink-2); font-size: 12px; font-weight: 600; margin-left: auto; white-space: nowrap; transition: all .15s; }
     .pro-menu-btn:hover { border-color: var(--pro-accent); color: var(--pro-accent-hover); background: #F7FAFF; }
+    .pro-premium { display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 14px; border-radius: 10px; border: 1px solid #E5B85B; background: linear-gradient(150deg, #F7CD6B 0%, #E3A83B 55%, #C98A1B 100%); color: #422A05; font-size: 12px; font-weight: 700; letter-spacing: .02em; text-decoration: none; box-shadow: 0 4px 12px rgba(201, 138, 27, .35), inset 0 1px 0 rgba(255,255,255,.55); transition: transform .15s, box-shadow .15s, filter .15s; white-space: nowrap; }
+    .pro-premium:hover { transform: translateY(-1px); filter: brightness(1.03); box-shadow: 0 8px 20px rgba(201, 138, 27, .4), inset 0 1px 0 rgba(255,255,255,.55); }
+    .pro-premium:active { transform: none; }
+    .pro-premium svg { flex: 0 0 auto; }
+    @media (max-width: 767.98px) { .pro-premium-teks { display: none; } .pro-premium { padding: 0; width: 38px; justify-content: center; } }
     .pro-meta { font-size: 9.5px; letter-spacing: .1em; color: var(--pro-ink-3); white-space: nowrap; padding: 0 4px; text-transform: none; }
     .pro-live { display: inline-flex; align-items: center; gap: 7px; height: 26px; padding: 0 11px; border: 1px solid var(--pro-border); background: var(--pro-surface); border-radius: 999px; font-size: 10px; font-weight: 500; color: var(--pro-ink-2); white-space: nowrap; }
     .pro-live-dot { display: block; width: 6px; height: 6px; border-radius: 999px; background: #0E9F6E; animation: proLive 2.4s ease-in-out infinite; }
@@ -1450,6 +1462,11 @@
             </button>
 
             <div style="margin-left:auto; display:flex; align-items:center; gap:8px">
+                {{-- Orion Premium: mahkota emas, selalu terlihat --}}
+                <a href="{{ route('premium.index') }}" class="pro-premium" title="Orion Premium - fitur eksklusif" aria-label="Orion Premium">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 8l4.5 3.5L12 4l4.5 7.5L21 8l-1.6 9.2a1.2 1.2 0 0 1-1.18 1.02H5.78A1.2 1.2 0 0 1 4.6 17.2L3 8z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="rgba(255,255,255,.18)" stroke-linecap="round"/></svg>
+                    <span class="pro-premium-teks">Premium</span>
+                </a>
                 {{-- Dark mode: hanya Administrator --}}
                 @if(str_starts_with((string) (optional(Auth::user()->role)->nama_role ?? ''), 'Administrator'))
                 <button type="button" id="tema-toggle" onclick="ubahTema()" class="pro-icon-btn" title="Ganti ke mode gelap" aria-label="Ganti mode gelap atau terang">
@@ -2091,6 +2108,42 @@
             if (perUrl[k]) { const b = document.createElement('span'); b.className = 'notif-badge ' + perUrl[k].tone; b.textContent = perUrl[k].n > 99 ? '99+' : perUrl[k].n; a.appendChild(b); }
         });
         badgeGrup();
+        syncProMegaBadges();
+    }
+    // #proMega (mega menu desktop) dibangun SEKALI dari #mainSidebar, jadi
+    // badge di dalamnya tidak ikut berubah saat polling /sinyal. Sinkronkan
+    // ulang: hapus badge panel, kloning badge sidebar terbaru per href,
+    // lalu jumlahkan ulang badge judul grup.
+    function syncProMegaBadges() {
+        if (!window.__proMegaBuilt) return;
+        var grid = document.getElementById('proMegaGrid');
+        if (!grid) return;
+        grid.querySelectorAll('.notif-badge').forEach(function (b) { b.remove(); });
+        var sidebarLinks = Array.prototype.slice.call(document.querySelectorAll('#mainSidebar a[href]'));
+        var peta = {};
+        sidebarLinks.forEach(function (a) {
+            var k; try { k = new URL(a.href, location.origin).pathname; } catch (e) { return; }
+            (peta[k] = peta[k] || []).push(a);
+        });
+        grid.querySelectorAll('.promega-link').forEach(function (link) {
+            var k; try { k = new URL(link.href, location.origin).pathname; } catch (e) { return; }
+            var src = (peta[k] || []).map(function (a) { return a.querySelector('.notif-badge'); })
+                .filter(Boolean)[0];
+            if (src) link.appendChild(src.cloneNode(true));
+        });
+        grid.querySelectorAll('.promega-group').forEach(function (grup) {
+            var n = 0;
+            grup.querySelectorAll('.promega-link .notif-badge').forEach(function (b) { n += parseInt(b.textContent, 10) || 0; });
+            var title = grup.querySelector('.promega-group-title');
+            if (!title) return;
+            var lama = title.querySelector('.notif-badge'); if (lama) lama.remove();
+            if (n > 0) {
+                var b = document.createElement('span');
+                b.className = 'notif-badge notif-grup indigo';
+                b.textContent = n > 99 ? '99+' : n;
+                title.appendChild(b);
+            }
+        });
     }
     // Ringkasan di judul grup menu (berguna saat grup sedang dilipat).
     function badgeGrup() {
@@ -2350,6 +2403,17 @@
                 return p && p.classList.contains('terbuka');
             });
             if (terbuka) toggleMenuPanel();
+        });
+
+        // Klik di luar mega menu (desktop) menutup panel - pengganti overlay
+        // di desktop (overlay dim hanya dipakai drawer mobile).
+        document.addEventListener('mousedown', function (e) {
+            if (!window.matchMedia('(min-width: 1024px)').matches) return;
+            var p = document.getElementById('proMega');
+            if (!p || !p.classList.contains('terbuka')) return;
+            var btn = document.getElementById('menuPanelBtn');
+            if (p.contains(e.target) || (btn && btn.contains(e.target))) return;
+            toggleMenuPanel();
         });
 
         // Hover-to-open (desktop pointer halus saja): mengarahkan kursor ke
