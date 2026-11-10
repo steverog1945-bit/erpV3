@@ -15,7 +15,7 @@
 {{-- ALUR ORDER -> SPK -> PRODUKSI -> SELESAI -> COLLECTING - tidak ada
      satu pun angka Rupiah di halaman ini (role ini cuma input order &
      lihat status, bukan transaksi/nominal). --}}
-<div class="bg-white rounded-lg border border-slate-100 shadow-sm p-6 mb-6">
+<div class="bg-white rounded-2xl border border-slate-200/70 shadow-[0_1px_4px_rgba(15,30,62,0.05)] p-6 mb-6">
     <p class="text-[10px] font-medium text-slate-400 uppercase tracking-[0.2em] mb-5">Alur Pergerakan Order</p>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <a href="{{ route('penjualan.riwayat') }}" class="text-center group">
@@ -38,7 +38,7 @@
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-    <div class="bg-white p-6 rounded-lg border border-slate-100 shadow-sm hover:shadow-md transition">
+    <div class="bg-white p-6 rounded-2xl border border-slate-200/70 shadow-[0_1px_4px_rgba(15,30,62,0.05)] hover:shadow-md transition">
         <div class="flex items-center gap-4">
             <div class="bg-emerald-100 p-3 rounded-lg"><i class="fas fa-check-circle text-2xl text-emerald-600" aria-hidden="true"></i></div>
             <div>
@@ -47,7 +47,7 @@
             </div>
         </div>
     </div>
-    <div class="bg-white p-6 rounded-lg border border-slate-100 shadow-sm hover:shadow-md transition">
+    <div class="bg-white p-6 rounded-2xl border border-slate-200/70 shadow-[0_1px_4px_rgba(15,30,62,0.05)] hover:shadow-md transition">
         <div class="flex items-center gap-4">
             <div class="bg-orange-100 p-3 rounded-lg"><i class="fas fa-fire text-2xl text-orange-600" aria-hidden="true"></i></div>
             <div>
@@ -62,7 +62,7 @@
 
     {{-- ORDER TERBARU - status pembayaran (badge) boleh terlihat, TANPA
          nominal sama sekali (tidak ada Rp di sini). --}}
-    <div class="lg:col-span-2 bg-white rounded-lg border border-slate-100 shadow-sm overflow-hidden">
+    <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200/70 shadow-[0_1px_4px_rgba(15,30,62,0.05)] overflow-hidden">
         <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
             <h3 class="text-sm font-medium text-slate-800">Order Terbaru</h3>
             <a href="{{ route('penjualan.riwayat', ['from' => now()->subDays(30)->format('Y-m-d'), 'to' => now()->format('Y-m-d')]) }}" class="text-[10px] font-medium text-indigo-500 uppercase tracking-widest hover:underline">Lihat Semua</a>
@@ -91,7 +91,7 @@
     </div>
 
     {{-- PERLU PERHATIAN (URGENT) --}}
-    <div class="bg-white rounded-lg border border-slate-100 shadow-sm overflow-hidden">
+    <div class="bg-white rounded-2xl border border-slate-200/70 shadow-[0_1px_4px_rgba(15,30,62,0.05)] overflow-hidden">
         <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
             <h3 class="text-sm font-medium text-slate-800"><i class="fas fa-fire text-rose-500 mr-1.5" aria-hidden="true"></i>Perlu Perhatian</h3>
             <a href="{{ route('spk.index', ['urgent_only' => 1]) }}" class="text-[10px] font-medium text-indigo-500 uppercase tracking-widest hover:underline">Semua</a>

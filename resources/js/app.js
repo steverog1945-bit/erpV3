@@ -55,7 +55,7 @@ window.deleteConfirm = function (formId) {
    tertutup tidak bisa difokus atau dibaca screen reader.
    ========================================================================== */
 
-const MODAL_TRANSITION_MS = 200;
+const MODAL_TRANSITION_MS = 240;
 let modalOpenCount = 0;
 let lastFocused = null;
 

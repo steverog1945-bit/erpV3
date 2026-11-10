@@ -85,23 +85,23 @@
     </p>
 </div>
 <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
-    <a href="{{ $u('penjualan.riwayat') }}" title="Jumlah order hari ini dan nilainya" class="bg-white p-5 rounded-lg border border-slate-100 shadow-sm hover:shadow-md transition-all">
+    <a href="{{ $u('penjualan.riwayat') }}" title="Jumlah order hari ini dan nilainya" class="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-[0_1px_3px_rgba(15,30,62,0.06)] hover:shadow-[0_10px_24px_rgba(15,30,62,0.10)] transition-all duration-200">
         <div class="flex items-center justify-between"><p class="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Order Hari Ini</p><span class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-500 flex items-center justify-center"><i class="fas fa-receipt text-xs"></i></span></div>
         <p class="text-3xl font-medium text-slate-900 mt-3">{{ $orderHariIni }}</p>
         <p class="text-xs font-medium text-slate-500 mt-0.5">Rp {{ number_format($nilaiOrderHariIni, 0, ',', '.') }}</p>
         <p class="text-[11px] font-medium mt-2 {{ $dOrderKls }}"><i class="fas {{ $dOrderIkon }} text-[10px]"></i> {{ $dOrderTeks }}</p>
     </a>
-    <a href="{{ $u('laporan.kas') }}" title="Uang yang diterima dari pembayaran nota hari ini" class="bg-white p-5 rounded-lg border border-slate-100 shadow-sm hover:shadow-md transition-all">
+    <a href="{{ $u('laporan.kas') }}" title="Uang yang diterima dari pembayaran nota hari ini" class="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-[0_1px_3px_rgba(15,30,62,0.06)] hover:shadow-[0_10px_24px_rgba(15,30,62,0.10)] transition-all duration-200">
         <div class="flex items-center justify-between"><p class="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Kas Masuk Hari Ini</p><span class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center"><i class="fas fa-wallet text-xs"></i></span></div>
         <p class="text-3xl font-medium text-slate-900 mt-3">Rp {{ number_format($kasMasukHariIni, 0, ',', '.') }}</p>
         <p class="text-[11px] font-medium mt-3 {{ $dKasKls }}"><i class="fas {{ $dKasIkon }} text-[10px]"></i> {{ $dKasTeks }}</p>
     </a>
-    <a href="{{ $u('laporan.piutang') }}" title="Tagihan nota yang belum lunas" class="bg-white p-5 rounded-lg border border-slate-100 shadow-sm hover:shadow-md transition-all">
+    <a href="{{ $u('laporan.piutang') }}" title="Tagihan nota yang belum lunas" class="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-[0_1px_3px_rgba(15,30,62,0.06)] hover:shadow-[0_10px_24px_rgba(15,30,62,0.10)] transition-all duration-200">
         <div class="flex items-center justify-between"><p class="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Piutang</p><span class="w-8 h-8 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center"><i class="fas fa-file-invoice-dollar text-xs"></i></span></div>
         <p class="text-3xl font-medium text-slate-900 mt-3">Rp {{ number_format($piutang, 0, ',', '.') }}</p>
         <p class="text-[11px] font-medium text-slate-400 mt-3">{{ $piutangCount }} nota belum lunas</p>
     </a>
-    <a href="{{ $u('spk.index', ['urgent_only' => 1]) }}" title="Item urgent yang belum selesai" class="bg-white p-5 rounded-lg border {{ $urgentAktif > 0 ? 'border-orange-200' : 'border-slate-100' }} shadow-sm hover:shadow-md transition-all">
+    <a href="{{ $u('spk.index', ['urgent_only' => 1]) }}" title="Item urgent yang belum selesai" class="bg-white p-5 rounded-2xl border {{ $urgentAktif > 0 ? 'border-orange-200' : 'border-slate-200/70' }} shadow-[0_1px_3px_rgba(15,30,62,0.06)] hover:shadow-[0_10px_24px_rgba(15,30,62,0.10)] transition-all duration-200">
         <div class="flex items-center justify-between"><p class="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Item Urgent</p><span class="w-8 h-8 rounded-xl bg-orange-50 text-orange-500 flex items-center justify-center"><i class="fas fa-fire text-xs"></i></span></div>
         <p class="text-3xl font-medium {{ $urgentAktif > 0 ? 'text-orange-600' : 'text-slate-900' }} mt-3">{{ $urgentAktif }}</p>
         <p class="text-[11px] font-medium text-slate-400 mt-3">{{ $urgentAktif > 0 ? 'perlu diprioritaskan' : 'semua berjalan normal' }}</p>
@@ -111,16 +111,16 @@
 <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
 
     {{-- ============ ALUR PRODUKSI ============ --}}
-    <div class="xl:col-span-2 bg-white rounded-lg border border-slate-100 shadow-sm p-6">
+    <div class="xl:col-span-2 bg-white rounded-2xl border border-slate-200/70 shadow-[0_1px_4px_rgba(15,30,62,0.05)] p-6">
         <div class="flex items-center justify-between mb-5">
             <div><h3 class="text-sm font-medium text-slate-800">Alur Pekerjaan</h3><p class="text-[11px] text-slate-400">Dari antrean sampai siap diserahkan</p></div>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
             @foreach([
-                ['Antre', $spkAntre, $u('spk.index', ['status_spk' => 'Antre']), 'bg-amber-50/60 hover:bg-amber-50', 'text-amber-600', 'Item SPK yang menunggu dikerjakan'],
-                ['Diproses', $spkProses, $u('produksi.index'), 'bg-indigo-50/60 hover:bg-indigo-50', 'text-indigo-600', 'Item yang sedang didesain/dicetak'],
-                ['Selesai Produksi', $spkSelesai, $u('produksi.index', ['status_produksi' => 'selesai']), 'bg-emerald-50/60 hover:bg-emerald-50', 'text-emerald-600', 'Item yang sudah selesai diproduksi'],
-                ['Siap Diambil', $notaLengkap, $u('collecting.index', ['status_pengerjaan' => 'lengkap']), 'bg-indigo-50/60 hover:bg-indigo-50', 'text-indigo-600', 'Nota yang semua itemnya sudah selesai'],
+                ['Antre', $spkAntre, $u('spk.index', ['status_spk' => 'Antre']), 'bg-amber-50/70 hover:bg-amber-100/70', 'text-amber-600', 'Item SPK yang menunggu dikerjakan'],
+                ['Diproses', $spkProses, $u('produksi.index'), 'bg-indigo-50/70 hover:bg-indigo-100/70', 'text-indigo-600', 'Item yang sedang didesain/dicetak'],
+                ['Selesai Produksi', $spkSelesai, $u('produksi.index', ['status_produksi' => 'selesai']), 'bg-emerald-50/70 hover:bg-emerald-100/70', 'text-emerald-600', 'Item yang sudah selesai diproduksi'],
+                ['Siap Diambil', $notaLengkap, $u('collecting.index', ['status_pengerjaan' => 'lengkap']), 'bg-indigo-50/70 hover:bg-indigo-100/70', 'text-indigo-600', 'Nota yang semua itemnya sudah selesai'],
             ] as $i => [$judul, $n, $url, $bg, $tx, $tip])
             <a href="{{ $url }}" title="{{ $tip }}" class="group rounded-lg {{ $bg }} p-4 transition-all">
                 <p class="text-[10px] font-medium {{ $tx }} uppercase tracking-widest">{{ $i + 1 }}. {{ $judul }}</p>
@@ -145,7 +145,7 @@
     </div>
 
     {{-- ============ PERLU TINDAKAN ============ --}}
-    <div class="bg-white rounded-lg border border-slate-100 shadow-sm overflow-hidden">
+    <div class="bg-white rounded-2xl border border-slate-200/70 shadow-[0_1px_4px_rgba(15,30,62,0.05)] overflow-hidden">
         <div class="px-6 py-5 border-b border-slate-100"><h3 class="text-sm font-medium text-slate-800">Perlu Tindakan</h3><p class="text-[11px] text-slate-400">Pekerjaan yang menunggu Anda</p></div>
         <div class="divide-y divide-slate-50 max-h-[22rem] overflow-y-auto">
             @forelse($perluTindakan as $it)
@@ -164,7 +164,7 @@
 {{-- ============ TREN 7 HARI ============ --}}
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
     @foreach([['Order 7 Hari Terakhir', 'order', $maksOrder, 'bg-indigo-500', false, 'Jumlah nota per hari'], ['Kas Masuk 7 Hari Terakhir', 'kas', $maksKas, 'bg-emerald-500', true, 'Pembayaran yang diterima per hari']] as [$jdl, $kunci, $maks, $warna, $uang, $tip])
-    <div class="bg-white rounded-lg border border-slate-100 shadow-sm p-6" title="{{ $tip }}">
+    <div class="bg-white rounded-2xl border border-slate-200/70 shadow-[0_1px_4px_rgba(15,30,62,0.05)] p-6" title="{{ $tip }}">
         <div class="flex items-center justify-between mb-4">
             <h3 class="text-sm font-medium text-slate-800">{{ $jdl }}</h3>
             <span class="text-xs font-medium text-slate-500">{{ $uang ? 'Rp ' . number_format($tren->sum($kunci), 0, ',', '.') : $tren->sum($kunci) . ' order' }}</span>
@@ -187,7 +187,7 @@
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
     {{-- ============ ORDER TERBARU ============ --}}
-    <div class="lg:col-span-2 bg-white rounded-lg border border-slate-100 shadow-sm overflow-hidden">
+    <div class="lg:col-span-2 bg-white rounded-2xl border border-slate-200/70 shadow-[0_1px_4px_rgba(15,30,62,0.05)] overflow-hidden">
         <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
             <h3 class="text-sm font-medium text-slate-800">Order Terbaru</h3>
             {{-- Rentang 30 hari supaya "Lihat Semua" selalu mencakup order yang tampil di sini. --}}
@@ -216,7 +216,7 @@
     </div>
 
     {{-- ============ PERLU DIPRIORITASKAN ============ --}}
-    <div class="bg-white rounded-lg border border-slate-100 shadow-sm overflow-hidden">
+    <div class="bg-white rounded-2xl border border-slate-200/70 shadow-[0_1px_4px_rgba(15,30,62,0.05)] overflow-hidden">
         <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
             <h3 class="text-sm font-medium text-slate-800"><i class="fas fa-fire text-orange-500 mr-1"></i> Diprioritaskan</h3>
             <a href="{{ $u('spk.index', ['urgent_only' => 1]) }}" title="Lihat semua item urgent" class="text-[10px] font-medium text-indigo-500 uppercase tracking-widest hover:underline">Semua</a>

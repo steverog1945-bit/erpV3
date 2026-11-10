@@ -776,10 +776,12 @@ select {
 /* --- Modal: fade untuk lapisan, scale untuk panel ---
    Selector memakai data-modal-root, bukan [id^="modal-"], karena
    judul di dalam modal juga ber-prefix "modal-" (id="modal-{id}-title")
-   dan akan ikut ter-jarum, lalu ikut ter-skale dan ter-fade. */
+   dan akan ikut ter-jarum, lalu ikut ter-skale dan ter-fade.
+   Spring ala framer-motion (apple-design): mulai dari 0.92 dengan
+   overshoot sangat halus, transform-origin center. */
 [data-modal-root] {
     opacity: 0;
-    transition: opacity var(--ui-med) var(--ui-ease);
+    transition: opacity 200ms cubic-bezier(.32,.72,0,1);
 }
 
 [data-modal-root][data-state="open"] {
@@ -787,8 +789,10 @@ select {
 }
 
 [data-modal-root] [data-modal-panel] {
-    transform: scale(0.96) translateY(8px);
-    transition: transform var(--ui-med) var(--ui-ease);
+    transform: scale(0.92) translateY(10px);
+    transition: transform 260ms cubic-bezier(.3,1.32,.38,1);
+    transform-origin: center;
+    will-change: transform;
 }
 
 [data-modal-root][data-state="open"] [data-modal-panel] {
@@ -798,8 +802,10 @@ select {
 /* Modal yang ditulis manual per halaman tidak memakai data-modal-panel.
    Panahnya adalah anak pertama root, jadi itu yang digerakkan. */
 [data-modal-root]:not(:has([data-modal-panel])) > div {
-    transform: scale(0.96) translateY(8px);
-    transition: transform var(--ui-med) var(--ui-ease);
+    transform: scale(0.92) translateY(10px);
+    transition: transform 260ms cubic-bezier(.3,1.32,.38,1);
+    transform-origin: center;
+    will-change: transform;
 }
 
 [data-modal-root][data-state="open"]:not(:has([data-modal-panel])) > div {
@@ -1051,6 +1057,13 @@ legend.text-\[10px\].uppercase {
       bawaan), termasuk toast notifikasi, supaya semuanya senada.
       ======================================================================== */
    .swal2-container { padding: 16px !important; }
+   /* Spring masuk/keluar ala framer-motion: mulai dari 0.94 + overshoot
+      sangat halus, keluar cepat & tajam. Mengalahkan animasi bawaan Swal
+      (yang linear-ish) tanpa menyentuh perilaku JS-nya. */
+   @keyframes swalSpringIn { 0% { opacity: 0; transform: scale(0.94) translateY(12px); } 60% { opacity: 1; transform: scale(1.015) translateY(-1px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+   @keyframes swalSpringOut { 0% { opacity: 1; transform: scale(1) translateY(0); } 100% { opacity: 0; transform: scale(0.96) translateY(6px); } }
+   .swal2-show { animation: swalSpringIn 320ms cubic-bezier(.3,1.28,.4,1) both !important; }
+   .swal2-hide { animation: swalSpringOut 170ms cubic-bezier(.4,0,.2,1) both !important; }
    .swal2-container.swal2-backdrop-show { background: rgba(24, 24, 27, 0.32) !important; }
 
    .swal2-popup:not(.swal2-toast) {

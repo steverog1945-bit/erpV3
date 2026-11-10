@@ -14,19 +14,19 @@
 
 {{-- RINGKASAN STOK - tanpa nominal (harga rata-rata tidak ditampilkan). --}}
 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-    <a href="{{ route('bahan.index') }}" class="bg-white p-6 rounded-lg border border-slate-100 shadow-sm hover:shadow-md transition text-center group">
+    <a href="{{ route('bahan.index') }}" class="bg-white p-6 rounded-2xl border border-slate-200/70 shadow-[0_1px_4px_rgba(15,30,62,0.05)] hover:shadow-md transition text-center group">
         <div class="text-3xl font-medium text-slate-800 group-hover:text-indigo-600 transition-colors">{{ $jumlahBahan }}</div>
         <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-1">Bahan Aktif</div>
     </a>
-    <div class="bg-white p-6 rounded-lg border border-slate-100 shadow-sm text-center">
+    <div class="bg-white p-6 rounded-2xl border border-slate-200/70 shadow-[0_1px_4px_rgba(15,30,62,0.05)] text-center">
         <div class="text-3xl font-medium text-rose-500">{{ $jumlahHabis }}</div>
         <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-1">Stok Habis</div>
     </div>
-    <div class="bg-white p-6 rounded-lg border border-slate-100 shadow-sm text-center">
+    <div class="bg-white p-6 rounded-2xl border border-slate-200/70 shadow-[0_1px_4px_rgba(15,30,62,0.05)] text-center">
         <div class="text-3xl font-medium text-amber-500">{{ $jumlahMenipis }}</div>
         <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-1">Stok Menipis</div>
     </div>
-    <div class="bg-white p-6 rounded-lg border border-slate-100 shadow-sm text-center">
+    <div class="bg-white p-6 rounded-2xl border border-slate-200/70 shadow-[0_1px_4px_rgba(15,30,62,0.05)] text-center">
         <div class="text-3xl font-medium text-sky-500">{{ $jumlahBelumAdaBatas }}</div>
         <div class="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-1">Belum Ada Batas Minimal</div>
     </div>
@@ -35,7 +35,7 @@
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
     {{-- BAHAN PERLU PERHATIAN (Habis/Menipis) --}}
-    <div class="bg-white rounded-lg border border-slate-100 shadow-sm overflow-hidden">
+    <div class="bg-white rounded-2xl border border-slate-200/70 shadow-[0_1px_4px_rgba(15,30,62,0.05)] overflow-hidden">
         <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
             <h3 class="text-sm font-medium text-slate-800"><i class="fas fa-exclamation-triangle text-amber-500 mr-1.5" aria-hidden="true"></i>Perlu Pengadaan</h3>
             <a href="{{ route('laporan.stok-bahan') }}" class="text-[10px] font-medium text-indigo-500 uppercase tracking-widest hover:underline">Lihat Laporan</a>
@@ -58,7 +58,7 @@
     </div>
 
     {{-- KEDATANGAN BAHAN TERBARU --}}
-    <div class="bg-white rounded-lg border border-slate-100 shadow-sm overflow-hidden">
+    <div class="bg-white rounded-2xl border border-slate-200/70 shadow-[0_1px_4px_rgba(15,30,62,0.05)] overflow-hidden">
         <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
             <h3 class="text-sm font-medium text-slate-800">Kedatangan Bahan Terbaru</h3>
             <a href="{{ route('kedatangan-bahan.index') }}" class="text-[10px] font-medium text-indigo-500 uppercase tracking-widest hover:underline">Lihat Semua</a>

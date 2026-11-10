@@ -136,10 +136,10 @@
         --pro-radius: 16px;
         --pro-radius-md: 12px;
         --pro-radius-sm: 6px;
-        --pro-shadow-sm: 0 1px 2px rgba(15, 30, 62, .05);
-        --pro-shadow-md: 0 6px 16px rgba(15, 30, 62, .08), 0 1px 3px rgba(15, 30, 62, .05);
-        --pro-shadow-lg: 0 14px 34px rgba(15, 30, 62, .12), 0 2px 6px rgba(15, 30, 62, .06);
-        --pro-shadow-xl: 0 24px 56px rgba(15, 30, 62, .14), 0 2px 8px rgba(15, 30, 62, .07);
+        --pro-shadow-sm: 0 1px 2px rgba(15, 30, 62, .04);
+        --pro-shadow-md: 0 4px 12px rgba(15, 30, 62, .06), 0 1px 2px rgba(15, 30, 62, .04);
+        --pro-shadow-lg: 0 10px 28px rgba(15, 30, 62, .08), 0 2px 5px rgba(15, 30, 62, .05);
+        --pro-shadow-xl: 0 18px 44px rgba(15, 30, 62, .10), 0 2px 7px rgba(15, 30, 62, .06);
         --bar1-h: 62px;
         --bar2-h: 48px;
     }
@@ -255,9 +255,9 @@
             background: var(--pro-surface); border: 1px solid var(--pro-border-2);
             border-radius: var(--pro-radius); box-shadow: var(--pro-shadow-xl);
         }
-        #proMega.terbuka { display: flex; animation: proMegaIn .24s cubic-bezier(.22,1,.36,1) both; }
+        #proMega.terbuka { display: flex; animation: proMegaIn .3s cubic-bezier(.3,1.28,.38,1) both; }
         @keyframes proMegaIn {
-            from { opacity: 0; transform: translate(-50%, -14px) scale(.985); }
+            from { opacity: 0; transform: translate(-50%, -16px) scale(.965); }
             to { opacity: 1; transform: translate(-50%, 0) scale(1); }
         }
         .promega-body { flex: 1; min-height: 0; display: grid; grid-template-columns: 320px minmax(0, 1fr); }
@@ -268,9 +268,10 @@
         .promega-card {
             position: relative; display: flex; align-items: center; gap: 13px;
             padding: 14px; border-radius: 14px; text-decoration: none; color: #fff;
-            transition: transform .16s ease, box-shadow .16s ease; overflow: hidden;
+            transition: transform .2s cubic-bezier(.3,1.2,.4,1), box-shadow .2s ease; overflow: hidden;
         }
-        .promega-card:hover { transform: translateY(-1px); box-shadow: var(--pro-shadow-md); }
+        .promega-card:hover { transform: translateY(-2px); box-shadow: var(--pro-shadow-md); }
+        .promega-card:hover .promega-card-arrow { transform: translateX(4px); opacity: 1; }
         .promega-card:active { transform: none; }
         .promega-card.tone-blue { background: #2563EB; }
         .promega-card.tone-navy { background: #152347; }
@@ -284,24 +285,28 @@
         .promega-card-text { min-width: 0; }
         .promega-card-title { display: block; font-size: 14.5px; font-weight: 600; letter-spacing: -0.01em; color: #fff; }
         .promega-card-desc { display: block; margin-top: 2px; font-size: 10.5px; color: rgba(255,255,255,.8); line-height: 1.35; }
-        .promega-card-arrow { flex: 0 0 auto; margin-left: auto; opacity: .8; }
+        .promega-card-arrow { flex: 0 0 auto; margin-left: auto; opacity: .75; transition: transform .2s cubic-bezier(.3,1.2,.4,1), opacity .2s ease; }
 
         /* Kolom tautan kanan (gaya Canva: grid rata, teks polos) */
-        .promega-content { overflow-y: auto; padding: 14px 18px 12px; }
-        .promega-grid { columns: 150px; column-gap: 20px; }
-        .promega-group { break-inside: avoid; margin-bottom: 14px; min-width: 0; }
+        .promega-content { overflow-y: auto; padding: 16px 22px 14px; }
+        .promega-grid { columns: 175px; column-gap: 24px; }
+        .promega-group { break-inside: avoid; margin-bottom: 18px; min-width: 0; }
         .promega-group-title {
-            font-size: 10px; font-weight: 600; letter-spacing: .13em; text-transform: uppercase;
+            display: flex; align-items: center; gap: 8px;
+            font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
             color: var(--pro-ink-3); border-bottom: 1px solid var(--pro-border);
-            padding: 3px 2px 8px; margin-bottom: 6px;
+            padding: 3px 2px 9px; margin-bottom: 8px;
         }
-        .promega-links { display: flex; flex-direction: column; gap: 1px; }
+        .promega-group-title .notif-badge { margin-left: auto; }
+        .promega-links { display: flex; flex-direction: column; gap: 3px; }
         .promega-link {
-            display: block; padding: 6px 8px; margin: 0 -8px; border-radius: 8px;
-            font-size: 12.5px; line-height: 1.35; color: var(--pro-ink-2);
-            text-decoration: none; transition: background .12s ease, color .12s ease;
+            display: flex; align-items: center; gap: 8px;
+            padding: 7px 10px; margin: 0 -10px; border-radius: 9px;
+            font-size: 13px; line-height: 1.35; color: var(--pro-ink-2);
+            text-decoration: none; transition: background .15s ease, color .15s ease;
             overflow-wrap: anywhere;
         }
+        .promega-link .notif-badge { margin-left: auto; flex: 0 0 auto; }
         /* Tautan polos ala Canva: ikon sidebar disembunyikan. */
         .promega-link svg { display: none; }
         .promega-link:hover { background: #F4F8FF; color: var(--pro-accent-hover); }
@@ -2235,13 +2240,19 @@
             var nav = document.querySelector('#mainSidebar nav');
             if (!grid || !nav) return;
 
-            function buatGrup(judul, links) {
+            function buatGrup(judul, links, badgeToggle) {
                 if (!links.length) return;
                 var grup = document.createElement('div');
                 grup.className = 'promega-group';
                 var h = document.createElement('div');
                 h.className = 'promega-group-title';
                 h.textContent = judul;
+                // Pindahkan badge notifikasi grup (bila ada) - dulu hilang
+                // saat panel dirakit ulang di sini.
+                if (badgeToggle) {
+                    var b = badgeToggle.querySelector('.notif-badge');
+                    if (b) { var c = b.cloneNode(true); c.classList.add('notif-grup'); h.appendChild(c); }
+                }
                 var body = document.createElement('div');
                 body.className = 'promega-links';
                 links.forEach(function (a) {
@@ -2269,7 +2280,7 @@
                 var items = t.nextElementSibling;
                 if (!items || !items.classList.contains('menu-group-items')) return;
                 var links = Array.prototype.slice.call(items.querySelectorAll('a[href]'));
-                buatGrup(judul, links);
+                buatGrup(judul, links, t);
             });
 
             // Featured rail: kartu hanya tampil bila rutenya ada di sidebar
@@ -2340,6 +2351,48 @@
             });
             if (terbuka) toggleMenuPanel();
         });
+
+        // Hover-to-open (desktop pointer halus saja): mengarahkan kursor ke
+        // "Semua Menu" membuka mega menu tanpa klik - seperti Canva. Klik
+        // tetap toggle untuk keyboard/layar sentuh; ada jeda kecil supaya
+        // tidak kebuka hanya karena tikus melintas. Panel harus ikut
+        // disentuh hover-nya supaya bisa dipindahkan dari tombol ke panel.
+        (function () {
+            var btn = document.getElementById('menuPanelBtn');
+            if (!btn) return;
+            var halus = window.matchMedia('(hover: hover) and (pointer: fine)');
+            var desktop = window.matchMedia('(min-width: 1024px)');
+            var timerMasuk = null, timerKeluar = null;
+
+            function panel() { return document.getElementById('proMega'); }
+            function buka() {
+                clearTimeout(timerKeluar);
+                if (!halus.matches || !desktop.matches) return;
+                var p = panel();
+                if (!p || p.classList.contains('terbuka')) return;
+                clearTimeout(timerMasuk);
+                timerMasuk = setTimeout(function () {
+                    var p2 = panel();
+                    if (p2 && !p2.classList.contains('terbuka')) toggleMenuPanel();
+                }, 140);
+            }
+            function keluar() {
+                clearTimeout(timerMasuk);
+                clearTimeout(timerKeluar);
+                timerKeluar = setTimeout(function () {
+                    var p = panel();
+                    if (p && p.classList.contains('terbuka') && desktop.matches) toggleMenuPanel();
+                }, 260);
+            }
+
+            btn.addEventListener('mouseenter', buka);
+            btn.addEventListener('mouseleave', keluar);
+            var p = panel();
+            if (p) {
+                p.addEventListener('mouseenter', function () { clearTimeout(timerKeluar); clearTimeout(timerMasuk); });
+                p.addEventListener('mouseleave', keluar);
+            }
+        })();
 
         // Tooltip native (title) di tiap link menu - satu-satunya cara tahu
         // nama menu saat ikon-only tanpa mengetik ulang ratusan baris label

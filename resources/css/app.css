@@ -194,26 +194,26 @@
 }
 
 
-/* Radius diseragamkan ke 8px senada .modern-table-wrapper & .modal
-   (token --radius-lg di ui-refresh.css). Nilai di sini sengaja sama
-   supaya sumber kode dan hasil render tidak berbeda pikiran. */
+/* Command Center (V3 pass 4): kartu lebih manis & lega - radius 16, border
+   hairline es, bayangan jauh lebih lembut, hover tersirat. */
 .card {
     background: var(--surface-primary);
-    border-radius: 8px;
+    border-radius: 16px;
     border: 1px solid var(--border-primary);
-    box-shadow: none;
+    box-shadow: 0 1px 2px rgba(15, 30, 62, .04);
     padding: 20px;
     margin-bottom: 20px;
+    transition: box-shadow .22s cubic-bezier(.32,.72,0,1), border-color .22s cubic-bezier(.32,.72,0,1);
 }
+.card:hover { box-shadow: 0 6px 18px rgba(15, 30, 62, .07); border-color: var(--pro-border-2, #CBD6EE); }
 
 /* --- TABLE SYSTEM --- */
-/* Radius 8px, sama persis dengan .card dan modal, supaya tabel tidak
-   terlihat "lebih bulat" atau "lebih kotak" dari panel di atasnya. */
+/* Radius 14px selaras kartu Command Center. */
 .modern-table-wrapper {
     width: 100%;
     background: var(--surface-primary);
-    border-radius: 8px;
-    box-shadow: none;
+    border-radius: 14px;
+    box-shadow: 0 1px 2px rgba(15, 30, 62, .04);
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     border: 1px solid var(--border-primary);
@@ -725,6 +725,26 @@ html[data-sidebar-mode="light"] aside {
     --notif-warning: #E8891D !important;  --notif-warning-fg: #1F2937 !important;
     --notif-fg: #FFFFFF !important;
 }
+
+/* Badge notifikasi: pil kecil dengan ikon lonceng (Font Awesome \f0f3),
+   angka tabular. Sebelumnya hanya warna teks yang didefinisikan - badge
+   tampil sebagai angka telanjang tanpa latar/penanda, sehingga sulit dibaca
+   di menu (keluhan owner 2026-11). Latar mengikuti token --notif-*. */
+.notif-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    min-width: 20px; height: 18px; padding: 0 6px; margin-left: 6px;
+    border-radius: 999px; vertical-align: 1px;
+    background: var(--notif-info); color: var(--notif-fg) !important;
+    font-size: 9.5px; font-weight: 700; line-height: 1;
+    font-variant-numeric: tabular-nums; letter-spacing: .02em;
+}
+.notif-badge::before {
+    content: "\f0f3"; font-family: "Font Awesome 6 Free"; font-weight: 900;
+    font-size: 7.5px; line-height: 1; opacity: .9;
+}
+.notif-badge.rose { background: var(--notif-danger); color: var(--notif-danger-fg) !important; }
+.notif-badge.amber { background: var(--notif-warning); color: var(--notif-warning-fg) !important; }
+.notif-badge.indigo { background: var(--notif-info); color: var(--notif-info-fg) !important; }
 
 /* Warna TEKS badge di dalam aside: perangkat/var sentral tidak cukup
    karena aturan menu (!important) yang semestinya menarget teks menu
@@ -1426,10 +1446,10 @@ html.dark .hero-postingan { box-shadow: none; }
     --pro-radius: 16px;
     --pro-radius-md: 12px;
     --pro-radius-sm: 6px;
-    --pro-shadow-sm: 0 1px 2px rgba(15, 30, 62, .05);
-    --pro-shadow-md: 0 6px 16px rgba(15, 30, 62, .08), 0 1px 3px rgba(15, 30, 62, .05);
-    --pro-shadow-lg: 0 14px 34px rgba(15, 30, 62, .12), 0 2px 6px rgba(15, 30, 62, .06);
-    --pro-shadow-xl: 0 24px 56px rgba(15, 30, 62, .14), 0 2px 8px rgba(15, 30, 62, .07);
+    --pro-shadow-sm: 0 1px 2px rgba(15, 30, 62, .04);
+    --pro-shadow-md: 0 4px 12px rgba(15, 30, 62, .06), 0 1px 2px rgba(15, 30, 62, .04);
+    --pro-shadow-lg: 0 10px 28px rgba(15, 30, 62, .08), 0 2px 5px rgba(15, 30, 62, .05);
+    --pro-shadow-xl: 0 18px 44px rgba(15, 30, 62, .10), 0 2px 7px rgba(15, 30, 62, .06);
 }
 
 /* Kartu: putih, border tipis tegas, radius 16px, shadow halus. */
@@ -1557,3 +1577,18 @@ html.dark .cmdk-group { color: #6B7799; }
 .modern-table tbody tr { transition: background-color .12s ease; }
 .modern-table tbody tr:hover { background: #FAFCFF !important; }
 .modern-table tbody tr.is-active { background: #F0F6FF !important; box-shadow: inset 3px 0 0 var(--pro-accent) !important; }
+/* ==========================================================================
+   VISUAL REFRESH V4 (2026-11) - Transisi halaman & motion
+   View Transitions API (Chrome/Edge 111+): crossfade + scale tipis antar
+   halaman Blade penuh. Browser lain mengabaikan blok ini; navigasi tetap
+   normal. prefers-reduced-motion mematikan keduanya.
+   ========================================================================== */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: vtOut .18s cubic-bezier(.4,0,.2,1) both; }
+::view-transition-new(root) { animation: vtIn .3s cubic-bezier(.32,.72,0,1) both; }
+@keyframes vtOut { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(4px) scale(.995); } }
+@keyframes vtIn { from { opacity: 0; transform: translateY(10px) scale(.99); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+    @view-transition { navigation: none; }
+    ::view-transition-old(root), ::view-transition-new(root) { animation: none !important; }
+}
