@@ -313,6 +313,8 @@
             font-size: 9px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--pro-ink-3);
         }
         .promega-foot kbd { background: var(--pro-bg); border: 1px solid var(--pro-border-2); border-radius: 4px; padding: 1px 6px; font-size: 9px; color: var(--pro-ink-2); font-family: inherit; }
+        html.dark .promega-link:hover { background: #22304F; color: var(--pro-accent-hover); }
+        html.dark .promega-card.tone-navy { background: #22304F; border: 1px solid #3A4767; }
     }
     @media (prefers-reduced-motion: reduce) {
         #proMega.terbuka, #mainSidebar.terbuka, .content-wrapper { animation: none !important; }
