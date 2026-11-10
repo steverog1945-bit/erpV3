@@ -665,6 +665,24 @@ Route::match(['post', 'patch'], '/pembelian-bahan/pelunasan/{id}', [PembelianBah
     Route::get('/backup', [\App\Http\Controllers\BackupController::class, 'index'])->name('backup.index');
     Route::post('/backup/jalankan', [\App\Http\Controllers\BackupController::class, 'jalankan'])->name('backup.jalankan');
 
+    /*
+    |--------------------------------------------------------------------------
+    | ORION PREMIUM (gratis, tanpa API) - showcase + fitur premium yang sudah
+    | berjalan. Seluruh role login boleh membuka (lihat always_allow). Tidak
+    | ada panggilan keluar; saat paywall diaktifkan nanti, gemboknya pindah ke
+    | middleware premium:* - route di bawah ini tidak diubah.
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('premium')->name('premium.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\PremiumController::class, 'index'])->name('index');
+        Route::get('/analisis', [\App\Http\Controllers\PremiumController::class, 'analisis'])->name('analisis');
+        Route::get('/piutang-wa', [\App\Http\Controllers\PremiumController::class, 'piutangWa'])->name('piutang-wa');
+        Route::get('/prediksi-stok', [\App\Http\Controllers\PremiumController::class, 'prediksiStok'])->name('prediksi-stok');
+        Route::get('/portal', [\App\Http\Controllers\PremiumController::class, 'portal'])->name('portal');
+        Route::get('/asisten', [\App\Http\Controllers\PremiumController::class, 'asisten'])->name('asisten');
+        Route::get('/cadangan', [\App\Http\Controllers\PremiumController::class, 'cadangan'])->name('cadangan');
+    });
+
     // Stock Opname (roadmap LEVEL 1) - eksekusi adjustment sungguhan lewat
     // Approval Workflow (lihat ApprovalController), bukan lewat route di sini.
     Route::get('/stock-opname', [\App\Http\Controllers\StockOpnameController::class, 'index'])->name('stock-opname.index');
@@ -952,3 +970,13 @@ Route::match(['post', 'patch'], '/pembelian-bahan/pelunasan/{id}', [PembelianBah
     });
 
 });
+/*
+|--------------------------------------------------------------------------
+| LACAK PESANAN - Publik (tanpa login). Hanya bisa dibuka lewat signed URL
+| 30 hari yang dibuat di /premium/portal. Menampilkan progres AGREGAT item;
+| tanpa HPP, komisi, atau id internal.
+|--------------------------------------------------------------------------
+*/
+Route::get('/lacak/{id}', [\App\Http\Controllers\PremiumController::class, 'lacak'])
+    ->whereNumber('id')
+    ->name('lacak.nota');

@@ -219,5 +219,10 @@ return [
         'logout',
         'storage',
         'up',
+        // Halaman Premium (showcase + fitur non-paywall) terbuka untuk
+        // semua role yang login. Ini masih gratis-penggunaan; saat fitur
+        // premium di-lock nanti, kontrolnya pindah ke middleware premium:*
+        // - bukan ke sini.
+        'premium',
     ],
 ];

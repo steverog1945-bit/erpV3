@@ -136,6 +136,84 @@ class BrandThemeService
                 'inactive_dark' => '#8A96B8', 'active_dark' => '#5B8DEF',
             ],
         ],
+        'obsidian-gold' => [
+            'name' => 'Obsidian Gold (Premium)',
+            'description' => 'Gelap mewah aksen emas - tema premium Orion.',
+            'swatches' => ['#1A1730', '#C98A1B', '#F7CD6B', '#0F0B1E'],
+            'neutralRamp' => [
+                '50' => '#F5F3FF', '100' => '#E8E6F2', '200' => '#CFCADA',
+                '300' => '#8E88A6', '400' => '#5F5980', '500' => '#3E3857',
+                '600' => '#2E2943', '700' => '#221E33', '800' => '#181527',
+                '900' => '#0F0B1E', '950' => '#080612',
+            ],
+            'surfaces' => [
+                'page' => '#121020', 'primary' => '#1A1730', 'secondary' => '#16132A',
+                'tertiary' => '#221F38', 'border' => '#2E2947', 'border_strong' => '#3E3857',
+                'text' => '#F3EFFA', 'text_secondary' => '#C9C4DC', 'text_tertiary' => '#8E88A6',
+                'dark_primary' => '#121020', 'dark_secondary' => '#1A1730',
+                'dark_tertiary' => '#221F38', 'dark_border' => '#2E2947',
+                'dark_text' => '#F3EFFA', 'dark_text_secondary' => '#C9C4DC', 'dark_text_tertiary' => '#8E88A6',
+            ],
+            'sidebar' => [
+                'deep' => '#0F0B1E', 'base' => '#181527', 'raised' => '#221F38',
+                'border' => '#2E2947', 'text' => '#C9C4DC', 'muted' => '#8E88A6',
+                'title' => '#FFFFFF', 'accent' => '#F7CD6B', 'warning' => '#F0A882',
+                'active' => '#2A2545', 'hover' => '#1F1C33', 'active_mark' => '#F7CD6B',
+            ],
+            'ramp' => [
+                '50' => '#FBF3DE', '100' => '#F7E8BE', '200' => '#EFD489',
+                '300' => '#E4BB55', '400' => '#D9A43A', '500' => '#C98A1B',
+                '600' => '#8A560C', '700' => '#6E4309', '800' => '#523007',
+                '900' => '#472C08', '950' => '#2B1C05',
+            ],
+            'accent' => [
+                'light' => '#8A560C', 'hover_light' => '#6E4309', 'surface_light' => '#F7E8BE',
+                'dark' => '#F7CD6B', 'hover_dark' => '#FFDF8F', 'dark_hover' => '#C98A1B', 'surface_dark' => '#2A2545',
+            ],
+            'mobileNavigation' => [
+                'inactive_light' => '#5F5980', 'active_light' => '#A96E12',
+                'inactive_dark' => '#8E88A6', 'active_dark' => '#F7CD6B',
+            ],
+        ],
+        'porcelain-bronze' => [
+            'name' => 'Porcelain Bronze (Premium)',
+            'description' => 'Kertas hangat aksen perunggu - tema premium terang.',
+            'swatches' => ['#FAF6EC', '#8C5A2B', '#F3EAD8', '#2E2418'],
+            'neutralRamp' => [
+                '50' => '#FAF6EC', '100' => '#F3ECDD', '200' => '#E7DCC6',
+                '300' => '#CBB894', '400' => '#9A8463', '500' => '#6E5B41',
+                '600' => '#54462F', '700' => '#3E3423', '800' => '#2E2718',
+                '900' => '#1F1A10', '950' => '#141009',
+            ],
+            'surfaces' => [
+                'page' => '#F7F2E7', 'primary' => '#FFFFFF', 'secondary' => '#FAF6EC',
+                'tertiary' => '#F3ECDD', 'border' => '#E7DCC6', 'border_strong' => '#CBB894',
+                'text' => '#2E2418', 'text_secondary' => '#54462F', 'text_tertiary' => '#6E5B41',
+                'dark_primary' => '#241F14', 'dark_secondary' => '#2E2718',
+                'dark_tertiary' => '#3E3423', 'dark_border' => '#54462F',
+                'dark_text' => '#F3ECDD', 'dark_text_secondary' => '#E7DCC6', 'dark_text_tertiary' => '#CBB894',
+            ],
+            'sidebar' => [
+                'deep' => '#141009', 'base' => '#1F1A10', 'raised' => '#2E2718',
+                'border' => '#3E3423', 'text' => '#E7DCC6', 'muted' => '#CBB894',
+                'title' => '#FFFFFF', 'accent' => '#D9A43A', 'warning' => '#F0A882',
+                'active' => '#33291A', 'hover' => '#241F14', 'active_mark' => '#D9A43A',
+            ],
+            'ramp' => [
+                '50' => '#FAF0DC', '100' => '#F0DFC0', '200' => '#E1C391',
+                '300' => '#C9A45F', '400' => '#B08A47', '500' => '#8C5A2B',
+                '600' => '#6F4520', '700' => '#55341A', '800' => '#3F2813',
+                '900' => '#2A1B0D', '950' => '#1A1007',
+            ],
+            'accent' => [
+                'light' => '#6F4520', 'hover_light' => '#55341A', 'surface_light' => '#F0DFC0',
+                'dark' => '#E1C391', 'hover_dark' => '#F5E3C4', 'dark_hover' => '#8C5A2B', 'surface_dark' => '#33291A',
+            ],
+            'mobileNavigation' => [
+                'inactive_light' => '#6E5B41', 'active_light' => '#6F4520',
+                'inactive_dark' => '#CBB894', 'active_dark' => '#E1C391',
+            ],
+        ],
     ];
 
     public function __construct(private readonly ?string $path = null)
