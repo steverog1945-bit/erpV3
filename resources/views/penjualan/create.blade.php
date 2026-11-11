@@ -39,7 +39,6 @@
          "Nomor Nota" selalu terbaca pertama kali tanpa noise berlebih. --}}
     <div class="po-head">
         <div class="po-head-left">
-            <p class="po-eyebrow">Kasir</p>
             <h1 class="po-title">{{ $notaEdit ? 'Edit Nota' : ($notaSusulan ? 'Order Susulan' : 'Input Order') }}</h1>
             <p class="po-sub">{{ $notaEdit ? 'Mengkoreksi ' . $notaEdit->nomor_nota . ' · ' . \Carbon\Carbon::parse($notaEdit->tgl_order)->translatedFormat('d M Y') : ($notaSusulan ? 'Menambah item ke ' . $notaSusulan->nomor_nota . ' · ' . \Carbon\Carbon::parse($notaSusulan->tgl_order)->translatedFormat('d M Y') : 'Order cetak reguler · ' . now()->translatedFormat('d M Y')) }}</p>
         </div>
@@ -327,7 +326,7 @@
         {{-- ---------- 01: Produk & Pengaturan ---------- --}}
         <div class="min-w-0">
             <div class="flex items-start gap-2.5 mb-2.5">
-                <span class="w-6 h-6 shrink-0 rounded-full bg-[#2563EB] text-white text-[11px] font-semibold flex items-center justify-center">01</span>
+                <span class="w-6 h-6 shrink-0 rounded-full bg-[#EEF2FA] text-[#0F1E3E] text-[11px] font-semibold flex items-center justify-center">01</span>
                 <div class="min-w-0 pt-0.5">
                     <p class="text-[13px] font-medium text-slate-800 leading-tight">Produk &amp; Pengaturan</p>
                     <p class="text-[11px] text-slate-400 leading-tight">Pilih sesuai pesanan</p>
@@ -430,7 +429,7 @@
         {{-- ---------- 02: Detail Desain & Ukuran ---------- --}}
         <div class="min-w-0">
             <div class="flex items-start gap-2.5 mb-2.5">
-                <span class="w-6 h-6 shrink-0 rounded-full bg-[#2563EB] text-white text-[11px] font-semibold flex items-center justify-center">02</span>
+                <span class="w-6 h-6 shrink-0 rounded-full bg-[#EEF2FA] text-[#0F1E3E] text-[11px] font-semibold flex items-center justify-center">02</span>
                 <div class="min-w-0 pt-0.5">
                     <p class="text-[13px] font-medium text-slate-800 leading-tight">Detail Desain &amp; Ukuran</p>
                     <p class="text-[11px] text-slate-400 leading-tight">Upload file lebih dulu</p>
@@ -544,16 +543,18 @@
      /unit pindah ke kanan atas supaya tidak dibaca sebagai bagian dari
      nominal besar - pemisahan posisi itu yang membuatoperator tidak salah
      mengira total sudah termasuk harga satuan. --}}
-                <div class="po-est mt-3 rounded-xl border border-[#2563EB]/15 px-4 py-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+                {{-- Estimasi harga: dipajang sebagai strip-soft di dalam kartu (satu-satunya
+                     surface gelap = keranjang). Angka navy, bukan pulau navy mengambang. --}}
+                <div class="po-est mt-3 rounded-xl border border-[#CBD2E3]/60 px-4 py-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
                     <div class="min-w-0">
-                        <p class="text-[10px] font-medium text-[#2563EB] uppercase tracking-widest">Harga Estimasi</p>
-                        <h2 id="display_subtotal" class="text-3xl font-medium text-[#2563EB] tracking-tight leading-tight tabular-nums">Rp 0</h2>
+                        <p class="po-est-lbl">Estimasi item ini</p>
+                        <h2 id="display_subtotal" class="tracking-tight leading-tight tabular-nums">Rp 0</h2>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
                         <p id="status_hitung" class="hidden text-amber-700 text-xs font-medium"><i class="fas fa-circle-notch fa-spin mr-1"></i> Menghitung...</p>
                         <span id="badge_promo" hidden class="inline-flex items-center rounded-md bg-rose-600 px-2 py-0.5 text-[10px] font-medium text-white">Harga promo</span>
-                        <p id="display_qty" hidden class="rounded-lg border border-[#2563EB]/25 bg-white px-2.5 py-1 text-[#2563EB] text-xs font-medium tabular-nums"></p>
-                        <p id="display_harga" class="rounded-lg border border-[#2563EB]/25 bg-white px-2.5 py-1 text-[#2563EB] text-xs font-medium tabular-nums">Rp 0 /unit</p>
+                        <p id="display_qty" hidden class="po-est-chip"></p>
+                        <p id="display_harga" class="po-est-chip">Rp 0 /unit</p>
                     </div>
                 </div>
 
@@ -755,14 +756,14 @@
                      terdorong jauh ke bawah oleh baris kosong di atasnya. --}}
                 <div class="flex flex-wrap items-center justify-between gap-2 mt-3 pt-3 border-t border-slate-100">
                     <div class="flex flex-wrap items-center gap-3">
-                        <button type="button" id="btn_tambah_finishing" onclick="tambahFinishingKeDaftar()" class="hidden inline-flex items-center gap-1.5 bg-sky-500 hover:bg-sky-600 text-white px-3.5 py-2 rounded-lg font-medium text-[10px] uppercase tracking-widest shadow-sm transition-all whitespace-nowrap">
+                        <button type="button" id="btn_tambah_finishing" onclick="tambahFinishingKeDaftar()" class="hidden inline-flex items-center gap-1.5 bg-white border border-[#CBD2E3] hover:border-[#2563EB] hover:text-[#1D4ED8] text-[#0F1E3E] px-3.5 py-2 rounded-lg font-semibold text-[11px] shadow-sm transition-all whitespace-nowrap">
                             <i class="fas fa-plus"></i> Tambah Finishing
                         </button>
-                        <button type="button" id="btn_tambah_desain" @unlessbolehDesain hidden @endbolehDesain onclick="tampilkanBiayaDesain()" class="text-indigo-500 hover:text-indigo-700 text-[10px] font-medium uppercase tracking-widest underline underline-offset-4 decoration-dotted whitespace-nowrap">
+                        <button type="button" id="btn_tambah_desain" @unlessbolehDesain hidden @endbolehDesain onclick="tampilkanBiayaDesain()" class="text-[#0F1E3E] hover:text-[#1D4ED8] text-[11px] font-semibold underline underline-offset-4 decoration-dotted whitespace-nowrap">
                             <i class="fas fa-plus-circle"></i> Biaya Desain
                         </button>
                     </div>
-                    <button onclick="tambahKeKeranjang()" class="inline-flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-3 rounded-lg font-medium text-xs uppercase tracking-wider shadow-sm transition-all active:scale-95 whitespace-nowrap">
+                    <button onclick="tambahKeKeranjang()" class="inline-flex items-center justify-center gap-2 bg-[#0F1E3E] hover:bg-[#1E2A4A] text-white px-8 py-3 rounded-lg font-semibold text-[13px] shadow-sm transition-all active:scale-95 whitespace-nowrap">
                         Tambah
                     </button>
                 </div>
@@ -811,7 +812,7 @@
                     </x-form.group>
 
                     <div class="flex justify-end">
-                        <button onclick="tambahJasaKeKeranjang()" class="inline-flex items-center justify-center gap-2 bg-purple-500 hover:bg-purple-600 text-white px-8 py-3.5 rounded-xl font-medium text-xs uppercase tracking-wider shadow-sm transition-all active:scale-95">
+                        <button onclick="tambahJasaKeKeranjang()" class="inline-flex items-center justify-center gap-2 bg-[#0F1E3E] hover:bg-[#1E2A4A] text-white px-8 py-3.5 rounded-xl font-semibold text-[13px] shadow-sm transition-all active:scale-95">
                             Tambah Jasa
                         </button>
                     </div>
@@ -837,8 +838,8 @@
                  padahal ruang di bawah top hanya 100vh - 96px, jadi bagian
                  bawah keranjang selalu keluar layar ~32px - tombol Simpan
                  justru yang paling penting dan justru terpotong. --}}
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col overflow-hidden lg:max-h-[calc(100vh-7rem)]">
-                <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
+            <div class="po-cart-dark rounded-2xl flex flex-col overflow-hidden lg:max-h-[calc(100vh-7rem)]">
+                <div class="po-cart-head px-5 py-4 flex justify-between items-center">
                     <div class="flex items-center gap-3">
                         <span class="po-ic w-10 h-10 rounded-xl flex items-center justify-center"><i class="fas fa-shopping-basket"></i></span>
                         <div class="min-w-0">
@@ -922,17 +923,17 @@
                     </div>
                 </div>
 
-                <div class="mt-auto p-6 bg-slate-50 border-t border-slate-100 shrink-0">
-                    <div class="flex justify-between items-center mb-5">
+                <div class="po-cart-foot mt-auto p-4 sm:p-5 shrink-0">
+                    <div class="flex justify-between items-center gap-3 mb-4">
                         <div>
-                            <p class="text-slate-400 text-[10px] font-medium uppercase tracking-widest mb-1">Total Pembayaran</p>
-                            <h2 id="grand_total" class="text-3xl font-medium text-[#2563EB] tracking-tight leading-none">Rp 0</h2>
+                            <p class="po-cart-total-lbl">Total Pembayaran</p>
+                            <h2 id="grand_total" class="tabular-nums leading-none">Rp 0</h2>
                         </div>
-                        <button onclick="resetCart()" title="Kosongkan keranjang" class="w-11 h-11 flex items-center justify-center bg-white border border-slate-200 text-slate-400 hover:text-rose-500 hover:border-rose-200 rounded-xl transition-all">
+                        <button onclick="resetCart()" title="Kosongkan keranjang" class="po-cart-reset">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                         </button>
                     </div>
-                    <button type="button" onclick="simpanTransaksi(this)" class="w-full inline-flex items-center justify-center gap-2 py-4 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-xl font-medium text-xs uppercase tracking-wider shadow-sm transition-colors active:scale-[0.99]">
+                    <button type="button" onclick="simpanTransaksi(this)" class="w-full inline-flex items-center justify-center gap-2 py-4 bg-[#2563EB] hover:bg-[#1D4ED8] text-white rounded-xl font-semibold text-[14px] tracking-normal shadow-sm transition-colors active:scale-[0.99]">
                         @if($notaEdit)
                             <i class="fas fa-save"></i> Simpan Koreksi Nota {{ $notaEdit->nomor_nota }}
                         @elseif($notaSusulan)
