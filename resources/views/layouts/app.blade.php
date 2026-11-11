@@ -354,10 +354,28 @@
     .pro-bar1 { display: flex; align-items: center; gap: 14px; height: var(--bar1-h); padding: 0 18px; }
     .pro-bar2 { display: flex; align-items: center; gap: 6px; height: var(--bar2-h); padding: 0 18px; overflow-x: auto; scrollbar-width: none; }
     .pro-bar2::-webkit-scrollbar { display: none; }
+    @media (max-width: 1023.98px) {
+        /* Tab aktif tidak terpotong tanpa jejak: fade di tepi + scrollbar tipis */
+        .pro-bar2 {
+            scrollbar-width: thin; scrollbar-color: #CBD6EE transparent;
+            -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 22px, #000 calc(100% - 26px), transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0, #000 22px, #000 calc(100% - 26px), transparent 100%);
+        }
+        .pro-bar2::-webkit-scrollbar { display: block; height: 5px; }
+        .pro-bar2::-webkit-scrollbar-thumb { background: #CBD6EE; border-radius: 999px; }
+        .pro-bar2::-webkit-scrollbar-track { background: transparent; }
+    }
 
-    .pro-logo { display: flex; align-items: center; gap: 11px; text-decoration: none; flex: 0 0 auto; }
-    .pro-wordmark { font-size: 16px; font-weight: 600; letter-spacing: -0.02em; color: var(--pro-ink); line-height: 1.05; }
-    .pro-wordmark small { display: block; font-size: 8.5px; letter-spacing: .24em; color: var(--pro-ink-3); font-weight: 600; margin-top: 3px; }
+    .pro-logo { display: flex; align-items: center; gap: 11px; text-decoration: none; flex: 0 0 auto; min-width: 0; }
+    .pro-wordmark { font-size: 15px; font-weight: 600; letter-spacing: -0.02em; color: var(--pro-ink); line-height: 1.05; white-space: nowrap; }
+    .pro-wordmark small { display: block; font-size: 8px; letter-spacing: .22em; color: var(--pro-ink-3); font-weight: 600; margin-top: 3px; white-space: nowrap; }
+    @media (max-width: 560px) {
+        .pro-logo { gap: 9px; }
+        .pro-wordmark { font-size: 14px; }
+        .pro-wordmark small { font-size: 6.5px; letter-spacing: .18em; margin-top: 2px; }
+        .pro-bar1 { gap: 8px; padding: 0 10px; }
+        .pro-premium { height: 34px; padding: 0; width: 34px; justify-content: center; }
+    }
 
     .pro-search { display: flex; align-items: center; gap: 9px; height: 36px; border: 1px solid var(--pro-border-2); background: #F7FAFF; border-radius: 10px; padding: 0 11px; color: var(--pro-ink-3); flex: 1; max-width: 460px; font-size: 12px; transition: border-color .15s, box-shadow .15s; }
     .pro-search:hover { border-color: var(--pro-accent); }
@@ -2533,6 +2551,12 @@
                     a.setAttribute('title', span.textContent.trim());
                 }
             });
+            // Di layar kecil, tab yang sedang aktif dimajukan supaya tidak
+            // terpotong di tepi kanan tanpa terlihat sama sekali.
+            if (window.innerWidth < 1024) {
+                const aktif = document.querySelector('.pro-bar2 .pro-tab.aktif');
+                if (aktif) aktif.scrollIntoView({ block: 'nearest', inline: 'center' });
+            }
         });
 
         // Sembunyikan sidebar otomatis jika layar diresize ke kecil

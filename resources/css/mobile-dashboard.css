@@ -8,82 +8,82 @@
 
     /* 1. Pangkas whitespace koridor konten (px-4 py-10 -> lebih ringkas);
        padding bawah ditambah memberi ruang navigasi bawah di HP. */
-    .max-w-\[1600px\] {
+    .dashboard-root {
         padding: 14px 12px 16px;
     }
 
     /* 2. Sapaan: ukuran proporsional; nama & role tetap lengkap */
-    .max-w-\[1600px\] h1.text-3xl {
+    .dashboard-root h1.text-3xl {
         font-size: 1.35rem;      /* 21.6px, dari 30px */
         line-height: 1.25;
         letter-spacing: -0.01em;
         margin-top: 2px;
     }
-    .max-w-\[1600px\] h1.text-3xl + p {  /* subjudul sapaan */
+    .dashboard-root h1.text-3xl + p {  /* subjudul sapaan */
         margin-top: 2px;
     }
 
     /* 3. Aksi cepat: satu jajar, sentuh lega (min 42px), tidak menumpuk */
-    .max-w-\[1600px\] a[href$="/penjualan/create"],
-    .max-w-\[1600px\] a[href$="/kasir"],
-    .max-w-\[1600px\] a[href$="/spk"],
-    .max-w-\[1600px\] a[href$="/kasir?tab=monitoring" i] {
+    .dashboard-root a[href$="/penjualan/create"],
+    .dashboard-root a[href$="/kasir"],
+    .dashboard-root a[href$="/spk"],
+    .dashboard-root a[href$="/kasir?tab=monitoring" i] {
         flex: 1 1 auto;
         justify-content: center;
         min-height: 42px;
         padding: 10px 12px;
         letter-spacing: 0.04em;   /* tracking-widest dipipihkan supaya teks muat */
     }
-    .max-w-\[1600px\] > .flex.flex-wrap.items-center.justify-between.gap-3 {
+    .dashboard-root > .flex.flex-wrap.items-center.justify-between.gap-3 {
         margin-bottom: 4px;
     }
 
     /* 4. Baris status live: rapatkan sebelum kartu KPI */
-    .max-w-\[1600px\] .flex.flex-wrap.items-center.justify-between.gap-3 .tracking-\[0\.2em\] {
+    .dashboard-root .flex.flex-wrap.items-center.justify-between.gap-3 .tracking-\[0\.2em\] {
         letter-spacing: 0.06em;
     }
 
     /* 5. KPI: 2 kolom tetap, tapi kartu memadat - angka utuh, ikon rapat */
-    .max-w-\[1600px\] .grid.grid-cols-2[class*="xl:grid-cols-4"] {
+    .dashboard-root .grid.grid-cols-2[class*="xl:grid-cols-4"] {
         gap: 10px;
     }
-    .max-w-\[1600px\] .grid.grid-cols-2[class*="xl:grid-cols-4"] > a {
+    .dashboard-root .grid.grid-cols-2[class*="xl:grid-cols-4"] > a {
         padding: 12px 14px 13px;
     }
-    .max-w-\[1600px\] .grid.grid-cols-2[class*="xl:grid-cols-4"] > a .text-3xl {
+    .dashboard-root .grid.grid-cols-2[class*="xl:grid-cols-4"] > a .text-3xl {
         font-size: 1.35rem;      /* angka 21.6px - tidak terpotong di 320px */
         margin-top: 6px;
         line-height: 1.15;
     }
-    .max-w-\[1600px\] .grid.grid-cols-2[class*="xl:grid-cols-4"] > a > div:first-child .w-8.h-8 {
+    .dashboard-root .grid.grid-cols-2[class*="xl:grid-cols-4"] > a > div:first-child .w-8.h-8 {
         width: 30px;
         height: 30px;
     }
 
     /* 6. Alur pekerjaan: mini-kartu angka lebih padat */
-    .max-w-\[1600px\] .grid.grid-cols-2[class*="md:grid-cols-4"] {
+    .dashboard-root .grid.grid-cols-2[class*="md:grid-cols-4"] {
         gap: 8px;
         margin-bottom: 12px;
     }
-    .max-w-\[1600px\] .grid.grid-cols-2[class*="md:grid-cols-4"] > a {
+    .dashboard-root .grid.grid-cols-2[class*="md:grid-cols-4"] > a {
         padding: 10px 12px;
     }
-    .max-w-\[1600px\] .grid.grid-cols-2[class*="md:grid-cols-4"] > a .text-3xl {
+    .dashboard-root .grid.grid-cols-2[class*="md:grid-cols-4"] > a .text-3xl {
         font-size: 1.3rem;
     }
 
     /* 7. Karta section: padding p-6/p-7 dlm mobile jadi sepadan */
-    .max-w-\[1600px\] .bg-white.rounded-lg.p-6,
-    .max-w-\[1600px\] .bg-white.rounded-2xl.p-6 {
+    .dashboard-root .bg-white.rounded-lg.p-6,
+    .dashboard-root .bg-white.rounded-2xl.p-6 {
         padding: 16px;
     }
 
     /* 8. Jarak antarseksi (gap-6 grid) dirapatkan */
-    .max-w-\[1600px\] .grid[class*="gap-6"] {
+    .dashboard-root .grid[class*="gap-6"] {
         gap: 14px;
     }
-    .max-w-\[1600px\] .grid[class*="gap-6"].mb-6,
-    .max-w-\[1600px\] .mb-6[class*="grid"] {
+    .dashboard-root .grid[class*="gap-6"].mb-6,
+    .dashboard-root .mb-6[class*="grid"] {
         margin-bottom: 14px;
     }
 
@@ -92,10 +92,10 @@
 
     /* 10. Sapaan: tanggal lebih kecil; judul proporsional tanpa menghilangkan
        nama & role pengguna. */
-    .max-w-\[1600px\] p.text-\[11px\].font-medium.text-indigo-500 {
+    .dashboard-root p.text-\[11px\].font-medium.text-indigo-500 {
         font-size: 10px;
     }
-    .max-w-\[1600px\] h1.text-3xl {
+    .dashboard-root h1.text-3xl {
         font-size: 1.3rem;
     }
 
@@ -107,39 +107,39 @@
        a[href$="/kasir"] justru menabrak tombol Nota Baru sehingga teks
        teal jatuh di latar teal (tidak terbaca). Diseleksi ulang:
        Nota Baru -> /penjualan/kasir, tombol Kasir -> /kasir/monitoring. */
-    .max-w-\[1600px\] a[href$="/penjualan/kasir"] {
+    .dashboard-root a[href$="/penjualan/kasir"] {
         background-color: var(--brand-accent-light, #2563EB);
         color: #fff;
         min-height: 48px;
     }
-    .max-w-\[1600px\] a[href$="/penjualan/kasir"] i { color: #fff; }
-    .max-w-\[1600px\] a[href$="/kasir/monitoring"],
-    .max-w-\[1600px\] a[href$="/spk"] {
+    .dashboard-root a[href$="/penjualan/kasir"] i { color: #fff; }
+    .dashboard-root a[href$="/kasir/monitoring"],
+    .dashboard-root a[href$="/spk"] {
         border-color: var(--brand-accent-light, #2563EB);
         color: var(--brand-accent-light, #2563EB);
         min-height: 48px;
     }
-    .max-w-\[1600px\] a[href$="/kasir/monitoring"] i,
-    .max-w-\[1600px\] a[href$="/spk"] i { color: var(--brand-accent-light, #2563EB); }
-    html.dark .max-w-\[1600px\] a[href$="/kasir/monitoring"],
-    html.dark .max-w-\[1600px\] a[href$="/spk"] {
+    .dashboard-root a[href$="/kasir/monitoring"] i,
+    .dashboard-root a[href$="/spk"] i { color: var(--brand-accent-light, #2563EB); }
+    html.dark .dashboard-root a[href$="/kasir/monitoring"],
+    html.dark .dashboard-root a[href$="/spk"] {
         border-color: var(--brand-accent-dark, #7FA6F5);
         color: var(--brand-accent-dark, #7FA6F5);
     }
-    html.dark .max-w-\[1600px\] a[href$="/kasir/monitoring"] i,
-    html.dark .max-w-\[1600px\] a[href$="/spk"] i { color: var(--brand-accent-dark, #7FA6F5); }
+    html.dark .dashboard-root a[href$="/kasir/monitoring"] i,
+    html.dark .dashboard-root a[href$="/spk"] i { color: var(--brand-accent-dark, #7FA6F5); }
 
     /* 12. KPI: jarak kartu lebih rapat, angka tetap utuh & terbaca. */
-    .max-w-\[1600px\] .grid.grid-cols-2[class*="xl:grid-cols-4"] {
+    .dashboard-root .grid.grid-cols-2[class*="xl:grid-cols-4"] {
         gap: 8px;
     }
-    .max-w-\[1600px\] .grid.grid-cols-2[class*="xl:grid-cols-4"] > a {
+    .dashboard-root .grid.grid-cols-2[class*="xl:grid-cols-4"] > a {
         padding: 14px 14px 15px;
     }
-    .max-w-\[1600px\] .grid.grid-cols-2[class*="xl:grid-cols-4"] > a .text-3xl {
+    .dashboard-root .grid.grid-cols-2[class*="xl:grid-cols-4"] > a .text-3xl {
         font-size: 1.3rem;
     }
-    .max-w-\[1600px\] .grid.grid-cols-2[class*="xl:grid-cols-4"] > a > div:first-child .w-8.h-8 {
+    .dashboard-root .grid.grid-cols-2[class*="xl:grid-cols-4"] > a > div:first-child .w-8.h-8 {
         width: 26px;
         height: 26px;
     }
