@@ -385,5 +385,6 @@
     @include('pengaturan.partials.scroll-reveal')
 
     @stack('skrip')
+    @include('partials.asisten-publik')
 </body>
 </html>

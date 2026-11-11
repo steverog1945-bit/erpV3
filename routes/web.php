@@ -55,6 +55,13 @@ Route::post('/client-log', [\App\Http\Controllers\ClientLogController::class, 's
     ->middleware(['auth', 'throttle:30,1'])
     ->name('client-log.store');
 
+// Asisten chat publik di landing page - HANYA seputar orderan
+// (AsistenLandingService menolak topik privasi/perusahaan). Publik tanpa
+// login, dibatasi 30 request/menit per IP.
+Route::post('/landing-tanya', [\App\Http\Controllers\LandingTanyaController::class, 'tanya'])
+    ->middleware('throttle:30,1')
+    ->name('landing.tanya');
+
 // Endpoint login khusus staf. Ini yang jadi tujuan route('login'), jadi
 // middleware auth, HanyaAdministrator, dan seluruh kode yang memanggil
 // route('login') otomatis mendarat di halaman yang benar-benar punya form

@@ -369,5 +369,6 @@
     @include('pengaturan.partials.smooth-scroll')
 
     @stack('skrip')
+    @include('partials.asisten-publik')
 </body>
 </html>

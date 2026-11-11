@@ -329,5 +329,6 @@
             .lp-product:hover, .lp-portfolio-card:hover, .lp-posts-card:hover { transform: none; box-shadow: none; transition: none; }
         }
     </style>
+    @include('partials.asisten-publik')
 </body>
 </html>

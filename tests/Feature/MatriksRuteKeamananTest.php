@@ -125,6 +125,7 @@ class MatriksRuteKeamananTest extends TestCase
             //                            tidak pernah draft, tidak pernah data ERP.
             'GET /manifest.webmanifest', // PWA: manifest untuk pasang app - wajib publik
             'GET /sw.js', // PWA: service worker - wajib publik (diambil browser saat load)
+            'POST /landing-tanya', // asisten chat publik landing - hanya tanya-jawab orderan (AsistenLandingService), tanpa login + throttle:30,1, tanpa data ERP
             'POST /client-log', // log error klien (graffik/umpan balik) - butuh login + throttle:30,1, bukan data bisnis
             'POST /profil/foto', // self-service foto profil sendiri - butuh login; controller hanya menulis milik user yang login
             'DELETE /profil/foto',
