@@ -161,7 +161,9 @@
 
     #sidebarOverlay {
         display: none; position: fixed; inset: 0; z-index: 38;
-        background: rgba(9, 15, 30, .32);
+        background: rgba(9, 15, 30, .34);
+        -webkit-backdrop-filter: blur(6px) saturate(.85);
+        backdrop-filter: blur(6px) saturate(.85);
     }
     #sidebarOverlay.terbuka { display: block; }
     /* Desktop: overlay tidak dipakai mega menu (tanpa dim ala Canva).
@@ -171,6 +173,20 @@
     @media (min-width: 1024px) {
         #sidebarOverlay, #sidebarOverlay.terbuka { display: none !important; }
     }
+
+    /* Backdrop full-layar khusus mega menu (desktop): seluruh isi halaman
+       di belakang menu diblur & diredupkan supaya mata fokus ke menu.
+       Mobile memakai #sidebarOverlay di atas. */
+    #menuBackdrop {
+        position: fixed; inset: 0; z-index: 36;
+        background: rgba(13, 20, 38, .30);
+        -webkit-backdrop-filter: blur(8px) saturate(.85);
+        backdrop-filter: blur(8px) saturate(.85);
+        opacity: 0; visibility: hidden; pointer-events: none;
+        transition: opacity .25s ease, visibility .25s ease;
+    }
+    #menuBackdrop.terbuka { opacity: 1; visibility: visible; pointer-events: auto; cursor: pointer; }
+    @media (prefers-reduced-motion: reduce) { #menuBackdrop { transition: none; } }
 
     /* ===== MENU PANEL (mega menu) ===== */
     @media (min-width: 1024px) {
@@ -220,24 +236,60 @@
     }
     @keyframes proPanelIn { from { opacity: 0; transform: translate(-50%, -12px) scale(.985); } to { opacity: 1; transform: translate(-50%, 0) scale(1); } }
 
-    /* Mobile & tablet: drawer kiri, accordion tetap aktif */
+    /* Mobile & tablet: drawer kiri. Ikon 20px outline konsisten, font Inter
+       13.5px/500-600, tautan minimal 44px tinggi (target sentuh), grup buka-
+       tutup dengan animasi halus (max-height + opacity + rotasi chevron). */
     @media (max-width: 1023px) {
         #mainSidebar {
             position: fixed; z-index: 40; top: 0; left: 0; right: auto; bottom: 0;
             width: min(320px, 88vw); height: 100dvh; background: var(--pro-surface);
             border: 0; border-right: 1px solid var(--pro-border-2);
-            overflow-y: auto; display: none; padding: 14px 14px 18px;
-            animation: proDrawerIn .22s cubic-bezier(.22,1,.36,1);
+            overflow-y: auto; display: none; padding: 12px 12px calc(18px + env(safe-area-inset-bottom));
+            animation: proDrawerIn .3s cubic-bezier(.22,1,.36,1);
+            font-family: var(--brand-font-family, 'Inter'), sans-serif;
+            font-feature-settings: "cv11", "ss01";
+            -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
         }
         #mainSidebar.terbuka { display: block; }
-        @keyframes proDrawerIn { from { transform: translateX(-100%); } to { transform: none; } }
+        @keyframes proDrawerIn { from { transform: translateX(-104%); opacity: .5; } to { transform: none; opacity: 1; } }
         #mainSidebar .lg\:hidden { display: flex; }
-        #mainSidebar a { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; font-size: 13px; color: var(--pro-ink-2); text-decoration: none; border-left: 3px solid transparent; }
+        #mainSidebar nav { padding-bottom: 12px; }
+        #mainSidebar a {
+            display: flex; align-items: center; gap: 12px;
+            min-height: 44px; padding: 10px 14px; border-radius: 12px;
+            font-size: 13.5px; font-weight: 500; color: var(--pro-ink-2);
+            text-decoration: none; border-left: 0; letter-spacing: 0; line-height: 1.3;
+            transition: background .18s ease, color .18s ease, transform .18s ease;
+        }
+        #mainSidebar a svg { width: 20px !important; height: 20px !important; opacity: .82; flex: 0 0 auto; transition: opacity .18s ease, color .18s ease; }
         #mainSidebar a:hover { background: var(--pro-accent-soft); color: var(--pro-accent-hover); }
-        #mainSidebar a.sb-active, #mainSidebar a.group.sb-active { background: var(--pro-accent-soft); color: var(--pro-accent-hover); border-left-color: var(--pro-accent); font-weight: 600; }
-        #mainSidebar .menu-group-toggle { display: flex; align-items: center; gap: 8px; width: 100%; text-align: left; padding: 12px 12px 7px; border: 0; background: transparent; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--pro-ink-3); font-weight: 600; }
-        #mainSidebar .menu-group-toggle > i.fa-chevron-down { margin-left: auto; transition: transform .16s ease; }
-        #mainSidebar .menu-group-items.hidden { display: none; }
+        #mainSidebar a:hover svg { opacity: 1; color: var(--pro-accent-hover); }
+        #mainSidebar a:active { transform: scale(.985); }
+        #mainSidebar a.sb-active, #mainSidebar a.group.sb-active { background: var(--pro-accent-soft); color: var(--pro-accent-hover); font-weight: 600; box-shadow: inset 0 0 0 1px #C9D9FB; }
+        #mainSidebar a.sb-active svg { opacity: 1; color: var(--pro-accent-hover); }
+        #mainSidebar .menu-group-toggle {
+            display: flex; align-items: center; gap: 10px; width: 100%;
+            text-align: left; padding: 14px 12px 8px; border: 0; background: transparent;
+            font-size: 11px; letter-spacing: .04em; text-transform: none;
+            color: var(--pro-ink-3); font-weight: 700; cursor: pointer;
+            border-bottom: 1px solid #EDF2F9; margin-bottom: 2px;
+        }
+        #mainSidebar .menu-group-toggle > i.fa-chevron-down { margin-left: auto; font-size: 12px; opacity: .7; transition: transform .38s cubic-bezier(.32,1.25,.4,1), opacity .2s ease; }
+        #mainSidebar .menu-group-toggle[aria-expanded="true"] > i.fa-chevron-down { transform: rotate(180deg); opacity: 1; }
+        #mainSidebar .menu-group-toggle i.rotate-180 { transform: rotate(180deg); opacity: 1; }
+        /* Akordeon: animasi max-height + opacity, tanpa menggantikan .hidden */
+        #mainSidebar .menu-group-items {
+            max-height: 900px; opacity: 1; overflow: hidden;
+            transition: max-height .38s cubic-bezier(.22,1,.36,1), opacity .3s ease;
+        }
+        #mainSidebar .menu-group-items.hidden {
+            display: block !important; max-height: 0; opacity: 0; pointer-events: none;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            #mainSidebar { animation: none; }
+            #mainSidebar .menu-group-items { transition: none; }
+            #mainSidebar .menu-group-toggle > i.fa-chevron-down { transition: none; }
+        }
         #sidebarBrandHeader { display: flex; align-items: center; gap: 12px; padding: 4px 8px 12px; border-bottom: 1px solid var(--pro-border); margin-bottom: 10px; }
         .sidebar-brandchip { display: flex; align-items: center; gap: 10px; text-decoration: none; min-width: 0; }
         .brandchip-logo { display: block; height: 28px; width: auto; max-width: 170px; max-height: 28px; object-fit: contain; }
@@ -254,13 +306,14 @@
         #mainSidebar.terbuka { display: none !important; }
         #proMega {
             position: fixed; z-index: 40;
-            top: calc(var(--bar1-h) + var(--bar2-h) + 12px);
+            top: calc(var(--bar1-h) + var(--bar2-h));
             left: 50%; transform: translate(-50%, 0);
-            width: min(1240px, calc(100% - 32px));
-            max-height: min(76vh, 680px);
+            width: min(1400px, calc(100% - 32px));
+            max-height: min(80vh, 720px);
             display: none; flex-direction: column; overflow: hidden;
             background: var(--pro-surface); border: 1px solid var(--pro-border-2);
-            border-radius: var(--pro-radius); box-shadow: var(--pro-shadow-xl);
+            border-top: 0; border-radius: 0 0 var(--pro-radius) var(--pro-radius);
+            box-shadow: var(--pro-shadow-xl);
         }
         #proMega.terbuka { display: flex; animation: proMegaIn .3s cubic-bezier(.3,1.28,.38,1) both; }
         @keyframes proMegaIn {
@@ -403,8 +456,10 @@
     .pro-premium svg { flex: 0 0 auto; }
     @media (max-width: 767.98px) { .pro-premium-teks { display: none; } .pro-premium { padding: 0; width: 38px; justify-content: center; } }
     .pro-meta { font-size: 9.5px; letter-spacing: .1em; color: var(--pro-ink-3); white-space: nowrap; padding: 0 4px; text-transform: none; }
-    .pro-live { display: inline-flex; align-items: center; gap: 7px; height: 26px; padding: 0 11px; border: 1px solid var(--pro-border); background: var(--pro-surface); border-radius: 999px; font-size: 10px; font-weight: 500; color: var(--pro-ink-2); white-space: nowrap; }
+    .pro-live { display: inline-flex; align-items: center; gap: 7px; height: 26px; padding: 0 11px; border: 1px solid var(--pro-border); background: var(--pro-surface); border-radius: 999px; font-size: 10px; font-weight: 500; color: var(--pro-ink-2); white-space: nowrap; cursor: pointer; }
     .pro-live-dot { display: block; width: 6px; height: 6px; border-radius: 999px; background: #0E9F6E; animation: proLive 2.4s ease-in-out infinite; }
+    .pro-live.is-offline .pro-live-dot { background: #F59E0B; animation: none; }
+    .pro-live.is-offline { border-color: #FDE6B0; background: #FFFBEB; color: #92400E; }
     @keyframes proLive { 0%, 100% { box-shadow: 0 0 0 0 rgba(14, 159, 110, .45); } 50% { box-shadow: 0 0 0 4px rgba(14, 159, 110, 0); } }
     @media (max-width: 860px) { .pro-search { display: none; } .pro-meta { display: none; } }
 
@@ -1427,7 +1482,8 @@
              polos kanan. Isi dirakit dari #mainSidebar (RBAC satu sumber).
              Di <1024px elemen ini tidak pernah tampil (lihat CSS); yang
              dipakai drawer #mainSidebar. --}}
-        <div id="proMega" role="dialog" aria-modal="false" aria-label="Menu utama" aria-hidden="true">
+        <div id="menuBackdrop" aria-hidden="true"></div>
+<div id="proMega" role="dialog" aria-modal="false" aria-label="Menu utama" aria-hidden="true">
             <div class="promega-body">
                 <div class="promega-rail" id="proMegaRail">
                     <span class="promega-rail-label">Akses Cepat</span>
@@ -1648,7 +1704,7 @@
                     {{ $tab['label'] }}
                 </a>
             @endforeach
-            <span class="pro-live"><i class="pro-live-dot" aria-hidden="true"></i>Data langsung</span>
+            <button type="button" class="pro-live" id="pro-live" title="Koneksi & data selalu segar - disinkronkan dari server tiap 30 detik. Klik untuk muat ulang."><i class="pro-live-dot" aria-hidden="true"></i><span class="pro-live-text">Data langsung</span></button>
             <button type="button" class="pro-menu-btn" id="menuPanelBtn" onclick="toggleMenuPanel()" aria-expanded="false" aria-controls="proMega mainSidebar">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
                 Semua Menu
@@ -1744,6 +1800,9 @@
         ['proMega', 'mainSidebar'].forEach(function (id) {
             var p = document.getElementById(id);
             if (p) { p.classList.remove('terbuka'); p.setAttribute('aria-hidden', 'true'); }
+        });
+        var mbk = document.getElementById('menuBackdrop');
+        if (mbk) { mbk.classList.remove('terbuka'); mbk.setAttribute('aria-hidden', 'true'); }
         });
         var ov = document.getElementById('sidebarOverlay');
         if (ov) { ov.classList.remove('terbuka'); ov.setAttribute('aria-hidden', 'true'); }
@@ -2363,6 +2422,22 @@
             b.onclick = () => location.reload();
             document.body.appendChild(b);
         }
+        function livePill(ok) {
+            var el = document.getElementById('pro-live');
+            if (!el) return;
+            var txt = el.querySelector('.pro-live-text');
+            if (ok) {
+                el.classList.remove('is-offline');
+                if (txt) txt.textContent = 'Data langsung';
+                el.title = 'Data selalu segar - disinkronkan dari server tiap 30 detik. Klik untuk muat ulang.';
+            } else {
+                el.classList.add('is-offline');
+                if (txt) txt.textContent = 'Mencoba ulang\u2026';
+                el.title = 'Koneksi ke server terputus - mencoba lagi otomatis. Klik untuk muat ulang.';
+            }
+        }
+        var proLive = document.getElementById('pro-live');
+        if (proLive) proLive.addEventListener('click', function () { location.reload(); });
         async function cek() {
             if (document.hidden || sibuk) return;
             sibuk = true;
@@ -2371,10 +2446,11 @@
                 if (!r.ok) throw new Error(r.status);
                 const d = await r.json();
                 jeda = 30000;
+                livePill(true);
                 if (d.notif) renderNotif(d.notif);
                 if (basis === null) basis = d.v;
                 else if (d.v !== basis) { aman() ? location.reload() : pill(); }
-            } catch (e) { jeda = Math.min(jeda * 2, 300000); }
+            } catch (e) { jeda = Math.min(jeda * 2, 300000); livePill(false); }
             finally { sibuk = false; jadwal(); }
         }
         function jadwal() { clearTimeout(timer); timer = setTimeout(cek, jeda); }
@@ -2456,6 +2532,7 @@
             const utama = document.getElementById(desktop ? 'proMega' : 'mainSidebar');
             const lain  = document.getElementById(desktop ? 'mainSidebar' : 'proMega');
             const overlay = document.getElementById('sidebarOverlay');
+            const backdrop = document.getElementById('menuBackdrop');
             const btn = document.getElementById('menuPanelBtn');
 
             // Tutup panel mana pun yang sedang terbuka (bukan sekadar toggle
@@ -2476,6 +2553,19 @@
                 panel.setAttribute('aria-hidden', 'false');
                 overlay.classList.add('terbuka');
                 overlay.setAttribute('aria-hidden', 'false');
+                if (backdrop) {
+                    backdrop.classList.add('terbuka');
+                    backdrop.setAttribute('aria-hidden', 'false');
+                }
+                // Select2 yang terbuka ditutup lebih dulu: dropdown-nya
+                // (z-index 99999) akan menutupi panel & mengaburkan fokus.
+                if (window.jQuery) {
+                    try {
+                        jQuery('.select2-hidden-accessible').each(function () {
+                            jQuery(this).select2('close');
+                        });
+                    } catch (e) { /* abaikan */ }
+                }
                 document.body.classList.add('menu-panel-open');
                 if (btn) btn.setAttribute('aria-expanded', 'true');
                 const fokus = panel.querySelector('a[href], button');
@@ -2485,6 +2575,10 @@
                 panel.setAttribute('aria-hidden', 'true');
                 overlay.classList.remove('terbuka');
                 overlay.setAttribute('aria-hidden', 'true');
+                if (backdrop) {
+                    backdrop.classList.remove('terbuka');
+                    backdrop.setAttribute('aria-hidden', 'true');
+                }
                 document.body.classList.remove('menu-panel-open');
                 if (btn) btn.setAttribute('aria-expanded', 'false');
             }
@@ -2506,8 +2600,9 @@
             if (terbuka) toggleMenuPanel();
         });
 
-        // Klik di luar mega menu (desktop) menutup panel - pengganti overlay
-        // di desktop (overlay dim hanya dipakai drawer mobile).
+        // Klik di luar mega menu (desktop) menutup panel - kini ditangani
+        // juga oleh backdrop full-layar di bawah; listener mousedown ini
+        // tetap sebagai jaring pengaman (mis. klik melalui elemen lain).
         document.addEventListener('mousedown', function (e) {
             if (!window.matchMedia('(min-width: 1024px)').matches) return;
             var p = document.getElementById('proMega');
@@ -2517,11 +2612,30 @@
             toggleMenuPanel();
         });
 
+        // Klik / pilih pada backdrop full-layar menutup mega menu.
+        (function () {
+            var backdrop = document.getElementById('menuBackdrop');
+            if (backdrop) backdrop.addEventListener('mousedown', function () { toggleMenuPanel(); });
+        })();
+
+        // Select2 dibuka -> mega menu tertutup (fokus tunggal, tidak
+        // pernah bertumbukan). Begitu juga sebaliknya di toggleMenuPanel.
+        if (window.jQuery) {
+            jQuery(document).on('select2:open', function () {
+                var terbuka = ['proMega', 'mainSidebar'].some(function (id) {
+                    var p = document.getElementById(id);
+                    return p && p.classList.contains('terbuka');
+                });
+                if (terbuka) toggleMenuPanel();
+            });
+        }
+
         // Hover-to-open (desktop pointer halus saja): mengarahkan kursor ke
         // "Semua Menu" membuka mega menu tanpa klik - seperti Canva. Klik
-        // tetap toggle untuk keyboard/layar sentuh; ada jeda kecil supaya
-        // tidak kebuka hanya karena tikus melintas. Panel harus ikut
-        // disentuh hover-nya supaya bisa dipindahkan dari tombol ke panel.
+        // tetap toggle untuk keyboard/layar sentuh. Panel menempel persis
+        // di bawah topbar (tanpa celah), sehingga kursor bisa berpindah
+        // dari tombol ke panel tanpa pernah "jatuh" ke halaman; jeda tutup
+        // 350 ms memberi ruang ekstra bagi pengguna awam.
         (function () {
             var btn = document.getElementById('menuPanelBtn');
             if (!btn) return;
@@ -2539,7 +2653,7 @@
                 timerMasuk = setTimeout(function () {
                     var p2 = panel();
                     if (p2 && !p2.classList.contains('terbuka')) toggleMenuPanel();
-                }, 140);
+                }, 120);
             }
             function keluar() {
                 clearTimeout(timerMasuk);
@@ -2547,7 +2661,7 @@
                 timerKeluar = setTimeout(function () {
                     var p = panel();
                     if (p && p.classList.contains('terbuka') && desktop.matches) toggleMenuPanel();
-                }, 260);
+                }, 350);
             }
 
             btn.addEventListener('mouseenter', buka);
