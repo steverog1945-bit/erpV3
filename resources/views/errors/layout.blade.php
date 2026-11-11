@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
     <meta name="robots" content="noindex">
-    <title>@yield('code') ┬╖ Orion Grafika</title>
+    <title>@yield('code') · Orion Grafika</title>
     <style>
-        /* Error pages Orion Grafika ΓÇö mandiri total: tanpa aset eksternal,
-           tanpa JS, tanpa database. Token disamakan dengan ui-refresh.css
-           (Inter, #E9EEFA/#FFFFFF/#E3E9F6/#0F1E3E/#2563EB, radius 10/16px). */
+        /* Error pages Orion Grafika — mandiri total: tanpa aset eksternal,
+           tanpa JS, tanpa database. Token disamakan dengan Command Center
+           (#E9EEFA/#FFFFFF/#E3E9F6/#0F1E3E/#2563EB, radius 16/10px). */
         :root {
             --bg: #E9EEFA;
             --card: #FFFFFF;
             --border: #E3E9F6;
+            --border-2: #CBD6EE;
             --text: #0F1E3E;
             --text-2: #3E4C74;
             --text-3: #5D6A85;
@@ -22,14 +23,13 @@
             --accent-hover: #1D4ED8;
             --accent-light: #EFF4FF;
             --accent-border: #C9D8FF;
-            --radius-card: 16px;
-            --radius-btn: 10px;
         }
         @media (prefers-color-scheme: dark) {
             :root {
                 --bg: #141A29;
                 --card: #1C2436;
                 --border: #2A3450;
+                --border-2: #3A4767;
                 --text: #E9EEFA;
                 --text-2: #B9C3DD;
                 --text-3: #8896B8;
@@ -43,134 +43,117 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
+            background:
+                radial-gradient(900px 560px at 88% -18%, rgba(37, 99, 235, .09) 0%, transparent 55%),
+                radial-gradient(720px 560px at -12% 118%, rgba(37, 99, 235, .07) 0%, transparent 55%),
+                var(--bg);
             color: var(--text);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 24px 16px;
+            padding: 32px 18px;
             -webkit-font-smoothing: antialiased;
+            font-feature-settings: "cv11", "ss01";
         }
         .kartu {
             width: 100%;
-            max-width: 420px;
+            max-width: 430px;
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: var(--radius-card);
-            padding: 28px 28px 20px;
-            box-shadow: 0 1px 2px rgba(16, 24, 20, .05), 0 20px 44px rgba(16, 24, 20, .08);
-            text-align: center;
+            border-radius: 20px;
+            padding: 26px 28px 18px;
+            box-shadow: 0 1px 2px rgba(15, 30, 62, .04), 0 18px 48px rgba(15, 30, 62, .10);
         }
         /* Brand row */
         .brand {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 11px;
             padding-bottom: 18px;
-            margin-bottom: 22px;
+            margin-bottom: 24px;
             border-bottom: 1px solid var(--border);
         }
-        .brand-mark {
-            width: 38px;
-            height: 38px;
-            border-radius: 8px;
-            background: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex: 0 0 auto;
-        }
         .brand-nama {
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: .16em;
-            color: var(--text-2);
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--text);
             text-align: left;
-            line-height: 1.25;
+            line-height: 1.15;
         }
         .brand-sub {
             display: block;
-            font-size: 9px;
-            font-weight: 500;
-            letter-spacing: .22em;
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: .24em;
             color: var(--text-4);
-            margin-top: 2px;
+            margin-top: 3px;
+            text-transform: uppercase;
         }
-        /* Ikon besar */
-        .ikon-lingkar {
-            width: 88px;
-            height: 88px;
-            border-radius: 999px;
-            background: var(--accent-light);
-            border: 1px solid var(--accent-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 2px auto 14px;
-        }
+        /* Isi tengah */
         .kode {
-            font-size: 46px;
+            font-size: 64px;
             line-height: 1;
-            font-weight: 500;
-            letter-spacing: -0.02em;
-            color: var(--accent);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: var(--text);
             font-variant-numeric: tabular-nums;
+            margin-top: 4px;
         }
         h1 {
-            font-size: 17px;
-            font-weight: 500;
+            font-size: 15.5px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
             color: var(--text);
-            margin: 10px 0 8px;
-            letter-spacing: 0;
+            margin: 10px 0 6px;
         }
         .pesan {
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 400;
             color: var(--text-3);
             line-height: 1.65;
             max-width: 340px;
-            margin: 0 auto;
         }
         .hint {
-            margin: 14px auto 0;
-            max-width: 340px;
+            margin: 14px 0 0;
             background: var(--accent-light);
             border: 1px solid var(--accent-border);
-            border-radius: var(--radius-btn);
+            border-radius: 10px;
             padding: 9px 12px;
-            font-size: 11.5px;
-            line-height: 1.55;
+            font-size: 11px;
+            line-height: 1.6;
             color: var(--accent-hover);
             display: flex;
             gap: 8px;
             align-items: flex-start;
-            text-align: left;
         }
         .hint svg { flex: 0 0 auto; margin-top: 1px; }
         /* Tombol */
         .aksi {
             display: flex;
             gap: 10px;
-            justify-content: center;
+            margin-top: 20px;
             flex-wrap: wrap;
-            margin-top: 22px;
         }
         .btn {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            height: 38px;
-            padding: 0 16px;
-            border-radius: var(--radius-btn);
+            height: 40px;
+            padding: 0 18px;
+            border-radius: 10px;
             font-family: inherit;
-            font-size: 13px;
-            font-weight: 500;
+            font-size: 12.5px;
+            font-weight: 600;
+            letter-spacing: .01em;
             text-decoration: none;
             border: 1px solid transparent;
             cursor: pointer;
-            transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+            transition: background-color .15s ease, border-color .15s ease, color .15s ease, transform .15s ease;
         }
+        .btn:hover { transform: translateY(-1px); }
+        .btn:active { transform: none; }
         .btn:focus-visible {
             outline: 2px solid var(--accent);
             outline-offset: 2px;
@@ -181,42 +164,55 @@
             color: #fff;
         }
         .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+        .ikon-lingkar {
+            width: 84px;
+            height: 84px;
+            border-radius: 999px;
+            background: var(--accent-light);
+            border: 1px solid var(--accent-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2px auto 14px;
+        }
         .btn-secondary {
             background: transparent;
-            border-color: var(--border);
+            border-color: var(--border-2);
             color: var(--text-2);
         }
         .btn-secondary:hover { border-color: var(--text-3); color: var(--text); }
-        /* Kaki */
         .kaki {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             gap: 12px;
             flex-wrap: wrap;
             border-top: 1px solid var(--border);
-            margin-top: 22px;
-            padding-top: 14px;
-            font-size: 10.5px;
-            letter-spacing: .04em;
+            margin-top: 20px;
+            padding-top: 13px;
+            font-size: 9.5px;
+            font-weight: 600;
+            letter-spacing: .14em;
+            text-transform: uppercase;
             color: var(--text-4);
-            text-align: left;
         }
-        .kaki span:last-child { text-align: right; }
+        @media (max-width: 480px) {
+            .kartu { padding: 20px 18px 14px; border-radius: 16px; }
+            .kode { font-size: 52px; }
+            .aksi .btn { flex: 1 1 auto; justify-content: center; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .btn { transition: none; }
+            .btn:hover { transform: none; }
+        }
     </style>
 </head>
 <body>
     <main class="kartu" role="main" aria-labelledby="judul-error">
         <div class="brand">
-            <span class="brand-mark" aria-hidden="true">
-                {{-- Glyph printer: mewakili percetakan/ERP produksi --}}
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M7 8V3h10v5"/>
-                    <rect x="3" y="8" width="18" height="9" rx="2"/>
-                    <path d="M7 13h10v8H7z"/>
-                    <circle cx="17.5" cy="11" r="0.5" fill="#fff" stroke="none"/>
-                </svg>
-            </span>
-            <span class="brand-nama">ORION GRAFIKA<span class="brand-sub">ERP PERCETAKAN</span></span>
+            {{-- Marka Orion: tiga titik di atas ubin biru (identitas aplikasi) --}}
+            <svg width="34" height="34" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="9" fill="#1D4ED8"/><circle cx="13.4" cy="15.6" r="3.4" fill="#22D3EE"/><circle cx="18" cy="11" r="3.4" fill="#F43F5E"/><circle cx="22.6" cy="15.6" r="3.4" fill="#FACC15"/></svg>
+            <span class="brand-nama">Orion Grafika<span class="brand-sub">ERP Percetakan</span></span>
         </div>
 
         <div class="ikon-lingkar" aria-hidden="true">@yield('ikon')</div>
@@ -240,7 +236,7 @@
             @endif
         </div>
         <div class="kaki">
-            <span>ORION GRAFIKA ┬╖ ERP PERCETAKAN</span>
+            <span>Orion Grafika ERP</span>
             <span>Jika berulang, hubungi Administrator</span>
         </div>
     </main>

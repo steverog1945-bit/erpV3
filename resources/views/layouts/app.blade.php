@@ -1666,6 +1666,7 @@
 (function () {
     var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (reduce) return;
+    var navTimer = null;
     document.addEventListener('click', function (e) {
         if (e.defaultPrevented || e.button !== 0) return;
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -1681,9 +1682,18 @@
         if (/\.(pdf|png|jpe?g|webp|gif|zip|xlsx?|docx?|pptx?)$/i.test(url.pathname)) return;
         e.preventDefault();
         document.body.classList.add('pv2-leaving');
-        window.setTimeout(function () { location.href = url.href; }, 180);
+        clearTimeout(navTimer);
+        navTimer = window.setTimeout(function () { location.href = url.href; }, 180);
     }, true);
+    // Kalau pengguna menekan back/forward sebelum 180ms habis, batalkan pindah halaman.
+    window.addEventListener('pageshow', function (e) {
+        if (e.persisted && navTimer) { clearTimeout(navTimer); navTimer = null; }
+    });
 })();
+    // Saat halaman dibuka lagi dari tombol kembali/maju (bfcache), pastikan
+    // body tidak menyisakan kelas fade-keluar dari navigasi sebelumnya -
+    // kalau menyisakan, isi halaman tetap opacity 0 dan tampak KOSONG.
+    window.addEventListener('pageshow', function () { document.body.classList.remove('pv2-leaving'); });
 </script>
 </main>
     </div>

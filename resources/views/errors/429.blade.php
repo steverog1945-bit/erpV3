@@ -3,7 +3,7 @@
 @section('code', '429')
 @section('title', 'Terlalu Banyak Permintaan')
 @section('message', 'Anda mengirim permintaan terlalu sering dalam waktu singkat, sehingga sistem menundanya sebentar.')
-@section('hint', 'Tunggu 1ΓÇô2 menit, lalu coba lagi. Hindari menekan tombol berkali-kali; satu klik sudah cukup.')
+@section('hint', 'Tunggu 1-2 menit, lalu coba lagi. Hindari menekan tombol berkali-kali; satu klik sudah cukup.')
 
 @section('ikon')
     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">

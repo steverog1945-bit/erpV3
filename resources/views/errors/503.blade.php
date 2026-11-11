@@ -3,7 +3,7 @@
 @section('code', '503')
 @section('title', 'Layanan Sedang Sibuk')
 @section('message', 'Sistem sedang sibuk memproses permintaan lain, atau sedang dalam pemeliharaan singkat.')
-@section('hint', 'Permintaan yang tertunda bentrok dengan proses kasir lain di saat yang sama. Data Anda tidak hilang ΓÇö coba lagi dalam beberapa detik.')
+@section('hint', 'Permintaan yang tertunda bentrok dengan proses kasir lain di saat yang sama. Data Anda tidak hilang - coba lagi dalam beberapa detik.')
 
 @section('ikon')
     <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">

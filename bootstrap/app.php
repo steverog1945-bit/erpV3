@@ -49,6 +49,50 @@ return Application::configure(basePath: dirname(__DIR__))
         );
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        // Database: terjemahkan kelas error umum menjadi respons yang ramah,
+        // bukan halaman 500 mentah. Rute tidak diketahui / bug tetap masuk
+        // ke halaman error bermerek (errors/500) oleh handler default.
+        $exceptions->render(function (\Illuminate\Database\QueryException $e, \Illuminate\Http\Request $request) {
+            $msg = (string) $e->getMessage();
+
+            // Koneksi database terputus / hilang / habis waktu
+            $connLost = preg_match('/\b(2002|2006|2013)\b/', $e->getCode())
+                || str_contains($msg, 'server has gone away')
+                || str_contains($msg, 'Connection refused')
+                || str_contains($msg, 'Lost connection')
+                || str_contains($msg, 'No connection could be made');
+            if ($connLost) {
+                if ($request->expectsJson()) {
+                    return response()->json(['message' => 'Koneksi database terputus. Coba beberapa saat lagi.'], 503);
+                }
+
+                return response()->view('errors.503', [], 503);
+            }
+
+            // Deadlock / bentrok proses bersamaan (kasir & produksi terjadi bersamaan)
+            if (stripos($msg, 'Deadlock') !== false || str_contains($e->getCode(), '1213') || str_contains($e->getCode(), '1205') || $e->getCode() === '40001') {
+                if ($request->expectsJson()) {
+                    return response()->json(['message' => 'Terjadi bentrokan proses bersamaan. Coba lagi dalam beberapa detik.'], 503);
+                }
+
+                return response()->view('errors.503', [], 503);
+            }
+
+            // Duplikat / pelanggaran integritas pada penulisan -> balikkan ke form dengan pesan
+            $isTulis = !$request->isMethodSafe();
+            $integrity = str_contains($msg, 'Integrity constraint violation') || str_contains($msg, 'Duplicate entry') || $e->getCode() === '23000';
+            if ($isTulis && $integrity) {
+                if ($request->expectsJson()) {
+                    return response()->json(['message' => 'Data duplikat atau masih terkait dengan data lain.'], 409);
+                }
+
+                return back()->withInput()->with('error', 'Data duplikat atau masih terkait dengan data lain. Periksa isian Anda.');
+            }
+
+            // Sisanya: handler default (halaman error bermerek 500)
+            return null;
+        });
+
         // Periode akuntansi ditutup: tampilkan pesan jelas, bukan halaman 500.
         // Transaksi database yang membungkus sudah di-rollback oleh Laravel
         // sebelum exception sampai di sini.
