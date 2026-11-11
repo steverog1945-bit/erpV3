@@ -59,7 +59,7 @@
             <p class="text-[11px] font-medium text-slate-500 mt-1.5">Rp {{ number_format($nilaiOrderHariIni, 0, ',', '.') }}</p>
             <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
                 <span class="text-[10px] text-slate-400">Total dalam proses cetak</span>
-                <span class="text-[10px] font-semibold {{ $dOrderKls }}">{{ $dOrderTeks }}</span>
+                <span class="text-[10px] font-semibold whitespace-nowrap {{ $dOrderKls }}">{{ $dOrderTeks }}</span>
             </div>
         </a>
 
@@ -85,7 +85,7 @@
 
         <a href="{{ $u('laporan.piutang') }}" class="group rounded-2xl border border-slate-200/70 bg-white px-5 py-4 shadow-[0_1px_3px_rgba(15,30,62,.05)] hover:shadow-[0_8px_20px_rgba(15,30,62,.07)] hover:border-slate-300/70 transition-all duration-200">
             <p class="text-[9.5px] font-bold text-slate-400 uppercase tracking-[0.14em]">Belum Dibayar</p>
-            <p class="text-[26px] leading-none font-semibold text-slate-900 mt-2 tracking-tight tabular-nums">Rp {{ number_format($piutang, 0, ',', '.') }}</p>
+            <p class="text-[21px] sm:text-[24px] lg:text-[26px] leading-none font-semibold text-slate-900 mt-2 tracking-tight tabular-nums">Rp {{ number_format($piutang, 0, ',', '.') }}</p>
             <p class="text-[11px] font-medium text-slate-500 mt-1.5">Total tagihan belum lunas</p>
             <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
                 <span class="text-[10px] text-slate-400">Belum lunas</span>
@@ -109,9 +109,9 @@
                     @php
                         $tahap = [
                             ['label' => 'SPK Baru', 'n' => $spkAntre, 'warna' => 'bg-amber-500', 'desc' => 'Pesanan baru diterima', 'url' => $u('spk.index', ['status_spk' => 'Antre'])],
-                            ['label' => 'Desain', 'n' => $spkDesain, 'warna' => 'bg-sky-500', 'desc' => 'Dalam proses desain &amp; revisi', 'url' => $u('spk.index', ['status_spk' => 'Desain'])],
+                            ['label' => 'Desain', 'n' => $spkDesain, 'warna' => 'bg-sky-500', 'desc' => 'Dalam proses desain & revisi', 'url' => $u('spk.index', ['status_spk' => 'Desain'])],
                             ['label' => 'Produksi', 'n' => $spkCetak, 'warna' => 'bg-indigo-500', 'desc' => 'Sedang dicetak / dikerjakan', 'url' => $u('produksi.index')],
-                            ['label' => 'Collecting', 'n' => $notaLengkap, 'warna' => 'bg-orange-500', 'desc' => 'Menunggu finalisasi &amp; packing', 'url' => $u('collecting.index', ['status_pengerjaan' => 'lengkap'])],
+                            ['label' => 'Collecting', 'n' => $notaLengkap, 'warna' => 'bg-orange-500', 'desc' => 'Menunggu finalisasi & packing', 'url' => $u('collecting.index', ['status_pengerjaan' => 'lengkap'])],
                             ['label' => 'Selesai', 'n' => $spkSelesai, 'warna' => 'bg-emerald-500', 'desc' => 'Item telah selesai', 'url' => $u('produksi.index', ['status_produksi' => 'selesai'])],
                         ];
                     @endphp
