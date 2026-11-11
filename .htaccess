@@ -6,6 +6,21 @@
     RewriteEngine On
 
     # ------------------------------------------------------------------
+    # JALUR /storage/*
+    # Instance ini dilayani dari root proyek (DocumentRoot = htdocs,
+    # aplikasi di /grafikaorionV3/) - BUKAN dari public/. Akibatnya semua
+    # /storage/* diblokir oleh aturan C-1 #2. Tanpa mengubah C-1, izinkan
+    # dua cabang jalur upload:
+    #   1) Folder privat -> dibiarkan sampai ke index.php (aturan akhir
+    #      di bawah men-dispatch ke Laravel > BerkasPrivatController)
+    #   2) Berkas/folder publik -> diarahkan ke berkas fisik di
+    #      public/storage/ (default-thumbnail, logo, landing-media/posts)
+    # Folder sensitif (logs, app, framework, ...) tetap ditolak 403.
+    # ------------------------------------------------------------------
+    RewriteRule ^storage/(order_thumbnails|jersey_thumbnails|jersey_bukti_bayar|kas_kecil_bukti|bukti_serah_terima|berkas_order|profil)(/.*)?$ index.php [QSA,L]
+    RewriteRule ^storage/(default-thumbnail.png|company_logo/.*|landing-media/.*|posts/.*)$ public/storage/$1 [QSA,L]
+
+    # ------------------------------------------------------------------
     # BLOKIR BERKAS INTERNAL (audit Fase 0, C-1)
     # Aplikasi dilayani dari folder proyek (bukan public/), jadi tanpa
     # aturan ini Apache menyajikan langsung file apa pun yang ada:
