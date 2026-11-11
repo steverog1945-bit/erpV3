@@ -55,6 +55,8 @@ return [
         // uji coba nyata: "Gagal ambil produk", 403).
         'api/penjualan' => [3, 41],
         'konsumen/store-ajax' => [3, 41],
+        'konsumen/search-ajax' => [3, 41],
+        'konsumen/cek-nama' => [3, 41, 7],
 
         'setting-akses' => [4],
         'menu-editor' => [4],

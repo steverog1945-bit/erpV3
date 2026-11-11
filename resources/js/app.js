@@ -508,3 +508,69 @@ document.addEventListener('click', function (e) {
         }
     };
 })();
+/* ==========================================================================
+   Cek nama konsumen mirip saat mengetik (dipakai form Tambah Konsumen dan
+   quick-add POS).  Menampilkan kandidat yang sudah ada di database supaya
+   konsumen tidak terdaftar ganda - lengkap dengan kode CST-000123.
+   opsi: { input, hint, pilih(id, kode, nama, telepon), url }
+   ========================================================================== */
+window.cekKonsumenMirip = function (opsi) {
+    var input = opsi.input, hint = opsi.hint, pilih = opsi.pilih, url = opsi.url || '/konsumen/cek-nama';
+    if (!input || !hint) return;
+    var timer = null;
+
+    function escapeHtml(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    }
+    function render(data) {
+        var rows = data.results || [];
+        if (!rows.length) {
+            hint.className = 'cek-nama-hint cek-nama-aman';
+            hint.innerHTML = '<i class="fas fa-circle-check"></i> Nama ini belum ada di database - aman dipakai.';
+            hint.classList.remove('hidden');
+            return;
+        }
+        var html = '<div class="cek-nama-judul"><i class="fas ' + (data.persis ? 'fa-triangle-exclamation' : 'fa-magnifying-glass') + '"></i> '
+            + (data.persis ? 'Nama ini SUDAH TERDAFTAR persis - pilih yang lama?' : 'Nama serupa sudah ada:') + '</div><div class="cek-nama-daftar">';
+        rows.forEach(function (r) {
+            html += '<button type="button" class="cek-nama-item" data-id="' + r.id + '" data-kode="' + escapeHtml(r.kode) + '" data-nama="' + escapeHtml(r.nama) + '" data-telepon="' + escapeHtml(r.telepon) + '">'
+                + '<span class="cek-nama-kode">' + escapeHtml(r.kode) + '</span>'
+                + '<span class="cek-nama-nama">' + escapeHtml(r.nama) + '</span>'
+                + '<span class="cek-nama-telp">' + escapeHtml(r.telepon) + '</span>'
+                + '</button>';
+        });
+        html += '</div>';
+        hint.className = 'cek-nama-hint ' + (data.persis ? 'cek-nama-warn' : 'cek-nama-info');
+        hint.innerHTML = html;
+        hint.classList.remove('hidden');
+    }
+    function sembunyi() { hint.classList.add('hidden'); hint.innerHTML = ''; }
+
+    input.addEventListener('input', function () {
+        var q = input.value.trim();
+        clearTimeout(timer);
+        if (q.length < 2) { sembunyi(); return; }
+        timer = setTimeout(function () {
+            fetch(url + '?nama=' + encodeURIComponent(q), {
+                headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
+                credentials: 'same-origin'
+            }).then(function (r) { return r.ok ? r.json() : null; })
+              .then(function (data) { if (data) render(data); })
+              .catch(function () {});
+        }, 350);
+    });
+    input.addEventListener('blur', function () { setTimeout(function () { /* beri waktu klik pilihan */ }, 0); });
+    hint.addEventListener('click', function (e) {
+        var btn = e.target.closest('.cek-nama-item');
+        if (!btn || typeof pilih !== 'function') return;
+        e.preventDefault();
+        pilih({
+            id: parseInt(btn.getAttribute('data-id'), 10),
+            kode: btn.getAttribute('data-kode'),
+            nama: btn.getAttribute('data-nama'),
+            telepon: btn.getAttribute('data-telepon')
+        });
+    });
+};

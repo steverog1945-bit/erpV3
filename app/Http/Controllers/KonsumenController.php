@@ -20,23 +20,62 @@ class KonsumenController extends Controller
     {
         $request->validate(['q' => 'nullable|string|max:100']);
 
+        $q = trim((string) $request->q);
+        $idPersis = \App\Support\KonsumenKode::keId($q);
+
         $rows = DB::table('konsumen')
-            ->when($request->filled('q'), fn ($q) => $q->where(function ($w) use ($request) {
-                $w->where('konsumen.nama_konsumen', 'like', '%' . $request->q . '%')
-                  ->orWhere('konsumen.telepon', 'like', '%' . $request->q . '%');
+            ->when($q !== '', fn ($q2) => $q2->where(function ($w) use ($q, $idPersis) {
+                $w->where('konsumen.nama_konsumen', 'like', '%' . $q . '%')
+                  ->orWhere('konsumen.telepon', 'like', '%' . $q . '%');
+                if ($idPersis !== null) {
+                    $w->orWhere('konsumen.id_konsumen', $idPersis);
+                }
             }))
+            ->orderByRaw('konsumen.id_konsumen = ? DESC', [$idPersis ?? 0])
             ->orderBy('konsumen.nama_konsumen')
             ->limit(20)
             ->get(['id_konsumen', 'nama_konsumen', 'telepon', 'id_golongan']);
 
         // Format select2 AJAX: { results: [...] }.
+        // ID ditampilkan sebagai CST-000042 supaya bisa jadi acuan pengambilan.
         return response()->json([
             'results' => $rows->map(fn ($k) => [
                 'id'       => $k->id_konsumen,
-                'text'     => $k->nama_konsumen . ($k->telepon && $k->telepon !== '-' ? ' (' . $k->telepon . ')' : ''),
+                'text'     => \App\Support\KonsumenKode::dariId((int) $k->id_konsumen) . ' · ' . $k->nama_konsumen . ($k->telepon && $k->telepon !== '-' ? ' (' . $k->telepon . ')' : ''),
                 'nama'     => $k->nama_konsumen,
                 'telepon'  => $k->telepon ?? '-',
                 'golongan' => $k->id_golongan,
+            ]),
+        ]);
+    }
+
+    /**
+     * Cek nama mirip/duplikat saat operator mengetik nama konsumen BARU.
+     * Exact match (beda huruf besar/kecil) ditandai `persis` supaya form
+     * bisa memperingatkan keras; sisanya daftar kandidat untuk dipilih.
+     */
+    public function cekNama(Request $request)
+    {
+        $request->validate(['nama' => 'required|string|min:2|max:100']);
+
+        $q = trim($request->nama);
+
+        $rows = DB::table('konsumen')
+            ->where('nama_konsumen', 'like', '%' . $q . '%')
+            ->orderByRaw('LOWER(nama_konsumen) = LOWER(?) DESC, nama_konsumen', [$q])
+            ->limit(8)
+            ->get(['id_konsumen', 'nama_konsumen', 'telepon', 'tipe_konsumen']);
+
+        $persis = $rows->contains(fn ($r) => mb_strtolower($r->nama_konsumen) === mb_strtolower($q));
+
+        return response()->json([
+            'persis'  => $persis ? 1 : 0,
+            'results' => $rows->map(fn ($r) => [
+                'id'     => (int) $r->id_konsumen,
+                'kode'   => \App\Support\KonsumenKode::dariId((int) $r->id_konsumen),
+                'nama'   => $r->nama_konsumen,
+                'telepon'=> $r->telepon ?? '-',
+                'tipe'   => $r->tipe_konsumen,
             ]),
         ]);
     }
@@ -49,9 +88,14 @@ class KonsumenController extends Controller
             ->select('konsumen.*', 'golongan_konsumen.nama_golongan');
 
         if ($request->filled('search')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('konsumen.nama_konsumen', 'like', '%' . $request->search . '%')
-                  ->orWhere('konsumen.telepon', 'like', '%' . $request->search . '%');
+            $q = trim($request->search);
+            $idPersis = \App\Support\KonsumenKode::keId($q);
+            $query->where(function ($q2) use ($q, $idPersis) {
+                $q2->where('konsumen.nama_konsumen', 'like', '%' . $q . '%')
+                  ->orWhere('konsumen.telepon', 'like', '%' . $q . '%');
+                if ($idPersis !== null) {
+                    $q2->orWhere('konsumen.id_konsumen', $idPersis);
+                }
             });
         }
 

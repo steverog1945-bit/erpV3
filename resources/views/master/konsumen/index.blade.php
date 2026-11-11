@@ -21,7 +21,7 @@
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
                     <input type="text" name="search" value="{{ request('search') }}"
                            class="w-full bg-white border border-slate-200 rounded-md py-2 pl-12 pr-4 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 "
-                           placeholder="Ketik nama atau no. telepon...">
+                           placeholder="Ketik nama, telepon, atau CST-000042...">
                 </div>
             </div>
             <div class="w-full md:w-56">
@@ -64,7 +64,7 @@
                             <div class="text-[14px] font-medium text-slate-700 group-hover:text-indigo-600 transition-colors uppercase">
                                 {{ $k->nama_konsumen }}
                             </div>
-                            <div class="text-[11px] text-slate-400 mt-0.5">ID: #CST-{{ $k->id_konsumen }}</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5 font-mono tracking-wider">{{ \App\Support\KonsumenKode::dariId((int) $k->id_konsumen) }}</div>
                         </div>
                     </div>
                 </td>

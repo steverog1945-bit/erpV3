@@ -25,7 +25,7 @@
         <form method="GET" action="{{ route('collecting.index') }}" class="collecting-mobile-filter-form flex flex-wrap items-end gap-4">
             <div class="collecting-mobile-search flex-1 min-w-[220px]">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Nama Konsumen</label>
-                <x-form.input type="text" name="nama_konsumen" value="{{ request('nama_konsumen') }}" placeholder="Cari konsumen..." />
+                <x-form.input type="text" name="nama_konsumen" value="{{ request('nama_konsumen') }}" placeholder="Cari konsumen / ID (CST-000042)..." />
             </div>
 
             <button type="button" class="collecting-mobile-filter-toggle" aria-controls="collecting-filter-panel" aria-expanded="{{ $adaFilterLanjutan ? 'true' : 'false' }}" onclick="toggleCollectingFilter(this)">

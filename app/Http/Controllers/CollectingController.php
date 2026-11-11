@@ -46,7 +46,16 @@ class CollectingController extends Controller
             ->selectRaw("{$item} as total_item, {$kelar} as item_kelar, {$batal} as item_batal");
 
         if ($request->filled('nama_konsumen')) {
-            $query->whereIn('transaksi.id_konsumen', DB::table('konsumen')->select('id_konsumen')->where('nama_konsumen', 'like', '%' . $request->nama_konsumen . '%'));
+            $q = trim($request->nama_konsumen);
+            $idPersis = \App\Support\KonsumenKode::keId($q);
+            $query->where(function ($w) use ($q, $idPersis) {
+                $w->whereIn('transaksi.id_konsumen', DB::table('konsumen')->select('id_konsumen')
+                    ->where('nama_konsumen', 'like', '%' . $q . '%')
+                    ->orWhere('telepon', 'like', '%' . $q . '%'));
+                if ($idPersis !== null) {
+                    $w->orWhere('transaksi.id_konsumen', $idPersis);
+                }
+            });
         }
 
         if ($request->filled('nomor_nota')) {

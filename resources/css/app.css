@@ -1662,3 +1662,25 @@ html.dark .cmdk-group { color: #6B7799; }
     html.dark .modern-table-wrapper { scrollbar-color: #3A4767 transparent; }
     html.dark .modern-table-wrapper::-webkit-scrollbar-thumb { background: #3A4767; }
 }
+/* ==========================================================================
+   CEK NAMA KONSUMEN GANDA (tambah konsumen & quick-add POS)
+   ========================================================================== */
+.cek-nama-hint { margin-top: 8px; border-radius: 10px; padding: 9px 10px; font-size: 11.5px; line-height: 1.5; border: 1px solid; }
+.cek-nama-aman { background: #EAF6F1; border-color: #A6D6C5; color: #0B7A5F; }
+.cek-nama-warn { background: #FEF6EA; border-color: #F2B565; color: #A15810; }
+.cek-nama-info { background: #EFF4FF; border-color: #C9D8FF; color: #1D4ED8; }
+.cek-nama-judul { font-weight: 700; font-size: 11px; margin-bottom: 6px; display: flex; gap: 6px; align-items: center; }
+.cek-nama-daftar { display: flex; flex-direction: column; gap: 4px; }
+.cek-nama-item { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; text-align: left; border: 1px solid transparent; background: rgba(255,255,255,.65); border-radius: 8px; padding: 6px 8px; cursor: pointer; transition: background .12s ease, border-color .12s ease; font: inherit; }
+.cek-nama-item:hover { background: #fff; border-color: #CBD6EE; }
+.cek-nama-kode { font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 10.5px; font-weight: 700; background: #0F1E3E; color: #E8ECF8; padding: 2px 7px; border-radius: 5px; white-space: nowrap; }
+.cek-nama-nama { font-size: 12px; font-weight: 600; color: #0F1E3E; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cek-nama-telp { font-size: 10px; color: #5D6A85; font-variant-numeric: tabular-nums; white-space: nowrap; }
+html.dark .cek-nama-aman { background: rgba(14, 159, 110, .14); border-color: rgba(14, 159, 110, .35); color: #6FE3B4; }
+html.dark .cek-nama-warn { background: rgba(232, 137, 29, .14); border-color: rgba(232, 137, 29, .4); color: #F2B565; }
+html.dark .cek-nama-info { background: rgba(91, 141, 239, .14); border-color: rgba(91, 141, 239, .35); color: #8FB4F8; }
+html.dark .cek-nama-item { background: rgba(255,255,255,.04); }
+html.dark .cek-nama-item:hover { background: rgba(255,255,255,.08); border-color: #3A4767; }
+html.dark .cek-nama-kode { background: #E8ECF8; color: #0F1E3E; }
+html.dark .cek-nama-nama { color: #E8ECF8; }
+html.dark .cek-nama-telp { color: #8A96B8; }

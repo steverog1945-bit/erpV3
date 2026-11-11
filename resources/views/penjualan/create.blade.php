@@ -965,6 +965,7 @@
     <div class="space-y-5">
         <x-form.group label="Nama Lengkap">
             <x-form.input type="text" id="new_nama" placeholder="Masukkan nama pelanggan..." />
+            <div id="cekNamaWrapPOS" class="cek-nama-hint hidden" role="status" aria-live="polite"></div>
         </x-form.group>
         <x-form.group label="Nomor WhatsApp">
             <x-form.input type="number" id="new_hp" placeholder="0812xxxx" />
@@ -994,6 +995,31 @@
         </x-button>
     </div>
 </x-modal>
+
+<script>
+// Cek duplikat nama konsumen saat mengetik di modal cepat ini - supaya kasir
+// tidak membuat pelanggan ganda. Pilih "pakai yang lama" untuk mengisi POS.
+document.addEventListener('DOMContentLoaded', function () {
+    var input = document.getElementById('new_nama');
+    var hint = document.getElementById('cekNamaWrapPOS');
+    if (!input || !hint || !window.cekKonsumenMirip) return;
+    window.cekKonsumenMirip({
+        input: input,
+        hint: hint,
+        url: '{{ url('/konsumen/cek-nama') }}',
+        pilih: function (k) {
+            var $sel = $('.select2-konsumen');
+            var val = String(k.id);
+            var teks = k.kode + ' · ' + k.nama + ' (' + k.telepon + ')';
+            if (!$sel.find('option[value="' + val + '"]').length) {
+                $sel.append($('<option>', { value: val, text: teks }));
+            }
+            $sel.val(val).trigger('change');
+            if (window.closeModal) window.closeModal('konsumen-baru');
+        }
+    });
+});
+</script>
 
 @endsection
 @push('scripts')
