@@ -76,10 +76,9 @@
                 </ul>
             </div>
 
-            <div class="rounded-2xl border border-[#E3E9F6] bg-[#F9FBFF] p-5">
-                <h2 class="text-[11px] font-semibold uppercase tracking-widest text-slate-500 mb-2">AI lokal (opsional)</h2>
-                <p class="text-[11.5px] leading-relaxed text-slate-600">Rekap sudah dibuat dari angka asli ERP. Bila pemilik memasang <strong>Ollama</strong> di mesin ini dan menyetel <code class="code">ASISTEN_AI_ENABLED=true</code>, AI lokal hanya <em>membacakan</em> angka itu menjadi kalimat eksekutif — tetap tanpa internet. Tanpa itu, ringkasan angka tetap tampil.</p>
-                <p class="mt-2 text-[10px] text-slate-400">Belum ada model eksternal/cloud yang dipasang. Keputusan model ada di tangan pemilik.</p>
+            <div class="rounded-2xl border border-[#E2E8F0] bg-[#F9FBFF] p-5">
+                <h2 class="text-[11px] font-semibold uppercase tracking-widest text-slate-500 mb-2">AI lokal (aktif)</h2>
+                <p class="text-[11.5px] leading-relaxed text-slate-600">Rekap dibuat dari angka asli ERP Anda. AI lokal <strong>Ollama qwen2.5:3b-instruct</strong> (terpasang di mesin ini, 1.9 GB) hanya <em>membacakan</em> angka itu menjadi kalimat eksekutif — tidak menghitung sendiri, tidak ada data keluar ke internet. Matikan kapan pun dengan <code class="code">ASISTEN_AI_ENABLED=false</code> di <code class="code">.env</code>.</p>
             </div>
         </div>
     </div>
