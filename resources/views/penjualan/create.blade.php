@@ -14,7 +14,7 @@
      Rombakan sebelumnya menjagli kolom kiri 64% sehingga Data Pelanggan ikut
      sempit - padahal di situ field paling lebar (select2 pelanggan). Full
      width membuat baris Pelanggan bisa 8 kolom tanpa berdesakan. --}}
-<div class="pos-mobile-shell w-full px-3 sm:px-5 lg:px-6 py-5">
+<div class="pos-mobile-shell page-input-order w-full px-3 sm:px-5 lg:px-6 py-5">
 
     @if(!empty($quotationRef))
     <div class="mb-6 p-5 rounded-2xl bg-amber-50 border border-amber-200">
@@ -58,12 +58,12 @@
             <x-button href="{{ $notaKunci ? route('penjualan.show', $notaKunci->id_transaksi) : route('penjualan.riwayat') }}" variant="outline">
                 <i class="fas fa-arrow-left"></i> {{ $notaKunci ? 'Kembali ke Nota' : 'Riwayat Nota' }}
             </x-button>
-            <div class="bg-white shadow-sm border border-slate-100 rounded-2xl px-5 sm:px-8 py-3.5 flex items-center gap-4 sm:gap-6 max-w-full">
+            <div class="nota-card bg-white border border-slate-200/80 rounded-2xl px-5 sm:px-8 py-3 flex items-center gap-4 sm:gap-6 max-w-full shadow-[0_1px_3px_rgba(15,30,62,.06)]">
                 <div class="text-right min-w-0">
-                    <p class="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Nomor Nota</p>
-                    <p id="no_nota_display" class="text-base sm:text-xl font-medium text-indigo-600 tracking-tight truncate">{{ $no_nota }}</p>
+                    <p class="text-[9.5px] font-bold text-slate-400 uppercase tracking-[0.18em]">Nomor Nota</p>
+                    <p id="no_nota_display" class="text-base sm:text-xl font-semibold text-indigo-600 tracking-tight truncate tabular-nums">{{ $no_nota }}</p>
                 </div>
-                <span class="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 hidden sm:flex items-center justify-center shrink-0"><i class="fas fa-file-invoice"></i></span>
+                <span class="w-10 h-10 rounded-xl bg-indigo-600 text-white shadow-[0_4px_10px_rgba(37,99,235,.35)] hidden sm:flex items-center justify-center shrink-0"><i class="fas fa-file-invoice"></i></span>
             </div>
         </x-slot:actions>
     </x-page-header>

@@ -1686,3 +1686,78 @@ html.dark .cek-nama-item:hover { background: rgba(255,255,255,.08); border-color
 html.dark .cek-nama-kode { background: #E8ECF8; color: #0F1E3E; }
 html.dark .cek-nama-nama { color: #E8ECF8; }
 html.dark .cek-nama-telp { color: #8A96B8; }
+/* ==========================================================================
+   VISUAL REFRESH V6 (2026-11) - Input Order: lebih profesional
+   Hanya gaya visual, tanpa mengubah id/name/handler JS.
+   ========================================================================== */
+
+/* Header halaman: eyebrow kuat, judul rapat & seimbang */
+.page-input-order h1 { letter-spacing: -0.02em; font-weight: 600; }
+
+/* Kartu nota: identitas utama dibaca dulu, garis vertikal aksen */
+.nota-card { position: relative; overflow: hidden; }
+.nota-card::before {
+    content: "";
+    position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+    background: linear-gradient(180deg, #2563EB 0%, #1D4ED8 100%);
+}
+.nota-card > div:first-child { position: relative; }
+
+/* Kartu-kontainer halaman: border & bayangan selaras Command Center */
+.page-input-order .bg-white.shadow-sm.border-slate-100.rounded-2xl,
+.page-input-order .bg-white.border-slate-100.shadow-sm.rounded-2xl {
+    border-color: var(--pro-border, #E3E9F6);
+    box-shadow: 0 1px 3px rgba(15, 30, 62, .05);
+}
+.page-input-order .bg-white { border-color: var(--pro-border, #E3E9F6); }
+
+/* Label mikro dipaskan dengan sistem eyebrow Command Center */
+.page-input-order label[class*="uppercase"],
+.page-input-order .text-slate-400[class*="uppercase"] {
+    letter-spacing: .16em;
+}
+
+/* Focus ring yang konsisten & tenang untuk semua isian halaman ini */
+.page-input-order input:focus-visible,
+.page-input-order select:focus-visible,
+.page-input-order textarea:focus-visible {
+    outline: 2px solid rgba(37, 99, 235, .35);
+    outline-offset: 1px;
+    border-color: #2563EB !important;
+}
+.page-input-order input:focus,
+.page-input-order select:focus,
+.page-input-order textarea:focus { outline: none; }
+
+/* Angka & harga: presisi baca, tabular-nums */
+.page-input-order .tabular-nums,
+.page-input-order [id="display_harga"],
+.page-input-order [id="display_subtotal"],
+.page-input-order [id="grand_total"],
+.page-input-order [id="no_nota_display"] {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+}
+
+/* Tombol utama (Simpan & Cetak Nota): solid, pasti, berbayang halus */
+.page-input-order button[type="submit"].bg-\[\#2563EB\],
+.page-input-order .pos-btn-primary {
+    box-shadow: 0 6px 16px rgba(37, 99, 235, .28);
+}
+
+/* Tombol hijau TAMBAH: solid gelap, senada dengan sistem */
+.page-input-order .bg-emerald-700,
+.page-input-order .bg-emerald-600 {
+    box-shadow: 0 6px 16px rgba(5, 150, 105, .25);
+}
+
+/* Tombol urgensi & toggle: jelas aktif vs nonaktif */
+.page-input-order .urgent-btn { transition: transform .12s ease, box-shadow .12s ease; }
+.page-input-order .urgent-btn:active { transform: scale(.98); }
+
+/* Keranjang: kosongannya lebih "berisi", tidak tampak hilang */
+.page-input-order #cart-items .text-slate-400 { color: #5D6A85; }
+
+/* Tautan kecil & judul section: lebih tegas */
+.page-input-order h2,
+.page-input-order h3 { letter-spacing: -0.01em; }
