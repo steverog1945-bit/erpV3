@@ -1791,79 +1791,75 @@ html.dark .cek-nama-telp { color: #8A96B8; }
 .page-input-order h3 { font-size: 15px; font-weight: 600; color: #0F1E3E; letter-spacing: -0.01em; }
 html.dark .page-input-order h3 { color: #E8ECF8; }
 
-/* ---------- KERANJANG = "struk kasir": SATU-SATUNYA surface gelap halaman ----------
-   Panel navy end-to-end (header, item, footer) sebagai counterweight form terang.
-   CTA tetap #2563EB = satu-satunya aksen yang benar-benar menjerit. */
-.page-input-order .po-cart-dark {
-    background: #0F1E3E;
-    border: 1px solid #0F1E3E;
-    box-shadow: 0 16px 40px rgba(15, 30, 62, .30);
+/* ---------- KERANJANG: kartu putih, menyatu dengan Command Center ----------
+   Putih/border tipis/radius 16/ikhtisar. Kontras dijaga lewat tipografi (navy ink),
+   bukan lewat surface asing. CTA #2563EB tetap satu-satunya aksen. */
+.page-input-order .po-cart {
+    background: #FFFFFF;
+    border: 1px solid #E3E9F6;
+    box-shadow: 0 1px 2px rgba(15, 30, 62, .05);
 }
-.page-input-order .po-cart-head { border-bottom: 1px solid rgba(232, 236, 248, .14); }
-.page-input-order .po-cart-head h3 { color: #E8ECF8; }
-.page-input-order .po-cart-head p { color: #A9B7DE; }
+.page-input-order .po-cart-head { border-bottom: 1px solid #E3E9F6; }
+.page-input-order .po-cart-head h3 { color: #0F1E3E; }
+.page-input-order .po-cart-head p { color: #5D6A85; }
 .page-input-order .po-cart-head .po-ic {
-    background: #E8ECF8; color: #0F1E3E;
+    background: #0F1E3E; color: #FFFFFF;
     width: 40px; height: 40px; border-radius: 10px; font-size: 15px;
 }
 .page-input-order #item_count_badge {
-    font-size: 13px; font-weight: 600; color: #C9D3E8;
-    background: rgba(232, 236, 248, .08); border-radius: 8px; padding: 5px 12px;
+    font-size: 13px; font-weight: 600; color: #3E4C74;
+    background: #E9EEFA; border-radius: 8px; padding: 5px 12px;
     letter-spacing: 0; text-transform: none; white-space: nowrap; border: 0;
 }
-.page-input-order .po-cart-dark #cart_body > * + * { border-top-color: rgba(232, 236, 248, .10); }
-.page-input-order .po-cart-dark #cart_body article { padding: 15px 18px; }
-.page-input-order .po-cart-dark #cart_body article:hover { background: rgba(232, 236, 248, .045); }
-.page-input-order .po-cart-dark #cart_body article p.text-sm { color: #E8ECF8; font-size: 14px; font-weight: 600; line-height: 1.35; }
-.page-input-order .po-cart-dark #cart_body article p.text-base { color: #FFFFFF; font-size: 17px; font-weight: 600; }
-.page-input-order .po-cart-dark #cart_body article .text-xs.text-slate-500,
-.page-input-order .po-cart-dark #cart_body article .text-xs.text-slate-600,
-.page-input-order .po-cart-dark #cart_body article .text-xs.text-slate-400 { color: #A9B7DE; }
-.page-input-order .po-cart-dark #cart_body article .border-slate-100 { border-color: rgba(232, 236, 248, .12); }
-.page-input-order .po-cart-dark #cart_body article .text-amber-700 { color: #F2B565; }
-.page-input-order .po-cart-dark #cart_body article .tabular-nums { color: inherit; }
+.page-input-order .po-cart #cart_body article { padding: 14px 16px; }
+.page-input-order .po-cart #cart_body article:hover { background: #F7FAFF; }
+.page-input-order .po-cart #cart_body article p.text-sm { color: #0F1E3E; font-size: 14px; font-weight: 600; line-height: 1.35; }
+.page-input-order .po-cart #cart_body article p.text-base { color: #0F1E3E; font-size: 17px; font-weight: 600; }
+.page-input-order .po-cart #cart_body article .text-xs.text-slate-500,
+.page-input-order .po-cart #cart_body article .text-xs.text-slate-600,
+.page-input-order .po-cart #cart_body article .text-xs.text-slate-400 { color: #3E4C74; }
+.page-input-order .po-cart #cart_body article .text-amber-700 { color: #8A4B0F; }
 
-/* Keadaan kosong: sebab + aksi, jelas di atas navy */
-.page-input-order .po-cart-dark #cart_body .opacity-30 { opacity: 1; padding: 46px 26px; }
-.page-input-order .po-cart-dark #cart_body .opacity-30 > i {
-    color: #E8ECF8; opacity: .16; display: block;
+/* Keadaan kosong: sebab + aksi, menyatu dengan kartu */
+.page-input-order .po-cart #cart_body .opacity-30 { opacity: 1; padding: 46px 26px; }
+.page-input-order .po-cart #cart_body .opacity-30 > i {
+    color: #0F1E3E; opacity: .14; display: block;
     font-size: 32px; margin-bottom: 10px;
 }
-.page-input-order .po-cart-dark #cart_body .opacity-30 p {
-    color: #E8ECF8; font-size: 14px; font-weight: 600;
+.page-input-order .po-cart #cart_body .opacity-30 p {
+    color: #3E4C74; font-size: 14px; font-weight: 600;
     letter-spacing: 0; text-transform: none; opacity: 1;
 }
-.page-input-order .po-cart-dark #cart_body .opacity-30 p::after {
+.page-input-order .po-cart #cart_body .opacity-30 p::after {
     content: "Pilih kategori dan produk di Detail Pesanan, lalu tekan TAMBAH.";
     display: block; margin-top: 5px;
-    font-size: 13px; font-weight: 400; color: #A9B7DE;
+    font-size: 13px; font-weight: 400; color: #5D6A85;
 }
 
-/* Footer keranjang: strip navy lebih gelap, total jadi titik berhenti visual */
+/* Footer keranjang: hairline separator + total navy besar */
 .page-input-order .po-cart-foot {
-    background: #0B1730;
-    border-top: 1px solid rgba(232, 236, 248, .14);
+    background: #FBFCFF;
+    border-top: 1px solid #E3E9F6;
 }
 .page-input-order .po-cart-total-lbl {
-    color: #A9B7DE; font-size: 12px; font-weight: 600; margin-bottom: 4px;
+    color: #5D6A85; font-size: 12px; font-weight: 600; margin-bottom: 4px;
 }
-.page-input-order .po-cart-dark #grand_total,
 .page-input-order #grand_total {
-    color: #FFFFFF; font-size: 32px; font-weight: 600;
+    color: #0F1E3E; font-size: 32px; font-weight: 600;
     letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
 }
 .page-input-order .po-cart-reset {
     width: 46px; height: 46px; flex: none;
     display: grid; place-items: center;
-    border-radius: 10px; border: 1px solid rgba(232, 236, 248, .22);
-    background: transparent; color: #C9D3E8; cursor: pointer;
+    border-radius: 10px; border: 1px solid #E3E9F6;
+    background: #FFFFFF; color: #8896B8; cursor: pointer;
     transition: color .15s ease, border-color .15s ease, background .15s ease;
 }
-.page-input-order .po-cart-reset:hover { color: #FDA4AF; border-color: rgba(253, 164, 175, .45); background: rgba(253, 164, 175, .08); }
+.page-input-order .po-cart-reset:hover { color: #DC2626; border-color: #FECACA; background: #FFF5F5; }
 .page-input-order .po-cart-foot button[onclick^="simpanTransaksi"] {
     height: 50px; border-radius: 12px; letter-spacing: 0;
     font-size: 14px; font-weight: 600;
-    box-shadow: 0 8px 22px rgba(37, 99, 235, .38);
+    box-shadow: 0 8px 22px rgba(37, 99, 235, .32);
 }
 
 /* ---------- Fokus & angka: tenang, tabular ---------- */
@@ -1898,13 +1894,13 @@ html.dark .page-input-order h3 { color: #E8ECF8; }
 .page-input-order .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #CBD2E3 transparent; }
 .page-input-order .custom-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
 .page-input-order .custom-scrollbar::-webkit-scrollbar-thumb { background: #CBD2E3; border-radius: 8px; }
-.page-input-order .po-cart-dark .custom-scrollbar { scrollbar-color: rgba(232, 236, 248, .25) transparent; }
-.page-input-order .po-cart-dark .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(232, 236, 248, .25); }
+.page-input-order .po-cart .custom-scrollbar { scrollbar-color: #CBD2E3 transparent; }
+.page-input-order .po-cart .custom-scrollbar::-webkit-scrollbar-thumb { background: #CBD2E3; }
 .page-input-order a:focus-visible,
 .page-input-order button:focus-visible,
 .page-input-order label:focus-visible { outline: 2px solid rgba(37, 99, 235, .55); outline-offset: 2px; border-radius: 4px; }
-.page-input-order .po-cart-dark a:focus-visible,
-.page-input-order .po-cart-dark button:focus-visible { outline-color: #7FA6F5; }
+.page-input-order .po-cart a:focus-visible,
+.page-input-order .po-cart button:focus-visible { outline-color: rgba(37, 99, 235, .55); }
 
 /* ---------- Judul halaman & section: spacing rapi ---------- */
 .page-input-order h2,

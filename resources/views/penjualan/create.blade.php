@@ -838,7 +838,7 @@
                  padahal ruang di bawah top hanya 100vh - 96px, jadi bagian
                  bawah keranjang selalu keluar layar ~32px - tombol Simpan
                  justru yang paling penting dan justru terpotong. --}}
-            <div class="po-cart-dark rounded-2xl flex flex-col overflow-hidden lg:max-h-[calc(100vh-7rem)]">
+            <div class="po-cart rounded-2xl bg-white flex flex-col overflow-hidden lg:max-h-[calc(100vh-7rem)]">
                 <div class="po-cart-head px-5 py-4 flex justify-between items-center">
                     <div class="flex items-center gap-3">
                         <span class="po-ic w-10 h-10 rounded-xl flex items-center justify-center"><i class="fas fa-shopping-basket"></i></span>
