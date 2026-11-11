@@ -1592,3 +1592,73 @@ html.dark .cmdk-group { color: #6B7799; }
     @view-transition { navigation: none; }
     ::view-transition-old(root), ::view-transition-new(root) { animation: none !important; }
 }
+/* ==========================================================================
+   VISUAL REFRESH V5 (2026-11) - Tabel di layar kecil / PWA
+   Tujuan: ringkas, mudah dipindai, dan nyaman disentuh di HP - dan tetap
+   identik dengan Command Center di desktop.
+   ========================================================================== */
+@media screen and (max-width: 767.98px) {
+    .modern-table-wrapper {
+        border-radius: 12px;
+        overflow: auto;
+        box-shadow: 0 1px 2px rgba(15, 30, 62, .05);
+        scrollbar-width: thin;
+        scrollbar-color: #CBD6EE transparent;
+    }
+    .modern-table-wrapper::-webkit-scrollbar { height: 6px; }
+    .modern-table-wrapper::-webkit-scrollbar-thumb { background: #CBD6EE; border-radius: 999px; }
+    .modern-table-wrapper::-webkit-scrollbar-track { background: transparent; }
+
+    .modern-table { min-width: 600px !important; }
+    .modern-table th {
+        padding: 9px 12px;
+        font-size: 9px !important;
+        letter-spacing: .13em !important;
+        text-transform: uppercase !important;
+        color: var(--pro-ink-3) !important;
+        background: #F7F9FE !important;
+        border-bottom: 1px solid var(--pro-border) !important;
+        white-space: nowrap;
+    }
+    .modern-table td { padding: 10px 12px; font-size: 12px; white-space: nowrap; }
+    .modern-table tbody tr { transition: background-color .15s ease; }
+    .modern-table tbody tr:nth-child(even) td { background: #FAFBFE; }
+    .modern-table tbody tr:hover td { background: #F0F6FF !important; }
+
+    /* Kolom pertama = identitas baris: menempel saat digulir ke samping */
+    .modern-table th:first-child,
+    .modern-table td:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 2;
+        background: var(--surface-primary);
+        font-weight: 600;
+        color: var(--pro-ink);
+        box-shadow: 1px 0 0 var(--pro-border);
+    }
+    .modern-table tbody tr:nth-child(even) td:first-child { background: #FAFBFE; }
+    .modern-table tbody tr:hover td:first-child { background: #F0F6FF !important; }
+
+    /* Chip/badge jangan patah di kolom sempit */
+    .modern-table .chip,
+    .modern-table .badge,
+    .modern-table .notif-badge,
+    .modern-table [class*="rounded-full"] { white-space: nowrap; }
+
+    /* Tabel polos (bukan .modern-table) tetap dapat napas di HP */
+    .content-wrapper table:not(.modern-table) { font-size: 12px; }
+    .content-wrapper table:not(.modern-table) th,
+    .content-wrapper table:not(.modern-table) td { padding: 8px 10px; }
+}
+/* Dark mode setara */
+@media screen and (max-width: 767.98px) {
+    html.dark .modern-table th { background: #1C2436 !important; color: #8896B8 !important; border-bottom-color: #2A3450 !important; }
+    html.dark .modern-table tbody tr:nth-child(even) td { background: rgba(28, 36, 54, .55); }
+    html.dark .modern-table tbody tr:hover td { background: #22304F !important; }
+    html.dark .modern-table th:first-child,
+    html.dark .modern-table td:first-child { background: var(--surface-primary); color: var(--pro-ink); }
+    html.dark .modern-table tbody tr:nth-child(even) td:first-child { background: rgba(28, 36, 54, .55); }
+    html.dark .modern-table tbody tr:hover td:first-child { background: #22304F !important; }
+    html.dark .modern-table-wrapper { scrollbar-color: #3A4767 transparent; }
+    html.dark .modern-table-wrapper::-webkit-scrollbar-thumb { background: #3A4767; }
+}

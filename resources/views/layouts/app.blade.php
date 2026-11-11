@@ -388,8 +388,13 @@
     @media (max-width: 860px) { .pro-search { display: none; } .pro-meta { display: none; } }
 
     /* Footer aplikasi */
-    .pro-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 18px; border-top: 1px solid var(--pro-border); background: var(--pro-surface); font-size: 9px; letter-spacing: .06em; color: var(--pro-ink-3); }
-    .pro-footer .ok-dot { display: inline-block; width: 7px; height: 7px; border-radius: 999px; background: #22C55E; margin-right: 7px; vertical-align: 0; }
+    .pro-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 18px; border-top: 1px solid var(--pro-border); background: var(--pro-surface); font-size: 9.5px; letter-spacing: .08em; color: var(--pro-ink-3); }
+    .pro-footer a { color: var(--pro-ink-2); text-decoration: none; transition: color .15s; }
+    .pro-footer a:hover { color: var(--pro-accent-hover); text-decoration: underline; }
+    .pro-footer .render-ms { font-variant-numeric: tabular-nums; letter-spacing: .12em; text-transform: uppercase; font-weight: 600; }
+    /* Footer tidak tampil di PWA (layar HP) maupun cetak */
+    @media screen and (max-width: 767.98px) { .pro-footer { display: none; } }
+    @media print { .pro-footer { display: none !important; } }
 
     .notif-badge { --tw-shadow: none; }
 
@@ -1657,7 +1662,8 @@
             <span class="mobile-nav-label">Lainnya</span>
         </button>
     </nav>
-    <footer class="pro-footer"><span>Orion Grafika ERP, Pusat Operasi</span><span><span class="ok-dot" aria-hidden="true"></span>Operasional &middot; Node JKT-HQ-01 &middot; ERP Core v1.0</span></footer>
+    @php $renderMs = round((microtime(true) - LARAVEL_START) * 1000); @endphp
+    <footer class="pro-footer"><span>Dikembangkan oleh <a href="http://www.obiyshinichiart.com" target="_blank" rel="noopener noreferrer">www.obiyshinichiart.com</a></span><span class="render-ms">Render {{ $renderMs }} ms</span></footer>
 
 <script>
 /* Fade out sebelum navigasi antarhalaman (bukan form submit / bukan aksi JS).
@@ -1693,7 +1699,27 @@
     // Saat halaman dibuka lagi dari tombol kembali/maju (bfcache), pastikan
     // body tidak menyisakan kelas fade-keluar dari navigasi sebelumnya -
     // kalau menyisakan, isi halaman tetap opacity 0 dan tampak KOSONG.
-    window.addEventListener('pageshow', function () { document.body.classList.remove('pv2-leaving'); });
+    // Sekalian tutup SEMUA panel yang mungkin sedang terbuka (mega menu,
+    // drawer, overlay, notifikasi, profil) - tanpa ini, menu yang sedang
+    // terbuka ikut "tersimpan" di bfcache dan muncul lagi setelah kembali.
+    window.addEventListener('pageshow', function () {
+        document.body.classList.remove('pv2-leaving');
+        ['proMega', 'mainSidebar'].forEach(function (id) {
+            var p = document.getElementById(id);
+            if (p) { p.classList.remove('terbuka'); p.setAttribute('aria-hidden', 'true'); }
+        });
+        var ov = document.getElementById('sidebarOverlay');
+        if (ov) { ov.classList.remove('terbuka'); ov.setAttribute('aria-hidden', 'true'); }
+        var np = document.getElementById('notif-panel');
+        if (np) np.classList.add('hidden');
+        var pp = document.getElementById('profil-menu-panel');
+        if (pp) pp.classList.add('hidden');
+        var mb = document.getElementById('menuPanelBtn');
+        if (mb) mb.setAttribute('aria-expanded', 'false');
+        var pb = document.getElementById('profil-menu-btn');
+        if (pb) pb.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('menu-panel-open');
+    });
 </script>
 </main>
     </div>
