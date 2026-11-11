@@ -154,9 +154,9 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 xl:grid-cols-5 gap-4 sm:gap-5 mb-6">
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-5 mb-6">
         {{-- ============ BEBAN PRODUKSI PER MESIN (data SPK aktif nyata) ============ --}}
-        <div class="xl:col-span-2 rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_4px_rgba(15,30,62,.05)] overflow-hidden">
+        <div class="rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_4px_rgba(15,30,62,.05)] overflow-hidden flex flex-col">
             <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 sm:px-6 py-4">
                 <div class="flex items-baseline gap-3">
                     <h2 class="text-[13.5px] font-semibold text-slate-800">Beban Produksi per Mesin</h2>
@@ -190,7 +190,7 @@
         </div>
 
         {{-- ============ PERLU PERHATIAN ============ --}}
-        <div class="xl:col-span-3 rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_4px_rgba(15,30,62,.05)] overflow-hidden flex flex-col">
+        <div class="rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_4px_rgba(15,30,62,.05)] overflow-hidden flex flex-col">
             <div class="border-b border-slate-100 px-5 sm:px-6 py-4 flex items-center justify-between gap-3">
                 <h2 class="text-[13.5px] font-semibold text-slate-800">Perlu Perhatian</h2>
                 <span class="text-[9.5px] font-bold uppercase tracking-[0.15em] text-slate-400">{{ count($perluTindakan) }} Aktif</span>
@@ -211,10 +211,9 @@
                 @endforelse
             </div>
         </div>
-    </div>
 
-    {{-- ============ TRANSAKSI TERBARU ============ --}}
-    <div class="rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_4px_rgba(15,30,62,.05)] overflow-hidden">
+        {{-- ============ TRANSAKSI TERBARU ============ --}}
+        <div class="rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_4px_rgba(15,30,62,.05)] overflow-hidden flex flex-col min-w-0">
         <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 sm:px-6 py-4">
             <div class="flex items-baseline gap-3">
                 <h2 class="text-[13.5px] font-semibold text-slate-800">Transaksi terbaru</h2>
@@ -223,31 +222,31 @@
             <div class="flex items-center gap-2">
                 <label class="relative flex items-center">
                     <i class="fas fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none"></i>
-                    <input type="text" id="trxCari" placeholder="Cari nota atau konsumen..." aria-label="Cari nota atau konsumen" autocomplete="off" class="h-9 w-44 sm:w-56 pl-8 pr-3 rounded-lg border border-slate-200 bg-slate-50/60 text-[12px] text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-indigo-400 focus:bg-white transition-colors">
+                    <input type="text" id="trxCari" placeholder="Cari nota..." aria-label="Cari nota atau konsumen" autocomplete="off" class="h-9 w-32 pl-8 pr-2 rounded-lg border border-slate-200 bg-slate-50/60 text-[11.5px] text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-indigo-400 focus:bg-white transition-colors">
                 </label>
                 <a href="{{ $u('penjualan.riwayat') }}" class="inline-flex items-center gap-1 h-9 px-3 rounded-lg border border-slate-200 text-[11px] font-semibold text-slate-500 hover:text-slate-700 hover:border-slate-300 transition-colors whitespace-nowrap">Lihat semua <i class="fas fa-arrow-right text-[9px]"></i></a>
             </div>
         </div>
         <div class="overflow-x-auto">
-            <table class="w-full text-left text-[12.5px] min-w-[560px]">
+            <table class="w-full text-left text-[11px] table-fixed">
                 <thead>
-                    <tr class="text-[9.5px] uppercase tracking-[0.13em] text-slate-400 bg-[#F7F9FE]">
-                        <th class="px-6 py-3 font-bold">Nota</th>
-                        <th class="px-6 py-3 font-bold">Konsumen</th>
-                        <th class="px-6 py-3 font-bold text-right">Total</th>
-                        <th class="px-6 py-3 font-bold text-right">Pembayaran</th>
+                    <tr class="text-[8.5px] uppercase tracking-[0.13em] text-slate-400 bg-[#F7F9FE]">
+                        <th class="px-3 py-2.5 font-bold w-[30%]">Nota</th>
+                        <th class="px-3 py-2.5 font-bold w-[27%]">Konsumen</th>
+                        <th class="px-3 py-2.5 font-bold text-right w-[22%]">Total</th>
+                        <th class="px-3 py-2.5 font-bold text-right w-[21%]">Status</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-50">
                     @forelse($orderTerbaru as $o)
                         <tr class="trx-row hover:bg-[#FAFCFF] transition-colors">
-                            <td class="px-6 py-3.5"><span class="font-mono text-[11px] font-semibold text-slate-700">{{ $o->nomor_nota }}</span></td>
-                            <td class="px-6 py-3.5 font-medium text-slate-700">{{ $o->nama_konsumen ?? 'Tanpa nama' }}</td>
-                            <td class="px-6 py-3.5 text-right font-semibold text-slate-800 tabular-nums">Rp {{ number_format((float) $o->total_bayar, 0, ',', '.') }}</td>
-                            <td class="px-6 py-3.5 text-right">@if($o->status_pembayaran === 'Lunas')<span class="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-1 text-[9.5px] font-bold uppercase tracking-wide text-emerald-700">Lunas</span>@elseif($o->status_pembayaran === 'DP')<span class="inline-flex items-center rounded-full bg-amber-50 border border-amber-200 px-2.5 py-1 text-[9.5px] font-bold uppercase tracking-wide text-amber-800">DP</span>@else<span class="inline-flex items-center rounded-full bg-rose-50 border border-rose-200 px-2.5 py-1 text-[9.5px] font-bold uppercase tracking-wide text-rose-600">Belum Bayar</span>@endif</td>
+                            <td class="px-3 py-3"><span class="font-mono text-[10px] font-semibold text-slate-700">{{ $o->nomor_nota }}</span></td>
+                            <td class="px-3 py-3 font-medium text-slate-700"><span class="block truncate">{{ $o->nama_konsumen ?? 'Tanpa nama' }}</span></td>
+                            <td class="px-3 py-3 text-right font-semibold text-slate-800 tabular-nums whitespace-nowrap">Rp {{ number_format((float) $o->total_bayar, 0, ',', '.') }}</td>
+                            <td class="px-3 py-3 text-right">@if($o->status_pembayaran === 'Lunas')<span class="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[9px] font-bold uppercase text-emerald-700">Lunas</span>@elseif($o->status_pembayaran === 'DP')<span class="inline-flex items-center rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-[9px] font-bold uppercase text-amber-800">DP</span>@else<span class="inline-flex items-center rounded-full bg-rose-50 border border-rose-200 px-2 py-0.5 text-[9px] font-bold uppercase text-rose-600">Belum</span>@endif</td>
                         </tr>
                     @empty
-                        <tr><td colspan="4" class="px-6 py-12 text-center text-[12px] text-slate-400">Belum ada transaksi.</td></tr>
+                        <tr><td colspan="4" class="px-3 py-12 text-center text-[11.5px] text-slate-400">Belum ada transaksi.</td></tr>
                     @endforelse
                 </tbody>
             </table>
