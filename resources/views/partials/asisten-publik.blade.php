@@ -88,10 +88,19 @@
             credentials: 'same-origin',
             body: JSON.stringify({ pesan: teks })
         }).then(function (r) {
-            return r.json().catch(function () { return { reply: 'Maaf, saya tidak bisa menjawab itu sekarang.' }; });
-        }).then(function (d) {
+            return r.text().then(function (txt) {
+                var data = null;
+                try { data = JSON.parse(txt); } catch (e) { /* bukan JSON (mis. halaman error 419/500) */ }
+                return { ok: r.ok, status: r.status, data: data, mentah: txt };
+            });
+        }).then(function (h) {
             loading.remove();
-            bubble(d.reply || 'Maaf, jawaban kosong.', 'asisten');
+            if (!h.data) {
+                bubble('Maaf, server menolak (HTTP ' + h.status + '). Coba muat ulang halaman; jika tetap gagal, hubungi kasir lewat WhatsApp.', 'asisten');
+                return;
+            }
+            var bal = h.data.reply || h.data.message || 'Maaf, jawaban kosong.';
+            bubble(bal, 'asisten');
         }).catch(function () {
             loading.remove();
             bubble('Maaf, gagal terhubung ke server. Coba lagi sebentar.', 'asisten');
