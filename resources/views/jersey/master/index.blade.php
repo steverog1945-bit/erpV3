@@ -276,8 +276,8 @@
                 <p class="text-xs text-slate-400 mb-4">Estimasi bahan untuk Tipe Lengan & Tipe Kerah - kelola daftar tipenya di tab <b class="text-slate-500">Tipe Lengan</b>/<b class="text-slate-500">Tipe Kerah</b>, isi angka pemakaiannya di sini per ukuran. Order mode Daftar Pemain/Campuran memakai pilihan lengan/kerah masing-masing pemain; mode Qty per Ukuran memakai pilihan default di level barang.</p>
 
                 <p class="text-[11px] font-medium text-indigo-600 uppercase tracking-widest mb-2">Estimasi Lengan (meter &amp; gram)</p>
-                <div class="overflow-x-auto mb-6">
-                    <table class="w-full text-xs border-collapse" id="tabel-estimasi-lengan">
+                <div class="modern-table-wrapper overflow-x-auto mb-6">
+                    <table class="modern-table w-full border-collapse" id="tabel-estimasi-lengan">
                         <thead>
                             <tr>
                                 <th class="p-2.5 text-left sticky left-0 bg-white z-10">Ukuran</th>
@@ -313,8 +313,8 @@
                 </div>
 
                 <p class="text-[11px] font-medium text-indigo-600 uppercase tracking-widest mb-2">Estimasi Kerah (meter &amp; gram)</p>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-xs border-collapse" id="tabel-estimasi-kerah">
+                <div class="modern-table-wrapper overflow-x-auto">
+                    <table class="modern-table w-full border-collapse" id="tabel-estimasi-kerah">
                         <thead>
                             <tr>
                                 <th class="p-2.5 text-left sticky left-0 bg-white z-10">Ukuran</th>

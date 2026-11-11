@@ -100,12 +100,18 @@ class SpkController extends Controller
         } else {
             $query->where('transaksi.tgl_order', '>=', $tglDari->format('Y-m-d H:i:s'));
             $query->where('transaksi.tgl_order', '<', $batasAtas);
-            // Default: tampilkan hanya pekerjaan yang belum MULAI (Antre & Pending).
-            // Saat operator mengklik untuk memulai (status berpindah ke
-            // Desain/Cetak), item itu otomatis hilang dari antrean ini —
-            // tidak perlu pilih filter "Antre" secara eksplisit.
+            // Default: antre. Operator bisa mengubah tab di baris tab
+            // (?tab=antre|dikerjakan|selesai|semua) tanpa menyentuh dropdown
+            // status (dropdown tetap ada untuk kompatibilitas dengan link lama
+            // yang memakai ?status_spk=).
             if (!$request->filled('status_spk')) {
-                $query->whereIn('transaksi_detail.status_spk', ['Antre', 'Pending']);
+                $aktifTab = $request->input('tab', 'antre');
+                match ($aktifTab) {
+                    'dikerjakan' => $query->whereIn('transaksi_detail.status_spk', ['Desain', 'Cetak']),
+                    'selesai'    => $query->where('transaksi_detail.status_spk', 'Selesai'),
+                    'semua'      => $query->whereNotIn('transaksi_detail.status_spk', ['Batal']),
+                    default      => $query->whereIn('transaksi_detail.status_spk', ['Antre', 'Pending']),
+                };
             }
         }
 
@@ -145,6 +151,38 @@ class SpkController extends Controller
 
         if ($request->boolean('urgent_only')) {
             $query->where('transaksi_detail.status_urgent', 1);
+        }
+
+        // Tab aktif untuk highlight di view.
+        $aktifTab = $request->input('tab', 'antre');
+        $hitunganAntre = 0; $hitunganDikerjakan = 0; $hitunganSelesai = 0; $hitunganSemua = 0;
+        if (! $tunggakanAktif) {
+            $hitQ = DB::table('transaksi_detail')
+                ->join('transaksi', 'transaksi_detail.id_transaksi', '=', 'transaksi.id_transaksi')
+                ->join('produk', 'transaksi_detail.id_produk', '=', 'produk.id_produk')
+                ->where('transaksi.status_nota', 'Aktif')
+                ->where('transaksi.status_order', 'Diterima Kasir')
+                ->where('transaksi.tgl_order', '>=', $tglDari->format('Y-m-d H:i:s'))
+                ->where('transaksi.tgl_order', '<', $batasAtas);
+            if ($mesinDiizinkan) {
+                $hitQ->whereIn('produk.id_mesin', $mesinDiizinkan);
+            }
+            \App\Services\DivisiService::saring($hitQ, $request->divisi);
+            if ($request->filled('search')) {
+                $search = $request->search;
+                $hitQ->where(function ($q) use ($search) {
+                    $q->where('transaksi_detail.nama_file', 'like', "%{$search}%")
+                      ->orWhere('konsumen.nama_konsumen', 'like', "%{$search}%")
+                      ->orWhere('transaksi.nomor_nota', 'like', "%{$search}%");
+                });
+            }
+            if ($request->boolean('urgent_only')) {
+                $hitQ->where('transaksi_detail.status_urgent', 1);
+            }
+            $hitunganSemua = (clone $hitQ)->whereNotIn('transaksi_detail.status_spk', ['Batal'])->count();
+            $hitunganDikerjakan = (clone $hitQ)->whereIn('transaksi_detail.status_spk', ['Desain', 'Cetak'])->count();
+            $hitunganSelesai = (clone $hitQ)->where('transaksi_detail.status_spk', 'Selesai')->count();
+            $hitunganAntre = (clone $hitQ)->whereIn('transaksi_detail.status_spk', ['Antre', 'Pending'])->count();
         }
 
         $spk = $query->orderByDesc('transaksi_detail.id_detail')->paginate(20)->withQueryString();
@@ -194,7 +232,7 @@ class SpkController extends Controller
             ->where('transaksi.tgl_order', '<', $hariEsok->format('Y-m-d H:i:s'))
             ->count();
 
-        return view('spk.index', compact('spk', 'divisis', 'jumlahAntreAwal', 'tglDari', 'tglSampai', 'tertinggal', 'tunggakanAktif'));
+        return view('spk.index', compact('spk', 'divisis', 'jumlahAntreAwal', 'tglDari', 'tglSampai', 'tertinggal', 'tunggakanAktif', 'aktifTab', 'hitunganAntre', 'hitunganDikerjakan', 'hitunganSelesai', 'hitunganSemua'));
     }
 
     /**

@@ -11,7 +11,7 @@
 <x-polling-notifikasi :url="route('spk.cek-antrian-baru')" :jumlah-awal="$jumlahAntreAwal" pesan="Ada SPK baru masuk antrian." />
 <div class="spk-page w-full px-4 sm:px-6 lg:px-8 py-10 max-w-[1600px] mx-auto">
 
-    <x-page-header title="SPK - Surat Perintah Kerja">
+    <x-page-header title="Antrean Produksi">
         <x-slot:subtitle>
             Produksi &amp; Logistik <span class="mx-1 text-slate-500">/</span> Daftar Pekerjaan dari Order
         </x-slot:subtitle>
@@ -22,6 +22,25 @@
             </x-button>
         </x-slot:actions>
     </x-page-header>
+
+    @unless ($tunggakanAktif)
+    <div class="spk-tabs flex flex-wrap items-center gap-1.5 border-b border-slate-100 mb-5 pb-3" role="tablist" aria-label="Tahap antrean produksi">
+        @php $tabItems = [
+            ['tab' => 'antre', 'label' => 'Antre (' . $hitunganAntre . ')', 'count' => $hitunganAntre, 'cls' => 'bg-amber-50 text-amber-700 border-amber-200'],
+            ['tab' => 'dikerjakan', 'label' => 'Dikerjakan (' . $hitunganDikerjakan . ')', 'count' => $hitunganDikerjakan, 'cls' => 'bg-indigo-50 text-indigo-700 border-indigo-200'],
+            ['tab' => 'selesai', 'label' => 'Selesai (' . $hitunganSelesai . ')', 'count' => $hitunganSelesai, 'cls' => 'bg-emerald-50 text-emerald-700 border-emerald-200'],
+            ['tab' => 'semua', 'label' => 'Semua (' . $hitunganSemua . ')', 'count' => $hitunganSemua, 'cls' => 'bg-slate-50 text-slate-700 border-slate-200'],
+        ]; @endphp
+        @foreach ($tabItems as $t)
+            <a href="{{ route('spk.index', array_merge(request()->except(['page', 'tab']), ['tab' => $t['tab']])) }}"
+               role="tab"
+               aria-selected="{{ $aktifTab === $t['tab'] ? 'true' : 'false' }}"
+               class="inline-flex items-center gap-2 h-8 pl-3 pr-2 rounded-lg border text-[11px] font-semibold transition-all {{ $aktifTab === $t['tab'] ? $t['cls'] . ' shadow-sm' : 'bg-white text-slate-500 border-slate-200 hover:border-slate-300' }}">
+                {{ $t['label'] }}
+            </a>
+        @endforeach
+    </div>
+    @endunless
 
     {{-- DIVISI: otomatis dari master mesin --}}
     @include('partials.divisi-tabs', ['routeName' => 'spk.index'])
