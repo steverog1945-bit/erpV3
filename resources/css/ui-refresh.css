@@ -1217,7 +1217,7 @@ legend.text-\[10px\].uppercase {
     }
     .swal2-popup.swal2-toast {
        display: grid !important;
-       grid-template-columns: 46px 1fr auto !important;
+       grid-template-columns: 46px minmax(0, 1fr) auto !important;
        column-gap: 12px !important;
        align-items: center !important;
        padding: 12px 14px 12px 12px !important;
@@ -1242,15 +1242,16 @@ legend.text-\[10px\].uppercase {
        display: flex !important; align-items: center !important; justify-content: center !important;
        font-size: 10px !important; color: #fff !important;
     }
-    .swal2-popup.swal2-toast .swal2-icon-success { background: linear-gradient(160deg, #22C55E 0%, #16A34A 100%) !important; box-shadow: 0 2px 6px rgba(34,197,94,.4) !important; }
-    .swal2-popup.swal2-toast .swal2-icon-error { background: linear-gradient(160deg, #F87171 0%, #DC2626 100%) !important; box-shadow: 0 2px 6px rgba(248,113,113,.4) !important; }
-    .swal2-popup.swal2-toast .swal2-icon-warning { background: linear-gradient(160deg, #FDE047 0%, #EAB308 100%) !important; box-shadow: 0 2px 6px rgba(253,224,71,.35) !important; }
-    .swal2-popup.swal2-toast .swal2-icon-info { background: linear-gradient(160deg, #60A5FA 0%, #2563EB 100%) !important; box-shadow: 0 2px 6px rgba(96,165,250,.4) !important; }
-    .swal2-popup.swal2-toast .swal2-icon-question { background: linear-gradient(160deg, #C084FC 0%, #9333EA 100%) !important; box-shadow: 0 2px 6px rgba(192,132,252,.4) !important; }
+    .swal2-popup.swal2-toast .swal2-icon.swal2-success { background: linear-gradient(160deg, #22C55E 0%, #16A34A 100%) !important; box-shadow: 0 2px 6px rgba(34,197,94,.4) !important; }
+    .swal2-popup.swal2-toast .swal2-icon.swal2-error { background: linear-gradient(160deg, #F87171 0%, #DC2626 100%) !important; box-shadow: 0 2px 6px rgba(248,113,113,.4) !important; }
+    .swal2-popup.swal2-toast .swal2-icon.swal2-warning { background: linear-gradient(160deg, #FDE047 0%, #EAB308 100%) !important; box-shadow: 0 2px 6px rgba(253,224,71,.35) !important; }
+    .swal2-popup.swal2-toast .swal2-icon.swal2-info { background: linear-gradient(160deg, #60A5FA 0%, #2563EB 100%) !important; box-shadow: 0 2px 6px rgba(96,165,250,.4) !important; }
+    .swal2-popup.swal2-toast .swal2-icon.swal2-question { background: linear-gradient(160deg, #C084FC 0%, #9333EA 100%) !important; box-shadow: 0 2px 6px rgba(192,132,252,.4) !important; }
     .swal2-popup.swal2-toast .swal2-success-line-tip, .swal2-popup.swal2-toast .swal2-success-line-long { background-color: #fff !important; height: .32em !important; }
+    .swal2-popup.swal2-toast .swal2-success-circular-line-left, .swal2-popup.swal2-toast .swal2-success-circular-line-right, .swal2-popup.swal2-toast .swal2-success-fix { background-color: transparent !important; border: 0 !important; }
     .swal2-popup.swal2-toast .swal2-x-mark-line-left, .swal2-popup.swal2-toast .swal2-x-mark-line-right { background-color: #fff !important; }
-    .swal2-popup.swal2-toast .swal2-icon-warning { border-color: transparent !important; }
-    .swal2-popup.swal2-toast .swal2-icon-warning .swal2-icon-content { color: #422006 !important; }
+    .swal2-popup.swal2-toast .swal2-icon.swal2-warning { border-color: transparent !important; }
+    .swal2-popup.swal2-toast .swal2-icon.swal2-warning .swal2-icon-content { color: #422006 !important; }
     .swal2-popup.swal2-toast .swal2-title {
        grid-column: 2 !important; grid-row: 1 !important;
        margin: 0 !important; padding: 0 !important;
@@ -1376,3 +1377,5 @@ legend.text-\[10px\].uppercase {
    html.dark .ld input:not([type=checkbox]):not([type=radio]), html.dark .ld select, html.dark .ld textarea { background: #232327 !important; color: #f4f4f5 !important; }
    html.dark .ld > .ld-label { color: #a1a1aa; }
    @media (prefers-reduced-motion: reduce) { .ld > .ld-label { transition: none; } }
+    /* Upload notification OS - strong push to override any default white */
+    body .swal2-popup.swal2-toast { background: #18181bd1 !important; color: #fafafa !important; border-radius: 18px !important; }
