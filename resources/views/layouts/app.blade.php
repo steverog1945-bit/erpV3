@@ -1431,6 +1431,7 @@
             <div class="promega-body">
                 <div class="promega-rail" id="proMegaRail">
                     <span class="promega-rail-label">Akses Cepat</span>
+                    @if(\App\Support\Izin::boleh(auth()->user(), [3, 41], 'view'))
                     <a class="promega-card tone-blue" href="{{ url('/penjualan/kasir') }}" data-href-suffix="/penjualan/kasir">
                         <span class="promega-card-icon">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4V7z"/><path d="M12 9v.01M12 15v.01M9 12v.01M15 12v.01"/></svg>
@@ -1441,6 +1442,8 @@
                         </span>
                         <svg class="promega-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
                     </a>
+                    @endif
+                    @if(\App\Support\Izin::bolehPath(auth()->user(), '/kasir/monitoring'))
                     <a class="promega-card tone-navy" href="{{ url('/kasir/monitoring') }}" data-href-suffix="/kasir/monitoring">
                         <span class="promega-card-icon">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="4" width="19" height="12.5" rx="2"/><path d="M9 20.5h6M12 16.5v4"/><path d="M7 12l2.5-2.5 2.5 2.5 4.5-4.5"/></svg>
@@ -1451,6 +1454,8 @@
                         </span>
                         <svg class="promega-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
                     </a>
+                    @endif
+                    @if(\App\Support\Izin::boleh(auth()->user(), [22], 'view'))
                     <a class="promega-card tone-emerald" href="{{ url('/spk') }}" data-href-suffix="/spk">
                         <span class="promega-card-icon">
                             <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="4.5" width="14" height="17" rx="2"/><path d="M9 4.5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2M9.5 11h5M9.5 15h5M9.5 19h3"/></svg>
@@ -1461,6 +1466,7 @@
                         </span>
                         <svg class="promega-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
                     </a>
+                    @endif
                 </div>
                 <div class="promega-content">
                     <div class="promega-grid" id="proMegaGrid"></div>
@@ -1620,6 +1626,7 @@
                 // TopbarTab::aktif() mengembalikan bawaan — tampilan identik
                 // sebelum fitur ini ada.
                 $proTabs = \App\Models\TopbarTab::aktif();
+                $user = auth()->user();
                 foreach ($proTabs as &$__tab) {
                     $__tab['aktif_baris'] = \Illuminate\Support\Facades\Request::is(
                         ltrim($__tab['url'], '/'),
@@ -1627,6 +1634,13 @@
                     );
                 }
                 unset($__tab);
+                // Saring tab yang permissionnya tidak dimiliki user:
+                // Administrator selalu lolos; role lain hanya melihat tab yang
+                // bisa dibuka tanpa 403. Topbar adalah shortcut, bukan izin —
+                // middleware tetap menolak 403 sebelum menyimpan apa pun.
+                $proTabs = array_values(array_filter($proTabs, function ($tab) {
+                    return \App\Support\Izin::bolehPath(auth()->user(), $tab['url']);
+                }));
             @endphp
             @foreach($proTabs as $tab)
                 <a href="{{ url($tab['url']) }}" role="tab" aria-selected="{{ $tab['aktif_baris'] ? 'true' : 'false' }}" class="pro-tab {{ $tab['aktif_baris'] ? 'aktif' : '' }}">
