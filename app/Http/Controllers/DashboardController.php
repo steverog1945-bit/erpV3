@@ -136,6 +136,9 @@ class DashboardController extends Controller
 
         $spkAntre = (int) ($statusSpk['Antre'] ?? 0);
         $spkProses = (int) (($statusSpk['Desain'] ?? 0) + ($statusSpk['Cetak'] ?? 0));
+        // Dipecah lagi untuk alur 5 tahap di dashboard (Antre -> Desain -> Produksi -> Collecting -> Selesai)
+        $spkDesain = (int) ($statusSpk['Desain'] ?? 0);
+        $spkCetak = (int) ($statusSpk['Cetak'] ?? 0);
         $spkSelesai = (int) ($statusSpk['Selesai'] ?? 0);
 
         $urgentAktif = DB::table('transaksi_detail')
@@ -195,7 +198,7 @@ class DashboardController extends Controller
         return view('dashboard', compact(
             'orderKemarin', 'kasMasukKemarin', 'tren', 'perluTindakan',
             'orderHariIni', 'nilaiOrderHariIni',
-            'spkAntre', 'spkProses', 'spkSelesai', 'urgentAktif',
+            'spkAntre', 'spkProses', 'spkDesain', 'spkCetak', 'spkSelesai', 'urgentAktif',
             'notaLengkap', 'notaBelumLengkap',
             'piutang', 'piutangCount', 'kasMasukHariIni', 'kasAktif',
             'urgentList', 'orderTerbaru'
