@@ -411,6 +411,13 @@
                     <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-slate-200 text-slate-500 text-[10px] font-medium cursor-help shrink-0 self-center" title="Harga sekarang berpusat pada Bahan - tiap bahan bisa punya tier qty & harga sendiri karena selisih harga belanja antar bahan bisa sangat jauh. Kosongkan Bahan/Tipe Produk/Kategori untuk membuat tier &quot;berlaku umum&quot; (fallback kalau tidak ada tier spesifik yang cocok). Pencarian harga otomatis memilih tier paling spesifik yang cocok dengan bahan & qty tiap baris barang.">?</span>
                 </div>
             </form>
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 mb-3">
+                <div class="flex-1 min-w-0 relative">
+                    <i class="fas fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="text" id="cari-harga-text" placeholder="Cari bahan, tipe, kategori atau harga..." autocomplete="off" class="w-full bg-white border border-slate-200 rounded-xl h-10 pl-9 pr-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+                </div>
+                <button type="button" id="btn-sort-harga" class="shrink-0 inline-flex items-center gap-2 h-10 px-3 rounded-xl bg-slate-100 text-slate-500 border border-slate-200 text-xs font-semibold hover:bg-slate-200 transition-colors" title="Urutkan harga dari terkecil (klik lagi: terbesar)"><i class="fas fa-arrow-down-short-wide text-xs"></i><span>Urut Harga</span></button>
+            </div>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
                 <select id="filter-harga-bahan" class="bg-white border border-slate-200 rounded-xl py-2.5 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
                     <option value="">Semua Bahan</option>
@@ -429,7 +436,14 @@
                 </button>
             </div>
             <x-table bare>
-                <thead><tr><th class="p-2.5 text-left">Bahan</th><th class="p-2.5 text-left">Tipe</th><th class="p-2.5 text-left">Kategori</th><th class="p-2.5 text-center">Qty</th><th class="p-2.5 text-right">Harga/pcs</th><th class="p-2.5 text-center w-20">Aksi</th></tr></thead>
+                <thead><tr>
+                    <th class="p-2.5 text-left cursor-pointer select-none hover:text-slate-600" data-sort-th="bahan">Bahan <i class="fas fa-sort text-[10px] text-slate-400 ml-0.5"></i></th>
+                    <th class="p-2.5 text-left cursor-pointer select-none hover:text-slate-600" data-sort-th="tipe">Tipe <i class="fas fa-sort text-[10px] text-slate-400 ml-0.5"></i></th>
+                    <th class="p-2.5 text-left cursor-pointer select-none hover:text-slate-600" data-sort-th="kategori">Kategori <i class="fas fa-sort text-[10px] text-slate-400 ml-0.5"></i></th>
+                    <th class="p-2.5 text-center cursor-pointer select-none hover:text-slate-600" data-sort-th="qty">Qty <i class="fas fa-sort text-[10px] text-slate-400 ml-0.5"></i></th>
+                    <th class="p-2.5 text-right cursor-pointer select-none hover:text-slate-600" data-sort-th="harga">Harga/pcs <i class="fas fa-sort text-[10px] text-slate-400 ml-0.5"></i></th>
+                    <th class="p-2.5 text-center w-20">Aksi</th>
+                </tr></thead>
                 <tbody class="divide-y divide-slate-50" id="tbody-harga" data-empty-colspan="6" data-empty-text="Belum ada tier harga">
                     @forelse($priceSettings as $p)
                         @include('jersey.master._row-harga', ['row' => $p])
@@ -1252,20 +1266,70 @@
         const bahan = document.getElementById('filter-harga-bahan').value;
         const tipe = document.getElementById('filter-harga-tipe').value;
         const kategori = document.getElementById('filter-harga-kategori').value;
+        const q = (document.getElementById('cari-harga-text')?.value || '').trim().toLowerCase();
         terapkanFilterTabel('tbody-harga', (row) => {
+            const teks = (row.textContent || '').toLowerCase();
             const cocokBahan = !bahan || row.dataset.materialId === bahan;
             const cocokTipe = !tipe || row.dataset.typeId === tipe;
             const cocokKategori = !kategori || row.dataset.categoryId === kategori;
-            return cocokBahan && cocokTipe && cocokKategori;
+            const cocokCari = !q || teks.includes(q);
+            return cocokBahan && cocokTipe && cocokKategori && cocokCari;
         }, 6);
     }
+
+    // Urutkan kolom kapan pun header diklik: asc -> desc -> asc.
+    let sortArah = {};
+    function urutkanKolom(key) {
+        const tbody = document.getElementById('tbody-harga');
+        if (!tbody) return;
+        const arah = (sortArah[key] === 'asc' ? 'desc' : 'asc');
+        sortArah = { [key]: arah };
+        document.querySelectorAll('[data-sort-th]').forEach(th => {
+            const ic = th.querySelector('i');
+            if (ic) ic.className = 'fas fa-sort text-[10px] text-slate-400 ml-0.5';
+        });
+        const aktif = document.querySelector(`[data-sort-th="${key}"] i`);
+        if (aktif) aktif.className = `fas fa-sort-${arah === 'asc' ? 'up' : 'down'} text-[10px] text-indigo-500 ml-0.5`;
+        const rows = Array.from(tbody.querySelectorAll('tr:not(.row-empty)'));
+        rows.sort((a, b) => {
+            const A = a.children, B = b.children;
+            if (key === 'qty') {
+                const an = parseFloat((A[3].textContent || '').split('-')[0].replace(/[^0-9.]/g, '')) || 0;
+                const bn = parseFloat((B[3].textContent || '').split('-')[0].replace(/[^0-9.]/g, '')) || 0;
+                return arah === 'asc' ? an - bn : bn - an;
+            }
+            if (key === 'harga') {
+                const an = parseFloat((A[4].textContent || '').replace(/[^0-9.,]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
+                const bn = parseFloat((B[4].textContent || '').replace(/[^0-9.,]/g, '').replace(/\./g, '').replace(',', '.')) || 0;
+                return arah === 'asc' ? an - bn : bn - an;
+            }
+            const idx = { bahan: 0, tipe: 1, kategori: 2 }[key] ?? 0;
+            return arah === 'asc'
+                ? (A[idx].textContent || '').localeCompare(B[idx].textContent || '')
+                : (B[idx].textContent || '').localeCompare(A[idx].textContent || '');
+        });
+        rows.forEach(r => tbody.appendChild(r));
+    }
+    document.querySelectorAll('[data-sort-th]').forEach(th => {
+        th.addEventListener('click', () => urutkanKolom(th.dataset.sortTh));
+    });
+    const btnSort = document.getElementById('btn-sort-harga');
+    if (btnSort) btnSort.addEventListener('click', () => urutkanKolom('harga'));
 
     function resetFilterHarga() {
         document.getElementById('filter-harga-bahan').value = '';
         document.getElementById('filter-harga-tipe').value = '';
         document.getElementById('filter-harga-kategori').value = '';
+        const cari = document.getElementById('cari-harga-text');
+        if (cari) cari.value = '';
+        sortArah = {};
+        document.querySelectorAll('[data-sort-th] i').forEach(i => {
+            i.className = 'fas fa-sort text-[10px] text-slate-400 ml-0.5';
+        });
         terapkanFilterHarga();
     }
+
+    document.getElementById('cari-harga-text')?.addEventListener('input', terapkanFilterHarga);
 
     ['filter-harga-bahan', 'filter-harga-tipe', 'filter-harga-kategori'].forEach(id => {
         document.getElementById(id).addEventListener('change', terapkanFilterHarga);

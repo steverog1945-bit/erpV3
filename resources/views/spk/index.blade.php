@@ -31,7 +31,7 @@
         <form method="GET" action="{{ route('spk.index') }}" class="spk-filter-form flex flex-wrap items-end gap-4">
             <input type="hidden" name="divisi" value="{{ request('divisi') }}">
 
-            <div class="spk-filter-search flex-1 min-w-[260px]">
+            <div class="spk-filter-search flex-1 min-w-[200px]">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Cari</label>
                 <x-form.input type="text" name="search" value="{{ request('search') }}"
                     placeholder="Nama file, konsumen, atau nomor nota..." />
@@ -87,7 +87,7 @@
                 <span class="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Urgent saja</span>
             </label>
 
-            <div class="spk-filter-toggle flex items-center gap-2 mt-3">
+            <div class="spk-filter-toggle flex items-center gap-2 pb-3">
                 <input type="checkbox" id="spk-tunggakan-aktif" name="tunggakan_aktif" value="1" {{ request('tunggakan_aktif') ? 'checked' : '' }}
                     class="rounded-md border-slate-200 text-indigo-600 focus:ring-indigo-500">
                 <span class="text-[11px] font-medium text-slate-500 uppercase tracking-wider">Tunggakan Aktif</span>

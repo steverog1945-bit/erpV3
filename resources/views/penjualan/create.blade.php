@@ -602,8 +602,10 @@
                     {{-- Biaya Cetak = komponen UTAMA subtotal (Cetak + Desain + Finishing, lihat hitungSubtotal()). Mengikuti Harga x Qty
                          sampai operator mengetik manual (cetakManualEdit). --}}
                     <div>
-                        <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Biaya Cetak (Rp)</label>
-                        <input type="text" inputmode="numeric" id="input_cetak" @unlessbolehHarga readonly @endbolehHarga onchange="hitungSubtotal()" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 text-right focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500  format-ribuan" value="0">
+                    {{-- Biaya Cetak sekarang TERKUNCI: angkanya diambil otomatis dari harga per unit x qty.
+                         Kasir hanya boleh membacanya, bukan mengetikkan ulang. --}}
+                        <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-1.5 ml-1 flex items-center gap-1.5"><i class="fas fa-lock text-[9px] text-slate-300"></i>Biaya Cetak (Rp)</label>
+                        <input type="text" inputmode="numeric" id="input_cetak" readonly disabled tabindex="-1" class="w-full bg-slate-50 border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-700 text-right cursor-not-allowed shadow-inner" value="0">
                     </div>
                     {{-- Jumlah pcs finishing hanya untuk finishing metode 'quantity' (mis. Pasang Mata Ayam) - kasir wajib cek/sesuaikan. --}}
                     <div id="wrapper_qty_finishing" class="hidden">
@@ -728,7 +730,10 @@
                     {{-- Biaya Desain disembunyikan default; muncul lewat tombol "+ Biaya Desain" (tampilkanBiayaDesain()). --}}
                     <div id="wrapper_biaya_desain" class="hidden">
                         <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Biaya Desain (Rp)</label>
-                        <input type="text" inputmode="numeric" id="input_desain" @unlessbolehDesain readonly @endbolehDesain onchange="hitungSubtotal()" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 text-right focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500  format-ribuan" value="0">
+                        <div class="flex items-center gap-2">
+                            <input type="text" inputmode="numeric" id="input_desain" @unlessbolehDesain readonly @endbolehDesain onchange="hitungSubtotal()" class="flex-1 min-w-0 bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 text-right focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500  format-ribuan" value="0">
+                            <button type="button" id="btn_batal_desain" onclick="kembaliKeAwalDesain()" class="shrink-0 inline-flex items-center gap-1.5 h-[38px] px-3 rounded-md bg-rose-50 text-rose-600 border border-rose-200 text-[10px] font-medium uppercase tracking-widest hover:bg-rose-100 transition-colors whitespace-nowrap" title="Batalkan biaya desain - kembali ke tampilan awal"><i class="fas fa-undo text-[9px]"></i>Batalkan</button>
+                        </div>
                     </div>
                     {{-- Desainer yang menerapkan biaya desain (untuk monitoring & komisi/bagi hasil) --}}
                     <div id="wrapper_desainer" class="hidden" title="Operator desain yang mengerjakan desain ini - dipakai untuk laporan biaya &amp; komisi desain">
@@ -1744,6 +1749,15 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('wrapper_desainer').classList.remove('hidden');
         document.getElementById('btn_tambah_desain').classList.add('hidden');
         document.getElementById('input_desain').focus();
+    }
+
+    // Kembali ke tampilan awal jika biaya desain ternyata tidak jadi dipasang.
+    function kembaliKeAwalDesain() {
+        document.getElementById('input_desain').value = '0';
+        document.getElementById('wrapper_biaya_desain').classList.add('hidden');
+        document.getElementById('wrapper_desainer').classList.add('hidden');
+        document.getElementById('btn_tambah_desain').classList.remove('hidden');
+        hitungSubtotal();
     }
 
     // Biaya finishing hasil auto-suggest (tier finishing_harga berdasarkan

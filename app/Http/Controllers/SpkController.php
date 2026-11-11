@@ -95,11 +95,18 @@ class SpkController extends Controller
             // satu baris pun. Sekarang operator menandainya untuk melihat order
             // LAMA yang belum selesai, bukan order hari ini.
             $query->where('transaksi.tgl_order', '<', $hariIni->format('Y-m-d H:i:s'));
-            $query->whereIn('transaksi_detail.status_spk', ['Antre', 'Desain', 'Cetak', 'Pending']);
-            $query->whereNotIn('transaksi_detail.status_spk', ['Batal', 'Selesai']);
+            // Antrean tunggakan = yang belum MULAI dikerjakan, sama dengan default.
+            $query->whereIn('transaksi_detail.status_spk', ['Antre', 'Pending']);
         } else {
             $query->where('transaksi.tgl_order', '>=', $tglDari->format('Y-m-d H:i:s'));
             $query->where('transaksi.tgl_order', '<', $batasAtas);
+            // Default: tampilkan hanya pekerjaan yang belum MULAI (Antre & Pending).
+            // Saat operator mengklik untuk memulai (status berpindah ke
+            // Desain/Cetak), item itu otomatis hilang dari antrean ini —
+            // tidak perlu pilih filter "Antre" secara eksplisit.
+            if (!$request->filled('status_spk')) {
+                $query->whereIn('transaksi_detail.status_spk', ['Antre', 'Pending']);
+            }
         }
 
         if ($request->filled('search')) {
