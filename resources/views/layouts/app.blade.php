@@ -1332,6 +1332,7 @@
     </svg>
     <span class="text-sm font-medium">Pengaturan Aplikasi</span>
 </a>
+@endif
 @if(str_starts_with((string) (optional(auth()->user()?->role)->nama_role ?? ''), 'Administrator'))
 <a href="{{ route('pengaturan-aplikasi.tema.index') }}"
    class="{{ $menuClass }} pl-8 {{ Request::is('pengaturan-aplikasi/tema', 'pengaturan-aplikasi/tema/*') ? $activeClass : $nonActiveClass }}">
@@ -1374,7 +1375,6 @@
     </svg>
     <span class="text-sm font-medium">Landing Page Builder</span>
 </a>
-@endif
 @endif
 
 @if($isAdministrator || $cekAkses(50))

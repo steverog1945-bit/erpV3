@@ -5,7 +5,9 @@
     <x-page-header title="Ringkasan Cadangan" subtitle="Kesehatan backup harian / mingguan / bulanan dari backup_logs. Read-only dari halaman Pengaturan → Cadangan.">
         <x-slot:actions>
             <span class="inline-flex items-center gap-1.5 rounded-full border border-[#E7D9B6] bg-[#FDF6E3] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[.16em] text-[#C98A1B]"><i class="fas fa-gem"></i> Premium</span>
+            @if(\App\Support\Izin::bolehPath(auth()->user(), '/backup'))
             <a href="{{ url('/backup') }}" class="inline-flex items-center gap-2 h-9 px-4 rounded-lg bg-slate-900 text-white text-[12px] font-semibold hover:bg-slate-800 transition-colors"><i class="fas fa-gear"></i> Kelola Backup</a>
+            @endif
         </x-slot:actions>
     </x-page-header>
 

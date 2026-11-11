@@ -74,7 +74,11 @@
                             </div>
                             <p class="mt-1.5 text-[12px] leading-relaxed text-slate-500">{{ $f['desc'] }}</p>
                             @if($f['route'])
-                                <a href="{{ $f['route'] }}" class="mt-3 inline-flex items-center gap-1.5 text-[11.5px] font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">Buka fitur <i class="fas fa-arrow-right text-[10px] transition-transform group-hover:translate-x-0.5"></i></a>
+                                @if(\App\Support\Izin::bolehPath(auth()->user(), $f['route']))
+                                    <a href="{{ $f['route'] }}" class="mt-3 inline-flex items-center gap-1.5 text-[11.5px] font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">Buka fitur <i class="fas fa-arrow-right text-[10px] transition-transform group-hover:translate-x-0.5"></i></a>
+                                @else
+                                    <span class="mt-3 inline-flex items-center gap-1.5 text-[11px] font-medium text-slate-400"><i class="fas fa-lock text-[10px]"></i> Perlu izin akses</span>
+                                @endif
                             @else
                                 <span class="mt-3 inline-flex items-center gap-1.5 text-[11.5px] font-semibold text-slate-400">Segera - butuh penambahan struktur data</span>
                             @endif

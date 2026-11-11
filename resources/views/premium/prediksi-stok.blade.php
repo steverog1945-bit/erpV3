@@ -5,7 +5,9 @@
     <x-page-header title="Prediksi Restock Cerdas" subtitle="Sisa hari pakai per bahan baku, dari pemakaian 60 hari terakhir. Diurutkan dari yang paling kritis.">
         <x-slot:actions>
             <span class="inline-flex items-center gap-1.5 rounded-full border border-[#E7D9B6] bg-[#FDF6E3] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[.16em] text-[#C98A1B]"><i class="fas fa-gem"></i> Premium</span>
+            @if(\App\Support\Izin::bolehPath(auth()->user(), '/purchase-request/create'))
             <a href="{{ url('/purchase-request/create') }}" class="inline-flex items-center gap-2 h-9 px-4 rounded-lg bg-slate-900 text-white text-[12px] font-semibold hover:bg-slate-800 transition-colors"><i class="fas fa-cart-plus"></i> Buat Permintaan Pembelian</a>
+            @endif
         </x-slot:actions>
     </x-page-header>
 
