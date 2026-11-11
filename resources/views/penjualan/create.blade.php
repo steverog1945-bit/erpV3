@@ -14,7 +14,7 @@
      Rombakan sebelumnya menjagli kolom kiri 64% sehingga Data Pelanggan ikut
      sempit - padahal di situ field paling lebar (select2 pelanggan). Full
      width membuat baris Pelanggan bisa 8 kolom tanpa berdesakan. --}}
-<div class="pos-mobile-shell page-input-order w-full px-3 sm:px-5 lg:px-6 py-5">
+<div class="pos-mobile-shell page-input-order w-full px-3 sm:px-5 lg:px-6 py-3">
 
     @if(!empty($quotationRef))
     <div class="mb-6 p-5 rounded-2xl bg-amber-50 border border-amber-200">
@@ -34,39 +34,26 @@
     </div>
     @endif
 
-    <x-page-header>
-        @if($notaEdit)
-            <x-slot:title>EDIT <span class="text-indigo-600">NOTA</span></x-slot:title>
-            <x-slot:subtitle>
-                <span class="flex h-2 w-2 rounded-full bg-sky-500"></span>
-                Mengoreksi nota {{ $notaEdit->nomor_nota }} &bull; {{ \Carbon\Carbon::parse($notaEdit->tgl_order)->translatedFormat('d M Y') }}
-            </x-slot:subtitle>
-        @elseif($notaSusulan)
-            <x-slot:title>TAMBAH <span class="text-indigo-600">ORDER SUSULAN</span></x-slot:title>
-            <x-slot:subtitle>
-                <span class="flex h-2 w-2 rounded-full bg-amber-500"></span>
-                Menambah item ke nota {{ $notaSusulan->nomor_nota }} &bull; {{ \Carbon\Carbon::parse($notaSusulan->tgl_order)->translatedFormat('d M Y') }}
-            </x-slot:subtitle>
-        @else
-            <x-slot:title>INPUT <span class="text-indigo-600">ORDER</span></x-slot:title>
-            <x-slot:subtitle>
-                <span class="flex h-2 w-2 rounded-full bg-emerald-500"></span>
-                Order Cetak Reguler &bull; {{ date('d M Y') }}
-            </x-slot:subtitle>
-        @endif
-        <x-slot:actions>
-            <x-button href="{{ $notaKunci ? route('penjualan.show', $notaKunci->id_transaksi) : route('penjualan.riwayat') }}" variant="outline">
-                <i class="fas fa-arrow-left"></i> {{ $notaKunci ? 'Kembali ke Nota' : 'Riwayat Nota' }}
-            </x-button>
-            <div class="nota-card bg-white border border-slate-200/80 rounded-2xl px-5 sm:px-8 py-3 flex items-center gap-4 sm:gap-6 max-w-full shadow-[0_1px_3px_rgba(15,30,62,.06)]">
-                <div class="text-right min-w-0">
-                    <p class="text-[9.5px] font-bold text-slate-400 uppercase tracking-[0.18em]">Nomor Nota</p>
-                    <p id="no_nota_display" class="text-base sm:text-xl font-semibold text-indigo-600 tracking-tight truncate tabular-nums">{{ $no_nota }}</p>
-                </div>
-                <span class="w-10 h-10 rounded-xl bg-indigo-600 text-white shadow-[0_4px_10px_rgba(37,99,235,.35)] hidden sm:flex items-center justify-center shrink-0"><i class="fas fa-file-invoice"></i></span>
+    {{-- Header ringkas bergaya alat kasir: 1 baris, fokus tunggal. Ikon Chip
+         sengaja putih di atas navy—satu-satunya ikon navy di halaman supaya
+         "Nomor Nota" selalu terbaca pertama kali tanpa noise berlebih. --}}
+    <div class="po-head">
+        <div class="po-head-left">
+            <p class="po-eyebrow">Kasir</p>
+            <h1 class="po-title">{{ $notaEdit ? 'Edit Nota' : ($notaSusulan ? 'Order Susulan' : 'Input Order') }}</h1>
+            <p class="po-sub">{{ $notaEdit ? 'Mengkoreksi ' . $notaEdit->nomor_nota . ' · ' . \Carbon\Carbon::parse($notaEdit->tgl_order)->translatedFormat('d M Y') : ($notaSusulan ? 'Menambah item ke ' . $notaSusulan->nomor_nota . ' · ' . \Carbon\Carbon::parse($notaSusulan->tgl_order)->translatedFormat('d M Y') : 'Order cetak reguler · ' . now()->translatedFormat('d M Y')) }}</p>
+        </div>
+        <div class="po-head-right">
+            <a class="po-ghost" href="{{ $notaKunci ? route('penjualan.show', $notaKunci->id_transaksi) : route('penjualan.riwayat') }}"><i class="fas fa-arrow-left"></i><span class="hidden sm:inline">{{ $notaKunci ? 'Kembali ke Nota' : 'Riwayat Nota' }}</span></a>
+            <div class="po-nota">
+                <span class="po-nota-ic"><i class="fas fa-file-invoice"></i></span>
+                <span class="po-nota-text">
+                    <span class="po-nota-lbl">Nomor Nota</span>
+                    <span id="no_nota_display">{{ $no_nota }}</span>
+                </span>
             </div>
-        </x-slot:actions>
-    </x-page-header>
+        </div>
+    </div>
 
     @if($notaEdit)
         {{-- Papan penanda mode edit. Yang penting bagi operator: nota ini TIDAK
@@ -130,16 +117,16 @@
            enam kolom itu juga sudah memuat seluruh baris desktop dalam satu
            baris: Pelanggan (2) + Telepon + Tipe Harga + Tipe Order + Tanggal.
            =================================================================== --}}
-    <x-card class="!p-4 mb-4 @container">
+    <x-card :padding="false" class="p-3 mb-3 @container">
         <div class="flex items-center gap-2.5 mb-3">
-            <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center shrink-0"><i class="fas fa-user text-xs"></i></span>
+            <span class="po-ic w-7 h-7 rounded-lg flex items-center justify-center shrink-0"><i class="fas fa-user text-xs"></i></span>
             <div class="min-w-0">
                 <h3 class="text-sm font-medium text-slate-800 leading-tight">Data Pelanggan</h3>
                 <p class="text-[11px] text-slate-400 leading-tight">Siapa pemesan dan jenis ordernya</p>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 @xs:grid-cols-2 @md:grid-cols-3 @lg:grid-cols-4 @2xl:grid-cols-6 gap-x-3 gap-y-2.5">
+        <div class="grid grid-cols-1 @xs:grid-cols-2 @md:grid-cols-3 @lg:grid-cols-4 @2xl:grid-cols-6 gap-x-3 gap-y-2">
             {{-- Cari Pelanggan: selalu lebar, minimal 2 kolom (penuh di 1-2 kolom)
                  supaya select2 punya ruang untuk nama pelanggan yang panjang. --}}
             <div class="@xs:col-span-2 @md:col-span-2 @lg:col-span-2 @2xl:col-span-2">
@@ -297,7 +284,7 @@
          dicegah. Dengan min-w-0, pembagian 62:38 dipatuhi dan isi yang
          kepanjangan dipotong di dalam kotaknya, bukan dengan mendorong
          kolom lain. --}}
-        <div class="pos-order-form w-full xl:flex-[62] min-w-0 space-y-4">
+        <div class="pos-order-form w-full xl:flex-[62] min-w-0 space-y-3">
 
 {{-- ============ DETAIL PESANAN ============
      Dua langkah berurutan, bukan satu deretan field: pilih produk dulu (01),
@@ -310,9 +297,9 @@
      onchange, dan wrapper visibility (wrapper_siap_cetak, wrapper_ukuran,
      wrapper_qty, note_ukuran) dibiarkan persis seperti semula supaya tidak
      ada logika atau pengikatan JS yang tersentuh. --}}
-<x-card class="@container !p-4">
-    <div class="flex items-center gap-3 mb-3">
-        <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0"><i class="fas fa-box-open text-sm"></i></span>
+<x-card :padding="false" class="@container p-3">
+    <div class="flex items-center gap-2.5 mb-2">
+        <span class="po-ic w-8 h-8 rounded-lg flex items-center justify-center shrink-0"><i class="fas fa-box-open text-sm"></i></span>
         <div class="min-w-0">
             <h3 class="text-sm font-medium text-slate-800">Detail Pesanan</h3>
             <p class="text-[11px] text-slate-400 leading-tight">Produk, ukuran, finishing, dan biaya item</p>
@@ -335,11 +322,11 @@
          246px: cukup untuk dropdown produk berdampingan tombol cari
          (200px + 38px + gap), sedangkan di @md (448px) hanya 224px dan
          select-nya benar-benar terpotong. --}}
-    <div class="grid grid-cols-1 @lg:grid-cols-2 gap-x-6 gap-y-4 p-3.5 bg-slate-50/70 border border-slate-100 rounded-xl">
+    <div class="grid grid-cols-1 @lg:grid-cols-2 gap-x-5 gap-y-3 p-3 bg-slate-50/70 border border-slate-100 rounded-xl">
 
         {{-- ---------- 01: Produk & Pengaturan ---------- --}}
         <div class="min-w-0">
-            <div class="flex items-start gap-2.5 mb-3.5">
+            <div class="flex items-start gap-2.5 mb-2.5">
                 <span class="w-6 h-6 shrink-0 rounded-full bg-[#2563EB] text-white text-[11px] font-semibold flex items-center justify-center">01</span>
                 <div class="min-w-0 pt-0.5">
                     <p class="text-[13px] font-medium text-slate-800 leading-tight">Produk &amp; Pengaturan</p>
@@ -347,7 +334,7 @@
                 </div>
             </div>
 
-            <div class="space-y-2.5">
+            <div class="space-y-2">
                 <x-form.group label="Kategori">
                     <select id="filter_kategori" onchange="filterProduk(this.value)" autocomplete="off" tabindex="2" @if($notaEdit) disabled @endif class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
                         <option value="all">Semua Kategori</option>
@@ -442,7 +429,7 @@
 
         {{-- ---------- 02: Detail Desain & Ukuran ---------- --}}
         <div class="min-w-0">
-            <div class="flex items-start gap-2.5 mb-3.5">
+            <div class="flex items-start gap-2.5 mb-2.5">
                 <span class="w-6 h-6 shrink-0 rounded-full bg-[#2563EB] text-white text-[11px] font-semibold flex items-center justify-center">02</span>
                 <div class="min-w-0 pt-0.5">
                     <p class="text-[13px] font-medium text-slate-800 leading-tight">Detail Desain &amp; Ukuran</p>
@@ -450,11 +437,11 @@
                 </div>
             </div>
 
-            <div class="space-y-2.5">
+            <div class="space-y-2">
                 <div>
                     <label class="block text-[10px] font-medium text-slate-500 uppercase tracking-widest mb-1.5 ml-1">Gambar File</label>
                     <div class="flex items-stretch gap-2">
-                        <div class="relative shrink-0 w-[92px] h-[92px] rounded-lg bg-white border border-slate-200 overflow-hidden">
+                        <div class="relative shrink-0 w-[76px] h-[76px] rounded-lg bg-white border border-slate-200 overflow-hidden">
                             <img loading="lazy" decoding="async" alt="Pratinjau gambar desain"
                                  id="thumbnail_preview"
                                  class="hidden w-full h-full object-contain">
@@ -557,7 +544,7 @@
      /unit pindah ke kanan atas supaya tidak dibaca sebagai bagian dari
      nominal besar - pemisahan posisi itu yang membuatoperator tidak salah
      mengira total sudah termasuk harga satuan. --}}
-                <div class="mt-4 rounded-xl bg-[#2563EB]/[0.06] border border-[#2563EB]/15 px-4 py-3.5 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+                <div class="po-est mt-3 rounded-xl border border-[#2563EB]/15 px-4 py-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
                     <div class="min-w-0">
                         <p class="text-[10px] font-medium text-[#2563EB] uppercase tracking-widest">Harga Estimasi</p>
                         <h2 id="display_subtotal" class="text-3xl font-medium text-[#2563EB] tracking-tight leading-tight tabular-nums">Rp 0</h2>
@@ -571,8 +558,8 @@
                 </div>
 
                 {{-- ---------- FINISHING & BIAYA ---------- --}}
-                <div class="mt-4 flex items-center gap-3 mb-2">
-                    <span class="w-8 h-8 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center shrink-0"><i class="fas fa-gear text-xs"></i></span>
+                <div class="mt-3 flex items-center gap-3 mb-2">
+                    <span class="po-ic w-8 h-8 rounded-lg flex items-center justify-center shrink-0"><i class="fas fa-gear text-xs"></i></span>
                     <div class="min-w-0">
                         <p class="text-[13px] font-medium text-slate-800 leading-tight">Finishing &amp; Biaya</p>
                         <p class="text-[11px] text-slate-400 leading-tight">Pilih sesuai pesanan</p>
@@ -586,7 +573,7 @@
 
          Tiga kolom sebagai batas DASAR, bukan lewat container query. Versi sebelumnya memakai @xl (36rem / 576px), tapi kartu input order hanya mengisi 62% lebar halaman - keranjang mengambil
          sisanya - sehingga kontainernya tetap di bawah ambang itu di layar 1280px pun, dan hasilnya tetap 2 kolom. Yang diukur operator adalah lebar jendela, bukan lebar kartu. --}}
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-3 gap-y-2.5">
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-3 gap-y-2">
                     <div>
                         <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Finishing</label>
                         <select id="select_finishing" onchange="onFinishingChange()" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
@@ -792,8 +779,8 @@
 
             {{-- ============ TAMBAH JASA (accordion, tertutup default; isi tidak berubah) ============ --}}
             <x-card :padding="false" class="@container">
-                <button type="button" onclick="toggleTambahJasa()" class="w-full flex items-center gap-3 p-6 text-left">
-                    <span class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0"><i class="fas fa-hand-holding-heart"></i></span>
+                <button type="button" onclick="toggleTambahJasa()" class="w-full flex items-center gap-3 p-4 sm:p-5 text-left">
+                    <span class="po-ic w-9 h-9 rounded-xl flex items-center justify-center shrink-0"><i class="fas fa-hand-holding-heart text-sm"></i></span>
                     <div>
                         <h3 class="text-base font-medium text-slate-800">Tambah Jasa</h3>
                         <p class="text-[11px] text-slate-400">Layanan non-material, harga manual</p>
@@ -801,7 +788,7 @@
                     <i id="icon_toggle_jasa" class="fas fa-chevron-down text-slate-500 ml-auto transition-transform"></i>
                 </button>
 
-                <div id="wrapper_tambah_jasa" class="hidden px-6 pb-6">
+                <div id="wrapper_tambah_jasa" class="hidden px-4 sm:px-5 pb-4 sm:pb-5">
                     <div class="grid grid-cols-1 @md:grid-cols-3 gap-4 mb-4">
                         <x-form.group label="Pilih Jasa">
                             <select id="select_jasa" onchange="onJasaChange()" class="select2-produk w-full">
@@ -851,9 +838,9 @@
                  bawah keranjang selalu keluar layar ~32px - tombol Simpan
                  justru yang paling penting dan justru terpotong. --}}
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col overflow-hidden lg:max-h-[calc(100vh-7rem)]">
-                <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center">
+                <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center">
                     <div class="flex items-center gap-3">
-                        <span class="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center"><i class="fas fa-shopping-basket"></i></span>
+                        <span class="po-ic w-10 h-10 rounded-xl flex items-center justify-center"><i class="fas fa-shopping-basket"></i></span>
                         <div class="min-w-0">
                             <h3 class="text-base font-medium text-slate-800 leading-tight">Keranjang Pesanan</h3>
                             @if($notaSusulan)
