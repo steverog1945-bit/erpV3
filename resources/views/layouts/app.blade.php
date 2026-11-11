@@ -341,10 +341,13 @@
         width: 100%; flex: 1;
         animation: proContentIn .34s cubic-bezier(.22,1,.36,1) both;
     }
-    @keyframes proContentIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    /* Tanpa transform pada elemen ini: transform menjadikan ancestor "containing
+       block" bagi position:fixed, sehingga modal (x-modal/swal) melayang
+       relatif ke konten, bukan ke viewport. Fade saja, tanpa geser. */
+    @keyframes proContentIn { from { opacity: 0; } to { opacity: 1; } }
     body.pv2-leaving main#mainContent, body.pv2-leaving .content-wrapper {
-        opacity: 0; transform: translateY(6px);
-        transition: opacity .18s cubic-bezier(.4,0,.2,1), transform .18s cubic-bezier(.4,0,.2,1);
+        opacity: 0;
+        transition: opacity .18s cubic-bezier(.4,0,.2,1);
     }
 
     .pro-topbar {

@@ -31,6 +31,7 @@ class AppSetting extends Model
         'nomor_nota_prefix',
         'nota_footer_text',
         'pembulatan_nota',
+        'wa_pesan_template',
     ];
 
     protected $casts = [

@@ -9,6 +9,39 @@
         </x-slot:actions>
     </x-page-header>
 
+    @if(session('status'))
+        <div class="mb-5 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-[12.5px] font-semibold text-emerald-800"><i class="fas fa-circle-check"></i> {{ session('status') }}</div>
+    @endif
+
+    {{-- Pengaturan template WA (self-service) --}}
+    <details class="group mb-5 rounded-2xl border border-slate-200/70 bg-white shadow-[0_1px_3px_rgba(15,30,62,.05)]">
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-4 select-none">
+            <span class="flex items-center gap-3">
+                <span class="grid h-9 w-9 place-items-center rounded-lg bg-amber-50 text-amber-600"><i class="fas fa-pen-fancy text-sm"></i></span>
+                <span>
+                    <span class="block text-[13px] font-semibold text-slate-800">Atur Teks Pesan WA Anda</span>
+                    <span class="block text-[11px] text-slate-400 mt-0.5">Nota &amp; piutang memakai template yang sama. Kosong = bawaan aplikasi.</span>
+                </span>
+            </span>
+            <i class="fas fa-chevron-down text-[11px] text-slate-400 transition-transform group-open:rotate-180"></i>
+        </summary>
+        <form method="POST" action="{{ route('premium.wa-template-save') }}" class="border-t border-slate-100 px-6 pb-6 pt-4">
+            @csrf
+            <label for="wa_pesan_template" class="text-[10.5px] font-semibold uppercase tracking-widest text-slate-500">Tulis pesan Anda</label>
+            <textarea id="wa_pesan_template" name="wa_pesan_template" rows="4" maxlength="2000" spellcheck="false" class="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50/60 p-4 text-[13px] leading-relaxed text-slate-800 placeholder:text-slate-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 focus:outline-none" placeholder="Kosong = pakai bawaan aplikasi.">{{ $waTemplate }}</textarea>
+            <div class="mt-2 flex flex-wrap items-center gap-1.5" aria-label="Placeholder">
+                @foreach (['{nama}', '{nota}', '{tanggal}', '{total}', '{status}', '{wa}'] as $ph)
+                    <code class="rounded-md border border-indigo-100 bg-indigo-50 px-2 py-1 text-[10px] font-semibold text-indigo-700">{{ $ph }}</code>
+                @endforeach
+                <span class="text-[10.5px] text-slate-400 ml-1">hadir otomatis diganti data nota.</span>
+            </div>
+            <div class="mt-4 flex flex-wrap items-center gap-2">
+                <button type="submit" class="inline-flex items-center gap-2 h-9 px-4 rounded-lg bg-slate-900 text-white text-[12px] font-semibold hover:bg-slate-800 transition-colors"><i class="fas fa-floppy-disk"></i> Simpan Template</button>
+                <button type="submit" name="wa_pesan_template" value="" formnovalidate class="inline-flex items-center gap-2 h-9 px-4 rounded-lg border border-slate-200 text-[12px] font-semibold text-slate-500 hover:text-slate-700 hover:border-slate-300 transition-colors"><i class="fas fa-rotate-left"></i> Kembalikan Bawaan</button>
+            </div>
+        </form>
+    </details>
+
     <div class="rounded-2xl border border-slate-200/70 bg-white overflow-hidden shadow-[0_1px_3px_rgba(15,30,62,.05)]">
         <div class="overflow-x-auto">
             <table class="w-full text-left text-[13px] min-w-[860px]">

@@ -680,6 +680,7 @@ Route::match(['post', 'patch'], '/pembelian-bahan/pelunasan/{id}', [PembelianBah
         Route::get('/', [\App\Http\Controllers\PremiumController::class, 'index'])->name('index');
         Route::get('/analisis', [\App\Http\Controllers\PremiumController::class, 'analisis'])->name('analisis');
         Route::get('/piutang-wa', [\App\Http\Controllers\PremiumController::class, 'piutangWa'])->name('piutang-wa');
+        Route::post('/wa-template-save', [\App\Http\Controllers\PremiumController::class, 'simpanWaTemplate'])->name('wa-template-save');
         Route::get('/prediksi-stok', [\App\Http\Controllers\PremiumController::class, 'prediksiStok'])->name('prediksi-stok');
         Route::get('/portal', [\App\Http\Controllers\PremiumController::class, 'portal'])->name('portal');
         Route::get('/asisten', [\App\Http\Controllers\PremiumController::class, 'asisten'])->name('asisten');

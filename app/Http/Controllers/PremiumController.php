@@ -16,9 +16,14 @@ use Illuminate\Support\Facades\URL;
  *  - Portal pelanggan: signed URL (HMAC APP_KEY) berumur 30 hari, tanpa data baru.
  *  - Asisten order: parsing teks sepenuhnya di browser.
  * Semua query READ-ONLY terhadap tabel yang sudah ada. Zero schema change.
+ *
+ * Template pesan WA (nota & piutang) bisa diubah operator sendiri dari
+ * /premium/piutang-wa (kolom app_settings.wa_pesan_template).
  */
 class PremiumController extends Controller
 {
+    public const WA_TEMPLATE_DEFAULT = "Halo {nama}, ini Orion Grafika.\nMengingatkan nota {nota} ({tanggal}) sebesar Rp {total} masih berstatus {status}.\nMohon konfirmasi pembayarannya. Terima kasih.";
+
     public function index()
     {
         $fitur = [
@@ -109,6 +114,22 @@ class PremiumController extends Controller
 
     public function piutangWa()
     {
+        $template = trim((string) (\App\Models\AppSetting::current()->wa_pesan_template ?? ''));
+        if ($template === '') {
+            $template = self::WA_TEMPLATE_DEFAULT;
+        }
+
+        $isiPesan = function ($n, string $nama) use ($template) {
+            return strtr($template, [
+                '{nama}' => $nama,
+                '{nota}' => (string) $n->nomor_nota,
+                '{tanggal}' => optional(\Carbon\Carbon::parse($n->tgl_order))->translatedFormat('d M Y'),
+                '{total}' => number_format((float) $n->total_bayar, 0, ',', '.'),
+                '{status}' => (string) $n->status_pembayaran,
+                '{wa}' => (string) (\App\Models\AppSetting::current()->telepon ?? ''),
+            ]);
+        };
+
         $nota = DB::table('transaksi as t')
             ->leftJoin('konsumen as k', 'k.id_konsumen', '=', 't.id_konsumen')
             ->where('t.status_nota', 'Aktif')
@@ -121,20 +142,33 @@ class PremiumController extends Controller
             ->limit(40)
             ->get();
 
-        $rows = $nota->map(function ($n) {
+        $rows = $nota->map(function ($n) use ($isiPesan) {
             $tel = $this->nomorWa($n->telepon);
-            $pesan = 'Halo ' . $n->nama . ", ini Orion Grafika.\n"
-                . 'Mengingatkan nota ' . $n->nomor_nota
-                . ' (' . optional(\Carbon\Carbon::parse($n->tgl_order))->translatedFormat('d M Y') . ')'
-                . ' sebesar Rp ' . number_format((float) $n->total_bayar, 0, ',', '.')
-                . ' masih berstatus ' . $n->status_pembayaran . ".\n"
-                . "Mohon konfirmasi pembayarannya. Terima kasih.";
+            $pesan = $isiPesan($n, $n->nama);
             $n->wa_link = $tel ? 'https://wa.me/' . $tel . '?text=' .rawurlencode($pesan) : null;
             $n->pesan = $pesan;
             return $n;
         });
 
-        return view('premium.piutang-wa', compact('rows'));
+        $waTemplate = \App\Models\AppSetting::current()->wa_pesan_template ?? '';
+
+        return view('premium.piutang-wa', compact('rows', 'waTemplate', 'template'));
+    }
+
+    /**
+     * Simpan template WA milik operator sendiri. Placeholder: {nama} {nota}
+     * {tanggal} {total} {status} {wa}. Kosong = kembali ke bawaan aplikasi.
+     */
+    public function simpanWaTemplate(\Illuminate\Http\Request $request)
+    {
+        $request->validate(['wa_pesan_template' => 'nullable|string|max:2000']);
+
+        \App\Models\AppSetting::current()->update([
+            'wa_pesan_template' => trim((string) $request->input('wa_pesan_template')) ?: null,
+        ]);
+        \App\Models\AppSetting::clearCache();
+
+        return back()->with('status', 'Template pesan WhatsApp tersimpan.');
     }
 
     public function prediksiStok()
