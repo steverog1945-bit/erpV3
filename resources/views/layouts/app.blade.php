@@ -377,6 +377,47 @@
         #proMega.terbuka .promega-grid > *:nth-child(10) { animation-delay: .30s; }
         #proMega.terbuka .promega-grid > *:nth-child(n+11) { animation-delay: .33s; }
         @media (prefers-reduced-motion: reduce) { #proMega.terbuka .promega-grid > * { animation: none; } .terakhir-chip { transition: none; } }
+        /* Kotak pencarian di dalam mega menu */
+        .promega-search { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 11px; border-radius: 10px; border: 1px solid var(--pro-border-2); background: var(--pro-bg); margin-bottom: 12px; transition: border-color .15s ease, box-shadow .15s ease, background .15s ease; }
+        .promega-search svg { width: 15px; height: 15px; flex: 0 0 15px; stroke: var(--pro-ink-3); }
+        .promega-search input { flex: 1; min-width: 0; border: 0; background: transparent; outline: 0; font: inherit; font-size: 12.5px; color: var(--pro-ink); }
+        .promega-search input::placeholder { color: var(--pro-ink-3); }
+        .promega-search kbd { flex: 0 0 auto; background: var(--pro-surface); border: 1px solid var(--pro-border-2); border-radius: 5px; padding: 1px 7px; font-size: 10px; color: var(--pro-ink-3); font-family: inherit; }
+        .promega-search:focus-within { border-color: var(--pro-accent); background: #fff; box-shadow: 0 0 0 3px rgba(37, 99, 235, .16); }
+        .promega-tidak-ada { display: none; padding: 22px 12px; text-align: center; font-size: 12px; color: var(--pro-ink-3); }
+        .promega-tidak-ada.tampil { display: block; }
+        .promega-link[hidden], .promega-group[hidden] { display: none !important; }
+        /* Statistik mini hari ini di rail */
+        .promega-rail-stats { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--pro-border); display: flex; flex-direction: column; gap: 8px; }
+        .rail-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .rail-stat { background: var(--pro-surface); border: 1px solid var(--pro-border); border-radius: 12px; padding: 9px 6px 8px; text-align: center; }
+        .rail-stat-n { display: block; font-size: 19px; font-weight: 600; color: var(--pro-ink); font-variant-numeric: tabular-nums; line-height: 1.1; }
+        .rail-stat-l { display: block; margin-top: 3px; font-size: 8px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--pro-ink-3); line-height: 1.3; }
+        /* Favorit: tombol pin muncul saat hover link */
+        .promega-pin { position: absolute; right: 5px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; border: 0; background: transparent; border-radius: 7px; color: var(--pro-ink-3); opacity: 0; cursor: pointer; display: grid; place-items: center; transition: opacity .15s ease, background .15s ease, color .15s ease; }
+        .promega-pin svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .promega-link:hover .promega-pin { opacity: 1; }
+        .promega-pin:hover { background: #E8EEFB; color: var(--pro-accent-hover); }
+        .promega-pin[aria-pressed="true"] { opacity: 1; color: var(--pro-accent); }
+        .promega-pin[aria-pressed="true"] svg { fill: var(--pro-accent); }
+        /* Grup yang memuat halaman aktif tersorot */
+        .promega-group.tersorot .promega-group-title { color: var(--pro-accent-hover); border-bottom-color: #C9D9FB; }
+        /* Overlay peta keyboard */
+        .promega-help-overlay { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; background: rgba(15, 23, 42, .28); -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); }
+        .promega-help-card { width: min(430px, 92%); background: var(--pro-surface); border: 1px solid var(--pro-border-2); border-radius: var(--pro-radius); box-shadow: var(--pro-shadow-xl); padding: 18px 20px 16px; }
+        .promega-help-card h3 { font-size: 13px; font-weight: 600; color: var(--pro-ink); margin: 0 0 10px; }
+        .promega-help-card ul { list-style: none; margin: 0 0 12px; padding: 0; font-size: 12px; color: var(--pro-ink-2); }
+        .promega-help-card li { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 6px 0; border-bottom: 1px dashed var(--pro-border); }
+        .promega-help-card li:last-child { border-bottom: 0; }
+        .promega-help-card kbd { background: var(--pro-bg); border: 1px solid var(--pro-border-2); border-radius: 5px; padding: 2px 7px; font-size: 10.5px; color: var(--pro-ink-2); font-family: inherit; margin: 0 1px; }
+        .promega-help-tutup { height: 32px; padding: 0 16px; border-radius: 8px; border: 1px solid var(--pro-border-2); background: var(--pro-surface); color: var(--pro-ink-2); font-size: 12px; font-weight: 600; cursor: pointer; }
+        .promega-help-tutup:hover { background: #F4F8FF; color: var(--pro-accent-hover); border-color: var(--pro-accent); }
+        /* Foot: tombol kembali di kiri */
+        .promega-foot { justify-content: space-between; align-items: center; }
+        .promega-back { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 0; color: var(--pro-ink-2); font-size: 11px; font-weight: 500; padding: 5px 10px; border-radius: 8px; cursor: pointer; transition: background .15s ease, color .15s ease; }
+        .promega-back:hover { background: #F2F6FF; color: var(--pro-accent-hover); }
+        .promega-help { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 6px; border: 1px solid var(--pro-border-2); background: var(--pro-bg); color: var(--pro-ink-2); font-size: 10px; line-height: 1; cursor: pointer; margin-left: 6px; vertical-align: middle; }
+        .promega-help:hover { border-color: var(--pro-accent); color: var(--pro-accent-hover); }
         .promega-grid { columns: 175px; column-gap: 24px; }
         .promega-group { break-inside: avoid; margin-bottom: 18px; min-width: 0; }
         .promega-group-title {
@@ -1579,18 +1620,49 @@
                         <svg class="promega-card-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
                     </a>
                     @endif
+                    <div class="promega-rail-stats" id="proMegaRailStats" aria-label="Statistik hari ini">
+                        <span class="promega-rail-label">Hari Ini</span>
+                        <div class="rail-stats-grid">
+                            <div class="rail-stat"><span class="rail-stat-n" id="rsOrder">–</span><span class="rail-stat-l">Order masuk</span></div>
+                            <div class="rail-stat"><span class="rail-stat-n" id="rsAntre">–</span><span class="rail-stat-l">Antre produksi</span></div>
+                            <div class="rail-stat"><span class="rail-stat-n" id="rsProses">–</span><span class="rail-stat-l">Dikerjakan</span></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="promega-content">
+                    <label class="promega-search" for="proMegaCari">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+                        <input id="proMegaCari" type="text" placeholder="Cari menu…" autocomplete="off" spellcheck="false" aria-label="Cari menu">
+                        <kbd>/</kbd>
+                    </label>
+                    <div class="terakhir-strip terakhir-strip-favorit" id="proMegaFavorit" hidden>
+                        <span class="terakhir-label">Favorit</span>
+                        <div class="terakhir-chips" id="proMegaFavoritChips"></div>
+                    </div>
                     <div class="terakhir-strip" id="proMegaTerakhir" hidden>
-                        <span class="terakhir-label">Terakhir dikunjungi</span>
+                        <span class="terakhir-label">Terakhir</span>
                         <div class="terakhir-chips" id="proMegaTerakhirChips"></div>
                     </div>
+                    <div class="promega-tidak-ada" id="proMegaTidakAda">Tidak ada menu cocok dengan kata itu.</div>
                     <div class="promega-grid" id="proMegaGrid"></div>
                 </div>
             </div>
+            <div class="promega-help-overlay" id="proMegaHelp" hidden role="dialog" aria-modal="true" aria-label="Peta keyboard">
+                <div class="promega-help-card">
+                    <h3>Peta keyboard</h3>
+                    <ul>
+                        <li><span>Palet perintah (semua menu)</span><span><kbd>Ctrl</kbd>+<kbd>K</kbd></span></li>
+                        <li><span>Fokus pencarian di menu ini</span><span><kbd>/</kbd></span></li>
+                        <li><span>Tutup menu / batal</span><span><kbd>Esc</kbd></span></li>
+                        <li><span>Tampilkan / sembunyikan bantuan</span><span><kbd>?</kbd></span></li>
+                    </ul>
+                    <button type="button" class="btn promega-help-tutup" id="proMegaHelpTutup">Tutup</button>
+                </div>
+            </div>
             <div class="promega-foot">
+                <button type="button" class="promega-back" id="proMegaBack" title="Kembali ke halaman sebelumnya"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Kembali</button>
                 <span>Orion Grafika ERP &middot; Pusat Operasi</span>
-                <span><kbd>Esc</kbd> menutup</span>
+                <span><kbd>Esc</kbd> menutup · <button type="button" class="promega-help" id="proMegaHelpBtn" aria-expanded="false" aria-controls="proMegaHelp" title="Peta keyboard (tekan ?)">?</button></span>
             </div>
         </div>
 
@@ -2634,7 +2706,7 @@
             if (buka) {
                 panel.classList.add('terbuka');
                 panel.setAttribute('aria-hidden', 'false');
-                if (window.renderTerakhir) window.renderTerakhir();
+                if (window.renderMenuSuper) window.renderMenuSuper(); else if (window.renderTerakhir) window.renderTerakhir();
                 overlay.classList.add('terbuka');
                 overlay.setAttribute('aria-hidden', 'false');
                 if (backdrop) {
@@ -2652,11 +2724,15 @@
                 }
                 document.body.classList.add('menu-panel-open');
                 if (btn) btn.setAttribute('aria-expanded', 'true');
-                const fokus = panel.querySelector('a[href], button');
+                const fokus = (desktop ? (document.getElementById('proMegaCari') || panel.querySelector('a[href], button')) : panel.querySelector('a[href], button'));
                 if (fokus) fokus.focus();
             } else {
                 panel.classList.remove('terbuka');
                 panel.setAttribute('aria-hidden', 'true');
+                var cari = document.getElementById('proMegaCari');
+                if (cari && cari.value !== '') { cari.value = ''; cari.dispatchEvent(new Event('input')); }
+                var help = document.getElementById('proMegaHelp');
+                if (help && !help.hidden) help.hidden = true;
                 overlay.classList.remove('terbuka');
                 overlay.setAttribute('aria-hidden', 'true');
                 if (backdrop) {
@@ -2880,6 +2956,179 @@
                     ada++;
                 });
                 strip.hidden = ada === 0;
+            };
+        })();
+
+        // SUPER MENU — pencarian di dalam mega menu, Favorit (pin),
+        // statistik mini hari ini di rail, grup aktif tersorot, overlay
+        // peta keyboard (?), dan tombol kembali. Isi & RBAC tetap dari
+        // #mainSidebar; localStorage hanya menyimpan path halaman.
+        (function () {
+            var FKEY = 'orion-favorites';
+            var grid = document.getElementById('proMegaGrid');
+
+            function pathOfHref(u) { try { return new URL(u, location.origin).pathname; } catch (e) { return String(u || ''); } }
+            function bacaList(k) { try { return JSON.parse(localStorage.getItem(k) || '[]'); } catch (e) { return []; } }
+            function simpanList(k, l) { try { localStorage.setItem(k, JSON.stringify(l.slice(0, 12))); } catch (e) {} }
+
+            /* --- Pencarian dalam mega menu --- */
+            var cari = document.getElementById('proMegaCari');
+            var tidakAda = document.getElementById('proMegaTidakAda');
+            function saring(q) {
+                if (!grid) return;
+                q = q.trim().toLowerCase();
+                var total = 0;
+                grid.querySelectorAll('.promega-group').forEach(function (g) {
+                    var gOk = 0;
+                    g.querySelectorAll('.promega-link').forEach(function (l) {
+                        var ok = q === '' || (l.textContent || '').toLowerCase().indexOf(q) !== -1;
+                        l.hidden = !ok;
+                        if (ok) gOk++;
+                    });
+                    g.hidden = gOk === 0;
+                    total += gOk;
+                });
+                if (tidakAda) tidakAda.classList.toggle('tampil', q !== '' && total === 0);
+            }
+            if (cari) {
+                cari.addEventListener('input', function () { saring(cari.value); });
+                cari.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); cari.value = ''; saring(''); }
+                });
+            }
+
+            /* --- Grup aktif tersorot --- */
+            function highlightTersorot() {
+                if (!grid) return;
+                grid.querySelectorAll('.promega-group.tersorot').forEach(function (g) { g.classList.remove('tersorot'); });
+                var aktif = grid.querySelector('.promega-link.sb-active');
+                if (aktif) { var g = aktif.closest('.promega-group'); if (g) g.classList.add('tersorot'); }
+            }
+
+            /* --- Favorit (pin) --- */
+            function bacaFav() { return bacaList(FKEY); }
+            function toggleFav(p) {
+                var cur = bacaFav();
+                var i = cur.indexOf(p);
+                if (i !== -1) { cur.splice(i, 1); simpanList(FKEY, cur); return false; }
+                cur.unshift(p); simpanList(FKEY, cur); return true;
+            }
+            function buatPin(link) {
+                if (!link || link.querySelector('.promega-pin')) return;
+                var b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'promega-pin';
+                b.setAttribute('aria-pressed', bacaFav().indexOf(pathOfHref(link.getAttribute('href'))) !== -1 ? 'true' : 'false');
+                b.setAttribute('title', 'Sematkan ke Favorit');
+                b.setAttribute('aria-label', 'Sematkan menu ini ke Favorit');
+                b.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+                b.addEventListener('click', function (e) {
+                    e.preventDefault(); e.stopPropagation();
+                    var p = pathOfHref(link.getAttribute('href'));
+                    var now = toggleFav(p);
+                    b.setAttribute('aria-pressed', now ? 'true' : 'false');
+                    renderFavorit();
+                });
+                link.appendChild(b);
+            }
+            function chipsDariPath(list, container) {
+                var chips = [];
+                var links = Array.prototype.slice.call(document.querySelectorAll('#mainSidebar nav a[href]'));
+                list.forEach(function (p) {
+                    if (chips.length >= 6) return;
+                    for (var i = 0; i < links.length; i++) {
+                        if (pathOfHref(links[i].getAttribute('href')) === p) { chips.push(links[i]); break; }
+                    }
+                });
+                container.innerHTML = '';
+                chips.forEach(function (sumber) {
+                    var c = document.createElement('a');
+                    c.className = 'terakhir-chip';
+                    c.href = sumber.getAttribute('href');
+                    var svg = sumber.querySelector('svg');
+                    if (svg) c.appendChild(svg.cloneNode(true));
+                    var span = sumber.querySelector('span');
+                    var t = document.createElement('span');
+                    t.textContent = (span ? span.textContent : sumber.textContent).trim();
+                    if (t.textContent.length > 22) t.textContent = t.textContent.slice(0, 21) + '…';
+                    c.appendChild(t);
+                    container.appendChild(c);
+                });
+                return chips.length;
+            }
+            function renderFavorit() {
+                var strip = document.getElementById('proMegaFavorit');
+                var box = document.getElementById('proMegaFavoritChips');
+                if (!strip || !box) return;
+                var n = chipsDariPath(bacaFav(), box);
+                strip.hidden = n === 0;
+            }
+            if (grid) {
+                var mo = new MutationObserver(function () {
+                    grid.querySelectorAll('.promega-link').forEach(buatPin);
+                    highlightTersorot();
+                });
+                mo.observe(grid, { childList: true, subtree: true });
+            }
+
+            /* --- Statistik mini hari ini di rail --- */
+            var kpiCache = { t: 0, d: null };
+            function refreshStats() {
+                function terapkan(d) {
+                    var o = document.getElementById('rsOrder'), a2 = document.getElementById('rsAntre'), p = document.getElementById('rsProses');
+                    if (o) o.textContent = (d && d.order_hari_ini != null) ? d.order_hari_ini : '–';
+                    if (a2) a2.textContent = (d && d.spk_antre != null) ? d.spk_antre : '–';
+                    if (p) p.textContent = (d && d.spk_proses != null) ? d.spk_proses : '–';
+                }
+                var now = Date.now();
+                if (kpiCache.d && now - kpiCache.t < 25000) { terapkan(kpiCache.d); return; }
+                fetch('{{ url('/dashboard/api/kpi') }}', { headers: { 'Accept': 'application/json' }, credentials: 'same-origin' })
+                    .then(function (r) { return r.ok ? r.json() : null; })
+                    .then(function (d) { kpiCache = { t: Date.now(), d: d }; terapkan(d); })
+                    .catch(function () { terapkan(null); });
+            }
+
+            /* --- Tombol kembali --- */
+            var back = document.getElementById('proMegaBack');
+            if (back) back.addEventListener('click', function () {
+                if (document.referrer && history.length > 1) history.back();
+                else window.location.href = @json(url('/dashboard'));
+            });
+
+            /* --- Overlay peta keyboard --- */
+            var help = document.getElementById('proMegaHelp');
+            var helpBtn = document.getElementById('proMegaHelpBtn');
+            var helpTutup = document.getElementById('proMegaHelpTutup');
+            function setHelp(v) { if (!help) return; help.hidden = !v; if (helpBtn) helpBtn.setAttribute('aria-expanded', v ? 'true' : 'false'); }
+            if (helpBtn) helpBtn.addEventListener('click', function () { setHelp(help.hidden); });
+            if (helpTutup) helpTutup.addEventListener('click', function () { setHelp(false); });
+
+            document.addEventListener('keydown', function (e) {
+                var mega = document.getElementById('proMega');
+                if (!mega || !mega.classList.contains('terbuka')) return;
+                var tag = (e.target.tagName || '').toUpperCase();
+                var inField = tag === 'INPUT' || tag === 'TEXTAREA' || !!e.target.isContentEditable;
+                var helpNow = help && !help.hidden;
+                if (e.key === 'Escape') {
+                    if (helpNow) { e.preventDefault(); e.stopPropagation(); setHelp(false); return; }
+                    if (cari && cari.value.trim() !== '') { e.preventDefault(); e.stopPropagation(); cari.value = ''; saring(''); return; }
+                }
+                if (inField) return;
+                if (e.key === '/') {
+                    e.preventDefault();
+                    if (cari) cari.focus();
+                    return;
+                }
+                if (e.key === '?') {
+                    e.preventDefault();
+                    setHelp(!helpNow);
+                }
+            }, true);
+
+            window.renderMenuSuper = function () {
+                renderFavorit();
+                highlightTersorot();
+                refreshStats();
             };
         })();
 
