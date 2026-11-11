@@ -1292,7 +1292,7 @@
         // diakses Administrator (menu_access.php rule-nya [] kosong - tidak
         // ada id_menu yang bisa menggrant lewat role_permissions), jadi
         // dicek $isAdministrator langsung, sama seperti Periode Akuntansi.
-        $grpSystemVisible = $cekAkses(6) || $cekAkses(4) || $cekAkses(37) || $cekAkses(63) || $cekAkses(66) || $cekAkses(49) || $cekAkses(50) || $cekAkses(52) || $isAdministrator;
+        $grpSystemVisible = $cekAkses(6) || $cekAkses(4) || $cekAkses(63) || $cekAkses(66) || $cekAkses(49) || $cekAkses(50) || $cekAkses(52) || $isAdministrator;
         $grpSystemAktif = Request::is('users', 'users/*') || Request::is('setting-akses', 'setting-akses/*') || Request::is('pengaturan-aplikasi', 'pengaturan-aplikasi/*') || Request::is('pengaturan-jam-kerja', 'pengaturan-jam-kerja/*') || Request::is('pengaturan-desainer', 'pengaturan-desainer/*') || Request::is('menu-editor', 'menu-editor/*')
             || Request::is('approval', 'approval/*') || Request::is('log-aktivitas', 'log-aktivitas/*') || Request::is('backup', 'backup/*');
     @endphp
@@ -1323,7 +1323,7 @@
 </a>
 @endif
 
-@if($cekAkses(37))
+@if($isAdministrator)
 <a href="{{ url('/pengaturan-aplikasi') }}"
    class="{{ $menuClass }} {{ Request::is('pengaturan-aplikasi', 'pengaturan-aplikasi/*') ? $activeClass : $nonActiveClass }}">
     <svg xmlns="http://www.w3.org/2000/svg" class="{{ $iconClass }} {{ Request::is('pengaturan-aplikasi', 'pengaturan-aplikasi/*') ? $iconActive : $iconNonActive }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1333,7 +1333,7 @@
     <span class="text-sm font-medium">Pengaturan Aplikasi</span>
 </a>
 @endif
-@if(str_starts_with((string) (optional(auth()->user()?->role)->nama_role ?? ''), 'Administrator'))
+@if($isAdministrator)
 <a href="{{ route('pengaturan-aplikasi.tema.index') }}"
    class="{{ $menuClass }} pl-8 {{ Request::is('pengaturan-aplikasi/tema', 'pengaturan-aplikasi/tema/*') ? $activeClass : $nonActiveClass }}">
     <i class="fas fa-palette w-5 text-center {{ Request::is('pengaturan-aplikasi/tema', 'pengaturan-aplikasi/tema/*') ? $iconActive : $iconNonActive }}" aria-hidden="true"></i>
@@ -1350,7 +1350,7 @@
 </a>
 @endif
 
-@if($cekAkses(37) || $cekAkses(63))
+@if($cekAkses(63))
 <a href="{{ route('jam-kerja.index') }}" class="{{ $menuClass }} {{ Request::is('pengaturan-jam-kerja', 'pengaturan-jam-kerja/*') ? $activeClass : $nonActiveClass }}">
     <svg xmlns="http://www.w3.org/2000/svg" class="{{ $iconClass }} {{ Request::is('pengaturan-jam-kerja', 'pengaturan-jam-kerja/*') ? $iconActive : $iconNonActive }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -1699,8 +1699,8 @@
             <span class="mobile-nav-label">Lainnya</span>
         </button>
     </nav>
-    @php $renderMs = round((microtime(true) - LARAVEL_START) * 1000); @endphp
-    <footer class="pro-footer"><span>Dikembangkan oleh <a href="http://www.obiyshinichiart.com" target="_blank" rel="noopener noreferrer">www.obiyshinichiart.com</a></span><span class="render-ms">Render {{ $renderMs }} ms</span></footer>
+    @php $renderMs = defined('LARAVEL_START') ? round((microtime(true) - LARAVEL_START) * 1000) : null; @endphp
+    <footer class="pro-footer"><span>Dikembangkan oleh <a href="http://www.obiyshinichiart.com" target="_blank" rel="noopener noreferrer">www.obiyshinichiart.com</a></span>@if(!is_null($renderMs))<span class="render-ms">Render {{ $renderMs }} ms</span>@endif</footer>
 
 <script>
 /* Fade out sebelum navigasi antarhalaman (bukan form submit / bukan aksi JS).

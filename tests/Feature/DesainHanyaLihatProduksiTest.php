@@ -30,7 +30,7 @@ class DesainHanyaLihatProduksiTest extends TestCase
         $k = DB::table('konsumen')->insertGetId(['nama_konsumen' => 'P', 'telepon' => '1', 'alamat' => '-', 'id_golongan' => $g]);
         $t = DB::table('transaksi')->insertGetId(['nomor_nota' => 'N-1', 'tipe_order' => 'Reguler', 'id_konsumen' => $k, 'id_user_kasir' => $this->desain->id_user, 'tgl_order' => now(), 'total_bayar' => 1, 'status_pembayaran' => 'Belum Bayar', 'status_nota' => 'Aktif', 'status_order' => 'Diterima Kasir']);
         $p = DB::table('produk')->insertGetId(['nama_produk' => 'P1', 'metode_hitung' => 'quantity', 'status' => 'Aktif']);
-        $this->idDetail = DB::table('transaksi_detail')->insertGetId(['id_transaksi' => $t, 'id_produk' => $p, 'nama_file' => 'F', 'p_ukuran' => 0, 'l_ukuran' => 0, 'qty' => 1, 'subtotal' => 1, 'status_spk' => 'Cetak']);
+        $this->idDetail = DB::table('transaksi_detail')->insertGetId(['id_transaksi' => $t, 'id_produk' => $p, 'nama_file' => 'F', 'p_ukuran' => 0, 'l_ukuran' => 0, 'qty' => 1, 'subtotal' => 1, 'status_spk' => 'Antre']);
     }
 
     public function test_desain_bisa_melihat_halaman_produksi_tapi_tidak_ada_tombol_aksi(): void
@@ -57,7 +57,7 @@ class DesainHanyaLihatProduksiTest extends TestCase
         $this->actingAs($this->desain)->get('/qc/create')->assertForbidden();
         $this->actingAs($this->desain)->get('/waste/create')->assertForbidden();
 
-        $this->assertEquals('Cetak', DB::table('transaksi_detail')->where('id_detail', $this->idDetail)->value('status_spk'));
+        $this->assertEquals('Antre', DB::table('transaksi_detail')->where('id_detail', $this->idDetail)->value('status_spk'));
     }
 
     public function test_kerja_input_order_desain_tidak_terganggu(): void

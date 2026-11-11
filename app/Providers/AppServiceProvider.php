@@ -56,7 +56,7 @@ class AppServiceProvider extends ServiceProvider
                 return response()->json([
                     'error' => 'Terlalu banyak percobaan login. Coba lagi dalam beberapa saat.',
                     'retry_after' => 300,
-                ], 429);
+                ], 429, $headers);
             });
         });
 

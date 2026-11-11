@@ -125,6 +125,10 @@ class MatriksRuteKeamananTest extends TestCase
             //                            tidak pernah draft, tidak pernah data ERP.
             'GET /manifest.webmanifest', // PWA: manifest untuk pasang app - wajib publik
             'GET /sw.js', // PWA: service worker - wajib publik (diambil browser saat load)
+            'POST /client-log', // log error klien (graffik/umpan balik) - butuh login + throttle:30,1, bukan data bisnis
+            'POST /profil/foto', // self-service foto profil sendiri - butuh login; controller hanya menulis milik user yang login
+            'DELETE /profil/foto',
+            'GET /lacak/{id}', // portal pelacakan publik - HMAC signed URL (URL::hasValidSignature diverifikasi di controller, 403 tanpa signature valid)
         ];
         $ditemukan = array_map(fn ($b) => preg_replace('/ \[.*\]$/', '', $b), $terbuka);
         $asing = array_values(array_filter($ditemukan, fn ($b) => !in_array($b, $harapan, true) && !str_starts_with($b, 'GET /storage') && $b !== 'PUT /storage/{path}' && !str_starts_with($b, 'GET /api/') && !str_starts_with($b, 'POST /api/')));

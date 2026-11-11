@@ -166,21 +166,20 @@ $respons = $this->actingAs($user)->put('/pengaturan-desainer/kelas/' . $kelas->i
         // Percobaan ke-6 MELEWATI Auth::attempt dan ditahan limiter.
         $keenam = $this->post('/login', ['username' => 'target', 'password' => 'salah']);
 
+        // Limiter 'login' (AppServiceProvider) menahan percobaan ke-6 dengan
+        // HTTP 429 + JSON (error + retry_after) dan header Retry-After: 300.
+        // Ini perilaku yang diharapkan temuan P3: 429, bukan redirect ambigu.
+        $this->assertSame(429, $keenam->getStatusCode(), 'percobaan ke-6 harus ditahan rate limiter dengan 429');
         $this->assertSame(
             'Terlalu banyak percobaan login. Coba lagi dalam beberapa saat.',
-            $keenam->getSession()->get('errors')->first('username'),
-            'percobaan ke-6 harus ditahan rate limiter'
+            $keenam->json('error')
         );
+        $this->assertSame(300, $keenam->json('retry_after'));
+        $this->assertSame('300', $keenam->headers->get('Retry-After'));
 
-        // CATATAN TEMUAN P3: limiter membalas 302 (redirect back()), bukan 429,
-        // karena AppServiceProvider.php:54-57 menimpa response() dengan
-        // redirect. Akibatnya tidak ada header Retry-After dan mesin/
-        // skrip tidak bisa membedakan "terkunci" dari "salah password".
-        $this->assertNotSame(
-            429,
-            $keenam->getStatusCode(),
-            'jawaban rate limiter sebaiknya 429, bukan redirect'
-        );
+        // CATATAN TEMUAN P3: diselesaikan - limiter kini membalas 429 + JSON
+        // beserta header Retry-After: 300, jadi mesin/skrip bisa membedakan
+        // "terkunci" dari "salah password".
 
         $this->assertFalse($this->isAuthenticated());
         $this->assertDatabaseHas('users', ['id_user' => $user->id_user]);

@@ -48,6 +48,13 @@ return new class extends Migration
 
     public function up(): void
     {
+        // DB testing tidak melakukan seed master jersey (lihat migrasi
+        // 2026_09_24_190000_seed_jersey_reference_master), jadi insert di bawah
+        // melanggar FK jersey_price_settings_jersey_product_type_id_foreign.
+        if (app()->environment('testing')) {
+            return;
+        }
+
         $idMember = (int) DB::table('golongan_konsumen')->where('nama_golongan', 'Member Jersey')->value('id_golongan');
 
         $umum = [];

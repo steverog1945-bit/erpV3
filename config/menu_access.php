@@ -58,9 +58,13 @@ return [
         'konsumen/search-ajax' => [3, 41],
         'konsumen/cek-nama' => [3, 41, 7],
 
-        'setting-akses' => [4],
-        'menu-editor' => [4],
-        'pengaturan-jam-kerja' => [37, 63],
+        // 'setting-akses' & 'menu-editor' TIDAK dipetakan ke id_menu mana pun.
+        // Sebelumnya [4] artinya pemegang menu Data User non-Administrator tetap
+        // bisa membuka URL ini langsung walau tidak ada link di sidebar -
+        // sekarang murni Administrator (lihat 'khusus_administrator').
+        // Jam Kerja bisa di-grant lewat menu 63 - menu 37 tidak lagi membuka
+        // halaman apa pun untuk non-Administrator.
+        'pengaturan-jam-kerja' => [63],
         'karyawan' => [5],
         'users' => [6],
         'konsumen' => [7],
@@ -84,8 +88,13 @@ return [
         'kategori' => [15],
 
         'kasir' => [16],
-        // Pengaturan Aplikasi (identitas toko, logo, nota) bisa diberikan ke peran lain lewat menu 37.
-        'pengaturan-aplikasi' => [37],
+        // Pengaturan Aplikasi (identitas toko, logo, nota), Pengaturan Akses,
+        // dan Pengaturan Menu khusus Administrator - tidak bisa di-grant lewat
+        // id_menu apa pun. Keputusan owner 26 Nov 2026: halaman ini mengatur
+        // konfigurasi sensitif toko, jadi bukan lagi grantable via menu 37/4.
+        // (jam-kerja tetap bisa di-grant lewat menu 63.)
+
+
         // Cetak ulang nota (baca saja) dari Riwayat/Detail Penjualan dan dari Penjualan dan Jasa.
         // JANGAN pernah menambahkan id_menu 61 ("Riwayat Nota") ke daftar ini.
         // 61 dipakai supaya role bisa MELIHAT daftar nota, dan role itu tidak
@@ -188,6 +197,19 @@ return [
         // bisa update/hapus/edit-lines/susulan karena route itu digembok
         // middleware terpisah di atas.
         'jersey' => [38, 42],
+    ],
+
+    // Prefix URL yang HANYA boleh dibuka Administrator (exact nama_role ===
+    // 'Administrator'), APAPUN id_menu yang dimilikinya. Dicek SEBELUM 'rules'
+    // di CheckMenuAccess dan di Izin::bolehPath, jadi grant id_menu apa pun
+    // tidak membuka halaman ini. Keputusan owner 26 Nov 2026: identitas toko,
+    // logo/nota, pengaturan hak akses & pengaturan menu hanya boleh dipegang
+    // Administrator - kalau perlu fitur itu dibagikan ke role lain, buat
+    // halaman/section baru, bukan melonggarkan gembok ini.
+    'khusus_administrator' => [
+        'pengaturan-aplikasi',
+        'setting-akses',
+        'menu-editor',
     ],
 
     // Halaman yang memuat harga/nilai uang - ditutup (403) untuk role dengan boleh_lihat_harga = 0.

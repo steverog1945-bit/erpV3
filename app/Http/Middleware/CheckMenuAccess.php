@@ -29,6 +29,14 @@ class CheckMenuAccess
 
         $path = trim($request->path(), '/');
 
+        // Prefix khusus Administrator: ditolak untuk SEMUA role lain berapa pun
+        // id_menu yang dimilikinya - gembok ini menang atas mapping 'rules'.
+        foreach (config('menu_access.khusus_administrator', []) as $prefix) {
+            if ($path === $prefix || str_starts_with($path, $prefix . '/')) {
+                abort(403, 'Halaman ini khusus Administrator. Hubungi Administrator untuk meminta perubahan.');
+            }
+        }
+
         // Prefix yang bebas untuk siapa pun yang sudah login (dashboard,
         // logout, dst) - berlaku untuk SEMUA metode (logout = POST) dan
         // dicek SEBELUM gembok baca-saja, kalau tidak role baca-saja

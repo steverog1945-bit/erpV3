@@ -39,9 +39,12 @@ class LogoSidebarTest extends TestCase
         $s = AppSetting::current();
         $this->assertSame(['besar', 'kaca', 'penuh'], [$s->logo_ukuran, $s->logo_gaya, $s->logo_ringkas]);
 
+        // Command Center V3: sidebar memakai markup .sidebar-brandchip > img.brandchip-logo
+        // (mode ringkas + kelas logo-ukuran/gaya dihapus), jadi yang diperiksa adalah
+        // gambar logo yang benar-benar tampil di sidebar.
         $this->get('/dashboard')->assertOk()
-            ->assertSee('sidebar-logo logo-besar logo-gaya-kaca', false)
-            ->assertSee('logo-penuh', false)
+            ->assertSee('brandchip-logo', false)
+            ->assertSee('storage/company_logo/', false)
             ->assertDontSee('v1.0 Printing System');
     }
 
@@ -49,16 +52,24 @@ class LogoSidebarTest extends TestCase
     {
         $this->simpan(['logo_gaya' => 'neon'])->assertSessionHasErrors('logo_gaya');
 
-        $this->get('/dashboard')->assertOk()->assertSee('logo-sedang logo-gaya-polos', false);
+        // Tanpa logo: sidebar memakai ikon inline SVG bawaan .sidebar-brandchip.
+        // (assertSee ke "brandchip-logo" akan cocok juga dengan selector di <style>,
+        // jadi yang diperiksa adalah tag <img> spesifik dan SVG fallback-nya.)
+        $this->get('/dashboard')->assertOk()
+            ->assertSee('viewBox="0 0 36 36"', false)
+            ->assertDontSee('<img src="' . asset('storage/'), false);
     }
 
-    public function test_logo_ikon_diunggah_dipakai_saat_ringkas_dan_bisa_dihapus(): void
+    public function test_logo_ikon_diunggah_disimpan_dan_bisa_dihapus(): void
     {
+        // Logo ikon hanya ditampilkan di halaman Pengaturan Aplikasi (logo
+        // ringkas sidebar sudah tidak dipakai di Command Center V3), jadi
+        // yang diperiksa: tersimpan + tampil di pengaturan + bisa dihapus.
         $this->simpan(['logo' => UploadedFile::fake()->create('logo.png', 50, 'image/png'), 'logo_ikon' => UploadedFile::fake()->create('ikon.png', 20, 'image/png')]);
         $path = AppSetting::current()->logo_ikon_path;
         $this->assertNotNull($path);
         Storage::disk('public')->assertExists($path);
-        $this->get('/dashboard')->assertSee('logo-ikon-file', false);
+        $this->get(route('pengaturan-aplikasi.edit'))->assertSee('storage/company_logo/', false);
 
         $this->simpan(['hapus_logo_ikon' => '1']);
         $this->assertNull(AppSetting::current()->logo_ikon_path);

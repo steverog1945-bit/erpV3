@@ -15,6 +15,13 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // Di DB testing, master jersey memang tidak di-seed (lihat migrasi
+        // 2026_09_24_190000_seed_jersey_reference_master), jadi insert di bawah
+        // selalu melanggar FK jersey_price_settings_jersey_product_type_id_foreign.
+        if (app()->environment('testing')) {
+            return;
+        }
+
         $idRetail = (int) DB::table('golongan_konsumen')->where('nama_golongan', 'Retail')->value('id_golongan');
         if (!$idRetail) {
             return;

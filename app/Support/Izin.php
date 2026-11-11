@@ -185,6 +185,11 @@ class Izin
             foreach ((array) config('menu_access.rules', []) as $prefix => $menuIds) {
                 $aturan[$prefix] = implode('', array_map(fn ($a) => self::boleh($user, $menuIds, $a) ? '1' : '0', self::AKSI));
             }
+            // Prefix khusus Administrator = 0000 untuk non-Administrator,
+            // supaya skrip layout ikut menyembunyikan tombol aksi di halaman itu.
+            foreach ((array) config('menu_access.khusus_administrator', []) as $prefix) {
+                $aturan[$prefix] = '0000';
+            }
         }
 
         return [
@@ -221,6 +226,14 @@ class Izin
         // Administrator selalu lolos - sama seperti di awal CheckMenuAccess.
         if (self::adalahAdmin($user)) {
             return true;
+        }
+
+        // Prefix khusus Administrator: di luar jangkauan role mana pun selain
+        // Administrator - gembok yang sama dengan CheckMenuAccess.
+        foreach ((array) config('menu_access.khusus_administrator', []) as $prefix) {
+            if ($path === $prefix || str_starts_with($path, $prefix . '/')) {
+                return false;
+            }
         }
 
         // Prefix yang bebas untuk siapa pun yang sudah login.

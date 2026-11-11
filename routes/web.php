@@ -869,17 +869,19 @@ Route::match(['post', 'patch'], '/pembelian-bahan/pelunasan/{id}', [PembelianBah
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/pengaturan-aplikasi',
-        [SettingAplikasiController::class, 'edit'])
-        ->name('pengaturan-aplikasi.edit');
+    Route::middleware('hanya.admin')->group(function () {
+        Route::get('/pengaturan-aplikasi',
+            [SettingAplikasiController::class, 'edit'])
+            ->name('pengaturan-aplikasi.edit');
 
-    Route::post('/pengaturan-aplikasi',
-        [SettingAplikasiController::class, 'update'])
-        ->name('pengaturan-aplikasi.update');
+        Route::post('/pengaturan-aplikasi',
+            [SettingAplikasiController::class, 'update'])
+            ->name('pengaturan-aplikasi.update');
 
-    Route::get('/pengaturan-aplikasi/preview-nota',
-        [SettingAplikasiController::class, 'previewNota'])
-        ->name('pengaturan-aplikasi.preview-nota');
+        Route::get('/pengaturan-aplikasi/preview-nota',
+            [SettingAplikasiController::class, 'previewNota'])
+            ->name('pengaturan-aplikasi.preview-nota');
+    });
 
     Route::middleware('hanya.admin')->prefix('pengaturan-aplikasi/tema')->name('pengaturan-aplikasi.tema.')->group(function () {
         Route::get('/', [BrandThemeController::class, 'index'])->name('index');

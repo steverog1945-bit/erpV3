@@ -16,6 +16,14 @@ use Illuminate\Support\Facades\DB;
  */
 class AksesController extends Controller
 {
+    public function __construct()
+    {
+        // Gembok kedua (selain middleware hanya.admin & khusus_administrator
+        // di config/menu_access.php): halaman ini bisa MENULIS matriks hak
+        // akses - tidak boleh bisa dipegang non-Administrator.
+        abort_unless(\App\Support\Izin::adalahAdmin(request()->user()), 403, 'Halaman ini khusus Administrator.');
+    }
+
     /** @return array<int, array{view:bool,add:bool,edit:bool,delete:bool}> */
     private function izinRole(int $idRole): array
     {

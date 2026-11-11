@@ -8,6 +8,14 @@ use Illuminate\Support\Facades\Storage;
 
 class SettingAplikasiController extends Controller
 {
+    public function __construct()
+    {
+        // Gembok kedua di atas middleware hanya.admin & khusus_administrator
+        // (config/menu_access.php): halaman ini mengatur identitas toko,
+        // logo, format nota & pembulatan - hanya Administrator (exact).
+        abort_unless(\App\Support\Izin::adalahAdmin(request()->user()), 403, 'Halaman ini khusus Administrator.');
+    }
+
     public function edit()
     {
         $setting = AppSetting::current();

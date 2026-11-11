@@ -17,6 +17,14 @@ class MenuEditorController extends Controller
     /** Modul yang tidak boleh disembunyikan agar admin tidak terkunci: Data User, Setting Akses, Pengaturan Aplikasi. */
     private const WAJIB = [4, 6, 37];
 
+    public function __construct()
+    {
+        // Gembok kedua (selain middleware hanya.admin & khusus_administrator
+        // di config/menu_access.php): halaman ini bisa menyembunyikan menu
+        // seluruh aplikasi - hanya Administrator (exact).
+        abort_unless(\App\Support\Izin::adalahAdmin(request()->user()), 403, 'Halaman ini khusus Administrator.');
+    }
+
     public function index()
     {
         return view('pengaturan.menu-editor', ['menus' => Menu::orderBy('urutan')->orderBy('id_menu')->get(), 'wajib' => self::WAJIB]);
