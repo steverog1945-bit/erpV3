@@ -8,7 +8,7 @@
     @include('postingan._daftar', array_merge(\App\Http\Controllers\PostinganController::dataDaftar(request(), route('dashboard')), ['basisUrl' => route('dashboard'), 'paramTetap' => ['tab' => 'info']]))
 @else
 <div class="mb-8">
-    <h1 class="text-3xl font-medium text-slate-900 tracking-tight">Dashboard</h1>
+    <h1 class="text-[26px] sm:text-[30px] leading-tight font-semibold text-slate-900 tracking-tight">Dashboard</h1>
     <p class="text-slate-500 text-sm">Pergerakan order & produksi hari ini, {{ now()->translatedFormat('d F Y') }} &middot; {{ Auth::user()->username }} ({{ Auth::user()->role->nama_role }})</p>
 </div>
 

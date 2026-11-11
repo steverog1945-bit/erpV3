@@ -12,7 +12,7 @@
                     <i class="fas fa-file-invoice-dollar text-white text-2xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-3xl font-medium text-slate-800 uppercase tracking-tight">Entry Faktur</h1>
+                    <h1 class="text-[26px] sm:text-[30px] leading-tight font-semibold text-slate-900 tracking-tight">Entry Faktur</h1>
                     <p class="text-slate-400 font-medium italic">Konversi Surat Jalan menjadi Tagihan Pembelian</p>
                 </div>
             </div>

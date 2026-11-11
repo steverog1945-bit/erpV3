@@ -9,7 +9,7 @@
 @else
 <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
     <div>
-        <h1 class="text-3xl font-medium text-slate-900 tracking-tight">Dashboard Produksi</h1>
+        <h1 class="text-[26px] sm:text-[30px] leading-tight font-semibold text-slate-900 tracking-tight">Dashboard Produksi</h1>
         <p class="text-slate-500 text-sm">Antrean pekerjaan cetak, {{ now()->translatedFormat('d F Y') }} &middot; {{ Auth::user()->username }}</p>
     </div>
     @if($namaMesinDiizinkan && $namaMesinDiizinkan->isNotEmpty())

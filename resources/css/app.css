@@ -1687,7 +1687,7 @@ html.dark .cek-nama-telp { color: #8A96B8; }
     gap: 16px; padding: 0 2px 12px; flex-wrap: wrap;
 }
 .page-input-order .po-title {
-    font-size: 24px; font-weight: 600; letter-spacing: -0.02em;
+    font-size: 26px; font-weight: 600; letter-spacing: -0.02em;
     color: #0F1E3E; line-height: 1.15;
 }
 .page-input-order .po-sub {
@@ -1727,7 +1727,7 @@ html.dark .cek-nama-telp { color: #8A96B8; }
 @media screen and (max-width: 640px) {
     .page-input-order .po-head { align-items: flex-start; }
     .page-input-order .po-nota { flex: 1; }
-    .page-input-order .po-title { font-size: 22px; }
+    .page-input-order .po-title { font-size: 24px; }
 }
 
 /* ---------- Section icon chips: satu motif navy di seluruh halaman ---------- */
@@ -1915,6 +1915,7 @@ html.dark .page-input-order .po-est #status_hitung { color: #FCD34D; }
     .page-input-order .pos-cart-panel button[onclick^="simpanTransaksi"] { transition: none; }
     .page-input-order .urgent-btn:active { transform: none; }
 }
+
 
 
 

@@ -8,7 +8,7 @@
             <div class="flex items-center gap-3">
                 <span class="w-10 h-10 rounded-xl bg-[#EFF4FF] grid place-items-center text-[#2563EB] text-lg"><i class="fas fa-wand-magic-sparkles"></i></span>
                 <div>
-                    <h1 class="text-[20px] font-semibold text-[#0F1E3E] tracking-tight leading-tight">Asisten Orion</h1>
+                    <h1 class="text-[26px] sm:text-[30px] leading-tight font-semibold text-slate-900 tracking-tight">Asisten Orion</h1>
                     <p class="text-[12px] font-medium text-slate-500">Tanya jawab order, stok, kas &amp; rekap laporan — dijalankan di server Anda. Tidak ada data yang keluar ke internet.</p>
                 </div>
             </div>
