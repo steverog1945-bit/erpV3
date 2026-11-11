@@ -221,6 +221,11 @@ return [
         'logout',
         'storage',
         'up',
+        // Ganti foto profil sendiri (self-service): controller hanya pernah
+        // menulis ke users.foto_profil milik pengguna yang sedang login, jadi
+        // tidak ada alasan mengunci endpoint ini ke menu tertentu. Sebelumnya
+        // "Rute ini belum terdaftar di peta akses" (403) untuk non-Administrator.
+        'profil',
         // Halaman Premium (showcase + fitur non-paywall) terbuka untuk
         // semua role yang login. Ini masih gratis-penggunaan; saat fitur
         // premium di-lock nanti, kontrolnya pindah ke middleware premium:*
