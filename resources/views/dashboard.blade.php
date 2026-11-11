@@ -9,8 +9,8 @@
 .gauge-arc--indigo { stroke: #2563EB; }
 .gauge-arc--amber { stroke: #D97706; }
 .gauge-arc--rose { stroke: #E11D48; }
-.gauge-text { font-size: 11px; font-weight: 700; fill: #0F1E3E; font-variant-numeric: tabular-nums; }
-.gauge-caption { font-size: 8px; font-weight: 600; letter-spacing: .08em; fill: #5D6A85; }
+.gauge-text { font-size: 11px; font-weight: 600; fill: #0F1E3E; font-variant-numeric: tabular-nums; }
+
 @media (prefers-reduced-motion: reduce) {
     .gauge-arc { transition: none; }
 }
@@ -59,9 +59,9 @@
     {{-- ============ HEADER ============ --}}
     <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-5">
         <div>
-            <p class="text-[10px] font-semibold text-indigo-600 uppercase tracking-[0.16em] flex items-center gap-2">
+            <p class="text-[11px] font-medium text-indigo-600 flex items-center gap-2">
                 <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 inline-block"></span>Operasional
-                <span class="text-slate-400 normal-case tracking-normal font-normal">· {{ now()->translatedFormat('d F Y') }}</span>
+                <span class="text-slate-400 font-normal">· {{ now()->translatedFormat('d F Y') }}</span>
             </p>
             <h1 class="text-[26px] sm:text-[30px] leading-tight font-semibold text-slate-900 tracking-tight mt-2">Ringkasan Operasi &amp; Pesanan</h1>
             <p class="text-[13px] text-slate-500 mt-1.5 max-w-2xl">{{ $salam }}, {{ $nama }} &middot; Pantau pesanan masuk, produksi berjalan, koleksi pesanan, dan piutang tertunggak.</p>
@@ -79,16 +79,16 @@
     {{-- ============ KPI CARDS (4 kartu, gauge lingkaran beranimasi saat reload) ============ --}}
     @php
         $kpi = [
-            ['label' => 'Pesanan Hari Ini', 'value' => (string) $orderHariIni, 'unit' => 'nota', 'sub' => 'Rp ' . number_format($nilaiOrderHariIni, 0, ',', '.'), 'pct' => $spkDonePct, 'arc' => 'gauge-arc--ok', 'footL' => 'SPK selesai', 'footR' => $dOrderTeks, 'footKls' => $dOrderKls, 'url' => $u('penjualan.riwayat'), 'warna' => 'emerald'],
-            ['label' => 'Dalam Produksi', 'value' => (string) $spkProses, 'unit' => 'item', 'sub' => 'desain ' . $spkDesain . ' · cetak ' . $spkCetak, 'pct' => $spkProsesPct, 'arc' => 'gauge-arc--indigo', 'footL' => 'Sedang dikerjakan', 'footR' => 'antre ' . $spkAntre, 'footKls' => 'text-slate-500', 'url' => $u('spk.index'), 'warna' => 'indigo'],
-            ['label' => 'Siap Diambil', 'value' => (string) $notaLengkap, 'unit' => 'nota', 'sub' => $notaBelumLengkap . ' nota menunggu pelengkap', 'pct' => $collectingPct, 'arc' => 'gauge-arc--amber', 'footL' => 'Menunggu finalisasi', 'footR' => $notaBelumLengkap . ' belum lengkap', 'footKls' => 'text-slate-500', 'url' => $u('collecting.index', ['status_pengerjaan' => 'lengkap']), 'warna' => 'amber'],
-            ['label' => 'Piutang Belum Lunas', 'value' => 'Rp ' . number_format($piutang, 0, ',', '.'), 'unit' => '', 'sub' => $piutangCount . ' nota belum lunas', 'pct' => $lunasPct, 'arc' => 'gauge-arc--rose', 'footL' => 'Nota lunas keseluruhan', 'footR' => $piutangCount . ' dari ' . $totalNotaAll, 'footKls' => 'text-slate-500', 'url' => $u('laporan.piutang'), 'warna' => 'rose'],
+            ['label' => 'Pesanan Hari Ini', 'value' => (string) $orderHariIni, 'unit' => 'nota', 'sub' => 'Rp ' . number_format($nilaiOrderHariIni, 0, ',', '.'), 'pct' => $spkDonePct, 'arc' => 'gauge-arc--ok', 'footL' => 'SPK selesai', 'footR' => $dOrderTeks, 'footKls' => $dOrderKls, 'url' => $u('penjualan.riwayat')],
+            ['label' => 'Dalam Produksi', 'value' => (string) $spkProses, 'unit' => 'item', 'sub' => 'desain ' . $spkDesain . ' · cetak ' . $spkCetak, 'pct' => $spkProsesPct, 'arc' => 'gauge-arc--indigo', 'footL' => 'Sedang dikerjakan', 'footR' => 'antre ' . $spkAntre, 'footKls' => 'text-slate-500', 'url' => $u('spk.index')],
+            ['label' => 'Siap Diambil', 'value' => (string) $notaLengkap, 'unit' => 'nota', 'sub' => $notaBelumLengkap . ' nota menunggu pelengkap', 'pct' => $collectingPct, 'arc' => 'gauge-arc--amber', 'footL' => 'Menunggu finalisasi', 'footR' => $notaBelumLengkap . ' belum lengkap', 'footKls' => 'text-slate-500', 'url' => $u('collecting.index', ['status_pengerjaan' => 'lengkap'])],
+            ['label' => 'Piutang Belum Lunas', 'value' => 'Rp ' . number_format($piutang, 0, ',', '.'), 'unit' => '', 'sub' => $piutangCount . ' nota belum lunas', 'pct' => $lunasPct, 'arc' => 'gauge-arc--rose', 'footL' => 'Nota lunas keseluruhan', 'footR' => $piutangCount . ' dari ' . $totalNotaAll, 'footKls' => 'text-slate-500', 'url' => $u('laporan.piutang')],
         ];
     @endphp
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
         @foreach ($kpi as $k)
             <a href="{{ $k['url'] }}" class="group rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5 shadow-[0_1px_3px_rgba(15,30,62,.06)] hover:shadow-[0_10px_24px_rgba(15,30,62,.08)] hover:border-slate-300/70 transition-all duration-200">
-                <p class="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">{{ $k['label'] }}</p>
+                <p class="text-[11px] font-medium text-slate-500">{{ $k['label'] }}</p>
                 <div class="mt-2 flex items-center justify-between gap-2">
                     <div class="min-w-0">
                         <p class="text-[22px] sm:text-[26px] leading-none font-semibold text-slate-900 tracking-tight tabular-nums truncate">{{ $k['value'] }}<span class="text-[11px] font-medium text-slate-400 ml-1">{{ $k['unit'] }}</span></p>
@@ -98,8 +98,7 @@
                         <circle class="gauge-track" cx="40" cy="40" r="34" stroke-width="8" />
                         <circle class="gauge-arc {{ $k['arc'] }}" cx="40" cy="40" r="34" stroke-width="8" stroke-linecap="round"
                                 stroke-dasharray="{{ $C }}" stroke-dashoffset="{{ $C }}" data-offset="{{ $C * (1 - min(100, max(0, $k['pct'])) / 100) }}" transform="rotate(-90 40 40)" />
-                        <text class="gauge-text" x="40" y="39" text-anchor="middle">{{ round($k['pct']) }}<tspan font-size="7">%</tspan></text>
-                        <text class="gauge-caption" x="40" y="51" text-anchor="middle">{{ strtoupper($k['warna'] === 'rose' ? 'lunas' : 'bar') }}</text>
+                        <text class="gauge-text" x="40" y="42" text-anchor="middle">{{ round($k['pct']) }}<tspan font-size="9">%</tspan></text>
                     </svg>
                 </div>
                 <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between gap-2 text-[10px]">
@@ -133,12 +132,12 @@
                 @foreach ($tahap as $t)
                     <a href="{{ $t['url'] }}" title="{{ $t['desc'] }}" class="alur-stage rounded-xl border border-slate-100 bg-slate-50/60 hover:bg-white px-3 sm:px-4 py-3 sm:py-4 flex flex-col focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">
                         <span class="flex items-center justify-between gap-2">
-                            <span class="text-[8.5px] font-semibold tracking-[0.14em] text-slate-400">TAHAP {{ $t['n'] }}</span>
+                            <span class="text-[10px] font-medium text-slate-500">Tahap {{ $t['n'] }}</span>
                             <span class="w-2 h-2 rounded-full {{ $t['dot'] }}"></span>
                         </span>
                         <p class="text-[12px] font-semibold text-slate-500 mt-2.5">{{ $t['label'] }}</p>
                         <p class="text-[26px] sm:text-[30px] leading-none font-semibold text-slate-900 tabular-nums tracking-tight mt-1">{{ $t['count'] }}</p>
-                        <p class="text-[9.5px] text-slate-400 mt-1.5 leading-snug hidden sm:block">{{ $t['desc'] }}</p>
+                        <p class="text-[10.5px] text-slate-400 mt-1.5 leading-snug hidden sm:block">{{ $t['desc'] }}</p>
                     </a>
                 @endforeach
             </div>
@@ -149,7 +148,7 @@
                     <div class="bg-indigo-500" style="width: {{ max(2, round($spkCetak / $totalSpk * 100)) }}%"></div>
                     <div class="bg-emerald-500" style="width: {{ max(2, round($spkSelesai / $totalSpk * 100)) }}%"></div>
                 </div>
-                <p class="text-[10.5px] text-slate-400 mt-2">{{ $spkSelesai }} dari {{ $totalSpk }} item SPK sudah selesai diproduksi.</p>
+                <p class="text-[10.5px] font-medium text-slate-500 mt-2">{{ $spkSelesai }} dari {{ $totalSpk }} item SPK sudah selesai diproduksi.</p>
             </div>
         </div>
     </div>
@@ -193,7 +192,7 @@
         <div class="rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_4px_rgba(15,30,62,.05)] overflow-hidden flex flex-col">
             <div class="border-b border-slate-100 px-5 sm:px-6 py-4 flex items-center justify-between gap-3">
                 <h2 class="text-[13.5px] font-semibold text-slate-800">Perlu Perhatian</h2>
-                <span class="text-[9.5px] font-bold uppercase tracking-[0.15em] text-slate-400">{{ count($perluTindakan) }} Aktif</span>
+                <span class="text-[11px] font-medium text-slate-500">{{ count($perluTindakan) }} menunggu</span>
             </div>
             <div class="divide-y divide-slate-50 max-h-[26rem] overflow-y-auto flex-1">
                 @forelse($perluTindakan as $it)
@@ -230,20 +229,20 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left text-[11px] table-fixed">
                 <thead>
-                    <tr class="text-[8.5px] uppercase tracking-[0.13em] text-slate-400 bg-[#F7F9FE]">
-                        <th class="px-3 py-2.5 font-bold w-[30%]">Nota</th>
-                        <th class="px-3 py-2.5 font-bold w-[27%]">Konsumen</th>
-                        <th class="px-3 py-2.5 font-bold text-right w-[22%]">Total</th>
-                        <th class="px-3 py-2.5 font-bold text-right w-[21%]">Status</th>
+                    <tr class="text-[10px] font-medium text-slate-500 bg-[#F7F9FE]">
+                        <th class="px-3 py-2.5 w-[30%]">Nota</th>
+                        <th class="px-3 py-2.5 w-[27%]">Konsumen</th>
+                        <th class="px-3 py-2.5 text-right w-[22%]">Total</th>
+                        <th class="px-3 py-2.5 text-right w-[21%]">Status</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-50">
                     @forelse($orderTerbaru as $o)
                         <tr class="trx-row hover:bg-[#FAFCFF] transition-colors">
-                            <td class="px-3 py-3"><span class="font-mono text-[10px] font-semibold text-slate-700">{{ $o->nomor_nota }}</span></td>
+                            <td class="px-3 py-3"><span class="text-[10.5px] font-semibold text-slate-700 tabular-nums whitespace-nowrap">{{ $o->nomor_nota }}</span></td>
                             <td class="px-3 py-3 font-medium text-slate-700"><span class="block truncate">{{ $o->nama_konsumen ?? 'Tanpa nama' }}</span></td>
                             <td class="px-3 py-3 text-right font-semibold text-slate-800 tabular-nums whitespace-nowrap">Rp {{ number_format((float) $o->total_bayar, 0, ',', '.') }}</td>
-                            <td class="px-3 py-3 text-right">@if($o->status_pembayaran === 'Lunas')<span class="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[9px] font-bold uppercase text-emerald-700">Lunas</span>@elseif($o->status_pembayaran === 'DP')<span class="inline-flex items-center rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-[9px] font-bold uppercase text-amber-800">DP</span>@else<span class="inline-flex items-center rounded-full bg-rose-50 border border-rose-200 px-2 py-0.5 text-[9px] font-bold uppercase text-rose-600">Belum</span>@endif</td>
+                            <td class="px-3 py-3 text-right">@if($o->status_pembayaran === 'Lunas')<span class="inline-flex items-center rounded-full bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[10px] font-medium text-emerald-700">Lunas</span>@elseif($o->status_pembayaran === 'DP')<span class="inline-flex items-center rounded-full bg-amber-50 border border-amber-200 px-2 py-0.5 text-[10px] font-medium text-amber-800">DP</span>@else<span class="inline-flex items-center rounded-full bg-rose-50 border border-rose-200 px-2 py-0.5 text-[10px] font-medium text-rose-600">Belum</span>@endif</td>
                         </tr>
                     @empty
                         <tr><td colspan="4" class="px-3 py-12 text-center text-[11.5px] text-slate-400">Belum ada transaksi.</td></tr>
