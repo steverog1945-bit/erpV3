@@ -75,7 +75,7 @@
                     @if($log->old_values || $log->new_values)
                         <details class="mt-1">
                             <summary class="text-[10px] text-indigo-500 cursor-pointer uppercase tracking-wide font-medium">Lihat detail</summary>
-                            <div class="mt-2 grid grid-cols-2 gap-2 text-[10px] font-mono">
+                            <div class="mt-2 grid grid-cols-2 gap-2 text-[10px] font-medium tabular-nums">
                                 <div>
                                     <p class="text-slate-400 font-medium mb-1">SEBELUM</p>
                                     <pre class="bg-slate-50 rounded p-2 overflow-x-auto">{{ $log->old_values ? json_encode($log->old_values, JSON_PRETTY_PRINT) : '-' }}</pre>

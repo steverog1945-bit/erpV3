@@ -78,7 +78,7 @@
                     @if($r->status === 'Gagal')
                         <span class="text-xs text-red-500">{{ $r->pesan_error }}</span>
                     @else
-                        <span class="text-[11px] text-slate-400 font-mono truncate block">{{ $r->file_path }}</span>
+                        <span class="text-[11px] text-slate-400 truncate block font-medium tabular-nums">{{ $r->file_path }}</span>
                     @endif
                     @if($r->offsite_status === 'Gagal')
                         <span class="text-xs text-red-500 block mt-1"><i class="fas fa-triangle-exclamation"></i> Salinan kedua gagal: {{ $r->offsite_error }}</span>

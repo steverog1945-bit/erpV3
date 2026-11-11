@@ -389,14 +389,10 @@
    kartu (.nota-block, .order-block, .sesi-block, .faktur-block,
    .divisi-block). */
 @media print {
-    /* Topbar aplikasi (nama toko, avatar user, tombol logout - lihat
-       layouts/app.blade.php) sebelumnya TIDAK PERNAH disembunyikan saat
-       print (cuma aside/.no-print yang disembunyikan per halaman
-       laporan), jadi ikut tercetak di atas setiap laporan - ini
-       ditaruh di sini (bukan di <style> tiap laporan) supaya otomatis
-       tersembunyi di SEMUA halaman yang memakai layout ini, bukan cuma
-       laporan. */
-    .topbar { display: none !important; }
+    /* Seluruh chrome aplikasi saat cetak (topbar/sidebar/mega menu/footer)
+       kini dikelola dari SATU tempat: partials/print-chrome.blade.php yang
+       dipanggil layouts/app.blade.php. Blok ini dipertahankan untuk aturan
+       warna/bayangan halaman cetak saja - jangan tambah aturan chrome di sini. */
     /* Full white: background HALAMAN (abu #F5F8FF dari body inline style,
        wrapper bg-slate) tidak pernah ikut tercetak - kalau ditangani per
        halaman selalu ada yang kelewat. Aksen lembut di dalam kartu (badge,
@@ -1270,7 +1266,7 @@ html.dark [style*="border:1px solid #B9C3DD"] { border-color: var(--border-prima
 .prose-post li + li { margin-top: .4em; }
 .prose-post blockquote { border-left: 4px solid #7FA6F5; background: #EFF4FF; padding: 1em 1.3em; border-radius: 0 1rem 1rem 0; color: #1D4ED8; font-style: italic; }
 .prose-post img { max-width: 100%; height: auto; border-radius: 1.25rem; margin-left: auto; margin-right: auto; box-shadow: 0 10px 30px rgba(15, 23, 42, .12); }
-.prose-post pre, .prose-post code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .92em; }
+.prose-post pre, .prose-post code { font-family: inherit; font-size: .92em; }
 .prose-post pre { background: #0F1E3E; color: #B9C3DD; padding: 1em 1.2em; border-radius: 1rem; overflow-x: auto; }
 .prose-post :not(pre) > code { background: #E8ECF8; padding: .15em .45em; border-radius: .4em; }
 .prose-post hr { border: 0; border-top: 1px solid #B9C3DD; margin: 2em 0; }
@@ -1357,7 +1353,7 @@ html.dark .hero-postingan { box-shadow: none; }
 .prose-post .ql-font-inter, .editor-kartu .ql-editor .ql-font-inter { font-family: 'Inter',sans-serif; }
 .prose-post .ql-font-lora, .editor-kartu .ql-editor .ql-font-lora { font-family: 'Lora',Georgia,serif; }
 .prose-post .ql-font-playfair, .editor-kartu .ql-editor .ql-font-playfair { font-family: 'Playfair Display',Georgia,serif; }
-.prose-post .ql-font-mono, .editor-kartu .ql-editor .ql-font-mono { font-family: ui-monospace,SFMono-Regular,Menlo,monospace; }
+.prose-post .ql-font-mono, .editor-kartu .ql-editor .ql-font-mono { font-family: inherit; }
 .prose-post .ql-size-small, .editor-kartu .ql-editor .ql-size-small { font-size: .85em; } .prose-post .ql-size-large, .editor-kartu .ql-editor .ql-size-large { font-size: 1.35em; line-height: 1.4; } .prose-post .ql-size-huge, .editor-kartu .ql-editor .ql-size-huge { font-size: 1.8em; line-height: 1.3; }
 .prose-post .ql-color-red, .editor-kartu .ql-editor .ql-color-red { color: #dc2626; }
 .prose-post .ql-color-orange, .editor-kartu .ql-editor .ql-color-orange { color: #ea580c; }
@@ -1675,7 +1671,7 @@ html.dark .cmdk-group { color: #6B7799; }
 .cek-nama-daftar { display: flex; flex-direction: column; gap: 4px; }
 .cek-nama-item { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; text-align: left; border: 1px solid transparent; background: rgba(255,255,255,.65); border-radius: 8px; padding: 6px 8px; cursor: pointer; transition: background .12s ease, border-color .12s ease; font: inherit; }
 .cek-nama-item:hover { background: #fff; border-color: #CBD6EE; }
-.cek-nama-kode { font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace; font-size: 10.5px; font-weight: 700; background: #0F1E3E; color: #E8ECF8; padding: 2px 7px; border-radius: 5px; white-space: nowrap; }
+.cek-nama-kode { font-family: 'Inter', inherit; font-size: 10.5px; font-weight: 700; letter-spacing: .02em; background: #0F1E3E; color: #E8ECF8; padding: 2px 7px; border-radius: 5px; white-space: nowrap; }
 .cek-nama-nama { font-size: 12px; font-weight: 600; color: #0F1E3E; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cek-nama-telp { font-size: 10px; color: #5D6A85; font-variant-numeric: tabular-nums; white-space: nowrap; }
 html.dark .cek-nama-aman { background: rgba(14, 159, 110, .14); border-color: rgba(14, 159, 110, .35); color: #6FE3B4; }

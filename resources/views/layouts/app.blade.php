@@ -425,8 +425,7 @@
         body.pv2-leaving main#mainContent, body.pv2-leaving .content-wrapper { transition: none; opacity: 1; transform: none; }
     }
     </style>
-
-    
+    @include('partials.print-chrome')
 </head>
 <body class="text-slate-900">
     {{-- Visual Refresh v2: sidebar dihapus, navigasi di topbar. State

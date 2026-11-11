@@ -64,7 +64,7 @@
                             <div class="text-[14px] font-medium text-slate-700 group-hover:text-indigo-600 transition-colors uppercase">
                                 {{ $k->nama_konsumen }}
                             </div>
-                            <div class="text-[11px] text-slate-400 mt-0.5 font-mono tracking-wider">{{ \App\Support\KonsumenKode::dariId((int) $k->id_konsumen) }}</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5 font-medium tabular-nums">{{ \App\Support\KonsumenKode::dariId((int) $k->id_konsumen) }}</div>
                         </div>
                     </div>
                 </td>

@@ -204,8 +204,8 @@
             @include('jersey.master._filter-toolbar', ['searchId' => 'search-estimasi', 'placeholder' => 'Cari nama ukuran...'])
 
             <p class="text-[11px] font-medium text-indigo-600 uppercase tracking-widest mb-2 mt-2">Estimasi Meter</p>
-            <div class="overflow-x-auto mb-6">
-                <table class="w-full text-xs border-collapse" id="tabel-estimasi">
+            <div class="modern-table-wrapper overflow-x-auto mb-6">
+                <table class="modern-table w-full border-collapse" id="tabel-estimasi">
                     <thead>
                         <tr>
                             <th class="p-2.5 text-left sticky left-0 bg-white z-10">Ukuran</th>
@@ -240,8 +240,8 @@
             </div>
 
             <p class="text-[11px] font-medium text-indigo-600 uppercase tracking-widest mb-2">Estimasi Berat (gram)</p>
-            <div class="overflow-x-auto">
-                <table class="w-full text-xs border-collapse" id="tabel-estimasi-berat-tbl">
+            <div class="modern-table-wrapper overflow-x-auto">
+                <table class="modern-table w-full border-collapse" id="tabel-estimasi-berat-tbl">
                     <thead>
                         <tr>
                             <th class="p-2.5 text-left sticky left-0 bg-white z-10">Ukuran</th>

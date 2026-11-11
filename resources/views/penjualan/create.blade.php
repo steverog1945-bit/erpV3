@@ -556,6 +556,10 @@
                         <p id="display_qty" hidden class="po-est-chip"></p>
                         <p id="display_harga" class="po-est-chip">Rp 0 /unit</p>
                     </div>
+                    {{-- Umpan balik singkat saat estimasi tidak bisa dihitung:
+                         sebelumnya hanya console.error — kasir lihat "Rp 0" tanpa
+                         tahu kenapa. Tetap diam bila harga ketemu. --}}
+                    <p id="est_hint" class="hidden w-full text-[11px] font-medium text-amber-700 mt-1" role="status"></p>
                 </div>
 
                 {{-- ---------- FINISHING & BIAYA ---------- --}}
@@ -2654,7 +2658,12 @@ let hitungUlangMenunggu = false;
         }
 
         let qtyCari = (currentProduk.metode_hitung === 'ukuran') ? (p * l / 10000) * qU : qB;
-        if (qtyCari <= 0) { updateDisplay(0, 0); return null; }
+        if (qtyCari <= 0) {
+            updateDisplay(0, 0);
+            const hint = document.getElementById('est_hint');
+            if (hint) { hint.textContent = currentProduk.metode_hitung === 'ukuran' ? 'Isi panjang, lebar, dan jumlah untuk menghitung estimasi.' : 'Isi jumlah untuk menghitung estimasi.'; hint.classList.remove('hidden'); }
+            return null;
+        }
 
         // Refresh dulu SEBELUM baca nilainya - dibungkus try/catch supaya satu
         // langkah gagal tidak menggagalkan keseluruhan perhitungan subtotal
@@ -2671,6 +2680,14 @@ let hitungUlangMenunggu = false;
             // produk (min_luas_total + kelompok_minimum), dan selisihnya
             // digulung ke subtotal item terbesar kelompok saat checkout
             // (validasiItems/PenjualanCheckoutService).
+            // Golongan harga belum terisi (pelanggan belum dipilih) → URL akan
+            // jadi "/api/penjualan/get-harga/5//1.5" dan 404 HTML. Hentikan di
+            // sini dengan pesan yang jelas, bukan diam Rp 0.
+            if (!idGol) {
+                const hint = document.getElementById('est_hint');
+                if (hint) { hint.textContent = 'Pilih pelanggan dulu supaya golongan harga bisa dibaca.'; hint.classList.remove('hidden'); }
+                return null;
+            }
             const url = `{{ url('/api/penjualan/get-harga') }}/${currentProduk.id_produk}/${idGol}/${qtyCari}${siapCetak ? '?siap_cetak=1' : ''}`;
             const response = await fetch(url);
             const data = await response.json();
@@ -2682,6 +2699,10 @@ let hitungUlangMenunggu = false;
             // di-update (bukan jadi Rp 0 dan update gagal).
             if (hargaJual <= 0 && editIndex !== null && cart[editIndex] && cart[editIndex].harga_satuan > 0) {
                 hargaJual = parseFloat(cart[editIndex].harga_satuan) || 0;
+            }
+            if (hargaJual <= 0) {
+                const hint = document.getElementById('est_hint');
+                if (hint) { hint.textContent = 'Harga belum ada di price list untuk golongan & qty ini — cek Master Harga.'; hint.classList.remove('hidden'); }
             }
             const isPromo = data.is_promo;
             const promoSelesai = data.promo_selesai;
@@ -2702,7 +2723,7 @@ let hitungUlangMenunggu = false;
             await cekMinOrder(p, l, qU, qB);
             cekKepingMelebihiMedia();
             return { harga_satuan: hargaJual, subtotal: subtotal, qty_hitung: qtyCari, p: p, l: l, qty_input: (currentProduk.metode_hitung === 'ukuran') ? qU : qB };
-        } catch (error) { console.error('hitungSubtotalInti gagal:', error); return { fetchError: true }; }
+        } catch (error) { console.error('hitungSubtotalInti gagal:', error); const hint = document.getElementById('est_hint'); if (hint) { hint.textContent = 'Gagal mengambil harga — periksa koneksi atau muat ulang halaman.'; hint.classList.remove('hidden'); } return { fetchError: true }; }
     }
 
     // Indikator stok - PERINGATAN saja, tidak pernah memblokir Tambah/Simpan.
@@ -2782,6 +2803,7 @@ let hitungUlangMenunggu = false;
         // disembunyikan dengan ATRIBUT hidden di HTML, jadi classList tidak
         // pernah menghilangkan atribut itu dan chip tidak akan pernah tampil.
         const elQty = document.getElementById('display_qty');
+        const hint = document.getElementById('est_hint');
         if (qty > 0) {
             const satuan = (currentProduk && currentProduk.metode_hitung === 'ukuran') ? 'm2' : 'pcs';
             elQty.innerHTML = `<i class="fas fa-cubes text-[10px] opacity-70 mr-1"></i>${fmt.format(qty)} ${satuan}`;
@@ -2789,6 +2811,7 @@ let hitungUlangMenunggu = false;
         } else {
             elQty.hidden = true;
         }
+        if (hint) hint.classList.add('hidden');
     }
 
     // 4. KERANJANG & AKSI

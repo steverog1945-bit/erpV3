@@ -28,7 +28,7 @@
             <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 py-4">
                 <div>
                     <p class="text-sm font-semibold text-slate-800">Tab modul</p>
-                    <p class="text-xs text-slate-500 mt-0.5">URL harus diawali garis miring, mis. <span class="font-mono">/kasir</span>. Ikon dibatasi pada preset.
+                    <p class="text-xs text-slate-500 mt-0.5">URL harus diawali garis miring, mis. <span class="font-medium tabular-nums">/kasir</span>. Ikon dibatasi pada preset.
                     </p>
                 </div>
                 <button type="button" id="tambah-tab" class="inline-flex items-center gap-2 h-9 px-3 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600 hover:text-slate-800 hover:border-slate-300 transition-colors">
@@ -70,7 +70,7 @@
                                     <input type="text" name="rows[{{ $i }}][label]" value="{{ $row['label'] }}" maxlength="30" class="h-9 w-full max-w-[10rem] rounded-lg border border-slate-200 px-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:border-indigo-400" required>
                                 </td>
                                 <td class="px-4 py-3 align-middle">
-                                    <input type="text" name="rows[{{ $i }}][url]" value="{{ $row['url'] }}" maxlength="255" class="h-9 w-full max-w-xs font-mono rounded-lg border border-slate-200 px-2.5 text-xs text-slate-600 focus:outline-none focus:border-indigo-400" required>
+                                    <input type="text" name="rows[{{ $i }}][url]" value="{{ $row['url'] }}" maxlength="255" class="h-9 w-full max-w-xs font-medium tabular-nums rounded-lg border border-slate-200 px-2.5 text-xs text-slate-600 focus:outline-none focus:border-indigo-400" required>
                                 </td>
                                 <td class="px-4 py-3 align-middle text-center">
                                     <input type="checkbox" name="rows[{{ $i }}][aktif]" value="1" @checked($row['aktif']) class="h-4 w-4 accent-indigo-600">
@@ -116,7 +116,7 @@
             <input type="text" name="rows[__INDEX__][label]" value="" maxlength="30" class="h-9 w-full max-w-[10rem] rounded-lg border border-slate-200 px-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:border-indigo-400" required>
         </td>
         <td class="px-4 py-3 align-middle">
-            <input type="text" name="rows[__INDEX__][url]" value="/" maxlength="255" class="h-9 w-full max-w-xs font-mono rounded-lg border border-slate-200 px-2.5 text-xs text-slate-600 focus:outline-none focus:border-indigo-400" required>
+            <input type="text" name="rows[__INDEX__][url]" value="/" maxlength="255" class="h-9 w-full max-w-xs font-medium tabular-nums rounded-lg border border-slate-200 px-2.5 text-xs text-slate-600 focus:outline-none focus:border-indigo-400" required>
         </td>
         <td class="px-4 py-3 align-middle text-center">
             <input type="checkbox" name="rows[__INDEX__][aktif]" value="1" checked class="h-4 w-4 accent-indigo-600">

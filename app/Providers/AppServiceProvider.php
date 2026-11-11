@@ -140,13 +140,22 @@ class AppServiceProvider extends ServiceProvider
             return $this->where($kolom, '>=', $dari->toDateTimeString())->where($kolom, '<', $besok->toDateTimeString());
         });
 
-        // @bolehHarga ... @else ... @endbolehHarga : tampilkan hanya untuk role yang berhak melihat harga/nilai uang.
-        // Batalkan Blade::if('bolehHarga') - auth() belum siap di boot time
+        // @bolehHarga ... @endbolehHarga : tampilkan hanya untuk role yang
+        // berhak melihat harga/nilai uang. Penentu tunggal: AksesHarga::bolehLihat().
+        // Blade::if dievaluasi saat VIEW dirender — auth() pasti sudah siap,
+        // jadi tidak perlu ada aturan terpisah soal "boot time".
+        \Illuminate\Support\Facades\Blade::if('bolehHarga', fn () => \App\Support\AksesHarga::bolehLihat());
 
-        // @bolehDesain ... @else ... @endbolehDesain : tampilkan hanya untuk role yang berhak
-        // MENGINPUT nilai Biaya Desain. Sengaja Terpisah dari @bolehHarga: hak ini cuma membuka
-        // satu field (Biaya Desain), tidak membuka harga produk/cetak/finishing maupun halaman harga.
-        // Batalkan Blade::if('bolehDesain') - auth() belum siap di boot time
+        // @bolehDesain ... @endbolehDesain : tampilkan hanya untuk role yang
+        // berhak MENGINPUT nilai Biaya Desain (AksesHarga::bolehInputBiayaDesain()).
+        \Illuminate\Support\Facades\Blade::if('bolehDesain', fn () => \App\Support\AksesHarga::bolehInputBiayaDesain());
+
+        // @unlessbolehHarga ... @endunlessbolehHarga : kebalikan bolehHarga,
+        // dipakai untuk isian readonly/sembunyi.
+        \Illuminate\Support\Facades\Blade::if('unlessbolehHarga', fn () => ! \App\Support\AksesHarga::bolehLihat());
+
+        // @unlessbolehDesain ... @endunlessbolehDesain : kebalikan bolehDesain.
+        \Illuminate\Support\Facades\Blade::if('unlessbolehDesain', fn () => ! \App\Support\AksesHarga::bolehInputBiayaDesain());
 
         // @versi($row) : kolom tersembunyi versi baris untuk optimistic locking (lihat App\Support\VersiBaris).
         \Illuminate\Support\Facades\Blade::directive('versi', fn ($e) => "<?php echo \App\Support\VersiBaris::field({$e}); ?>");

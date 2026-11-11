@@ -100,7 +100,7 @@
 
                 <div id="due_date_group" class="hidden">
                     <x-form.group label="Tgl Jatuh Tempo" dalam>
-                        <p class="text-[11px] font-medium text-indigo-500 mt-1.5 ml-1 hidden" id="info-jatuh-tempo"></p>
+                        <p class="text-[10px] font-medium text-slate-400 mt-1.5 ml-1 hidden" id="info-jatuh-tempo"></p>
                         <input type="date" name="jatuh_tempo_tgl" id="jatuh_tempo_tgl" readonly
                             class="w-full bg-slate-100 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-500 shadow-inner cursor-not-allowed">
                     </x-form.group>
@@ -325,7 +325,7 @@
             date.setDate(date.getDate() + parseInt(hari));
             document.getElementById('jatuh_tempo_tgl').value = date.toISOString().split('T')[0];
             const teks = date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
-            info.textContent = `Jatuh tempo ${teks} (${parseInt(hari)} hari setelah tanggal transaksi)`;
+            info.textContent = `Jatuh tempo ${teks} · ${parseInt(hari)} hari setelah transaksi`;
             info.classList.remove('hidden');
         } else {
             info.classList.add('hidden');

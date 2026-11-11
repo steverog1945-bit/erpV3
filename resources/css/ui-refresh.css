@@ -484,11 +484,9 @@ html.dark ::-webkit-scrollbar-thumb {
    14. PRINT - Clean paper
    ========================================================================== */
 @media print {
-    aside,
-    .topbar {
-        display: none !important;
-    }
-
+    /* Chrome aplikasi (topbar/sidebar/mega menu/footer dsb.) dikelola dari
+       partials/print-chrome.blade.php yang dipanggil layouts/app.blade.php.
+       Jangan tambah aturan chrome di sini lagi - satu sumber saja. */
     .card,
     .modern-table-wrapper {
         background: #fff !important;
