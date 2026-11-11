@@ -680,24 +680,18 @@ html.dark .pil-pilih:has(:checked) { color: #FFFFFF !important; }
           jadi badge otomatis ikut tema tanpa override terpisah lagi.
    =================================================================== */
 :root {
-    --notif-fg: #FFFFFF;
+    --notif-fg: #0F1E3E;
     --notif-neutral: #5D6A85;
-    --notif-danger: #93481A;
-    --notif-danger-fg: #FFFFFF;
-    --notif-info: #2563EB;
-    --notif-info-fg: #FFFFFF;
-    --notif-warning: #E8891D;
-    --notif-warning-fg: #1F2937;
+    --notif-danger: #FBD5D5;   --notif-danger-fg: #B4233C;
+    --notif-info: #DCE8FF;     --notif-info-fg: #1E3A8A;
+    --notif-warning: #FDF3C7;  --notif-warning-fg: #8A5A07;
 }
 
 html.dark {
     --notif-neutral: #8896B8;
-    --notif-danger: #E0A583;
-    --notif-danger-fg: #0F1E3E;
-    --notif-info: #7FA6F5;
-    --notif-info-fg: #0F1E3E;
-    --notif-warning: #F5C46A;
-    --notif-warning-fg: #0F1E3E;
+    --notif-danger: #FBD5D5;   --notif-danger-fg: #B4233C;
+    --notif-info: #DCE8FF;     --notif-info-fg: #1E3A8A;
+    --notif-warning: #FDF3C7;  --notif-warning-fg: #8A5A07;
 }
 
 /* KONTEKS SIDEBAR - badge angka tidak boleh mengikuti warna surface
@@ -708,36 +702,31 @@ html.dark {
    deklarasi html.dark tingkat halaman - badge berdiri sendiri mengikuti
    mode sidebar, bukan mode halaman. */
 aside {
-    --notif-neutral: #8896B8 !important;
-    --notif-danger: #F5A882 !important;   --notif-danger-fg: #0F1E3E !important;
-    --notif-info: #8FB4F8 !important;     --notif-info-fg: #0F1E3E !important;
-    --notif-warning: #F5C46A !important;  --notif-warning-fg: #4A3508 !important;
+    --notif-neutral: #8B97B5 !important;
+    --notif-danger: #FBD5D5 !important;   --notif-danger-fg: #B4233C !important;
+    --notif-info: #DCE8FF !important;     --notif-info-fg: #1E3A8A !important;
+    --notif-warning: #FDF3C7 !important;  --notif-warning-fg: #8A5A07 !important;
     --notif-fg: #0F1E3E !important;
 }
 html[data-sidebar-mode="light"] aside {
     --notif-neutral: #5D6A85 !important;
-    --notif-danger: #93481A !important;   --notif-danger-fg: #FFFFFF !important;
-    --notif-info: #2563EB !important;     --notif-info-fg: #FFFFFF !important;
-    --notif-warning: #E8891D !important;  --notif-warning-fg: #1F2937 !important;
-    --notif-fg: #FFFFFF !important;
+    --notif-danger: #FBD5D5 !important;   --notif-danger-fg: #B4233C !important;
+    --notif-info: #DCE8FF !important;     --notif-info-fg: #1E3A8A !important;
+    --notif-warning: #FDF3C7 !important;  --notif-warning-fg: #8A5A07 !important;
+    --notif-fg: #0F1E3E !important;
 }
 
-/* Badge notifikasi: pil kecil dengan ikon lonceng (Font Awesome \f0f3),
-   angka tabular. Sebelumnya hanya warna teks yang didefinisikan - badge
-   tampil sebagai angka telanjang tanpa latar/penanda, sehingga sulit dibaca
-   di menu (keluhan owner 2026-11). Latar mengikuti token --notif-*. */
+/* Badge notifikasi: pil kecil, angka tabular, tanpa ikon lonceng (owner 2026-11: bersih, seragam, tidak sibuk).
+   Warna lembut mengikuti token --notif-* di setiap skema. */
 .notif-badge {
-    display: inline-flex; align-items: center; gap: 4px;
-    min-width: 20px; height: 18px; padding: 0 6px; margin-left: 6px;
+    display: inline-flex; align-items: center; gap: 0;
+    min-width: 20px; height: 19px; padding: 0 7px; margin-left: 6px;
     border-radius: 999px; vertical-align: 1px;
-    background: var(--notif-info); color: var(--notif-fg) !important;
-    font-size: 9.5px; font-weight: 700; line-height: 1;
-    font-variant-numeric: tabular-nums; letter-spacing: .02em;
+    background: var(--notif-info); color: var(--notif-fg);
+    font-size: 10px; font-weight: 700; line-height: 1;
+    font-variant-numeric: tabular-nums; letter-spacing: .01em;
 }
-.notif-badge::before {
-    content: "\f0f3"; font-family: "Font Awesome 6 Free"; font-weight: 900;
-    font-size: 7.5px; line-height: 1; opacity: .9;
-}
+
 .notif-badge.rose { background: var(--notif-danger); color: var(--notif-danger-fg) !important; }
 .notif-badge.amber { background: var(--notif-warning); color: var(--notif-warning-fg) !important; }
 .notif-badge.indigo { background: var(--notif-info); color: var(--notif-info-fg) !important; }
@@ -839,9 +828,11 @@ html.dark .border-slate-200 { border-color: var(--border-primary, #2A3450); }
    Palet terang generik agar cocok dengan keempat tema.
    =================================================================== */
 html[data-sidebar-mode="light"] aside {
-    background: #F3F4F6 !important;
-    color: #1F2937 !important;
-    border-right-color: #D1D5DB !important;
+    --notif-neutral: #5D6A85 !important;
+    --notif-danger: #FBD5D5 !important;   --notif-danger-fg: #B4233C !important;
+    --notif-info: #DCE8FF !important;     --notif-info-fg: #1E3A8A !important;
+    --notif-warning: #FDF3C7 !important;  --notif-warning-fg: #8A5A07 !important;
+    --notif-fg: #0F1E3E !important;
 }
 html[data-sidebar-mode="light"] aside .sidebar-brand-title,
 html[data-sidebar-mode="light"] aside .sidebar-title,
@@ -1924,3 +1915,6 @@ html.dark .page-input-order .po-est #status_hitung { color: #FCD34D; }
     .page-input-order .pos-cart-panel button[onclick^="simpanTransaksi"] { transition: none; }
     .page-input-order .urgent-btn:active { transform: none; }
 }
+
+
+

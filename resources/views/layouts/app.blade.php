@@ -178,7 +178,8 @@
        di belakang menu diblur & diredupkan supaya mata fokus ke menu.
        Mobile memakai #sidebarOverlay di atas. */
     #menuBackdrop {
-        position: fixed; inset: 0; z-index: 36;
+        position: fixed; left: 0; right: 0; bottom: 0; z-index: 36;
+        top: calc(var(--bar1-h) + var(--bar2-h));
         background: rgba(13, 20, 38, .30);
         -webkit-backdrop-filter: blur(8px) saturate(.85);
         backdrop-filter: blur(8px) saturate(.85);
@@ -214,7 +215,7 @@
         #mainSidebar .menu-group-toggle > i.fa-chevron-down { display: none; }
         #mainSidebar .menu-group-toggle .notif-badge { margin-left: auto; }
         #mainSidebar .notif-grup, #mainSidebar .menu-panel-foot kbd { letter-spacing: 0; }
-        #mainSidebar .notif-grup { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 18px; padding: 0 6px; border-radius: 999px; background: var(--pro-accent); color: #fff; font-size: 9px; font-weight: 700; margin-left: auto; }
+        #mainSidebar .notif-grup { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 19px; padding: 0 7px; border-radius: 999px; background: var(--notif-info); color: var(--notif-info-fg); font-size: 10px; font-weight: 700; font-variant-numeric: tabular-nums; margin-left: auto; }
         #mainSidebar a {
             display: flex; align-items: center; gap: 11px; padding: 8px 10px; border-radius: 10px;
             font-size: 13px; font-weight: 400; color: var(--pro-ink-2); text-decoration: none;
@@ -236,15 +237,15 @@
     }
     @keyframes proPanelIn { from { opacity: 0; transform: translate(-50%, -12px) scale(.985); } to { opacity: 1; transform: translate(-50%, 0) scale(1); } }
 
-    /* Mobile & tablet: drawer kiri. Ikon 20px outline konsisten, font Inter
-       13.5px/500-600, tautan minimal 44px tinggi (target sentuh), grup buka-
-       tutup dengan animasi halus (max-height + opacity + rotasi chevron). */
+    /* Mobile & tablet: drawer kiri. Ikon 20px outline konsisten, teks Inter,
+       tanpa bold di mana pun - kesan lapang & elegan; target sentuh 44px;
+       grup buka-tutup beranimasi. */
     @media (max-width: 1023px) {
         #mainSidebar {
             position: fixed; z-index: 40; top: 0; left: 0; right: auto; bottom: 0;
             width: min(320px, 88vw); height: 100dvh; background: var(--pro-surface);
             border: 0; border-right: 1px solid var(--pro-border-2);
-            overflow-y: auto; display: none; padding: 12px 12px calc(18px + env(safe-area-inset-bottom));
+            overflow-y: auto; display: none; padding: 10px 12px calc(14px + env(safe-area-inset-bottom));
             animation: proDrawerIn .3s cubic-bezier(.22,1,.36,1);
             font-family: var(--brand-font-family, 'Inter'), sans-serif;
             font-feature-settings: "cv11", "ss01";
@@ -253,31 +254,35 @@
         #mainSidebar.terbuka { display: block; }
         @keyframes proDrawerIn { from { transform: translateX(-104%); opacity: .5; } to { transform: none; opacity: 1; } }
         #mainSidebar .lg\:hidden { display: flex; }
-        #mainSidebar nav { padding-bottom: 12px; }
+        /* Arsitektur polos di drawer: tanpa teks ornamen/label yang tidak
+           menambah informasi (brand teks, footer "ORION GRAFIKA ERP", dll). */
+        #mainSidebar .menu-panel-foot,
+        #mainSidebar .sidebar-brand-title,
+        #mainSidebar .sidebar-brand-subtitle { display: none !important; }
+        #mainSidebar nav { padding-bottom: 10px; }
         #mainSidebar a {
             display: flex; align-items: center; gap: 12px;
             min-height: 44px; padding: 10px 14px; border-radius: 12px;
-            font-size: 13.5px; font-weight: 500; color: var(--pro-ink-2);
-            text-decoration: none; border-left: 0; letter-spacing: 0; line-height: 1.3;
+            font-size: 13.5px; font-weight: 400; color: var(--pro-ink-2);
+            text-decoration: none; border-left: 0; letter-spacing: .01em; line-height: 1.35;
             transition: background .18s ease, color .18s ease, transform .18s ease;
         }
-        #mainSidebar a svg { width: 20px !important; height: 20px !important; opacity: .82; flex: 0 0 auto; transition: opacity .18s ease, color .18s ease; }
-        #mainSidebar a:hover { background: var(--pro-accent-soft); color: var(--pro-accent-hover); }
+        #mainSidebar a svg { width: 20px !important; height: 20px !important; opacity: .8; flex: 0 0 auto; transition: opacity .18s ease, color .18s ease; }
+        #mainSidebar a:hover { background: #F6FAFF; color: var(--pro-accent-hover); }
         #mainSidebar a:hover svg { opacity: 1; color: var(--pro-accent-hover); }
         #mainSidebar a:active { transform: scale(.985); }
-        #mainSidebar a.sb-active, #mainSidebar a.group.sb-active { background: var(--pro-accent-soft); color: var(--pro-accent-hover); font-weight: 600; box-shadow: inset 0 0 0 1px #C9D9FB; }
+        #mainSidebar a.sb-active, #mainSidebar a.group.sb-active { background: #EFF4FF; color: var(--pro-accent-hover); font-weight: 500; box-shadow: inset 0 0 0 1px #DCE8FF; }
         #mainSidebar a.sb-active svg { opacity: 1; color: var(--pro-accent-hover); }
         #mainSidebar .menu-group-toggle {
             display: flex; align-items: center; gap: 10px; width: 100%;
-            text-align: left; padding: 14px 12px 8px; border: 0; background: transparent;
-            font-size: 11px; letter-spacing: .04em; text-transform: none;
-            color: var(--pro-ink-3); font-weight: 700; cursor: pointer;
-            border-bottom: 1px solid #EDF2F9; margin-bottom: 2px;
+            text-align: left; padding: 15px 12px 9px; border: 0; background: transparent;
+            font-size: 11px; letter-spacing: .06em; text-transform: none;
+            color: var(--pro-ink-3); font-weight: 500; cursor: pointer;
+            border-bottom: 1px solid #EFF3FA; margin-bottom: 2px;
         }
-        #mainSidebar .menu-group-toggle > i.fa-chevron-down { margin-left: auto; font-size: 12px; opacity: .7; transition: transform .38s cubic-bezier(.32,1.25,.4,1), opacity .2s ease; }
-        #mainSidebar .menu-group-toggle[aria-expanded="true"] > i.fa-chevron-down { transform: rotate(180deg); opacity: 1; }
-        #mainSidebar .menu-group-toggle i.rotate-180 { transform: rotate(180deg); opacity: 1; }
-        /* Akordeon: animasi max-height + opacity, tanpa menggantikan .hidden */
+        #mainSidebar .menu-group-toggle > i.fa-chevron-down { margin-left: auto; font-size: 11px; opacity: .6; font-weight: 400; transition: transform .38s cubic-bezier(.32,1.25,.4,1), opacity .2s ease; }
+        #mainSidebar .menu-group-toggle[aria-expanded="true"] > i.fa-chevron-down { transform: rotate(180deg); opacity: .9; }
+        #mainSidebar .menu-group-toggle i.rotate-180 { transform: rotate(180deg); opacity: .9; }
         #mainSidebar .menu-group-items {
             max-height: 900px; opacity: 1; overflow: hidden;
             transition: max-height .38s cubic-bezier(.22,1,.36,1), opacity .3s ease;
@@ -290,10 +295,10 @@
             #mainSidebar .menu-group-items { transition: none; }
             #mainSidebar .menu-group-toggle > i.fa-chevron-down { transition: none; }
         }
-        #sidebarBrandHeader { display: flex; align-items: center; gap: 12px; padding: 4px 8px 12px; border-bottom: 1px solid var(--pro-border); margin-bottom: 10px; }
+        #sidebarBrandHeader { display: flex; align-items: center; gap: 12px; padding: 4px 8px 10px; border-bottom: 1px solid var(--pro-border); margin-bottom: 8px; }
         .sidebar-brandchip { display: flex; align-items: center; gap: 10px; text-decoration: none; min-width: 0; }
-        .brandchip-logo { display: block; height: 28px; width: auto; max-width: 170px; max-height: 28px; object-fit: contain; }
-        .sidebar-kas-status { display: flex; align-items: center; gap: 12px; border: 1px solid var(--pro-border); border-radius: var(--pro-radius-md); padding: 10px 12px; margin: 0 0 10px; background: var(--pro-bg); }
+        .brandchip-logo { display: block; height: 27px; width: auto; max-width: 165px; max-height: 27px; object-fit: contain; }
+        .sidebar-kas-status { display: flex; align-items: center; gap: 12px; border: 1px solid var(--pro-border); border-radius: var(--pro-radius-md); padding: 9px 12px; margin: 0 0 9px; background: var(--pro-bg); }
         .sidebar-kas-status * { color: var(--pro-ink-2) !important; }
     }
 
@@ -328,9 +333,10 @@
         .promega-card {
             position: relative; display: flex; align-items: center; gap: 13px;
             padding: 14px; border-radius: 14px; text-decoration: none; color: #fff;
-            transition: transform .2s cubic-bezier(.3,1.2,.4,1), box-shadow .2s ease; overflow: hidden;
+            transition: transform .22s cubic-bezier(.3,1.3,.4,1), box-shadow .25s ease; overflow: hidden;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 4px 14px rgba(15,30,62,.18);
         }
-        .promega-card:hover { transform: translateY(-2px); box-shadow: var(--pro-shadow-md); }
+        .promega-card:hover { transform: translateY(-3px) scale(1.01); box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 18px 40px rgba(15,30,62,.35); }
         .promega-card:hover .promega-card-arrow { transform: translateX(4px); opacity: 1; }
         .promega-card:active { transform: none; }
         .promega-card.tone-blue { background: #2563EB; }
@@ -349,6 +355,28 @@
 
         /* Kolom tautan kanan (gaya Canva: grid rata, teks polos) */
         .promega-content { overflow-y: auto; padding: 16px 22px 14px; }
+        /* Strip "Terakhir dikunjungi" — jalan pintas ke 5 halaman terakhir Anda */
+        .terakhir-strip { display: flex; align-items: center; gap: 12px; padding: 0 2px 12px; margin-bottom: 12px; border-bottom: 1px solid var(--pro-border); }
+        .terakhir-label { flex: 0 0 auto; font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--pro-ink-3); }
+        .terakhir-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px; }
+        .terakhir-chips::-webkit-scrollbar { display: none; }
+        .terakhir-chip { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--pro-border-2); background: var(--pro-bg); color: var(--pro-ink-2); font-size: 11px; font-weight: 500; text-decoration: none; white-space: nowrap; transition: border-color .15s ease, color .15s ease, background .15s ease, transform .18s ease; }
+        .terakhir-chip:hover { border-color: var(--pro-accent); color: var(--pro-accent-hover); background: #F4F8FF; transform: translateY(-1px); }
+        /* Staggered entrance: kolom grup muncul berurutan saat panel dibuka */
+        @keyframes proGroupIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+        #proMega.terbuka .promega-grid > * { animation: proGroupIn .34s cubic-bezier(.22,1,.36,1) both; }
+        #proMega.terbuka .promega-grid > *:nth-child(1) { animation-delay: .03s; }
+        #proMega.terbuka .promega-grid > *:nth-child(2) { animation-delay: .06s; }
+        #proMega.terbuka .promega-grid > *:nth-child(3) { animation-delay: .09s; }
+        #proMega.terbuka .promega-grid > *:nth-child(4) { animation-delay: .12s; }
+        #proMega.terbuka .promega-grid > *:nth-child(5) { animation-delay: .15s; }
+        #proMega.terbuka .promega-grid > *:nth-child(6) { animation-delay: .18s; }
+        #proMega.terbuka .promega-grid > *:nth-child(7) { animation-delay: .21s; }
+        #proMega.terbuka .promega-grid > *:nth-child(8) { animation-delay: .24s; }
+        #proMega.terbuka .promega-grid > *:nth-child(9) { animation-delay: .27s; }
+        #proMega.terbuka .promega-grid > *:nth-child(10) { animation-delay: .30s; }
+        #proMega.terbuka .promega-grid > *:nth-child(n+11) { animation-delay: .33s; }
+        @media (prefers-reduced-motion: reduce) { #proMega.terbuka .promega-grid > * { animation: none; } .terakhir-chip { transition: none; } }
         .promega-grid { columns: 175px; column-gap: 24px; }
         .promega-group { break-inside: avoid; margin-bottom: 18px; min-width: 0; }
         .promega-group-title {
@@ -472,8 +500,11 @@
     html.dark .tabdrop-link:hover { background: #1c2440; }
     @media (prefers-reduced-motion: reduce) { .tabdrop-panel { animation: none; } }
 
-    .pro-menu-btn { display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--pro-border-2); background: var(--pro-surface); color: var(--pro-ink-2); font-size: 12px; font-weight: 600; margin-left: auto; white-space: nowrap; transition: all .15s; }
-    .pro-menu-btn:hover { border-color: var(--pro-accent); color: var(--pro-accent-hover); background: #F7FAFF; }
+    .pro-menu-btn { display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 15px; border-radius: 9px; border: 1px solid #1D4ED8; background: var(--pro-accent); color: #fff; font-size: 12px; font-weight: 600; white-space: nowrap; transition: background .15s, border-color .15s, transform .15s; box-shadow: 0 2px 8px rgba(37, 99, 235, .35); }
+    .pro-menu-btn:hover { background: #1D4ED8; border-color: #1E40AF; }
+    .pro-menu-btn:active { transform: scale(.98); }
+    .pro-menu-btn:focus-visible { outline: 2px solid #93C5FD; outline-offset: 2px; }
+    .pro-bar2-sep { width: 1px; height: 22px; background: var(--pro-border-2); flex: 0 0 auto; }
     .pro-premium { display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 14px; border-radius: 10px; border: 1px solid #E5B85B; background: linear-gradient(150deg, #F7CD6B 0%, #E3A83B 55%, #C98A1B 100%); color: #422A05; font-size: 12px; font-weight: 700; letter-spacing: .02em; text-decoration: none; box-shadow: 0 4px 12px rgba(201, 138, 27, .35), inset 0 1px 0 rgba(255,255,255,.55); transition: transform .15s, box-shadow .15s, filter .15s; white-space: nowrap; }
     .pro-premium:hover { transform: translateY(-1px); filter: brightness(1.03); box-shadow: 0 8px 20px rgba(201, 138, 27, .4), inset 0 1px 0 rgba(255,255,255,.55); }
     .pro-premium:active { transform: none; }
@@ -1550,6 +1581,10 @@
                     @endif
                 </div>
                 <div class="promega-content">
+                    <div class="terakhir-strip" id="proMegaTerakhir" hidden>
+                        <span class="terakhir-label">Terakhir dikunjungi</span>
+                        <div class="terakhir-chips" id="proMegaTerakhirChips"></div>
+                    </div>
                     <div class="promega-grid" id="proMegaGrid"></div>
                 </div>
             </div>
@@ -1701,6 +1736,11 @@
         </div>
 
         <div class="pro-bar2" role="tablist" aria-label="Modul">
+            <button type="button" class="pro-menu-btn" id="menuPanelBtn" onclick="toggleMenuPanel()" aria-expanded="false" aria-controls="proMega mainSidebar">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                Semua Menu
+            </button>
+            <span class="pro-bar2-sep" aria-hidden="true"></span>
             @php
                 // Tab modul kini bisa diatur dari Pengaturan → Topbar (label, urutan,
                 // url, ikon, tampil/sembunyi). Kalau tabel topbar_tabs kosong,
@@ -1752,10 +1792,6 @@
                 @endif
             @endforeach
             <button type="button" class="pro-live" id="pro-live" title="Koneksi & data selalu segar - disinkronkan dari server tiap 30 detik. Klik untuk muat ulang."><i class="pro-live-dot" aria-hidden="true"></i><span class="pro-live-text">Data langsung</span></button>
-            <button type="button" class="pro-menu-btn" id="menuPanelBtn" onclick="toggleMenuPanel()" aria-expanded="false" aria-controls="proMega mainSidebar">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-                Semua Menu
-            </button>
         </div>
     </header>
     @include('partials.command-palette')
@@ -2598,6 +2634,7 @@
             if (buka) {
                 panel.classList.add('terbuka');
                 panel.setAttribute('aria-hidden', 'false');
+                if (window.renderTerakhir) window.renderTerakhir();
                 overlay.classList.add('terbuka');
                 overlay.setAttribute('aria-hidden', 'false');
                 if (backdrop) {
@@ -2788,6 +2825,62 @@
             window.addEventListener('resize', tutup);
             window.addEventListener('scroll', tutup, true);
             document.getElementById('menuPanelBtn') && document.getElementById('menuPanelBtn').addEventListener('mouseenter', tutup);
+        })();
+
+        // Terakhir dikunjungi (maks 5 menu, localStorage) — jalan pintas di
+        // mega menu. Hanya halaman yang memang dibuka/diklik di dalam
+        // sidebar / mega menu / dropdown tab yang dicatat.
+        (function () {
+            var KEY = 'orion-terakhir';
+            function pathOf(u) { try { return new URL(u, location.origin).pathname; } catch (e) { return String(u || ''); } }
+            function catat(href) {
+                var p = pathOf(href);
+                try {
+                    var list = JSON.parse(localStorage.getItem(KEY) || '[]').filter(function (x) { return x !== p; });
+                    list.unshift(p);
+                    localStorage.setItem(KEY, JSON.stringify(list.slice(0, 5)));
+                } catch (e) { /* storage penuh/mode privat: diam */ }
+            }
+            document.addEventListener('click', function (e) {
+                var a = e.target.closest && e.target.closest('a[href]');
+                if (!a) return;
+                if (!a.closest('#mainSidebar, #proMega, .tabdrop-panel')) return;
+                var href = a.getAttribute('href') || '';
+                if (href.charAt(0) === '#' || href.indexOf('javascript:') === 0) return;
+                catat(href);
+            }, true);
+            window.renderTerakhir = function () {
+                var strip = document.getElementById('proMegaTerakhir');
+                var chips = document.getElementById('proMegaTerakhirChips');
+                if (!strip || !chips) return;
+                var list = [];
+                try { list = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) {}
+                chips.innerHTML = '';
+                var ada = 0;
+                var links = Array.prototype.slice.call(document.querySelectorAll('#mainSidebar nav a[href]'));
+                list.forEach(function (p) {
+                    if (ada >= 5) return;
+                    var sumber = null;
+                    for (var i = 0; i < links.length; i++) {
+                        if (pathOf(links[i].getAttribute('href')) === p) { sumber = links[i]; break; }
+                    }
+                    if (!sumber) return;
+                    // Hanya link yang boleh dibuka role ini (ter-render di sidebar).
+                    var c = document.createElement('a');
+                    c.className = 'terakhir-chip';
+                    c.href = sumber.getAttribute('href');
+                    var svg = sumber.querySelector('svg');
+                    if (svg) c.appendChild(svg.cloneNode(true));
+                    var span = sumber.querySelector('span');
+                    var t = document.createElement('span');
+                    t.textContent = (span ? span.textContent : sumber.textContent).trim();
+                    if (t.textContent.length > 26) t.textContent = t.textContent.slice(0, 25) + '…';
+                    c.appendChild(t);
+                    chips.appendChild(c);
+                    ada++;
+                });
+                strip.hidden = ada === 0;
+            };
         })();
 
         // Hover-to-open (desktop pointer halus saja): mengarahkan kursor ke
