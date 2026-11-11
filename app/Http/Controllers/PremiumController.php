@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\URL;
  * layanan luar:
  *  - WhatsApp: tautan wa.me (klik -> aplikasi WA terbuka dengan pesan terisi).
  *  - Portal pelanggan: signed URL (HMAC APP_KEY) berumur 30 hari, tanpa data baru.
- *  - Asisten order: parsing teks sepenuhnya di browser.
+ *  - Asisten order: tanya-jawab lokal dari data ERP sendiri (tanpa API; AI lokal opsional via Ollama).
  * Semua query READ-ONLY terhadap tabel yang sudah ada. Zero schema change.
  *
  * Template pesan WA (nota & piutang) bisa diubah operator sendiri dari
@@ -31,7 +31,7 @@ class PremiumController extends Controller
             ['nama' => 'Portal Lacak Pelanggan', 'status' => 'Berjalan', 'route' => route('premium.portal'), 'tier' => 'Operator', 'ikon' => 'fa-link fas', 'desc' => 'Tautan unik berumur 30 hari per nota. Pelanggan melihat progres produksi tanpa login dan tanpa menelepon kasir.'],
             ['nama' => 'Analisis 30 Hari + Margin', 'status' => 'Berjalan', 'route' => route('premium.analisis'), 'tier' => 'Insight', 'ikon' => 'fa-chart-simple fas', 'desc' => 'Omzet harian, jam sibuk, rata-rata nota, produk terlaris, dan margin realisasi dari HPP snapshot.'],
             ['nama' => 'Prediksi Restock Cerdas', 'status' => 'Berjalan', 'route' => route('premium.prediksi-stok'), 'tier' => 'Insight', 'ikon' => 'fa-boxes-stacked fas', 'desc' => 'Bahan baku diurutkan dari sisa hari pakai tersedikit (pemakaian 60 hari). Bahan kritis tampil paling atas.'],
-            ['nama' => 'Asisten Order Lokal', 'status' => 'Berjalan', 'route' => route('premium.asisten'), 'tier' => 'Insight', 'ikon' => 'fa-wand-magic-sparkles fas', 'desc' => 'Tempel chat pelanggan, dapatkan ringkasan terstruktur (item, jumlah, ukuran, tenggat) tanpa API.'],
+            ['nama' => 'Asisten Order Lokal', 'status' => 'Berjalan', 'route' => route('premium.asisten'), 'tier' => 'Insight', 'ikon' => 'fa-wand-magic-sparkles fas', 'desc' => 'Tanya jawab order, stok, kas & rekap laporan (omzet, HPP, laba, piutang) langsung dari data ERP di server Anda — tanpa internet; AI lokal (Ollama) opsional.'],
             ['nama' => 'Tema Premium (Obsidian Gold & Porcelain Bronze)', 'status' => 'Berjalan', 'route' => route('pengaturan-aplikasi.edit'), 'tier' => 'Enterprise', 'ikon' => 'fa-gem fas', 'desc' => 'Dua tema eksklusif: obsidian gelap aksen emas dan porcelain hangat aksen perunggu.'],
             ['nama' => 'Approval Berjenjang', 'status' => 'Sudah tersedia', 'route' => url('/approval'), 'tier' => 'Enterprise', 'ikon' => 'fa-stamp fas', 'desc' => 'Pembatalan nota, edit nota dan permintaan pembelian lewat antrean persetujuan berjenjang (sudah aktif).'],
             ['nama' => 'Ringkasan Cadangan', 'status' => 'Berjalan', 'route' => route('premium.cadangan'), 'tier' => 'Enterprise', 'ikon' => 'fa-database fas', 'desc' => 'Kesehatan backup harian/mingguan/bulanan: terakhir berjalan, ukuran, kegagalan, dan offsite.'],

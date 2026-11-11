@@ -684,6 +684,7 @@ Route::match(['post', 'patch'], '/pembelian-bahan/pelunasan/{id}', [PembelianBah
         Route::get('/prediksi-stok', [\App\Http\Controllers\PremiumController::class, 'prediksiStok'])->name('prediksi-stok');
         Route::get('/portal', [\App\Http\Controllers\PremiumController::class, 'portal'])->name('portal');
         Route::get('/asisten', [\App\Http\Controllers\PremiumController::class, 'asisten'])->name('asisten');
+        Route::post('/asisten/tanya', [\App\Http\Controllers\AsistenController::class, 'tanya'])->name('asisten.tanya');
         Route::get('/cadangan', [\App\Http\Controllers\PremiumController::class, 'cadangan'])->name('cadangan');
     });
 
