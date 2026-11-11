@@ -886,6 +886,12 @@ Route::match(['post', 'patch'], '/pembelian-bahan/pelunasan/{id}', [PembelianBah
         Route::post('/', [BrandThemeController::class, 'update'])->name('update');
     });
 
+    Route::middleware('hanya.admin')->prefix('pengaturan-aplikasi/topbar')->name('pengaturan-aplikasi.topbar.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\PengaturanTopbarController::class, 'index'])->name('index');
+        Route::post('/', [\App\Http\Controllers\PengaturanTopbarController::class, 'update'])->name('update');
+        Route::post('/reset', [\App\Http\Controllers\PengaturanTopbarController::class, 'reset'])->name('reset');
+    });
+
     /*
     |--------------------------------------------------------------------------
     | MODUL ORDER JERSEY (terpisah dari transaksi/kasir/BOM percetakan -
