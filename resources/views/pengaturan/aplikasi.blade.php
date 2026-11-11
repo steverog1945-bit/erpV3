@@ -30,6 +30,9 @@
             <a href="{{ route('pengaturan-aplikasi.tema.index') }}" class="px-5 py-3 text-xs font-medium uppercase tracking-widest text-slate-500 hover:text-indigo-600 whitespace-nowrap">
                 <i class="fas fa-palette mr-1.5"></i> Tema &amp; Tampilan
             </a>
+            <a href="{{ route('pengaturan-aplikasi.topbar.index') }}" class="px-5 py-3 text-xs font-medium uppercase tracking-widest text-slate-500 hover:text-indigo-600 whitespace-nowrap">
+                <i class="fas fa-table-columns mr-1.5"></i> Topbar
+            </a>
         @endif
     </div>
 

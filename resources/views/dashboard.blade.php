@@ -1,7 +1,24 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="dashboard-root w-full px-3 sm:px-6 lg:px-8 py-6 max-w-[1600px] mx-auto">
+<style>
+/* Scoped ke halaman Dasbor — tidak bocor ke halaman lain. */
+.gauge-track { stroke: #EAEFF8; fill: none; }
+.gauge-arc { fill: none; transition: stroke-dashoffset 1.05s cubic-bezier(.22, 1, .36, 1); }
+.gauge-arc--ok { stroke: #10B981; }
+.gauge-arc--indigo { stroke: #2563EB; }
+.gauge-arc--amber { stroke: #D97706; }
+.gauge-arc--rose { stroke: #E11D48; }
+.gauge-text { font-size: 11px; font-weight: 700; fill: #0F1E3E; font-variant-numeric: tabular-nums; }
+.gauge-caption { font-size: 8px; font-weight: 600; letter-spacing: .08em; fill: #5D6A85; }
+@media (prefers-reduced-motion: reduce) {
+    .gauge-arc { transition: none; }
+}
+.alur-stage { transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s ease, border-color .25s ease; }
+.alur-stage:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(15,30,62,.10); border-color: #CBD6EE; }
+.beban-bar { transition: width 1.1s cubic-bezier(.22,1,.36,1); }
+</style>
+<div class="dashboard-root w-full px-4 sm:px-6 lg:px-8 py-6">
     @php $tabInfo = request('tab') === 'info' && \App\Support\Izin::boleh(auth()->user(), [67], 'view'); @endphp
     @include('partials.dashboard-tab', ['tabInfo' => $tabInfo])
     @if($tabInfo)
@@ -31,119 +48,154 @@
         [$dOrderTeks, $dOrderKls] = $delta((float) $orderHariIni, (float) $orderKemarin);
 
         $totalSpk = max(1, $spkAntre + $spkDesain + $spkCetak + $spkSelesai);
+        $spkDonePct = $spkSelesai / $totalSpk * 100;
+        $spkProsesPct = $spkProses / $totalSpk * 100;
+        $collectingPct = ($notaLengkap + $notaBelumLengkap) > 0 ? $notaLengkap / ($notaLengkap + $notaBelumLengkap) * 100 : 0;
+        $lunasPct = $totalNotaAll > 0 ? max(0, min(100, (1 - $piutangCount / $totalNotaAll) * 100)) : 0;
+        $C = 2 * pi() * 34; // kalibrasi keliling lingkaran gauge (r=34)
         $nadaTone = ['rose' => 'bg-rose-500', 'amber' => 'bg-amber-500', 'indigo' => 'bg-indigo-500'];
     @endphp
 
-    {{-- ============ HEADER: eyebrow + judul + aksi bawah ============ --}}
-    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-6">
+    {{-- ============ HEADER ============ --}}
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-5">
         <div>
-            <p class="text-[10px] font-bold text-indigo-600 uppercase tracking-[0.22em] flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-indigo-500 inline-block"></span>Operasional</p>
-            <h1 class="text-[27px] md:text-[32px] font-semibold text-slate-900 tracking-tight mt-2">Ringkasan operasional</h1>
-            <p class="text-[13px] text-slate-400 mt-1">{{ $salam }}, {{ $nama }} &middot; Pantau pekerjaan dan transaksi Orion Grafika.</p>
+            <p class="text-[10px] font-semibold text-indigo-600 uppercase tracking-[0.16em] flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-indigo-500 inline-block"></span>Operasional
+                <span class="text-slate-400 normal-case tracking-normal font-normal">· {{ now()->translatedFormat('d F Y') }}</span>
+            </p>
+            <h1 class="text-[26px] sm:text-[30px] leading-tight font-semibold text-slate-900 tracking-tight mt-2">Ringkasan Operasi &amp; Pesanan</h1>
+            <p class="text-[13px] text-slate-500 mt-1.5 max-w-2xl">{{ $salam }}, {{ $nama }} &middot; Pantau pesanan masuk, produksi berjalan, koleksi pesanan, dan piutang tertunggak.</p>
         </div>
         <div class="flex flex-wrap items-center gap-2">
-            <span class="inline-flex items-center gap-2 h-9 pl-3 pr-3.5 rounded-lg border border-slate-200 bg-white text-[12px] font-medium text-slate-600 shadow-[0_1px_2px_rgba(15,30,62,.04)]">
+            <span class="inline-flex items-center gap-2 h-9 px-3 rounded-lg border border-slate-200 bg-white text-[12px] font-medium text-slate-600 shadow-sm">
                 <i class="far fa-calendar-days text-slate-400 text-[11px]"></i>{{ now()->translatedFormat('d F Y') }}
             </span>
-            <a href="{{ route('laporan.order') }}" class="inline-flex items-center gap-2 h-9 px-4 rounded-lg border border-slate-200 bg-white text-[12px] font-semibold text-slate-600 shadow-[0_1px_2px_rgba(15,30,62,.04)] hover:border-slate-300 hover:text-slate-800 transition-colors">
-                <i class="fas fa-download text-[11px]"></i>Ekspor
+            <a href="{{ $u('laporan.order') }}" class="inline-flex items-center gap-2 h-9 px-4 rounded-lg border border-slate-200 bg-white text-[12px] font-semibold text-slate-600 shadow-sm hover:border-slate-300 hover:text-slate-800 transition-colors">
+                <i class="fas fa-download text-[11px]"></i>Ekspor Laporan
             </a>
         </div>
     </div>
 
-    {{-- ============ KPI CARDS (4 kartu, divider rambut + catatan kiri/kanan) ============ --}}
+    {{-- ============ KPI CARDS (4 kartu, gauge lingkaran beranimasi saat reload) ============ --}}
+    @php
+        $kpi = [
+            ['label' => 'Pesanan Hari Ini', 'value' => (string) $orderHariIni, 'unit' => 'nota', 'sub' => 'Rp ' . number_format($nilaiOrderHariIni, 0, ',', '.'), 'pct' => $spkDonePct, 'arc' => 'gauge-arc--ok', 'footL' => 'SPK selesai', 'footR' => $dOrderTeks, 'footKls' => $dOrderKls, 'url' => $u('penjualan.riwayat'), 'warna' => 'emerald'],
+            ['label' => 'Dalam Produksi', 'value' => (string) $spkProses, 'unit' => 'item', 'sub' => 'desain ' . $spkDesain . ' · cetak ' . $spkCetak, 'pct' => $spkProsesPct, 'arc' => 'gauge-arc--indigo', 'footL' => 'Sedang dikerjakan', 'footR' => 'antre ' . $spkAntre, 'footKls' => 'text-slate-500', 'url' => $u('spk.index'), 'warna' => 'indigo'],
+            ['label' => 'Siap Diambil', 'value' => (string) $notaLengkap, 'unit' => 'nota', 'sub' => $notaBelumLengkap . ' nota menunggu pelengkap', 'pct' => $collectingPct, 'arc' => 'gauge-arc--amber', 'footL' => 'Menunggu finalisasi', 'footR' => $notaBelumLengkap . ' belum lengkap', 'footKls' => 'text-slate-500', 'url' => $u('collecting.index', ['status_pengerjaan' => 'lengkap']), 'warna' => 'amber'],
+            ['label' => 'Piutang Belum Lunas', 'value' => 'Rp ' . number_format($piutang, 0, ',', '.'), 'unit' => '', 'sub' => $piutangCount . ' nota belum lunas', 'pct' => $lunasPct, 'arc' => 'gauge-arc--rose', 'footL' => 'Nota lunas keseluruhan', 'footR' => $piutangCount . ' dari ' . $totalNotaAll, 'footKls' => 'text-slate-500', 'url' => $u('laporan.piutang'), 'warna' => 'rose'],
+        ];
+    @endphp
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
-        <a href="{{ $u('penjualan.riwayat') }}" class="group rounded-2xl border border-slate-200/70 bg-white px-5 py-4 shadow-[0_1px_3px_rgba(15,30,62,.05)] hover:shadow-[0_8px_20px_rgba(15,30,62,.07)] hover:border-slate-300/70 transition-all duration-200">
-            <p class="text-[9.5px] font-bold text-slate-400 uppercase tracking-[0.14em]">Pesanan Hari Ini</p>
-            <p class="text-[30px] leading-none font-semibold text-slate-900 mt-2 tracking-tight tabular-nums">{{ $orderHariIni }}</p>
-            <p class="text-[11px] font-medium text-slate-500 mt-1.5">Rp {{ number_format($nilaiOrderHariIni, 0, ',', '.') }}</p>
-            <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-                <span class="text-[10px] text-slate-400">Total dalam proses cetak</span>
-                <span class="text-[10px] font-semibold whitespace-nowrap {{ $dOrderKls }}">{{ $dOrderTeks }}</span>
-            </div>
-        </a>
-
-        <a href="{{ $u('spk.index') }}" class="group rounded-2xl border border-slate-200/70 bg-white px-5 py-4 shadow-[0_1px_3px_rgba(15,30,62,.05)] hover:shadow-[0_8px_20px_rgba(15,30,62,.07)] hover:border-slate-300/70 transition-all duration-200">
-            <p class="text-[9.5px] font-bold text-slate-400 uppercase tracking-[0.14em]">Dalam Produksi</p>
-            <p class="text-[30px] leading-none font-semibold text-slate-900 mt-2 tracking-tight tabular-nums">{{ $spkProses }}</p>
-            <p class="text-[11px] font-medium text-slate-500 mt-1.5">Sedang dikerjakan di produksi</p>
-            <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-                <span class="text-[10px] text-slate-400">Detail per divisi</span>
-                <span class="text-[10px] font-semibold text-slate-500">{{ $spkDesain }} desain &middot; {{ $spkCetak }} cetak</span>
-            </div>
-        </a>
-
-        <a href="{{ $u('collecting.index', ['status_pengerjaan' => 'lengkap']) }}" class="group rounded-2xl border border-slate-200/70 bg-white px-5 py-4 shadow-[0_1px_3px_rgba(15,30,62,.05)] hover:shadow-[0_8px_20px_rgba(15,30,62,.07)] hover:border-slate-300/70 transition-all duration-200">
-            <p class="text-[9.5px] font-bold text-slate-400 uppercase tracking-[0.14em]">Siap Diambil</p>
-            <p class="text-[30px] leading-none font-semibold text-slate-900 mt-2 tracking-tight tabular-nums">{{ $notaLengkap }}</p>
-            <p class="text-[11px] font-medium text-slate-500 mt-1.5">Pesanan selesai dicetak</p>
-            <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-                <span class="text-[10px] text-slate-400">Menunggu finalisasi</span>
-                <span class="text-[10px] font-semibold text-slate-500">{{ $notaBelumLengkap }} nota belum lengkap</span>
-            </div>
-        </a>
-
-        <a href="{{ $u('laporan.piutang') }}" class="group rounded-2xl border border-slate-200/70 bg-white px-5 py-4 shadow-[0_1px_3px_rgba(15,30,62,.05)] hover:shadow-[0_8px_20px_rgba(15,30,62,.07)] hover:border-slate-300/70 transition-all duration-200">
-            <p class="text-[9.5px] font-bold text-slate-400 uppercase tracking-[0.14em]">Belum Dibayar</p>
-            <p class="text-[21px] sm:text-[24px] lg:text-[26px] leading-none font-semibold text-slate-900 mt-2 tracking-tight tabular-nums">Rp {{ number_format($piutang, 0, ',', '.') }}</p>
-            <p class="text-[11px] font-medium text-slate-500 mt-1.5">Total tagihan belum lunas</p>
-            <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-                <span class="text-[10px] text-slate-400">Belum lunas</span>
-                <span class="text-[10px] font-semibold text-slate-500">{{ $piutangCount }} nota</span>
-            </div>
-        </a>
+        @foreach ($kpi as $k)
+            <a href="{{ $k['url'] }}" class="group rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5 shadow-[0_1px_3px_rgba(15,30,62,.06)] hover:shadow-[0_10px_24px_rgba(15,30,62,.08)] hover:border-slate-300/70 transition-all duration-200">
+                <p class="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-400">{{ $k['label'] }}</p>
+                <div class="mt-2 flex items-center justify-between gap-2">
+                    <div class="min-w-0">
+                        <p class="text-[22px] sm:text-[26px] leading-none font-semibold text-slate-900 tracking-tight tabular-nums truncate">{{ $k['value'] }}<span class="text-[11px] font-medium text-slate-400 ml-1">{{ $k['unit'] }}</span></p>
+                        <p class="text-[11px] text-slate-500 mt-1.5 truncate">{{ $k['sub'] }}</p>
+                    </div>
+                    <svg class="shrink-0" width="62" height="62" viewBox="0 0 80 80" role="img" aria-label="{{ round($k['pct']) }} persen">
+                        <circle class="gauge-track" cx="40" cy="40" r="34" stroke-width="8" />
+                        <circle class="gauge-arc {{ $k['arc'] }}" cx="40" cy="40" r="34" stroke-width="8" stroke-linecap="round"
+                                stroke-dasharray="{{ $C }}" stroke-dashoffset="{{ $C }}" data-offset="{{ $C * (1 - min(100, max(0, $k['pct'])) / 100) }}" transform="rotate(-90 40 40)" />
+                        <text class="gauge-text" x="40" y="39" text-anchor="middle">{{ round($k['pct']) }}<tspan font-size="7">%</tspan></text>
+                        <text class="gauge-caption" x="40" y="51" text-anchor="middle">{{ strtoupper($k['warna'] === 'rose' ? 'lunas' : 'bar') }}</text>
+                    </svg>
+                </div>
+                <div class="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between gap-2 text-[10px]">
+                    <span class="text-slate-400 truncate">{{ $k['footL'] }}</span>
+                    <span class="font-semibold whitespace-nowrap {{ $k['footKls'] }}">{{ $k['footR'] }}</span>
+                </div>
+            </a>
+        @endforeach
     </div>
 
-    <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-5 mb-6">
-        {{-- ============ ALUR PEKERJAAN (5 tahap) ============ --}}
-        <div class="xl:col-span-2 rounded-2xl border border-slate-200/70 bg-white shadow-[0_1px_4px_rgba(15,30,62,.05)] overflow-hidden">
+    {{-- ============ SIKLUS ALUR PRODUKSI (5 tahap) ============ --}}
+    <div class="rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_4px_rgba(15,30,62,.05)] overflow-hidden mb-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 sm:px-6 py-4">
+            <div class="flex items-baseline gap-3">
+                <h2 class="text-[13.5px] font-semibold text-slate-800">Siklus Alur Produksi</h2>
+                <span class="text-[10.5px] text-slate-400 hidden sm:inline">Lima tahap pesanan, dari antre sampai selesai</span>
+            </div>
+            <a href="{{ $u('spk.index') }}" class="text-[11px] font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">Antrean SPK &rarr;</a>
+        </div>
+        <div class="px-4 sm:px-6 py-5">
+            @php
+                $tahap = [
+                    ['n' => '01', 'label' => 'Antre', 'count' => $spkAntre, 'dot' => 'bg-amber-500', 'desc' => 'Pesanan baru masuk', 'url' => $u('spk.index', ['status_spk' => 'Antre'])],
+                    ['n' => '02', 'label' => 'Desain', 'count' => $spkDesain, 'dot' => 'bg-sky-500', 'desc' => 'Sedang didesain / revisi', 'url' => $u('spk.index', ['status_spk' => 'Desain'])],
+                    ['n' => '03', 'label' => 'Cetak', 'count' => $spkCetak, 'dot' => 'bg-indigo-500', 'desc' => 'Sedang dicetak / dikerjakan', 'url' => $u('produksi.index')],
+                    ['n' => '04', 'label' => 'Collecting', 'count' => $notaLengkap, 'dot' => 'bg-orange-500', 'desc' => 'Lengkap, menunggu diambil', 'url' => $u('collecting.index', ['status_pengerjaan' => 'lengkap'])],
+                    ['n' => '05', 'label' => 'Selesai', 'count' => $spkSelesai, 'dot' => 'bg-emerald-500', 'desc' => 'Sudah diserahkan', 'url' => $u('produksi.index', ['status_produksi' => 'selesai'])],
+                ];
+            @endphp
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 sm:gap-3">
+                @foreach ($tahap as $t)
+                    <a href="{{ $t['url'] }}" title="{{ $t['desc'] }}" class="alur-stage rounded-xl border border-slate-100 bg-slate-50/60 hover:bg-white px-3 sm:px-4 py-3 sm:py-4 flex flex-col focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">
+                        <span class="flex items-center justify-between gap-2">
+                            <span class="text-[8.5px] font-semibold tracking-[0.14em] text-slate-400">TAHAP {{ $t['n'] }}</span>
+                            <span class="w-2 h-2 rounded-full {{ $t['dot'] }}"></span>
+                        </span>
+                        <p class="text-[12px] font-semibold text-slate-500 mt-2.5">{{ $t['label'] }}</p>
+                        <p class="text-[26px] sm:text-[30px] leading-none font-semibold text-slate-900 tabular-nums tracking-tight mt-1">{{ $t['count'] }}</p>
+                        <p class="text-[9.5px] text-slate-400 mt-1.5 leading-snug hidden sm:block">{{ $t['desc'] }}</p>
+                    </a>
+                @endforeach
+            </div>
+            <div class="mt-4 sm:mt-5">
+                <div class="flex h-2 rounded-full overflow-hidden bg-slate-100" title="Proporsi item SPK: antre / desain / cetak / selesai">
+                    <div class="bg-amber-400" style="width: {{ max(2, round($spkAntre / $totalSpk * 100)) }}%"></div>
+                    <div class="bg-sky-400" style="width: {{ max(2, round($spkDesain / $totalSpk * 100)) }}%"></div>
+                    <div class="bg-indigo-500" style="width: {{ max(2, round($spkCetak / $totalSpk * 100)) }}%"></div>
+                    <div class="bg-emerald-500" style="width: {{ max(2, round($spkSelesai / $totalSpk * 100)) }}%"></div>
+                </div>
+                <p class="text-[10.5px] text-slate-400 mt-2">{{ $spkSelesai }} dari {{ $totalSpk }} item SPK sudah selesai diproduksi.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 xl:grid-cols-5 gap-4 sm:gap-5 mb-6">
+        {{-- ============ BEBAN PRODUKSI PER MESIN (data SPK aktif nyata) ============ --}}
+        <div class="xl:col-span-2 rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_4px_rgba(15,30,62,.05)] overflow-hidden">
             <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 sm:px-6 py-4">
                 <div class="flex items-baseline gap-3">
-                    <h2 class="text-[13.5px] font-semibold text-slate-800">Alur pekerjaan</h2>
-                    <span class="text-[10.5px] text-slate-400 hidden sm:inline">Ringkasan proses pesanan hari ini</span>
+                    <h2 class="text-[13.5px] font-semibold text-slate-800">Beban Produksi per Mesin</h2>
+                    <span class="text-[10.5px] text-slate-400 hidden md:inline">SPK aktif saja</span>
                 </div>
-                <a href="{{ $u('spk.index') }}" class="text-[10.5px] font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">Antrean SPK &rarr;</a>
+                <a href="{{ $u('produksi.index') }}" class="text-[11px] font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">Ke Produksi &rarr;</a>
             </div>
-            <div class="px-5 sm:px-6 pt-6 pb-5">
-                <div class="grid grid-cols-2 sm:grid-cols-5 gap-y-6 gap-x-4">
-                    @php
-                        $tahap = [
-                            ['label' => 'SPK Baru', 'n' => $spkAntre, 'warna' => 'bg-amber-500', 'desc' => 'Pesanan baru diterima', 'url' => $u('spk.index', ['status_spk' => 'Antre'])],
-                            ['label' => 'Desain', 'n' => $spkDesain, 'warna' => 'bg-sky-500', 'desc' => 'Dalam proses desain & revisi', 'url' => $u('spk.index', ['status_spk' => 'Desain'])],
-                            ['label' => 'Produksi', 'n' => $spkCetak, 'warna' => 'bg-indigo-500', 'desc' => 'Sedang dicetak / dikerjakan', 'url' => $u('produksi.index')],
-                            ['label' => 'Collecting', 'n' => $notaLengkap, 'warna' => 'bg-orange-500', 'desc' => 'Menunggu finalisasi & packing', 'url' => $u('collecting.index', ['status_pengerjaan' => 'lengkap'])],
-                            ['label' => 'Selesai', 'n' => $spkSelesai, 'warna' => 'bg-emerald-500', 'desc' => 'Item telah selesai', 'url' => $u('produksi.index', ['status_produksi' => 'selesai'])],
-                        ];
-                    @endphp
-                    @foreach($tahap as $i => $t)
-                        <a href="{{ $t['url'] }}" title="{{ $t['desc'] }}" class="group flex flex-col {{ $i > 0 ? 'sm:border-l sm:border-slate-100 sm:pl-4' : '' }}">
-                            <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full {{ $t['warna'] }}"></span><span class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.13em] group-hover:text-slate-600 transition-colors">{{ $t['label'] }}</span></span>
-                            <span class="text-[30px] leading-none font-semibold text-slate-900 mt-2 tabular-nums">{{ $t['n'] }}</span>
-                            <span class="text-[10px] text-slate-400 mt-1.5 leading-snug">{{ $t['desc'] }}</span>
-                        </a>
-                    @endforeach
-                </div>
-
-                {{-- Proporsi item SPK --}}
-                <div class="mt-7">
-                    <div class="flex h-2.5 rounded-full overflow-hidden bg-slate-100" title="Proporsi item SPK: antre / desain / cetak / selesai">
-                        <div class="bg-amber-400" style="width: {{ max(2, round($spkAntre / $totalSpk * 100)) }}%"></div>
-                        <div class="bg-sky-400" style="width: {{ max(2, round($spkDesain / $totalSpk * 100)) }}%"></div>
-                        <div class="bg-indigo-500" style="width: {{ max(2, round($spkCetak / $totalSpk * 100)) }}%"></div>
-                        <div class="bg-emerald-500" style="width: {{ max(2, round($spkSelesai / $totalSpk * 100)) }}%"></div>
+            <div class="px-5 sm:px-6 py-5">
+                @if ($bebanMesin->isNotEmpty())
+                    <div class="flex flex-col gap-4">
+                        @foreach ($bebanMesin as $m)
+                            <div>
+                                <div class="flex items-center justify-between gap-3 text-[12px]">
+                                    <span class="font-medium text-slate-700 truncate">{{ $m->nama_mesin }}</span>
+                                    <span class="font-semibold text-slate-900 tabular-nums shrink-0">{{ $m->jumlah }} item</span>
+                                </div>
+                                <div class="h-2.5 mt-1.5 rounded-full bg-slate-100 overflow-hidden">
+                                    <div class="beban-bar h-full rounded-full bg-indigo-500" style="width: {{ max(6, round($m->jumlah / $bebanMesinMaks * 100, 1)) }}%"></div>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
-                    <p class="text-[10.5px] text-slate-400 mt-2">{{ $spkSelesai }} dari {{ $totalSpk }} item SPK sudah selesai diproduksi.</p>
-                </div>
+                @else
+                    <div class="py-10 text-center">
+                        <i class="fas fa-industry text-slate-300 text-2xl mb-3 block"></i>
+                        <p class="text-[12.5px] font-medium text-slate-500">Belum ada SPK aktif saat ini.</p>
+                        <p class="text-[10.5px] text-slate-400 mt-1">Bar ini akan terisi otomatis selama ada SPK berstatus antre, desain, atau cetak.</p>
+                    </div>
+                @endif
             </div>
         </div>
 
-        {{-- ============ PERLU PERHATIAN (daftar aksi, dinamis) ============ --}}
-        <div class="rounded-2xl border border-slate-200/70 bg-white shadow-[0_1px_4px_rgba(15,30,62,.05)] overflow-hidden flex flex-col">
-            <div class="border-b border-slate-100 px-5 sm:px-6 py-4 flex items-center justify-between">
-                <h2 class="text-[13.5px] font-semibold text-slate-800">Perlu perhatian</h2>
+        {{-- ============ PERLU PERHATIAN ============ --}}
+        <div class="xl:col-span-3 rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_4px_rgba(15,30,62,.05)] overflow-hidden flex flex-col">
+            <div class="border-b border-slate-100 px-5 sm:px-6 py-4 flex items-center justify-between gap-3">
+                <h2 class="text-[13.5px] font-semibold text-slate-800">Perlu Perhatian</h2>
                 <span class="text-[9.5px] font-bold uppercase tracking-[0.15em] text-slate-400">{{ count($perluTindakan) }} Aktif</span>
             </div>
-            <div class="divide-y divide-slate-50 max-h-[24rem] overflow-y-auto flex-1">
+            <div class="divide-y divide-slate-50 max-h-[26rem] overflow-y-auto flex-1">
                 @forelse($perluTindakan as $it)
                     <a href="{{ $it['url'] }}" title="Buka: {{ $it['label'] }}" class="flex items-start gap-3 px-5 sm:px-6 py-4 hover:bg-[#FAFCFF] transition-colors group">
                         <span class="mt-1 w-2 h-2 rounded-full {{ $nadaTone[$it['tone'] ?? 'indigo'] ?? 'bg-indigo-500' }} shrink-0"></span>
@@ -161,8 +213,8 @@
         </div>
     </div>
 
-    {{-- ============ TRANSAKSI TERBARU (tabel, filter cari sisi klien) ============ --}}
-    <div class="rounded-2xl border border-slate-200/70 bg-white shadow-[0_1px_4px_rgba(15,30,62,.05)] overflow-hidden">
+    {{-- ============ TRANSAKSI TERBARU ============ --}}
+    <div class="rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_4px_rgba(15,30,62,.05)] overflow-hidden">
         <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 sm:px-6 py-4">
             <div class="flex items-baseline gap-3">
                 <h2 class="text-[13.5px] font-semibold text-slate-800">Transaksi terbaru</h2>
@@ -215,6 +267,16 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.trx-row').forEach(function (r) {
             var cocok = !q || r.textContent.toLowerCase().indexOf(q) !== -1;
             r.classList.toggle('hidden', !cocok);
+        });
+    });
+
+    // Animasi gauge lingkaran saat halaman dimuat (menghormati prefers-reduced-motion).
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    document.querySelectorAll('.gauge-arc').forEach(function (el, i) {
+        var target = parseFloat(el.getAttribute('data-offset') || '0');
+        if (reduce) { el.style.strokeDashoffset = String(target); return; }
+        requestAnimationFrame(function () {
+            setTimeout(function () { el.style.strokeDashoffset = String(target); }, 80 + i * 120);
         });
     });
 });

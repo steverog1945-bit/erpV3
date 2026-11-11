@@ -1419,7 +1419,7 @@
 @endif
 </nav>
         <div class="menu-panel-foot">
-            <span>Orion Grafika ERP &middot; Node JKT-HQ-01</span>
+            <span>Orion Grafika ERP &middot; Pusat Operasi</span>
             <span><kbd>Esc</kbd> untuk menutup</span>
         </div>
         </aside>
@@ -1469,7 +1469,7 @@
             </div>
             <div class="promega-foot">
                 <span>Orion Grafika ERP &middot; Pusat Operasi</span>
-                <span>Node JKT-HQ-01 &middot; <kbd>Esc</kbd> menutup</span>
+                <span><kbd>Esc</kbd> menutup</span>
             </div>
         </div>
 
@@ -1616,17 +1616,21 @@
 
         <div class="pro-bar2" role="tablist" aria-label="Modul">
             @php
-                $proTabs = [
-                    ['label' => 'Dasbor', 'url' => url('/dashboard'), 'active' => Request::is('dashboard', 'dashboard/*'), 'icon' => 'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z'],
-                    ['label' => 'Kasir', 'url' => url('/penjualan/kasir'), 'active' => Request::is('penjualan/kasir', 'penjualan/kasir/*'), 'icon' => 'M6 3h12v18l-2-1.4-2 1.4-2-1.4L10 21l-2-1.4L6 21zM9.5 8.5h5M9.5 12.5h5'],
-                    ['label' => 'Produksi', 'url' => url('/spk'), 'active' => Request::is('spk', 'spk/*'), 'icon' => 'M4 9h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM8 9V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3'],
-                    ['label' => 'Bahan Baku', 'url' => url('/bahan-baku'), 'active' => Request::is('bahan-baku', 'bahan-baku/*'), 'icon' => 'M4 6h16M4 12h16M4 18h16'],
-                    ['label' => 'Laporan', 'url' => url('/laporan/order'), 'active' => Request::is('laporan/*'), 'icon' => 'M5 19h14M7.5 16l4-8 4 5 3-7.5'],
-                    ['label' => 'Pengaturan', 'url' => url('/pengaturan-aplikasi'), 'active' => Request::is('pengaturan-aplikasi', 'pengaturan-aplikasi/*'), 'icon' => 'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zm8.5 4a7.6 7.6 0 0 0-.1-1.3l2-1.5-2-3.4-2.3 1a7.9 7.9 0 0 0-2.2-1.2L15.6 2H8.4l-.3 2.6a7.9 7.9 0 0 0-2.2 1.2l-2.3-1-2 3.4 2 1.5a7.6 7.6 0 0 0 0 2.6l-2 1.5 2 3.4 2.3-1a7.9 7.9 0 0 0 2.2 1.2l.3 2.6h7.2l.3-2.6a7.9 7.9 0 0 0 2.2-1.2l2.3 1 2-3.4-2-1.5c.1-.4.1-.9.1-1.3z'],
-                ];
+                // Tab modul kini bisa diatur dari Pengaturan → Topbar (label, urutan,
+                // url, ikon, tampil/sembunyi). Kalau tabel topbar_tabs kosong,
+                // TopbarTab::aktif() mengembalikan bawaan — tampilan identik
+                // sebelum fitur ini ada.
+                $proTabs = \App\Models\TopbarTab::aktif();
+                foreach ($proTabs as &$__tab) {
+                    $__tab['aktif_baris'] = \Illuminate\Support\Facades\Request::is(
+                        ltrim($__tab['url'], '/'),
+                        ltrim($__tab['url'], '/') . '/*'
+                    );
+                }
+                unset($__tab);
             @endphp
             @foreach($proTabs as $tab)
-                <a href="{{ $tab['url'] }}" role="tab" aria-selected="{{ $tab['active'] ? 'true' : 'false' }}" class="pro-tab {{ $tab['active'] ? 'aktif' : '' }}">
+                <a href="{{ url($tab['url']) }}" role="tab" aria-selected="{{ $tab['aktif_baris'] ? 'true' : 'false' }}" class="pro-tab {{ $tab['aktif_baris'] ? 'aktif' : '' }}">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ $tab['icon'] }}"/></svg>
                     {{ $tab['label'] }}
                 </a>
@@ -1636,7 +1640,6 @@
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
                 Semua Menu
             </button>
-            <span class="pro-meta">Node JKT-HQ-01 &middot; ERP Core v1.0</span>
         </div>
     </header>
     @include('partials.command-palette')

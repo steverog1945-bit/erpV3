@@ -149,6 +149,26 @@ class DashboardController extends Controller
         [$notaLengkap, $notaBelumLengkap] = $this->ringkasanCollecting();
 
         $piutangCount = (int) ($piutangRow->jumlah ?? 0);
+
+        // Total nota aktif (non-dibatalkan) — dipakai sebagai angka penyebut
+        // untuk menampilkan persentase nota lunas di kartu Kinerja Pembayaran.
+        // Murni query baca tambahan, tidak mengubah query/perhitungan lain.
+        $totalNotaAll = (int) DB::table('transaksi')->where('status_nota', '!=', 'Dibatalkan')->count();
+
+        // Beban SPK aktif per mesin (antre/desain/cetak). Dipakai panel
+        // "Beban Produksi per Mesin" di dashboard — angka nyata, bukan contoh.
+        $bebanMesin = DB::table('transaksi_detail')
+            ->join('transaksi', 'transaksi_detail.id_transaksi', '=', 'transaksi.id_transaksi')
+            ->join('produk', 'transaksi_detail.id_produk', '=', 'produk.id_produk')
+            ->leftJoin('mesin', 'produk.id_mesin', '=', 'mesin.id_mesin')
+            ->where('transaksi.status_nota', '!=', 'Dibatalkan')
+            ->whereIn('transaksi_detail.status_spk', ['Antre', 'Desain', 'Cetak'])
+            ->select(DB::raw("COALESCE(mesin.nama_mesin, 'Lainnya') as nama_mesin"), DB::raw('COUNT(*) as jumlah'))
+            ->groupBy('produk.id_mesin', 'mesin.nama_mesin')
+            ->orderByDesc('jumlah')
+            ->limit(4)
+            ->get();
+        $bebanMesinMaks = max(1, (int) $bebanMesin->max('jumlah'));
         $kasMasukHariIni = self::uangMasuk($mulaiHariIni, $akhirHariIni);
 
         $kasAktifSemua = KasSesiService::aktif();
@@ -199,7 +219,7 @@ class DashboardController extends Controller
             'orderKemarin', 'kasMasukKemarin', 'tren', 'perluTindakan',
             'orderHariIni', 'nilaiOrderHariIni',
             'spkAntre', 'spkProses', 'spkDesain', 'spkCetak', 'spkSelesai', 'urgentAktif',
-            'notaLengkap', 'notaBelumLengkap',
+            'notaLengkap', 'notaBelumLengkap', 'totalNotaAll', 'bebanMesin', 'bebanMesinMaks',
             'piutang', 'piutangCount', 'kasMasukHariIni', 'kasAktif',
             'urgentList', 'orderTerbaru'
         ));
