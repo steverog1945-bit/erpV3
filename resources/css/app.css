@@ -1609,7 +1609,9 @@ html.dark .cmdk-group { color: #6B7799; }
     .modern-table-wrapper::-webkit-scrollbar-thumb { background: #CBD6EE; border-radius: 999px; }
     .modern-table-wrapper::-webkit-scrollbar-track { background: transparent; }
 
-    .modern-table { min-width: 600px !important; }
+    /* Sengaja TIDAK memaksa min-width: setiap halaman punya transformasi
+       tabel sendiri (Bahan Baku, SPK, dll.) dan mobile-all-modules memberi
+       fallback min-width:0 - semua sudah terbukti bekerja di HP. */
     .modern-table th {
         padding: 9px 12px;
         font-size: 9px !important;
@@ -1620,7 +1622,7 @@ html.dark .cmdk-group { color: #6B7799; }
         border-bottom: 1px solid var(--pro-border) !important;
         white-space: nowrap;
     }
-    .modern-table td { padding: 10px 12px; font-size: 12px; white-space: nowrap; }
+    .modern-table td { padding: 10px 12px; font-size: 12px; }
     .modern-table tbody tr { transition: background-color .15s ease; }
     .modern-table tbody tr:nth-child(even) td { background: #FAFBFE; }
     .modern-table tbody tr:hover td { background: #F0F6FF !important; }

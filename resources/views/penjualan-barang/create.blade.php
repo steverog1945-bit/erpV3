@@ -237,6 +237,7 @@
     <div class="space-y-5">
         <x-form.group label="Nama lengkap" required dalam>
             <x-form.input type="text" id="new_nama" maxlength="100" />
+            <div id="cekNamaWrapPB" class="cek-nama-hint hidden" role="status" aria-live="polite"></div>
         </x-form.group>
         <x-form.group label="Telepon/WA" required dalam>
             <x-form.input type="text" id="new_hp" inputmode="tel" maxlength="20" />
@@ -507,6 +508,28 @@
         Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 1800 })
             .fire({ icon: 'success', title: 'Jasa ditambahkan ke daftar' });
     }
+
+    // Cek duplikat nama sebelum menyimpan pelanggan baru (blok cepat POS barang).
+    document.addEventListener('DOMContentLoaded', function () {
+        var input = document.getElementById('new_nama');
+        var hint = document.getElementById('cekNamaWrapPB');
+        if (!input || !hint || !window.cekKonsumenMirip) return;
+        window.cekKonsumenMirip({
+            input: input,
+            hint: hint,
+            url: '{{ url('/konsumen/cek-nama') }}',
+            pilih: function (k) {
+                var $sel = $('#select_konsumen');
+                var val = String(k.id);
+                if (!$sel.find('option[value="' + val + '"]').length) {
+                    var teks = k.kode + ' · ' + k.nama + (k.telepon && k.telepon !== '-' ? ' - ' + k.telepon : '');
+                    $sel.append(new Option(teks, val, true, true));
+                }
+                $sel.val(val).trigger('change');
+                closeModal('konsumen-baru');
+            }
+        });
+    });
 
     // 2. MODAL KONSUMEN BARU (pola sama dengan penjualan/create.blade.php)
     async function saveKonsumen() {

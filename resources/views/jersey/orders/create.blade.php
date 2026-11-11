@@ -259,6 +259,7 @@
             <div class="col-span-2">
                 <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-widest mb-1">Nama <span class="text-rose-500">*</span></label>
                 <input id="mc-nama" type="text" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 " placeholder="Nama lengkap / nama tim">
+                <div id="cekNamaWrapJersey" class="cek-nama-hint hidden" role="status" aria-live="polite"></div>
             </div>
             <div>
                 <label class="block text-[9px] font-medium text-slate-400 uppercase tracking-widest mb-1">No. HP</label>
@@ -620,6 +621,28 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         try { $('.select2-konsumen-jersey').select2({ placeholder: '-- Cari Nama / No. HP --', width: '100%' }); } catch (e) { console.warn('Select2 konsumen gagal dimuat:', e && e.message); }
+        // Anti-duplikat: ketik nama di modal cepat -> tampilkan yang sudah ada.
+        var inputNama = document.getElementById('mc-nama');
+        var hintNama = document.getElementById('cekNamaWrapJersey');
+        if (inputNama && hintNama && window.cekKonsumenMirip) {
+            window.cekKonsumenMirip({
+                input: inputNama,
+                hint: hintNama,
+                url: '{{ url('/konsumen/cek-nama') }}',
+                pilih: function (k) {
+                    var sel = document.getElementById('select_id_konsumen');
+                    if (!sel) return;
+                    var val = String(k.id);
+                    if (!sel.querySelector('option[value="' + val + '"]')) {
+                        var opt = new Option(k.kode + ' · ' + k.nama + (k.telepon && k.telepon !== '-' ? ' - ' + k.telepon : ''), val, true, true);
+                        opt.setAttribute('data-telp', k.telepon || '');
+                        sel.appendChild(opt);
+                    }
+                    try { $(sel).val(val).trigger('change'); } catch (e) {}
+                    tutupModalTambahKonsumen();
+                }
+            });
+        }
         // Kursor langsung siap di select2 Pelanggan saat form dibuka (fokus DOM
         // murni - API select2('focus') terbukti ikut membuka dropdown). Delay
         // singkat agar pemulihan fokus Chrome setelah reload tidak menimpanya.
