@@ -447,6 +447,30 @@
     .pro-tab.aktif { background: var(--pro-accent-soft); border-color: #C9D8FF; color: var(--pro-accent-hover); font-weight: 600; }
     html.dark .pro-tab.aktif { border-color: #2F3E66; }
     .pro-tab svg { opacity: .85; }
+    .pro-tab-drop { cursor: pointer; font-family: inherit; }
+    .pro-tab-chevron { opacity: .7; transition: transform .22s cubic-bezier(.22,1,.36,1); }
+    .pro-tab-drop[aria-expanded="true"] .pro-tab-chevron { transform: rotate(180deg); opacity: 1; }
+    .pro-tab-drop[aria-expanded="true"] { background: var(--pro-accent-soft); border-color: #C9D8FF; color: var(--pro-accent-hover); font-weight: 600; }
+    /* Dropdown per modul (hibrida): panel kecil di bawah bar, isi dari sidebar (RBAC) */
+    .tabdrop { position: fixed; z-index: 45; display: none; }
+    .tabdrop.terbuka { display: block; }
+    .tabdrop-panel {
+        background: var(--pro-surface); border: 1px solid var(--pro-border-2); border-radius: var(--pro-radius);
+        box-shadow: var(--pro-shadow-xl); width: min(460px, calc(100vw - 24px));
+        max-height: min(70vh, 560px); overflow-y: auto; padding: 8px;
+        animation: tabDropIn .18s cubic-bezier(.22,1,.36,1);
+    }
+    @keyframes tabDropIn { from { opacity: 0; transform: translateY(-8px) scale(.985); } to { opacity: 1; transform: none; } }
+    .tabdrop-title { padding: 8px 10px 10px; border-bottom: 1px solid #EDF2F9; margin-bottom: 6px; font-size: 10.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--pro-ink-3); }
+    .tabdrop-kosong { padding: 14px 12px; font-size: 12px; color: var(--pro-ink-3); }
+    .tabdrop-link { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 9px 10px; border-radius: 10px; font-size: 13px; font-weight: 400; color: var(--pro-ink-2); text-decoration: none; border-left: 0; }
+    .tabdrop-link svg { width: 16px !important; height: 16px !important; opacity: .8; flex: 0 0 16px; }
+    .tabdrop-link:hover { background: #F4F8FF; color: var(--pro-accent-hover); }
+    .tabdrop-link:hover svg { opacity: 1; color: var(--pro-accent-hover); }
+    .tabdrop-link.sb-active, .tabdrop-link.group.sb-active { background: var(--pro-accent-soft); color: var(--pro-accent-hover); font-weight: 600; }
+    .tabdrop-link .notif-grup { margin-left: auto; }
+    html.dark .tabdrop-link:hover { background: #1c2440; }
+    @media (prefers-reduced-motion: reduce) { .tabdrop-panel { animation: none; } }
 
     .pro-menu-btn { display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px; border-radius: 10px; border: 1px solid var(--pro-border-2); background: var(--pro-surface); color: var(--pro-ink-2); font-size: 12px; font-weight: 600; margin-left: auto; white-space: nowrap; transition: all .15s; }
     .pro-menu-btn:hover { border-color: var(--pro-accent); color: var(--pro-accent-hover); background: #F7FAFF; }
@@ -1482,7 +1506,8 @@
              polos kanan. Isi dirakit dari #mainSidebar (RBAC satu sumber).
              Di <1024px elemen ini tidak pernah tampil (lihat CSS); yang
              dipakai drawer #mainSidebar. --}}
-        <div id="menuBackdrop" aria-hidden="true"></div>
+        <div id="tabDrop" class="tabdrop" aria-hidden="true"><div class="tabdrop-panel" id="tabDropPanel" role="menu" aria-label="Pintasan modul"></div></div>
+<div id="menuBackdrop" aria-hidden="true"></div>
 <div id="proMega" role="dialog" aria-modal="false" aria-label="Menu utama" aria-hidden="true">
             <div class="promega-body">
                 <div class="promega-rail" id="proMegaRail">
@@ -1699,10 +1724,32 @@
                 }));
             @endphp
             @foreach($proTabs as $tab)
+                @php
+                    // Tab yang dipetakan mendapat panel dropdown per domain
+                    // (isi dirender dari #mainSidebar = RBAC satu sumber).
+                    // Tab lain tetap menjadi tautan biasa.
+                    $dropKey = match (true) {
+                        str_starts_with($tab['url'], '/dashboard') => 'dasbor',
+                        str_starts_with($tab['url'], '/penjualan') => 'kasir',
+                        str_starts_with($tab['url'], '/spk') => 'produksi',
+                        str_starts_with($tab['url'], '/bahan-baku') => 'bahan',
+                        str_starts_with($tab['url'], '/laporan') => 'laporan',
+                        str_starts_with($tab['url'], '/pengaturan-aplikasi') => 'pengaturan',
+                        default => null,
+                    };
+                @endphp
+                @if($dropKey)
+                <button type="button" class="pro-tab pro-tab-drop {{ $tab['aktif_baris'] ? 'aktif' : '' }}" data-dropdown="{{ $dropKey }}" data-label="{{ $tab['label'] }}" aria-expanded="false" aria-haspopup="true" aria-controls="tabDrop">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ $tab['icon'] }}"/></svg>
+                    {{ $tab['label'] }}
+                    <svg class="pro-tab-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                </button>
+                @else
                 <a href="{{ url($tab['url']) }}" role="tab" aria-selected="{{ $tab['aktif_baris'] ? 'true' : 'false' }}" class="pro-tab {{ $tab['aktif_baris'] ? 'aktif' : '' }}">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{ $tab['icon'] }}"/></svg>
                     {{ $tab['label'] }}
                 </a>
+                @endif
             @endforeach
             <button type="button" class="pro-live" id="pro-live" title="Koneksi & data selalu segar - disinkronkan dari server tiap 30 detik. Klik untuk muat ulang."><i class="pro-live-dot" aria-hidden="true"></i><span class="pro-live-text">Data langsung</span></button>
             <button type="button" class="pro-menu-btn" id="menuPanelBtn" onclick="toggleMenuPanel()" aria-expanded="false" aria-controls="proMega mainSidebar">
@@ -2627,8 +2674,121 @@
                     return p && p.classList.contains('terbuka');
                 });
                 if (terbuka) toggleMenuPanel();
+                if (typeof window.tutupTabDrop === 'function') window.tutupTabDrop();
             });
         }
+
+        // Dropdown per modul (tab bar2) — hibrida: klik/hover buka, hover-out
+        // diberi jeda 350ms, Esc/luar-panel menutup. Isi dirender dari
+        // #mainSidebar sehingga RBAC tetap satu sumber kebenaran.
+        (function () {
+            var drop = document.getElementById('tabDrop');
+            var panel = document.getElementById('tabDropPanel');
+            if (!drop || !panel) return;
+            var timerIn = null, timerOut = null;
+            var btnAktif = null;
+            var PREFIX = {
+                dasbor: ['/dashboard', '/eksekutif', '/audit-owner', '/postingan'],
+                kasir: ['/penjualan', '/penjualan-barang', '/quotation', '/kasir', '/kas-kecil', '/kategori-kas-kecil'],
+                produksi: ['/spk', '/produksi', '/qc', '/collecting', '/waste', '/jasa-jahit'],
+                bahan: ['/bahan-baku', '/kartu-stok', '/stock-opname', '/pembelian-bahan', '/purchase-request', '/purchase-order', '/kedatangan-bahan', '/gudang', '/waste'],
+                laporan: ['/laporan'],
+                pengaturan: ['/pengaturan-aplikasi', '/pengaturan-jam-kerja', '/menu-editor', '/setting-akses', '/premium']
+            };
+            var JUDUL = { dasbor: 'Dasbor', kasir: 'Kasir & Penjualan', produksi: 'Produksi', bahan: 'Bahan Baku & Gudang', laporan: 'Laporan', pengaturan: 'Pengaturan' };
+
+            function pathOf(a) {
+                try { return new URL(a.getAttribute('href'), location.origin).pathname.toLowerCase(); }
+                catch (e) { return String(a.getAttribute('href') || '').toLowerCase(); }
+            }
+            function cocok(path, awalan) {
+                return path === awalan || path.endsWith(awalan) || path.indexOf(awalan + '/') !== -1;
+            }
+
+            function isi(key) {
+                var prefixes = PREFIX[key] || [];
+                var out = [];
+                document.querySelectorAll('#mainSidebar nav a[href]').forEach(function (a) {
+                    var p = pathOf(a);
+                    var ok = prefixes.some(function (aw) { return cocok(p, aw); });
+                    if (!ok) return;
+                    var clone = a.cloneNode(true);
+                    clone.removeAttribute('class'); clone.removeAttribute('style'); clone.removeAttribute('title'); clone.removeAttribute('onclick');
+                    clone.classList.add('tabdrop-link');
+                    if (a.classList.contains('sb-active')) clone.classList.add('sb-active');
+                    out.push(clone);
+                });
+                panel.innerHTML = '';
+                var t = document.createElement('div');
+                t.className = 'tabdrop-title';
+                t.textContent = JUDUL[key] || 'Pintasan';
+                panel.appendChild(t);
+                if (!out.length) {
+                    var k = document.createElement('div');
+                    k.className = 'tabdrop-kosong';
+                    k.textContent = 'Tidak ada pintasan untuk peran Anda di domain ini.';
+                    panel.appendChild(k);
+                    return;
+                }
+                out.forEach(function (el) { panel.appendChild(el); });
+            }
+
+            function posisi(btn) {
+                var rect = btn.getBoundingClientRect();
+                var lebar = Math.min(460, window.innerWidth - 24);
+                var left = Math.min(Math.max(12, rect.left), Math.max(12, window.innerWidth - lebar - 12));
+                drop.style.left = left + 'px';
+                drop.style.top = '110px';
+            }
+            function buka(btn) {
+                if (btnAktif === btn && drop.classList.contains('terbuka')) return;
+                tutup();
+                isi(btn.getAttribute('data-dropdown'));
+                posisi(btn);
+                drop.classList.add('terbuka');
+                drop.setAttribute('aria-hidden', 'false');
+                btn.setAttribute('aria-expanded', 'true');
+                btnAktif = btn;
+            }
+            function tutup() {
+                if (btnAktif) btnAktif.setAttribute('aria-expanded', 'false');
+                drop.classList.remove('terbuka');
+                drop.setAttribute('aria-hidden', 'true');
+                btnAktif = null;
+            }
+            window.tutupTabDrop = tutup;
+
+            document.querySelectorAll('.pro-tab-drop').forEach(function (btn) {
+                btn.addEventListener('mouseenter', function () {
+                    clearTimeout(timerOut); clearTimeout(timerIn);
+                    timerIn = setTimeout(function () { buka(btn); }, 120);
+                });
+                btn.addEventListener('mouseleave', function () {
+                    clearTimeout(timerIn); clearTimeout(timerOut);
+                    timerOut = setTimeout(tutup, 350);
+                });
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (drop.classList.contains('terbuka') && btnAktif === btn) tutup(); else buka(btn);
+                });
+                btn.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape') { tutup(); btn.focus(); }
+                });
+            });
+            drop.addEventListener('mouseenter', function () { clearTimeout(timerOut); clearTimeout(timerIn); });
+            drop.addEventListener('mouseleave', function () { clearTimeout(timerOut); timerOut = setTimeout(tutup, 350); });
+            document.addEventListener('mousedown', function (e) {
+                if (!drop.classList.contains('terbuka')) return;
+                if (drop.contains(e.target) || (btnAktif && btnAktif.contains(e.target))) return;
+                tutup();
+            });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') tutup();
+            });
+            window.addEventListener('resize', tutup);
+            window.addEventListener('scroll', tutup, true);
+            document.getElementById('menuPanelBtn') && document.getElementById('menuPanelBtn').addEventListener('mouseenter', tutup);
+        })();
 
         // Hover-to-open (desktop pointer halus saja): mengarahkan kursor ke
         // "Semua Menu" membuka mega menu tanpa klik - seperti Canva. Klik
