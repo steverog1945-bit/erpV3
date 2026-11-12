@@ -22,6 +22,7 @@ class AuditTrailHargaBomTest extends TestCase
 
     private User $admin;
     private int $idGolongan;
+    private int $idBahan;
 
     protected function setUp(): void
     {
@@ -30,8 +31,10 @@ class AuditTrailHargaBomTest extends TestCase
         $this->idGolongan = DB::table('golongan_konsumen')->insertGetId(['nama_golongan' => 'Retail', 'keterangan' => '-']);
         $idMesin = DB::table('mesin')->insertGetId(['nama_mesin' => 'Mesin Uji', 'tipe_mesin' => 'Cetak']);
         $idKategori = DB::table('kategori')->insertGetId(['nama_kategori' => 'Kategori Uji']);
-        DB::table('bahan_baku')->insert([
-            'id_bahan' => 1, 'nama_bahan' => 'Bahan A', 'kode_bahan' => 'BA1', 'satuan_stok' => 'roll',
+        // Jangan hardcode id_bahan = 1: seed yang dijalankan otomatis saat
+        // test (produk "Cetak Kain Jersey" dll.) sudah terlanjur memakan id 1.
+        $this->idBahan = DB::table('bahan_baku')->insertGetId([
+            'nama_bahan' => 'Bahan A', 'kode_bahan' => 'BA1', 'satuan_stok' => 'roll',
             'id_mesin' => $idMesin, 'id_kategori' => $idKategori,
             'nilai_konversi' => 1, 'stok' => 100, 'harga_rata_rata' => 1000,
             'status' => 'aktif', 'created_at' => now(), 'updated_at' => now(),
