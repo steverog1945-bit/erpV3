@@ -239,20 +239,10 @@ class AsistenLokalService
     /** AI narator opsional: Ollama lokal; gagal = null, pemanggil memakai teks mentah. */
     private function narasiOllama(string $teksAngka, string $periode): ?string
     {
-        $url = rtrim((string) config('asisten_ai.ollama_url', 'http://127.0.0.1:11434'), '/') . '/api/generate';
         $prompt = "Anda asisten manajer percetakan. Ubah angka berikut menjadi ringkasan eksekutif Bahasa Indonesia 4-6 kalimat, natural seperti laporan pemilik usaha, tanpa mengarang angka baru:\n\n{$teksAngka}";
-        try {
-            $resp = \Illuminate\Support\Facades\Http::timeout((int) config('asisten_ai.timeout', 25))->post($url, [
-                'model' => (string) config('asisten_ai.model', 'qwen2.5:3b-instruct'),
-                'prompt' => $prompt,
-                'stream' => false,
-                'options' => ['temperature' => 0.3],
-            ]);
-            $out = (string) ($resp->json('response') ?? '');
-            return trim($out) !== '' ? trim($out) : null;
-        } catch (\Throwable $e) {
-            return null;
-        }
+
+        // Delegasi ke klien bersama (keep_alive + timeout + config satu pintu).
+        return \App\Services\OllamaService::generate($prompt);
     }
 
     private function daftarPerintah(): string

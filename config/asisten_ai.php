@@ -19,4 +19,8 @@ return [
     'ollama_url' => env('OLLAMA_URL', 'http://127.0.0.1:11434'),
     'model' => env('OLLAMA_MODEL', 'qwen2.5:3b-instruct'),
     'timeout' => (int) env('ASISTEN_AI_TIMEOUT', 25),
+    // Berapa lama model tetap di RAM setelah dipakai ("30m", "1h", "-1" =
+    // selamanya). Tanpa ini Ollama membongkar model sesaat setelah panggilan
+    // sehingga panggilan berikutnya menunggu cold start 5-10 detik.
+    'keep_alive' => (string) env('OLLAMA_KEEP_ALIVE', '30m'),
 ];

@@ -133,15 +133,13 @@ class TelegramAsistenService
         $storage = is_writable(storage_path()) ? 'ok' : 'GAGAL';
         $freeBytes = @disk_free_space(storage_path()) ?: 0;
         $diskGB = number_format($freeBytes / 1073741824, 1);
-        $ollama = 'mati';
-        try {
-            $r = Http::timeout(3)->get('http://127.0.0.1:11434/api/version');
-            $ollama = $r->ok() ? 'ok' : 'mati';
-        } catch (\Throwable $e) {
-            $ollama = 'mati';
-        }
+        $ollama = \App\Services\OllamaService::health();
+        $ollamaLine = $ollama['hidup']
+            ? 'ok v' . $ollama['versi'] . ' (' . $ollama['latensi_ms'] . ' ms)'
+                . ($ollama['model_terload'] !== '' ? ' - model di RAM: ' . $ollama['model_terload'] : ' - model BELUM di RAM (jalankan: php artisan ollama:warm)')
+            : 'mati (asisten narasi memakai ringkasan tanpa AI)';
         $waktu = now(config('app.timezone', 'Asia/Jakarta'))->translatedFormat('d M Y H:i');
-        return "Health {$waktu}\n- Database: {$db}\n- Storage tulis: {$storage}\n- Disk bebas: {$diskGB} GB\n- Ollama AI lokal: {$ollama}\n\n(Batas aman: tidak ada data transaksi yang dibagikan)";
+        return "Health {$waktu}\n- Database: {$db}\n- Storage tulis: {$storage}\n- Disk bebas: {$diskGB} GB\n- Ollama AI lokal: {$ollamaLine}\n\n(Batas aman: tidak ada data transaksi yang dibagikan)";
     }
 
     private function backup(): string

@@ -30,7 +30,12 @@ class TelegramAsistenTest extends TestCase
             'asisten_telegram.token' => 'TOKEN123',
             'asisten_telegram.chat_id' => '999888777',
         ]);
-        Http::fake(['api.telegram.org/*' => Http::response(['ok' => true, 'result' => []], 200)]);
+        // Hermetic: selain Telegram, panggilan Ollama (dipakai /health) juga
+        // dipalsukan - test tidak pernah menyentuh server lokal nyata.
+        Http::fake([
+            'api.telegram.org/*' => Http::response(['ok' => true, 'result' => []], 200),
+            '127.0.0.1:11434/*' => Http::response(['version' => '0.0.0-test', 'models' => []], 200),
+        ]);
     }
 
     public function test_help_pemilik_dijawab(): void
