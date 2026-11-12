@@ -998,7 +998,7 @@ Route::match(['post', 'patch'], '/pembelian-bahan/pelunasan/{id}', [PembelianBah
 /*
 |--------------------------------------------------------------------------
 | LACAK PESANAN - Publik (tanpa login). Hanya bisa dibuka lewat signed URL
-| 30 hari yang dibuat di /premium/portal. Menampilkan progres AGREGAT item;
+| 7 hari yang dibuat di /premium/portal. Menampilkan progres AGREGAT item;
 | tanpa HPP, komisi, atau id internal.
 |--------------------------------------------------------------------------
 */

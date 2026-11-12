@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="w-full px-4 sm:px-6 lg:px-8 py-6 max-w-[1600px] mx-auto">
-    <x-page-header title="Portal Lacak Pelanggan" subtitle="Tautan unik berumur 30 hari per nota. Kirim tautannya lewat WhatsApp/SMS — pelanggan melihat progres produksi tanpa login.">
+    <x-page-header title="Portal Lacak Pelanggan" subtitle="Tautan unik berumur 7 hari per nota. Kirim tautannya lewat WhatsApp/SMS - pelanggan melihat progres produksi tanpa login.">
         <x-slot:actions>
             <span class="inline-flex items-center gap-1.5 rounded-full border border-[#E7D9B6] bg-[#FDF6E3] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[.16em] text-[#C98A1B]"><i class="fas fa-gem"></i> Premium</span>
         </x-slot:actions>
@@ -16,7 +16,7 @@
                         <th class="px-6 py-3">Nota</th>
                         <th class="px-6 py-3">Pelanggan</th>
                         <th class="px-6 py-3">Tanggal</th>
-                        <th class="px-6 py-3">Tautan Lacak (30 hari)</th>
+                        <th class="px-6 py-3">Tautan Lacak (7 hari)</th>
                         <th class="px-6 py-3 text-right">Salin</th>
                     </tr>
                 </thead>
@@ -39,7 +39,7 @@
 
     <div class="mt-4 flex flex-wrap items-start gap-4 text-[11px] text-slate-400 leading-relaxed max-w-3xl">
         <p><i class="fas fa-circle-info mr-1.5 text-slate-300"></i><strong>Cara pakai:</strong> klik Salin, tempel ke chat pelanggan. Pelanggan membuka tautan tanpa login — halaman menampilkan progres item (Antre / Diproses / Cetak / Selesai), status pembayaran, dan status pengambilan.</p>
-        <p><i class="fas fa-shield-halved mr-1.5 text-slate-300"></i><strong>Privasi:</strong> tautan ditandatangani dengan kunci aplikasi, kedaluwarsa 30 hari, dan tidak memuat HPP, komisi, maupun data pelanggan lain. Tautan yang bocor hanya memperlihatkan progres satu nota.</p>
+        <p><i class="fas fa-shield-halved mr-1.5 text-slate-300"></i><strong>Privasi:</strong> tautan ditandatangani dengan kunci aplikasi, kedaluwarsa 7 hari, dan tidak memuat HPP, komisi, maupun data pelanggan lain. Tautan yang bocor hanya memperlihatkan progres satu nota.</p>
     </div>
 </div>
 

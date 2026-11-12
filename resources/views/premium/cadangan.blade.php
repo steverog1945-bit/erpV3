@@ -30,6 +30,26 @@
         </div>
     </div>
 
+    {{-- Verifikasi isi backup terakhir (dulu hanya via command backup:verify) --}}
+    <div class="rounded-2xl border border-slate-200/70 bg-white overflow-hidden shadow-[0_1px_3px_rgba(15,30,62,.05)] mb-6">
+        <div class="px-6 py-4 border-b border-slate-100">
+            <h3 class="text-sm font-semibold text-slate-800">Verifikasi Backup Terakhir</h3>
+        </div>
+        <div class="divide-y divide-slate-50">
+            @forelse($verifikasi as $v)
+                <div class="flex items-center gap-3 px-6 py-3">
+                    <span class="text-[12px] font-semibold text-slate-700 w-20 capitalize">{{ $v['tipe'] }}</span>
+                    <span class="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-wide {{ ($v['ok'] ?? false) ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-600' }}">
+                        <span class="w-1.5 h-1.5 rounded-full {{ ($v['ok'] ?? false) ? 'bg-emerald-500' : 'bg-rose-500' }}"></span>{{ ($v['ok'] ?? false) ? 'LULUS' : 'GAGAL' }}
+                    </span>
+                    <span class="text-[11.5px] text-slate-500 truncate">{{ $v['pesan'] ?? '' }}</span>
+                </div>
+            @empty
+                <p class="px-6 py-5 text-center text-[12px] text-slate-400">Belum ada backup untuk diverifikasi - jalankan backup manual dulu.</p>
+            @endforelse
+        </div>
+    </div>
+
     <div class="rounded-2xl border border-slate-200/70 bg-white overflow-hidden shadow-[0_1px_3px_rgba(15,30,62,.05)]">
         <div class="px-6 py-4 border-b border-slate-100"><h3 class="text-sm font-semibold text-slate-800">30 Entri Terakhir</h3></div>
         <div class="overflow-x-auto">

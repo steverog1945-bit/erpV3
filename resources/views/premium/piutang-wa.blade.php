@@ -98,7 +98,7 @@
             </table>
         </div>
     </div>
-    <p class="mt-4 text-[11px] text-slate-400">Urut dari nota terlama belum bayar. Maksimal 40 nota per filter umur. Tombol "+ Link" menyisipkan tautan lacak progres (valid 30 hari, pelanggan buka tanpa login). Pesan dibangun dari data nota — periksa sekali lagi sebelum mengirim.</p>
+    <p class="mt-4 text-[11px] text-slate-400">Urut dari nota terlama belum bayar. Maksimal 40 nota per filter umur. Tombol "+ Link" menyisipkan tautan lacak progres (valid 7 hari, pelanggan buka tanpa login). Pesan dibangun dari data nota - periksa sekali lagi sebelum mengirim.</p>
 </div>
 
 <script>

@@ -41,6 +41,16 @@ class AsistenLokalService
             return $this->balas($this->rekapTeks($periode, $user), 'rekap');
         }
 
+        // HPP internal (owner/role ber-harga): "hpp nota LAN-1", "hpp banner
+        // per m2", "hpp FLS280 3x1". HARUS sebelum nota lookup umum, karena
+        // "hpp nota X" juga cocok pola nota biasa.
+        if (preg_match('/\bhpp\b|biaya produksi|modal produksi|bahan produksi/u', $t)) {
+            if (!AksesHarga::bolehLihat($user)) {
+                return $this->balas('Maaf, HPP (harga pokok produksi) adalah data internal - hanya untuk role yang berhak melihat harga.', 'ditolak-harga');
+            }
+            return $this->hppJawab($t, $user);
+        }
+
         // Cek nota tertentu: "nota LAN-1" / "status nota 2026-0042" / "spk INV-88"
         if (preg_match('/(nota|invoice|inv|spk|pesanan|order)\s*(nomor|no\.?|#|:)?\s*[:=\-]?\s*([a-z0-9\-\/]*\d[a-z0-9\-\/]*)/u', $t, $m)) {
             return $this->notaLookup($m[3], $user);
@@ -186,6 +196,152 @@ class AsistenLokalService
             ->first() ?: ['jumlah' => 0, 'total' => 0];
     }
 
+    /**
+     * Jawab pertanyaan HPP internal. Dua bentuk:
+     *   1. "hpp nota <nomor>" - HPP nyata dari hpp_snapshot nota (jangan
+     *      dihitung ulang dari BOM live - nilai saat order yang benar).
+     *   2. "hpp <produk> [ukuran PxL]" - estimasi bahan dari service yang
+     *      SAMA dengan checkout (BomCalculationService::komponen): qty pakai
+     *      per rumus BOM, dikonversi ke satuan stok, dikali harga_rata_rata.
+     *      Tanpa ukuran → per m² (ukuran 100 x 100 cm).
+     * Finishing TIDAK ikut dihitung di sini - dijawab jujur di teks.
+     */
+    private function hppJawab(string $t, ?User $user): array
+    {
+        // 1) HPP nota nyata (snapshot saat order, bukan ramalan).
+        if (preg_match('/(nota|inv|invoice|spk)\s*(nomor|no\.?|#|:)?\s*[:=\-]?\s*([a-z0-9\-\/]*\d[a-z0-9\-\/]*)/u', $t, $m)) {
+            $row = DB::table('transaksi')
+                ->whereRaw('LOWER(nomor_nota) LIKE ?', ['%' . mb_strtolower($m[3]) . '%'])
+                ->where('status_nota', '!=', 'Dibatalkan')
+                ->orderByDesc('tgl_order')
+                ->first(['id_transaksi', 'nomor_nota', 'total_bayar']);
+            if (!$row) {
+                return $this->balas("Nota \"{$m[3]}\" tidak ditemukan.", 'hpp-nota');
+            }
+            $agg = DB::table('transaksi_detail')
+                ->where('id_transaksi', $row->id_transaksi)
+                ->selectRaw('SUM(hpp_snapshot) as hpp, SUM(subtotal) as jual')
+                ->first();
+            $hpp = (float) ($agg->hpp ?? 0);
+            $jual = (float) ($agg->jual ?? 0);
+            $margin = $jual > 0 ? round(($jual - $hpp) / $jual * 100, 1) : null;
+            $teks = "HPP **{$row->nomor_nota}**: Rp " . number_format($hpp, 0, ',', '.')
+                . " (bahan sesuai BOM saat order, dari hpp_snapshot)\n"
+                . "Jual: Rp " . number_format($jual, 0, ',', '.')
+                . " - Laba kotor: Rp " . number_format($jual - $hpp, 0, ',', '.')
+                . ($margin !== null ? " ({$margin}%)" : '')
+                . "\nBelum termasuk biaya operasional lain (listrik, gaji, sewa).";
+
+            return $this->balas($teks, 'hpp-nota');
+        }
+
+        // 2) Estimasi HPP produk dari BOM (service yang sama dengan checkout).
+        [$p, $l] = $this->parseUkuranCm($t);
+        $perM2 = $p === null; // tanpa ukuran → per m² standar (100 x 100 cm)
+        $p = $p ?? 100.0;
+        $l = $l ?? 100.0;
+
+        $produk = $this->cariProdukBom($t);
+        if (!$produk) {
+            return $this->balas("Produk tidak ditemukan di BOM. Sebut nama produk, mis. \"hpp FLS280 1.1m\" atau \"hpp nota LAN-1\" untuk HPP nota nyata.", 'hpp');
+        }
+
+        try {
+            $boms = \App\Services\BomCalculationService::komponen((int) $produk->id_produk, $p, $l, 1);
+        } catch (\Throwable $e) {
+            return $this->balas("Gagal menghitung BOM {$produk->nama_produk}.", 'hpp');
+        }
+
+        // Idem checkout: qty pakai (satuan hitung) ÷ nilai_konversi × harga
+        // rata-rata (satuan stok). Satu query bahan untuk semua baris BOM.
+        $bahanIds = collect($boms)->pluck('id_bahan')->unique()->all();
+        $bahanMap = $bahanIds
+            ? DB::table('bahan_baku')->whereIn('id_bahan', $bahanIds)
+                ->get(['id_bahan', 'nama_bahan', 'harga_rata_rata', 'nilai_konversi'])
+                ->keyBy('id_bahan')
+            : collect();
+
+        $hpp = 0.0;
+        $rincian = [];
+        foreach ($boms as $bom) {
+            $b = $bahanMap[$bom->id_bahan] ?? null;
+            $harga = $b ? (float) $b->harga_rata_rata : 0.0;
+            $konversi = $b && (float) $b->nilai_konversi > 0 ? (float) $b->nilai_konversi : 1.0;
+            $biaya = ($bom->qty_pakai > 0 ? $bom->qty_pakai : 0) / $konversi * $harga;
+            $hpp += $biaya;
+            if ($biaya > 0) {
+                $rincian[] = '- ' . ($b->nama_bahan ?? 'Bahan #' . $bom->id_bahan) . ': Rp ' . number_format($biaya, 0, ',', '.');
+            }
+        }
+
+        $luas = ($p * $l) / 10000;
+        $label = $perM2 ? 'per m² (ukuran 100 x 100 cm)' : "ukuran " . rtrim(rtrim(number_format($p / 100, 2, ',', '.'), '0'), ',') . " x " . rtrim(rtrim(number_format($l / 100, 2, ',', '.'), '0'), ',') . " m";
+        $teks = "Estimasi HPP {$produk->nama_produk} {$label}: Rp " . number_format($hpp, 0, ',', '.');
+        if (!$perM2 && $luas > 0) {
+            $teks .= " (Rp " . number_format($hpp / $luas, 0, ',', '.') . "/m²)";
+        }
+        if (!empty($rincian)) {
+            $teks .= "\nRincian bahan (harga rata-rata):\n" . implode("\n", array_slice($rincian, 0, 6));
+        }
+        $teks .= "\nBahan saja dari BOM - belum termasuk finishing & biaya operasional. Angka final di nota tetap dari kasir.";
+
+        return $this->balas($teks, 'hpp');
+    }
+
+    /** Cari produk untuk HPP: token nama (>=4 huruf) atau kamus produk_alias. */
+    private function cariProdukBom(string $t): ?object
+    {
+        $token = [];
+        foreach (preg_split('/\s+/u', preg_replace('/\bhpp\b|biaya produksi|modal produksi|per m2|per m²|ukuran|berapa|harga|\d+(?:[.,]\d+)?\s*[x×]\s*\d+(?:[.,]\d+)?/u', ' ', $t) ?: []) ?: [] as $w) {
+            if (mb_strlen($w) >= 4 && !is_numeric($w)) {
+                $token[] = $w;
+            }
+        }
+        if (empty($token)) {
+            return null;
+        }
+
+        // Nama produk dulu, lalu kamus alias (data owner, tanpa hardcode).
+        $produk = DB::table('produk')->where('status', 'aktif')->get(['id_produk', 'nama_produk']);
+        foreach ($produk as $p) {
+            foreach ($token as $w) {
+                if (str_contains($this->normalisasi($p->nama_produk), $w)) {
+                    return $p;
+                }
+            }
+        }
+        $aliasIds = DB::table('produk_alias')->whereIn('alias', $token)->orderBy('id_produk')->pluck('id_produk')->unique()->values();
+        if ($aliasIds->isNotEmpty()) {
+            $p = DB::table('produk')->whereIn('id_produk', $aliasIds)->orderBy('id_produk')->first(['id_produk', 'nama_produk']);
+            if ($p) {
+                return $p;
+            }
+        }
+
+        return null;
+    }
+
+    /** Ukuran dari teks: "3x1", "3,5 x 2", "300x100" (cm default? meter) → cm. */
+    private function parseUkuranCm(string $t): array
+    {
+        if (!preg_match('/(\d+(?:[.,]\d+)?)\s*[x×]\s*(\d+(?:[.,]\d+)?)/u', $t, $m)) {
+            return [null, null];
+        }
+        $a = (float) str_replace(',', '.', $m[1]);
+        $b = (float) str_replace(',', '.', $m[2]);
+        if ($a <= 0 || $b <= 0 || $a > 10000 || $b > 10000) {
+            return [null, null];
+        }
+        // Konvensi percetakan: angka <= 25 dianggap METER (banner 3 x 1),
+        // lebih dari itu dianggap cm (A3 = 30 x 42).
+        if ($a <= 25 && $b <= 25) {
+            $a *= 100;
+            $b *= 100;
+        }
+
+        return [$a, $b];
+    }
+
     private function notaLookup(string $token, ?User $user): array
     {
         $rows = DB::table('transaksi')
@@ -253,6 +409,8 @@ class AsistenLokalService
             . "- \"piutang belum lunas\" / \"stok menipis\" / \"produk terlaris\"\n"
             . "- \"antrean produksi\" / \"kas masuk hari ini\"\n"
             . "- \"nota <nomor>\" mis. nota LAN-1 - cek status nota\n"
+            . "- \"hpp nota <nomor>\" - HPP nota dari snapshot saat order\n"
+            . "- \"hpp <produk>\" - estimasi HPP bahan per m² dari BOM; dengan ukuran mis. \"hpp banner 3x1\"\n"
             . "- \"konsumen <nama>\" - cari data pelanggan\n\n"
             . "Jawaban uang hanya untuk role yang berhak melihat harga. AI narator (opsional, lokal via Ollama) diaktifkan dengan ASISTEN_AI_ENABLED=true.";
     }

@@ -91,4 +91,95 @@ class AsistenLokalTest extends TestCase
         $r = $this->tanya('   ');
         $r->assertStatus(422);
     }
+
+    // ===== ASISTEN HPP (internal, guard AksesHarga, idem engine checkout) =====
+
+    /**
+     * Produk + BOM 1 bahan. Rumus dipilih dari daftar yang DIAKUI
+     * BomCalculationService::hitungQtyPakai - jadi angka HPP tes = angka
+     * checkout nyata dengan data yang sama.
+     */
+    private function bomProduk(string $namaProduk, string $rumus, float $hargaRata, float $nilaiKonversi = 1): void
+    {
+        $seq = $this->urutanKode++;
+        $mesin = DB::table('mesin')->insertGetId(['nama_mesin' => 'MHP' . $seq, 'tipe_mesin' => 'Cetak']);
+        $kat = DB::table('kategori')->insertGetId(['nama_kategori' => 'KHP' . $seq, 'kode_kategori' => 'KHP' . $seq]);
+        $bahan = DB::table('bahan_baku')->insertGetId([
+            'kode_bahan' => 'BH' . $seq, 'nama_bahan' => 'Frontlite 280gr', 'id_mesin' => $mesin,
+            'id_kategori' => $kat, 'stok' => 100, 'satuan_stok' => 'm2',
+            'harga_rata_rata' => $hargaRata, 'nilai_konversi' => $nilaiKonversi,
+        ]);
+        $produk = DB::table('produk')->insertGetId([
+            'nama_produk' => $namaProduk, 'id_mesin' => $mesin,
+            'metode_hitung' => 'ukuran', 'status' => 'aktif',
+        ]);
+        DB::table('bom_detail')->insert(['id_produk' => $produk, 'id_bahan' => $bahan, 'cara_hitung_pemakaian' => $rumus]);
+    }
+
+    public function test_hpp_per_m2_dari_bom_idem_engine_checkout(): void
+    {
+        User::factory()->create(['id_role' => Role::factory()->create(['nama_role' => 'Administrator', 'boleh_lihat_harga' => true])->id_role]);
+        // Rumus (P*L)/10000, harga rata-rata 50rb per m2 → per m² = 50rb;
+        // ukuran 3x1 (300x100 cm) = 3 m² → 150rb.
+        $this->bomProduk('FLS280', '(P*L)/10000', 50000);
+
+        $perM2 = $this->tanya('hpp FLS280');
+        $perM2->assertOk();
+        $this->assertStringContainsString('Estimasi HPP FLS280', $perM2->json('reply'));
+        $this->assertStringContainsString('Rp 50.000', $perM2->json('reply'));
+        $this->assertStringContainsString('per m²', $perM2->json('reply'));
+
+        $ukuran = $this->tanya('hpp FLS280 3x1');
+        $this->assertStringContainsString('Rp 150.000', $ukuran->json('reply'));
+        $this->assertStringContainsString('Rp 50.000/m²', $ukuran->json('reply'));
+    }
+
+    public function test_hpp_menghormati_nilai_konversi_seperti_checkout(): void
+    {
+        User::factory()->create(['id_role' => Role::factory()->create(['nama_role' => 'Administrator', 'boleh_lihat_harga' => true])->id_role]);
+        // Bahan dijual per roll 50m2 (nilai_konversi 50): 1 m² pakai = 1/50
+        // roll × 500.000/roll = 10.000 per m² - persis cara checkout memotong stok.
+        $this->bomProduk('FLS280', '(P*L)/10000', 500000, 50);
+
+        $r = $this->tanya('hpp FLS280');
+        $this->assertStringContainsString('Rp 10.000', $r->json('reply'));
+    }
+
+    public function test_hpp_nota_dari_snapshot_bukan_hitung_ulang(): void
+    {
+        User::factory()->create(['id_role' => Role::factory()->create(['nama_role' => 'Administrator', 'boleh_lihat_harga' => true])->id_role]);
+        // nota() menyimpan hpp_snapshot = total/2 → 100.000 dari jual 200.000 (50%).
+        $this->nota('LAN-5', 'Aktif', 'Lunas', 200000);
+        $r = $this->tanya('hpp nota LAN-5');
+        $r->assertOk();
+        $reply = $r->json('reply');
+        $this->assertStringContainsString('LAN-5', $reply);
+        $this->assertStringContainsString('Rp 100.000', $reply);
+        $this->assertStringContainsString('hpp_snapshot', $reply);
+    }
+
+    public function test_hpp_lewat_alias_tanpa_hardcode(): void
+    {
+        User::factory()->create(['id_role' => Role::factory()->create(['nama_role' => 'Administrator', 'boleh_lihat_harga' => true])->id_role]);
+        $this->bomProduk('FLS280', '(P*L)/10000', 50000);
+        // Alias dari kamus owner (tabel produk_alias), bukan mapping di kode.
+        $idProduk = DB::table('produk')->where('nama_produk', 'FLS280')->value('id_produk');
+        DB::table('produk_alias')->insert(['id_produk' => $idProduk, 'alias' => 'spanduk', 'created_at' => now(), 'updated_at' => now()]);
+
+        $r = $this->tanya('hpp spanduk');
+        $r->assertOk();
+        $this->assertStringContainsString('Estimasi HPP FLS280', $r->json('reply'));
+    }
+
+    public function test_hpp_ditolak_tanpa_hak_harga(): void
+    {
+        $role = Role::factory()->create(['nama_role' => 'Operator Desain', 'boleh_lihat_harga' => false]);
+        $user = User::factory()->create(['id_role' => $role->id_role]);
+        $this->nota('LAN-8');
+        $r = $this->tanya('hpp nota LAN-8', $user);
+        $r->assertOk();
+        $reply = $r->json('reply');
+        $this->assertStringContainsString('harga', $reply);
+        $this->assertStringNotContainsString('Rp', $reply);
+    }
 }

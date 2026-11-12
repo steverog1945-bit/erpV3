@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\URL;
  * KEPADA SEMUA ROLE login tanpa biaya API apa pun. Tidak ada panggilan ke
  * layanan luar:
  *  - WhatsApp: tautan wa.me (klik -> aplikasi WA terbuka dengan pesan terisi).
- *  - Portal pelanggan: signed URL (HMAC APP_KEY) berumur 30 hari, tanpa data baru.
+ *  - Portal pelanggan: signed URL (HMAC APP_KEY) berumur 7 hari, tanpa data baru.
  *  - Asisten order: tanya-jawab lokal dari data ERP sendiri (tanpa API; AI lokal opsional via Ollama).
  * Semua query READ-ONLY terhadap tabel yang sudah ada. Zero schema change.
  *
@@ -28,7 +28,7 @@ class PremiumController extends Controller
     {
         $fitur = [
             ['nama' => 'Kirim WA Nota & Piutang', 'status' => 'Berjalan', 'route' => route('premium.piutang-wa'), 'tier' => 'Operator', 'ikon' => 'fa-whatsapp fab', 'desc' => 'Satu klik dari halaman piutang: WhatsApp terbuka dengan pesan pengingat terisi otomatis. Tidak perlu gateway, tidak ada biaya.'],
-            ['nama' => 'Portal Lacak Pelanggan', 'status' => 'Berjalan', 'route' => route('premium.portal'), 'tier' => 'Operator', 'ikon' => 'fa-link fas', 'desc' => 'Tautan unik berumur 30 hari per nota. Pelanggan melihat progres produksi tanpa login dan tanpa menelepon kasir.'],
+            ['nama' => 'Portal Lacak Pelanggan', 'status' => 'Berjalan', 'route' => route('premium.portal'), 'tier' => 'Operator', 'ikon' => 'fa-link fas', 'desc' => 'Tautan unik berumur 7 hari per nota. Pelanggan melihat progres produksi tanpa login dan tanpa menelepon kasir.'],
             ['nama' => 'Analisis 30 Hari + Margin', 'status' => 'Berjalan', 'route' => route('premium.analisis'), 'tier' => 'Insight', 'ikon' => 'fa-chart-simple fas', 'desc' => 'Omzet harian, jam sibuk, rata-rata nota, produk terlaris, dan margin realisasi dari HPP snapshot.'],
             ['nama' => 'Prediksi Restock Cerdas', 'status' => 'Berjalan', 'route' => route('premium.prediksi-stok'), 'tier' => 'Insight', 'ikon' => 'fa-boxes-stacked fas', 'desc' => 'Bahan baku diurutkan dari sisa hari pakai tersedikit (pemakaian 60 hari). Bahan kritis tampil paling atas.'],
             ['nama' => 'Asisten Order Lokal', 'status' => 'Berjalan', 'route' => route('premium.asisten'), 'tier' => 'Insight', 'ikon' => 'fa-wand-magic-sparkles fas', 'desc' => 'Tanya jawab order, stok, kas & rekap laporan (omzet, HPP, laba, piutang) langsung dari data ERP di server Anda — tanpa internet; AI lokal (Ollama) opsional.'],
@@ -283,9 +283,9 @@ class PremiumController extends Controller
         $rows = $nota->map(function ($n) use ($isiPesan) {
             $tel = $this->nomorWa($n->telepon);
             $pesan = $isiPesan($n, $n->nama);
-            // Link lacak agregat (signed URL 30 hari) - menyisip ke pesan via
+            // Link lacak agregat (signed URL 7 hari) - menyisip ke pesan via
             // {link} atau tombol "WA + Link" di bawah.
-            $n->lacak_url = URL::signedRoute('lacak.nota', ['id' => $n->id_transaksi], now()->addDays(30));
+            $n->lacak_url = URL::signedRoute('lacak.nota', ['id' => $n->id_transaksi], now()->addDays(7));
             $pesanDenganLink = $pesan . "\n\nCek progres orderan Anda kapan saja (tanpa login):\n" . $n->lacak_url;
             $n->wa_link = $tel ? 'https://wa.me/' . $tel . '?text=' . rawurlencode($pesan) : null;
             $n->wa_link_dengan = $tel ? 'https://wa.me/' . $tel . '?text=' . rawurlencode($pesanDenganLink) : null;
@@ -390,7 +390,9 @@ class PremiumController extends Controller
             ->limit(14)
             ->get()
             ->map(function ($n) {
-                $n->lacak_url = URL::signedRoute('lacak.nota', ['id' => $n->id_transaksi], now()->addDays(30));
+                // Umur 7 hari (keputusan owner): tautan pendek = kecil risiko
+                // bila bocor diteruskan; order jangka pendek beres <1 minggu.
+                $n->lacak_url = URL::signedRoute('lacak.nota', ['id' => $n->id_transaksi], now()->addDays(7));
                 return $n;
             });
 
@@ -410,7 +412,16 @@ class PremiumController extends Controller
         $terakhir = $sukses->first();
         $totalUkuran = (int) $sukses->sum('ukuran_bytes');
 
-        return view('premium.cadangan', compact('logs', 'sukses', 'gagal', 'terakhir', 'totalUkuran'));
+        // Verifikasi isi backup terakhir per tipe (file ada, ukuran cocok
+        // dengan log, dump berisi tabel inti) - dulu hanya via command
+        // backup:verify; owner harus bisa melihatnya dari halaman ini.
+        try {
+            $verifikasi = \App\Services\BackupService::verifikasiTerbaru('semua');
+        } catch (\Throwable $e) {
+            $verifikasi = [];
+        }
+
+        return view('premium.cadangan', compact('logs', 'sukses', 'gagal', 'terakhir', 'totalUkuran', 'verifikasi'));
     }
 
     /**
