@@ -2,11 +2,19 @@
 
 @section('content')
 <div class="w-full px-4 sm:px-6 lg:px-8 py-6 max-w-[1600px] mx-auto">
-    <x-page-header title="Analisis Premium · 30 Hari Terakhir" subtitle="Omzet, jam sibuk, produk terlaris, dan margin realisasi. Dihitung langsung dari data nyata, tanpa API.">
+    <x-page-header title="Analisis Premium · {{ $periode }} Hari Terakhir" subtitle="Omzet, jam sibuk, produk terlaris, dan margin realisasi. Dihitung langsung dari data nyata, tanpa API.">
         <x-slot:actions>
             <span class="inline-flex items-center gap-1.5 rounded-full border border-[#E7D9B6] bg-[#FDF6E3] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[.16em] text-[#C98A1B]"><i class="fas fa-gem"></i> Premium</span>
+            <a href="{{ route('premium.analisis-csv', ['periode' => $periode]) }}" class="inline-flex items-center gap-2 h-9 px-4 rounded-lg border border-slate-200 bg-white text-[12px] font-semibold text-slate-600 hover:border-slate-300 hover:text-slate-800 transition-colors"><i class="fas fa-file-csv"></i> Export CSV</a>
         </x-slot:actions>
     </x-page-header>
+
+    {{-- Pilihan periode --}}
+    <div class="mb-5 inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1" role="group" aria-label="Pilih periode analisis">
+        @foreach([7 => '7 Hari', 30 => '30 Hari', 90 => '90 Hari'] as $p => $label)
+            <a href="{{ route('premium.analisis', ['periode' => $p]) }}" class="h-8 px-4 rounded-lg text-[12px] font-semibold transition-colors {{ $p === $periode ? 'bg-slate-900 text-white' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50' }}">{{ $label }}</a>
+        @endforeach
+    </div>
 
     {{-- KPI --}}
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -15,14 +23,14 @@
             $rata = (float) ($kpi->rata_nota ?? 0);
         @endphp
         <div class="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-[0_1px_3px_rgba(15,30,62,.05)]">
-            <p class="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Omzet 30 Hari</p>
+            <p class="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Omzet {{ $periode }} Hari</p>
             <p class="text-2xl font-semibold text-slate-900 mt-2 tracking-tight">Rp {{ number_format($omzet, 0, ',', '.') }}</p>
-            <p class="text-[11px] text-slate-400 mt-1">{{ (int) ($kpi->nota ?? 0) }} nota aktif</p>
+            <p class="text-[11px] mt-1">{{ (int) ($kpi->nota ?? 0) }} nota aktif @include('premium.partials.delta-badge', ['nilai' => $delta['omzet']])</p>
         </div>
         <div class="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-[0_1px_3px_rgba(15,30,62,.05)]">
             <p class="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Rata-rata / Nota</p>
             <p class="text-2xl font-semibold text-slate-900 mt-2 tracking-tight">Rp {{ number_format($rata, 0, ',', '.') }}</p>
-            <p class="text-[11px] text-slate-400 mt-1">nilai transaksi rata-rata</p>
+            <p class="text-[11px] text-slate-400 mt-1">nilai transaksi rata-rata @include('premium.partials.delta-badge', ['nilai' => $delta['rata']])</p>
         </div>
         <div class="rounded-2xl border border-slate-200/70 bg-white p-5 shadow-[0_1px_3px_rgba(15,30,62,.05)]">
             <p class="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Belum Lunas</p>
@@ -44,9 +52,9 @@
                     <h3 class="text-sm font-semibold text-slate-800">Omzet per Hari</h3>
                     <p class="text-[11px] text-slate-400">Arahkan kursor ke batang untuk nilai pasti</p>
                 </div>
-                <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">30 HARI</span>
+                <span class="text-[10px] font-semibold uppercase tracking-widest text-slate-400">{{ $periode }} HARI</span>
             </div>
-            <div class="flex items-end gap-[3px] h-40 border-b border-slate-100 pb-0" role="img" aria-label="Grafik omzet harian 30 hari terakhir">
+            <div class="flex items-end gap-[3px] h-40 border-b border-slate-100 pb-0" role="img" aria-label="Grafik omzet harian {{ $periode }} hari terakhir">
                 @foreach($hari as $h)
                     @php $tinggi = max(2, round($h['omzet'] / $maksOmzet * 100)); @endphp
                     <div class="flex-1 group relative rounded-t-[3px] bg-gradient-to-t from-indigo-600/85 to-indigo-400/85 hover:from-indigo-700 hover:to-indigo-500 transition-colors" style="height: {{ $tinggi }}%" title="{{ $h['label'] }} · Rp {{ number_format($h['omzet'], 0, ',', '.') }} · {{ $h['nota'] }} nota"></div>
@@ -54,15 +62,15 @@
             </div>
             <div class="flex justify-between mt-2 text-[9px] font-medium text-slate-400">
                 <span>{{ $hari[0]['label'] }}</span>
-                <span>{{ $hari[15]['label'] }}</span>
-                <span>{{ $hari[29]['label'] }}</span>
+                <span>{{ $hari[intdiv(count($hari), 2)]['label'] }}</span>
+                <span>{{ $hari[count($hari) - 1]['label'] }}</span>
             </div>
         </div>
 
         {{-- JAM SIBUK --}}
         <div class="rounded-2xl border border-slate-200/70 bg-white p-6 shadow-[0_1px_3px_rgba(15,30,62,.05)]">
             <h3 class="text-sm font-semibold text-slate-800">Jam Sibuk</h3>
-            <p class="text-[11px] text-slate-400 mb-4">Jumlah nota per jam (30 hari)</p>
+            <p class="text-[11px] text-slate-400 mb-4">Jumlah nota per jam ({{ $periode }} hari)</p>
             @php $maksJam = max(1, (int) $jam->max()); @endphp
             <div class="grid grid-cols-6 gap-1.5">
                 @for($h = 7; $h <= 22; $h++)
@@ -95,13 +103,32 @@
                         <span class="text-[12.5px] font-semibold text-slate-800 tabular-nums">{{ number_format((float) $p->qty, 0, ',', '.') }}<span class="text-[10px] text-slate-400 font-medium">&nbsp;pcs</span></span>
                     </div>
                 @empty
-                    <p class="px-6 py-8 text-center text-sm text-slate-400">Belum ada transaksi produk dalam 30 hari.</p>
+                    <p class="px-6 py-8 text-center text-sm text-slate-400">Belum ada transaksi produk dalam {{ $periode }} hari.</p>
+                @endforelse
+            </div>
+        </div>
+
+        {{-- KONSUMEN TERATAS --}}
+        <div class="rounded-2xl border border-slate-200/70 bg-white overflow-hidden shadow-[0_1px_3px_rgba(15,30,62,.05)]">
+            <div class="px-6 py-4 border-b border-slate-100"><h3 class="text-sm font-semibold text-slate-800">Konsumen Teratas</h3></div>
+            <div class="divide-y divide-slate-50">
+                @forelse($topKonsumen as $i => $k)
+                    <div class="flex items-center gap-3 px-6 py-3">
+                        <span class="w-6 h-6 rounded-md bg-amber-50 text-amber-600 text-[10.5px] font-bold grid place-items-center">{{ $i + 1 }}</span>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-[12px] font-medium text-slate-700 truncate">{{ $k->nama }}</p>
+                            <p class="text-[10px] text-slate-400">{{ (int) $k->nota }} nota</p>
+                        </div>
+                        <span class="text-[12.5px] font-semibold text-slate-800 tabular-nums">Rp {{ number_format((float) $k->omzet, 0, ',', '.') }}</span>
+                    </div>
+                @empty
+                    <p class="px-6 py-8 text-center text-sm text-slate-400">Belum ada transaksi dalam {{ $periode }} hari.</p>
                 @endforelse
             </div>
         </div>
 
         {{-- RINGKASAN CADANGAN --}}
-        <div class="xl:col-span-2 rounded-2xl border border-slate-200/70 bg-white overflow-hidden shadow-[0_1px_3px_rgba(15,30,62,.05)]">
+        <div class="xl:col-span-1 rounded-2xl border border-slate-200/70 bg-white overflow-hidden shadow-[0_1px_3px_rgba(15,30,62,.05)]">
             <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between"><h3 class="text-sm font-semibold text-slate-800">Cadangan Terakhir</h3><a href="{{ route('premium.cadangan') }}" class="text-[11px] font-semibold text-indigo-600 hover:text-indigo-700">Lihat semua →</a></div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-[12px]">

@@ -23,6 +23,7 @@
                         <th class="px-6 py-3 text-right">Pakai 60 Hr</th>
                         <th class="px-6 py-3 text-right">Per Hari</th>
                         <th class="px-6 py-3">Sisa Hari</th>
+                        <th class="px-6 py-3 text-right">Saran Beli</th>
                         <th class="px-6 py-3">Status</th>
                     </tr>
                 </thead>
@@ -48,6 +49,13 @@
                                 </div>
                             @endif
                         </td>
+                        <td class="px-6 py-3">
+                            @if($b->saran_beli > 0)
+                                <span class="text-[12px] font-bold tabular-nums text-indigo-700">{{ number_format((float) $b->saran_beli, 0, ',', '.') }} <span class="text-[10px] font-medium text-slate-400">{{ $b->satuan_stok }}</span></span>
+                            @else
+                                <span class="text-[11px] text-slate-400">cukup</span>
+                            @endif
+                        </td>
                         <td class="px-6 py-3"><span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[9.5px] font-bold uppercase tracking-wide {{ $badge[1] }}"><span class="w-1.5 h-1.5 rounded-full {{ $badge[2] }}"></span>{{ $badge[0] }}</span></td>
                     </tr>
                     @endforeach
@@ -55,6 +63,6 @@
             </table>
         </div>
     </div>
-    <p class="mt-4 text-[11px] text-slate-400">Prediksi memakai rata-rata pakai 60 hari (kartu stok, tipe keluar). Bahan tanpa pemakaian tidak diramal. Angka adalah panduan — keputusan beli final ada di Anda.</p>
+    <p class="mt-4 text-[11px] text-slate-400">Prediksi memakai rata-rata pakai 60 hari (kartu stok, tipe keluar). Saran beli = gap ke stok minimal atau cadangan 14 hari pemakaian, yang lebih besar. Bahan tanpa pemakaian dan tanpa stok minimal tidak diramal. Angka adalah panduan — keputusan beli final ada di Anda.</p>
 </div>
 @endsection

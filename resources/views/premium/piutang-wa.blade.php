@@ -9,6 +9,13 @@
         </x-slot:actions>
     </x-page-header>
 
+    {{-- Filter umur piutang --}}
+    <div class="mb-5 inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1" role="group" aria-label="Filter umur piutang">
+        @foreach([7 => '7 Hari', 30 => '30 Hari', 60 => '60 Hari'] as $u => $label)
+            <a href="{{ route('premium.piutang-wa', ['umur' => $u]) }}" class="h-8 px-4 rounded-lg text-[12px] font-semibold transition-colors {{ $u === $umur ? 'bg-slate-900 text-white' : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50' }}">{{ $label }}</a>
+        @endforeach
+    </div>
+
     @if(session('status'))
         <div class="mb-5 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-[12.5px] font-semibold text-emerald-800"><i class="fas fa-circle-check"></i> {{ session('status') }}</div>
     @endif
@@ -30,10 +37,10 @@
             <label for="wa_pesan_template" class="text-[10.5px] font-semibold uppercase tracking-widest text-slate-500">Tulis pesan Anda</label>
             <textarea id="wa_pesan_template" name="wa_pesan_template" rows="4" maxlength="2000" spellcheck="false" class="mt-2 w-full rounded-xl border border-slate-200 bg-slate-50/60 p-4 text-[13px] leading-relaxed text-slate-800 placeholder:text-slate-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 focus:outline-none" placeholder="Kosong = pakai bawaan aplikasi.">{{ $waTemplate }}</textarea>
             <div class="mt-2 flex flex-wrap items-center gap-1.5" aria-label="Placeholder">
-                @foreach (['{nama}', '{nota}', '{tanggal}', '{total}', '{status}', '{wa}'] as $ph)
+                @foreach (['{nama}', '{nota}', '{tanggal}', '{total}', '{sisa}', '{status}', '{link}', '{wa}'] as $ph)
                     <code class="rounded-md border border-indigo-100 bg-indigo-50 px-2 py-1 text-[10px] font-semibold text-indigo-700">{{ $ph }}</code>
                 @endforeach
-                <span class="text-[10.5px] text-slate-400 ml-1">hadir otomatis diganti data nota.</span>
+                <span class="text-[10.5px] text-slate-400 ml-1">hadir otomatis diganti data nota. {sisa} = total − terbayar; {link} = tautan lacak pelanggan.</span>
             </div>
             <div class="mt-4 flex flex-wrap items-center gap-2">
                 <button type="submit" class="inline-flex items-center gap-2 h-9 px-4 rounded-lg bg-slate-900 text-white text-[12px] font-semibold hover:bg-slate-800 transition-colors"><i class="fas fa-floppy-disk"></i> Simpan Template</button>
@@ -52,6 +59,7 @@
                         <th class="px-6 py-3">Tanggal</th>
                         <th class="px-6 py-3">Status</th>
                         <th class="px-6 py-3 text-right">Total</th>
+                        <th class="px-6 py-3 text-right">Sisa</th>
                         <th class="px-6 py-3 text-right">Aksi</th>
                     </tr>
                 </thead>
@@ -66,11 +74,15 @@
                             <td class="px-6 py-3.5 text-slate-500">{{ \Carbon\Carbon::parse($r->tgl_order)->translatedFormat('d M Y') }}</td>
                             <td class="px-6 py-3.5"><span class="inline-flex items-center rounded-full px-2.5 py-1 text-[9.5px] font-bold uppercase tracking-wide {{ $r->status_pembayaran === 'DP' ? 'bg-amber-50 text-amber-800 border border-amber-200' : 'bg-rose-50 text-rose-600 border border-rose-200' }}">{{ $r->status_pembayaran }}</span></td>
                             <td class="px-6 py-3.5 text-right font-semibold text-slate-800 tabular-nums">Rp {{ number_format((float) $r->total_bayar, 0, ',', '.') }}</td>
+                            <td class="px-6 py-3.5 text-right font-semibold tabular-nums {{ (float) $r->total_terbayar > 0 ? 'text-orange-600' : 'text-slate-800' }}">Rp {{ number_format(max(0, (float) $r->total_bayar - (float) $r->total_terbayar), 0, ',', '.') }}</td>
                             <td class="px-6 py-3.5">
                                 <div class="flex items-center justify-end gap-2">
                                     @if($r->wa_link)
                                         <a href="{{ $r->wa_link }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-[#25D366] text-[#053b1e] text-[11px] font-bold hover:brightness-95 transition" title="Buka WhatsApp dengan pesan terisi">
                                             <i class="fab fa-whatsapp"></i> WA
+                                        </a>
+                                        <a href="{{ $r->wa_link_dengan }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg bg-[#075E54] text-white text-[11px] font-bold hover:brightness-110 transition" title="Pesan + tautan lacak progres (pelanggan membuka tanpa login)">
+                                            <i class="fas fa-link"></i> + Link
                                         </a>
                                     @else
                                         <span class="text-[10px] text-slate-400" title="Nomor WA tidak tersedia / tidak valid">tanpa WA</span>
@@ -80,13 +92,13 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="6" class="px-6 py-12 text-center text-sm text-slate-400"><i class="fas fa-circle-check text-emerald-400 text-2xl mb-2 block"></i>Tidak ada nota belum lunas 60 hari terakhir. Semua beres.</td></tr>
+                        <tr><td colspan="7" class="px-6 py-12 text-center text-sm text-slate-400"><i class="fas fa-circle-check text-emerald-400 text-2xl mb-2 block"></i>Tidak ada nota belum lunas {{ $umur }} hari terakhir. Semua beres.</td></tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
     </div>
-    <p class="mt-4 text-[11px] text-slate-400">Menampilkan maksimal 40 nota terbaru (60 hari). Pesan dibangun dari data nota — periksa sekali lagi sebelum mengirim. Pengingat otomatis terjadwal menyusul saat gateway resmi diaktifkan.</p>
+    <p class="mt-4 text-[11px] text-slate-400">Urut dari nota terlama belum bayar. Maksimal 40 nota per filter umur. Tombol "+ Link" menyisipkan tautan lacak progres (valid 30 hari, pelanggan buka tanpa login). Pesan dibangun dari data nota — periksa sekali lagi sebelum mengirim.</p>
 </div>
 
 <script>
