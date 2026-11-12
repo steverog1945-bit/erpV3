@@ -127,6 +127,11 @@
             @if($totalFinishing > 0)
             <tr><td class="l">Total Finishing</td><td class="t">:</td><td class="v">{{ number_format($totalFinishing, 0, ',', '.') }}</td></tr>
             @endif
+            {{-- Diskon tingkat nota (transaksi.diskon) — tampil hanya bila ada,
+                 supaya nota rekonsiliasi: Cetak + Desain + Finishing − Diskon = Grand Total. --}}
+            @if((float) ($transaksi->diskon ?? 0) > 0)
+            <tr><td class="l">Diskon</td><td class="t">:</td><td class="v">-{{ number_format((float) $transaksi->diskon, 0, ',', '.') }}</td></tr>
+            @endif
             <tr class="tebal"><td class="l">Grand Total</td><td class="t">:</td><td class="v">{{ number_format($totalTagihanAsli, 0, ',', '.') }}</td></tr>
             {{-- Pembulatan hanya tampil bila ada selisih; murni tampilan nota (lihat AppSetting::bulatkan()). --}}
             @if($pembulatan != 0)

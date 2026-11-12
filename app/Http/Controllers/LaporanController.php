@@ -28,6 +28,7 @@ class LaporanController extends Controller
                 'transaksi.tgl_order',
                 'transaksi.created_at',
                 'transaksi.total_bayar',
+                'transaksi.diskon',
                 'transaksi.status_pembayaran',
                 'transaksi.status_nota',
                 'transaksi.metode_pembayaran',
@@ -471,12 +472,21 @@ class LaporanController extends Controller
             ->get()
             ->groupBy('jersey_order_id');
 
+        // Finishing per order untuk nota cetak laporan - satu query agregat
+        // (bukan satu query per order - pola yang sama dengan itemPerNota).
+        $finishingPerOrder = DB::table('jersey_line_finishing')
+            ->join('jersey_order_lines', 'jersey_order_lines.id', '=', 'jersey_line_finishing.jersey_order_line_id')
+            ->whereIn('jersey_order_lines.jersey_order_id', $idOrderHalamanIni)
+            ->select('jersey_order_lines.jersey_order_id', DB::raw('SUM(jersey_line_finishing.biaya) as finishing'))
+            ->groupBy('jersey_order_lines.jersey_order_id')
+            ->pluck('finishing', 'jersey_order_id');
+
         $designers = \App\Models\JerseyDesigner::orderBy('name')->get();
         $konsumenList = DB::table('konsumen')->orderBy('nama_konsumen')->get(['id_konsumen', 'nama_konsumen', 'telepon']);
 
         return view('laporan.order-jersey', compact(
             'data', 'designers', 'konsumenList', 'jumlahOrder', 'totalTransaksi', 'totalPiutang',
-            'breakdownDesainer', 'breakdownKategori', 'linePerOrder', 'tglDari', 'tglSampai'
+            'breakdownDesainer', 'breakdownKategori', 'linePerOrder', 'tglDari', 'tglSampai', 'finishingPerOrder'
         ));
     }
 

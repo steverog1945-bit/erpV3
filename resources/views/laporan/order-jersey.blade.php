@@ -229,8 +229,24 @@
                 </tbody>
             </table>
             <div class="px-3 py-2 bg-slate-50 border-t border-slate-200 flex justify-end">
+                @php
+                    $subtotalBarang = $lineOrderPrint->sum('subtotal');
+                    $finishingOrder = (float) ($finishingPerOrder->get($o->id, 0) ?? 0);
+                    $diskonOrder = (float) ($o->discount ?? 0);
+                    $tambahanOrder = (float) ($o->additional_charge ?? 0);
+                @endphp
                 <table class="text-[11px]">
-                    <tr><td class="pr-4 text-slate-600">Grand Total</td><td class="text-right font-medium text-slate-800">{{ number_format($o->total, 0, ',', '.') }}</td></tr>
+                    <tr><td class="pr-4 text-slate-600">Subtotal Barang</td><td class="text-right font-medium text-slate-800">{{ number_format($subtotalBarang, 0, ',', '.') }}</td></tr>
+                    @if($finishingOrder > 0)
+                    <tr><td class="pr-4 text-slate-600">Finishing</td><td class="text-right font-medium text-slate-800">+{{ number_format($finishingOrder, 0, ',', '.') }}</td></tr>
+                    @endif
+                    @if($diskonOrder > 0)
+                    <tr><td class="pr-4 text-slate-600">Diskon</td><td class="text-right font-medium text-emerald-600">-{{ number_format($diskonOrder, 0, ',', '.') }}</td></tr>
+                    @endif
+                    @if($tambahanOrder > 0)
+                    <tr><td class="pr-4 text-slate-600">Biaya Tambahan</td><td class="text-right font-medium text-slate-800">+{{ number_format($tambahanOrder, 0, ',', '.') }}</td></tr>
+                    @endif
+                    <tr><td class="pr-4 font-medium text-slate-800">Grand Total</td><td class="text-right font-semibold text-slate-900">{{ number_format($o->total, 0, ',', '.') }}</td></tr>
                     <tr><td class="pr-4 text-slate-600">Sudah Dibayar</td><td class="text-right font-medium text-slate-800">{{ number_format($o->deposit, 0, ',', '.') }}</td></tr>
                     <tr><td class="pr-4 font-medium text-slate-700">{{ $o->sisa_tagihan > 0 ? 'Sisa Tagihan' : 'Lunas' }}</td><td class="text-right font-medium text-slate-900">{{ number_format($o->sisa_tagihan, 0, ',', '.') }}</td></tr>
                 </table>

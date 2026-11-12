@@ -234,6 +234,10 @@
             </table>
             <div class="px-3 py-2 bg-slate-50 border-t border-slate-200 flex justify-end">
                 <table class="text-[11px]">
+                    @if((float) ($t->diskon ?? 0) > 0)
+                    <tr><td class="pr-4 text-slate-600">Subtotal Barang</td><td class="text-right font-medium text-slate-800">{{ number_format($t->total_bayar + (float) $t->diskon, 0, ',', '.') }}</td></tr>
+                    <tr><td class="pr-4 text-slate-600">Diskon</td><td class="text-right font-medium text-emerald-600">-{{ number_format((float) $t->diskon, 0, ',', '.') }}</td></tr>
+                    @endif
                     <tr><td class="pr-4 text-slate-600">Grand Total</td><td class="text-right font-medium text-slate-800">{{ number_format($t->total_bayar, 0, ',', '.') }}</td></tr>
                     <tr><td class="pr-4 text-slate-600">Total Bayar</td><td class="text-right font-medium text-slate-800">{{ number_format($t->total_dibayar, 0, ',', '.') }}</td></tr>
                     <tr><td class="pr-4 font-medium text-slate-700">{{ $kurangBayarPrint > 0 ? 'Kurang Bayar' : 'Lunas' }}</td><td class="text-right font-medium text-slate-900">{{ number_format($kurangBayarPrint, 0, ',', '.') }}</td></tr>
@@ -329,6 +333,10 @@
         {{-- TOTAL PER NOTA --}}
         <div class="px-6 py-4 bg-slate-50/60 border-t border-slate-100 flex justify-end">
             <div class="text-right space-y-1 min-w-[220px]">
+                @if((float) ($t->diskon ?? 0) > 0)
+                <p class="text-[12px] text-slate-500 flex justify-between gap-6"><span>Subtotal Barang</span> <span class="font-medium text-slate-800">Rp {{ number_format($t->total_bayar + (float) $t->diskon, 0, ',', '.') }}</span></p>
+                <p class="text-[12px] text-emerald-600 flex justify-between gap-6"><span>Diskon</span> <span class="font-medium">−Rp {{ number_format((float) $t->diskon, 0, ',', '.') }}</span></p>
+                @endif
                 <p class="text-[12px] text-slate-500 flex justify-between gap-6"><span>Grand Total</span> <span class="font-medium text-slate-800">Rp {{ number_format($t->total_bayar, 0, ',', '.') }}</span></p>
                 <p class="text-[12px] text-slate-500 flex justify-between gap-6"><span>Sudah Dibayar</span> <span class="font-medium text-emerald-600">Rp {{ number_format($t->total_dibayar, 0, ',', '.') }}</span></p>
                 @php $kurangBayar = max(0, $t->total_bayar - $t->total_dibayar); @endphp
