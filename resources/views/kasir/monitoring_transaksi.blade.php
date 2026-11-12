@@ -67,17 +67,17 @@
                 </summary>
 
                 <div class="pwa-ops-filter-fields" id="pwa-ops-filter-fields">
-            <div class="w-full md:flex-1 md:min-w-[160px]">
+            <div class="min-w-0">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Order Dari</label>
                 <x-form.input type="date" name="tgl_mulai" value="{{ request('tgl_mulai') }}" />
             </div>
 
-            <div class="w-full md:flex-1 md:min-w-[160px]">
+            <div class="min-w-0">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Order Sampai</label>
                 <x-form.input type="date" name="tgl_selesai" value="{{ request('tgl_selesai') }}" />
             </div>
 
-            <div class="w-full md:flex-[1.6] md:min-w-[220px]">
+            <div class="min-w-0">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Konsumen</label>
                 <select name="id_konsumen" class="select2-filter w-full">
                     <option value="">-- Semua Konsumen --</option>
@@ -87,12 +87,12 @@
                 </select>
             </div>
 
-            <div class="w-full md:flex-1 md:min-w-[150px]">
+            <div class="min-w-0">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">No. Nota</label>
                 <x-form.input type="text" name="nomor_nota" value="{{ request('nomor_nota') }}" placeholder="INV-..." />
             </div>
 
-            <div class="w-full md:flex-1 md:min-w-[150px]">
+            <div class="min-w-0">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Status Transaksi</label>
                 <x-form.select name="status_bayar">
                     <option value="">-- Semua Status --</option>

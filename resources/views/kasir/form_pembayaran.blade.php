@@ -208,21 +208,36 @@
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2" role="radiogroup" aria-label="Pilih rekening bank">
                             @forelse($banks as $b)
                             @php
-                                $kata = preg_split('/\s+/', trim((string) $b->nama_bank));
-                                $monogram = mb_strtoupper(mb_substr($kata[0] ?? 'B', 0, 1) . (count($kata) > 1 ? mb_substr($kata[1], 0, 1) : ''), 'UTF-8');
                                 $palettes = ['#1D4E7C', '#12365B', '#134E4A', '#3B1F56', '#4A1F1F', '#2B3648'];
                                 $palette = $palettes[crc32((string) $b->nama_bank) % count($palettes)];
                                 $norekTampil = trim(preg_replace('/(.{4})(?=.)/', '$1 ', (string) $b->nomor_rekening));
                             @endphp
-                            <label class="cursor-pointer select-none">
-                                <input type="radio" name="id_bank" value="{{ $b->id_bank }}" class="peer sr-only">
-                                <div class="rek-card border border-slate-200 rounded-xl bg-white px-2.5 py-1.5 flex items-center gap-2.5 transition-all hover:border-slate-300">
-                                    <span class="shrink-0 w-9 h-7 rounded-[5px] flex items-center justify-center text-[10px] font-extrabold text-white tracking-wide" style="background: {{ $palette }}">{{ $monogram }}</span>
-                                    <span class="min-w-0 flex-1">
-                                        <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-600 truncate">{{ $b->nama_bank }}</span>
-                                        <span class="block font-mono text-[10px] text-slate-500 tabular-nums tracking-[.12em] mt-0.5">{{ $norekTampil }}</span>
+                            <label class="cursor-pointer select-none block transition-transform duration-150 ease-out active:scale-[.98]">
+                                <input type="radio" name="id_bank" value="{{ $b->id_bank }}" class="sr-only">
+                                <div class="rek-card relative overflow-hidden rounded-xl text-white shadow-[0_2px_10px_rgba(2,6,23,.20)] transition-shadow duration-200 ease-out"
+                                     style="background: {{ $palette }}">
+                                    {{-- Kilau diagonal halus, samar (versi mini dari kartu ATM halaman Bank) --}}
+                                    <span class="absolute -top-10 -right-8 w-28 h-28 rounded-full opacity-20 pointer-events-none" style="background: radial-gradient(circle, #ffffff 0%, transparent 70%)" aria-hidden="true"></span>
+                                    <span class="relative flex items-center gap-2.5 px-3 py-2.5">
+                                        {{-- Chip EMV mini --}}
+                                        <span class="shrink-0 w-8 h-[22px] rounded-[4px] bg-gradient-to-br from-amber-200 via-amber-300 to-amber-400 border border-amber-600/40 flex items-center justify-center" aria-hidden="true">
+                                            <svg viewBox="0 0 38 28" class="w-5 h-3.5">
+                                                <rect x="1" y="1" width="36" height="26" rx="5" fill="none" stroke="#8A6B14" stroke-width="1.5"/>
+                                                <rect x="1" y="9" width="36" height="10" fill="none" stroke="#8A6B14" stroke-width="1.1"/>
+                                                <line x1="9" y1="1" x2="9" y2="27" stroke="#8A6B14" stroke-width="1.1"/>
+                                                <line x1="29" y1="1" x2="29" y2="27" stroke="#8A6B14" stroke-width="1.1"/>
+                                                <rect x="14" y="9" width="10" height="10" fill="none" stroke="#8A6B14" stroke-width="1"/>
+                                            </svg>
+                                        </span>
+                                        <span class="min-w-0 flex-1">
+                                            <span class="block text-[9px] font-bold uppercase tracking-[.16em] text-white/70 truncate">{{ $b->nama_bank }}</span>
+                                            <span class="block font-mono text-[11.5px] font-semibold text-white tabular-nums tracking-[.13em] mt-0.5" style="text-shadow: 0 1px 4px rgba(0,0,0,.35)">{{ $norekTampil }}</span>
+                                        </span>
+                                        {{-- Tombol state profesional: pil "Pilih" <-> "Terpilih" --}}
+                                        <span class="rek-btn shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold border border-white/40 bg-white/10 text-white transition-colors duration-150 ease-out">
+                                            <i class="fas fa-arrow-right text-[8px]" aria-hidden="true"></i> Pilih
+                                        </span>
                                     </span>
-                                    <span class="check-dot shrink-0 w-4 h-4 rounded-full border border-slate-300 flex items-center justify-center text-transparent"><i class="fas fa-check text-[7px]"></i></span>
                                 </div>
                             </label>
                             @empty
@@ -722,37 +737,38 @@
         document.getElementById('wrapper-deposit-info').classList.toggle('hidden', metode !== 'Deposit');
     }
 
-    // Kartu ATM mini pemilihan rekening: gaya kartu tersorot saat terpilih.
+    // Kartu ATM mini pemilihan rekening: tombol pil "Pilih" berubah jadi
+    // "Terpilih" (putih solid) + ring sorot pada kartu yang dipilih.
     // (peer-checked untuk elemen bertingkat tidak bisa tanpa varian Tailwind
     //  arbitrary yang tidak dikompilasi di build ini, jadi lewat JS.)
+    function terapkanStateRek(card, terpilih) {
+        const btn = card.querySelector('.rek-btn');
+        if (!btn) return;
+        if (terpilih) {
+            card.classList.add('ring-2', 'ring-indigo-400/70', 'ring-offset-2');
+            btn.classList.remove('bg-white/10', 'border-white/40', 'text-white');
+            btn.classList.add('bg-white', 'border-white', 'text-slate-900');
+            btn.innerHTML = '<i class="fas fa-check text-[8px]" aria-hidden="true"></i> Terpilih';
+        } else {
+            card.classList.remove('ring-2', 'ring-indigo-400/70', 'ring-offset-2');
+            btn.classList.remove('bg-white', 'border-white', 'text-slate-900');
+            btn.classList.add('bg-white/10', 'border-white/40', 'text-white');
+            btn.innerHTML = '<i class="fas fa-arrow-right text-[8px]" aria-hidden="true"></i> Pilih';
+        }
+    }
     document.querySelectorAll('input[name="id_bank"]').forEach(function (radio) {
         radio.addEventListener('change', function () {
-            document.querySelectorAll('.rek-card').forEach(function (card) {
-                card.classList.toggle('border-indigo-500', false);
-                card.classList.toggle('bg-indigo-50/50', false);
-                card.classList.toggle('shadow-[0_0_0_3px_rgba(99,102,241,.22)]', false);
-                card.classList.toggle('border-slate-200', true);
-            });
+            document.querySelectorAll('.rek-card').forEach(function (card) { terapkanStateRek(card, false); });
             const card = radio.closest('label') ? radio.closest('label').querySelector('.rek-card') : null;
-            if (card) {
-                card.classList.remove('border-slate-200');
-                card.classList.add('border-indigo-500', 'bg-indigo-50/50', 'shadow-[0_0_0_3px_rgba(99,102,241,.22)]');
-            }
-            document.querySelectorAll('.check-dot').forEach(function (dot) {
-                dot.classList.toggle('border-indigo-500', false);
-                dot.classList.toggle('bg-indigo-600', false);
-                dot.classList.toggle('text-white', false);
-                dot.classList.toggle('text-transparent', true);
-            });
-            if (card) {
-                const dot = card.querySelector('.check-dot');
-                if (dot) {
-                    dot.classList.remove('border-slate-300', 'text-transparent');
-                    dot.classList.add('border-indigo-500', 'bg-indigo-600', 'text-white');
-                }
-            }
+            if (card) terapkanStateRek(card, true);
         });
     });
+    // Pulihkan state saat halaman dibuka ulang dengan input lama ter-check.
+    const rekChecked = document.querySelector('input[name="id_bank"]:checked');
+    if (rekChecked) {
+        const rekCard = rekChecked.closest('label') ? rekChecked.closest('label').querySelector('.rek-card') : null;
+        if (rekCard) terapkanStateRek(rekCard, true);
+    }
 
     // Kalau konsumen ini punya saldo deposit, otomatis pilih Metode
     // Pembayaran = Deposit & isi Uang Diterima = saldo (dibatasi maksimal

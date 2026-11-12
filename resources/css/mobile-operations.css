@@ -14,12 +14,17 @@
    ::details-content supaya isi menjadi item flex - geometri sama persis
    dengan baseline sebelum <details> dipasang (form flex-wrap items-end
    gap-4). Tidak ada selector lain yang diubah. */
+/* Desktop >=768px: field filter tampil sebagai KOLOM grid (5 kolom satu
+   baris: tanggal x2, konsumen lebih lebar, nota, status), aksi submit di
+   ujung kanan. Grid dipilih daripada flex-1 karena lebar kolom jadi
+   deterministik - tidak bergantung kompilasi kelas arbitrary Tailwind
+   dan tidak bisa jatuh berbaris ke bawah. */
 @media screen and (min-width:768px){
  .pwa-ops-filter{display:flex;flex:1 1 100%;flex-wrap:wrap;align-items:flex-end;gap:16px;width:100%}
  .pwa-ops-filter::details-content{display:contents;content-visibility:visible}
+ .pwa-ops-filter .pwa-ops-filter-fields{display:grid;grid-template-columns:1.1fr 1.1fr 1.6fr 1fr 1fr;gap:12px;align-items:end;flex:1 1 auto;min-width:0}
 }
 .pwa-ops-filter .pwa-ops-filter-toggle{display:none}
-.pwa-ops-filter .pwa-ops-filter-fields{display:contents}
 .pwa-ops-filter .pwa-ops-filter-actions{display:inline-flex;flex-wrap:wrap;align-items:center;gap:10px}
 @media screen and (max-width:767.98px){
  .pwa-ops-page form[method='GET'] .pwa-ops-filter{display:block;width:100%}
@@ -28,6 +33,7 @@
  .pwa-ops-page .pwa-ops-filter .pwa-ops-filter-toggle::after{content:'\f078';font-family:'Font Awesome 6 Free';font-weight:900;transition:transform .2s ease;font-size:11px;color:var(--brand-surface-text_tertiary,var(--text-tertiary,#64748b))}
  .pwa-ops-page .pwa-ops-filter[open] .pwa-ops-filter-toggle::after{transform:rotate(180deg)}
  .pwa-ops-page .pwa-ops-filter:not([open]) .pwa-ops-filter-fields{display:none}
+ .pwa-ops-page .pwa-ops-filter[open] .pwa-ops-filter-fields{display:block}
  .pwa-ops-page .pwa-ops-filter--active .pwa-ops-filter-toggle{color:var(--brand-aksen,#E8891D)}
  .pwa-ops-page .pwa-ops-filter--active .pwa-ops-filter-toggle > span{position:relative}
  .pwa-ops-page .pwa-ops-filter--active .pwa-ops-filter-toggle > span::after{content:'';position:absolute;top:-4px;right:-12px;width:6px;height:6px;border-radius:999px;background:var(--brand-aksen,#E8891D)}
