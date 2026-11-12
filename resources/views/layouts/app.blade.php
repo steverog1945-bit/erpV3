@@ -2377,7 +2377,7 @@
         if (tot) { tot.textContent = d.total > 99 ? '99+' : d.total; tot.classList.toggle('hidden', !(d.total > 0)); tot.classList.toggle('inline-flex', d.total > 0); }
         const tt = document.getElementById('notif-total-teks');
         if (tt) tt.textContent = d.total > 0 ? d.total + ' tugas' : '';
-        const warna = { rose: 'bg-rose-500', amber: 'bg-amber-500', indigo: 'bg-indigo-500' }; // sisa pemetaan lama; warÂ­na badge kini dari token CSS
+        const warna = { rose: 'bg-rose-500', amber: 'bg-amber-500', indigo: 'bg-indigo-500' }; // sisa pemetaan lama; war­na badge kini dari token CSS
         void warna;
         const list = document.getElementById('notif-list');
         if (list) {

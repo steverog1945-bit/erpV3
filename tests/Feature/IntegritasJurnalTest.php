@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 /**
- * AUDIT Â§8B - integritas jurnal (Payment -> Journal).
+ * AUDIT §8B - integritas jurnal (Payment -> Journal).
  *
  * Peta nyata, bukan tebakan. Diperiksa langsung ke skema database:
  *
@@ -236,7 +236,7 @@ class IntegritasJurnalTest extends TestCase
             'tahun' => $tahun,
             'bulan' => $bulan,
             'status' => 'Closed',
-            'catatan' => 'Uji audit Â§8B',
+            'catatan' => 'Uji audit §8B',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

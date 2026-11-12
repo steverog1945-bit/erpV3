@@ -65,7 +65,7 @@
             @forelse($produk as $i => $p)
             @php
                 $hargaProduk = $all_harga[$p->id_produk] ?? collect();
-                $satuanRentangRow = $p->metode_hitung === 'ukuran' ? 'mÃ‚Â²' : 'Pcs';
+                $satuanRentangRow = $p->metode_hitung === 'ukuran' ? 'm²' : 'Pcs';
                 // rtrim ganda: buang nol desimal berlebih (2.00 -> 2, 0.50 -> 0.5)
                 // supaya tier bilangan bulat tetap tampil bersih, bukan "2.00".
                 $fmtRentang = fn ($v) => angka_polos((float) $v, 2);
@@ -92,7 +92,7 @@
                             @php $satu = $tiersGol->first(); @endphp
                             <span class="text-slate-700 font-medium">Rp{{ number_format($satu->harga_jual, 0, ',', '.') }}</span>
                             @if($satu->range_min > 0.01 || $satu->range_max)
-                                <div class="text-[9px] text-slate-400">{{ $fmtRentang($satu->range_min) }}-{{ $satu->range_max !== null ? $fmtRentang($satu->range_max) : 'Ã¢Ë†Å¾' }} {{ $satuanRentangRow }}</div>
+                                <div class="text-[9px] text-slate-400">{{ $fmtRentang($satu->range_min) }}-{{ $satu->range_max !== null ? $fmtRentang($satu->range_max) : '∞' }} {{ $satuanRentangRow }}</div>
                             @endif
                         @else
                             <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-indigo-50 text-indigo-600 border border-indigo-100">{{ $tiersGol->count() }} TIER</span>
@@ -131,10 +131,10 @@
     @foreach($produk as $p)
     @php
         $hargaProdukModal = $all_harga[$p->id_produk] ?? collect();
-        // Satuan rentang Min/Max HARUS eksplisit - mÃ‚Â² untuk metode 'ukuran',
+        // Satuan rentang Min/Max HARUS eksplisit - m² untuk metode 'ukuran',
         // Pcs untuk 'quantity', ikut definisi yang sama dengan
         // HargaService::getHargaEfektif().
-        $satuanRentang = $p->metode_hitung === 'ukuran' ? 'mÃ‚Â²' : 'Pcs';
+        $satuanRentang = $p->metode_hitung === 'ukuran' ? 'm²' : 'Pcs';
         $stepRentang = $p->metode_hitung === 'ukuran' ? '0.01' : '1';
         $defaultMin = $p->metode_hitung === 'ukuran' ? '0.01' : '1';
         $fmtNilai = fn ($v) => angka_polos((float) $v, 2);
@@ -149,7 +149,7 @@
          subtitle="Harga dasar dan harga bertingkat yang dipakai saat membuat nota"
          icon="fa-tags" maxWidth="6xl">
         <p class="text-xs text-slate-400 mb-5 -mt-2">
-            Rentang dalam <b class="text-slate-500">{{ $satuanRentang }}</b>{{ $p->metode_hitung === 'ukuran' ? ' (luas = panjang Ãƒâ€” lebar, boleh pecahan - mis. 0,09 mÃ‚Â²)' : '' }}. Kosongkan <b class="text-slate-500">Max</b> untuk rentang tak terbatas. Harga dipilih otomatis di Input Order sesuai golongan &amp; {{ $satuanRentang }} order.
+            Rentang dalam <b class="text-slate-500">{{ $satuanRentang }}</b>{{ $p->metode_hitung === 'ukuran' ? ' (luas = panjang × lebar, boleh pecahan - mis. 0,09 m²)' : '' }}. Kosongkan <b class="text-slate-500">Max</b> untuk rentang tak terbatas. Harga dipilih otomatis di Input Order sesuai golongan &amp; {{ $satuanRentang }} order.
         </p>
 
         {{-- TAB GOLONGAN --}}
@@ -323,7 +323,7 @@
     // pas coba tambah tier berikutnya dari Min=1 lagi, dan berakhir coba-
     // coba sampai ke angka aneh semacam 1,01/10,01 - padahal cukup 11.
     // Disarankan otomatis: Max tier TERTINGGI (yang punya Max, bukan tak
-    // terbatas) + 1 untuk Pcs, atau +0.01 untuk mÃ‚Â² (boleh pecahan). Kalau
+    // terbatas) + 1 untuk Pcs, atau +0.01 untuk m² (boleh pecahan). Kalau
     // belum ada tier sama sekali, atau semua tier yang ada tak terbatas
     // (Max kosong), tidak ada saran yang masuk akal - biarkan default HTML.
     function perbaruiSaranMinTier(idProduk, idGolongan) {

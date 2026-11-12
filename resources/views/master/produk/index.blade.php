@@ -191,7 +191,7 @@
                     </x-form.group>
                     <x-form.group label="Metode Hitung Order" dalam>
                         <x-form.select name="metode_hitung" onchange="toggleMinOrderFields()" class="!bg-white !shadow-sm !py-2.5">
-                            <option value="ukuran">Berdasarkan Ukuran Cetak (mÂ²)</option>
+                            <option value="ukuran">Berdasarkan Ukuran Cetak (m²)</option>
                             <option value="quantity">Berdasarkan Satuan (Pcs)</option>
                         </x-form.select>
                     </x-form.group>
@@ -234,7 +234,7 @@
                      di atas - itu aturan per-baris (min_panjang/min_lebar), ini
                      aturan akumulasi order. --}}
                 <div id="field_min_luas" class="grid grid-cols-1 md:grid-cols-2 gap-2.5 hidden">
-                    <x-form.group label="Min. Luas Total Kelompok (mÂ²)" dalam>
+                    <x-form.group label="Min. Luas Total Kelompok (m²)" dalam>
                         <x-form.input type="number" name="min_luas_total" step="0.01" min="0" placeholder="0" class="!bg-white !shadow-sm !py-2.5" />
                     </x-form.group>
                     <x-form.group label="Nama Kelompok Minimum" dalam>
@@ -291,7 +291,7 @@
                         </div>
                         <div class="ld md:col-span-1">
                             <select id="temp_rumus" class="w-full bg-white border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 shadow-sm focus:ring-2 focus:ring-indigo-500/20">
-                                <option value="(P*L)/10000">Luas (mÂ²) - [P*L/10000]</option>
+                                <option value="(P*L)/10000">Luas (m²) - [P*L/10000]</option>
                                 <option value="Q">Quantity (1:1) - [Satuan]</option>
                                 <option value="2*(P+L)/100">Keliling (m) - [2*(P+L)/100]</option>
                                 <option value="(P*L)/10000*2">Bolak Balik (x2)</option>
@@ -421,7 +421,7 @@
         document.getElementById('tab-btn-finishing').className = 'flex-1 py-3 text-[11px] font-medium uppercase tracking-widest transition-all ' + (tab === 'finishing' ? aktif : nonaktif);
     }
 
-    // Tampilkan input Min Order sesuai metode_hitung: Panjang/Lebar (mÂ²) untuk
+    // Tampilkan input Min Order sesuai metode_hitung: Panjang/Lebar (m²) untuk
     // 'ukuran', atau Qty (Pcs) untuk 'quantity' - keduanya disimpan di kolom
     // berbeda (min_panjang/min_lebar vs min_order) jadi hanya satu yang relevan
     // untuk diisi tergantung metode yang dipilih.

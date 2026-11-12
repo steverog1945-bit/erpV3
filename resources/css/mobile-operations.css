@@ -1,4 +1,4 @@
-/* ORION GRAFIKA â€” operational table cards: scoped and mobile-only. */
+/* ORION GRAFIKA — operational table cards: scoped and mobile-only. */
 .pwa-ops-mobile-only{display:none}
 /* Filter collapsible ala SPK/Produksi (mobile: <details> buka/tutup).
    Desktop >=768px harus kembali ke baris filter horizontal seperti

@@ -48,9 +48,9 @@
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Metode Hitung</label>
                 <select name="metode_hitung" class="select2-filter w-full">
                     <option value="">Semua Metode</option>
-                    <option value="luas" @selected(request('metode_hitung') === 'luas')>Luas (mÂ²)</option>
+                    <option value="luas" @selected(request('metode_hitung') === 'luas')>Luas (m²)</option>
                     <option value="keliling" @selected(request('metode_hitung') === 'keliling')>Keliling (m)</option>
-                    <option value="KEPING_ROLL" @selected(request('metode_hitung') === 'KEPING_ROLL')>Keping (m) â€” jahit keliling barang per keping</option>
+                    <option value="KEPING_ROLL" @selected(request('metode_hitung') === 'KEPING_ROLL')>Keping (m) — jahit keliling barang per keping</option>
                     <option value="quantity" @selected(request('metode_hitung') === 'quantity')>Satuan (Pcs)</option>
                     <option value="LINEAR_GRID" @selected(request('metode_hitung') === 'LINEAR_GRID')>Potong Manual (meter potong)</option>
                 </select>
@@ -98,7 +98,7 @@
                 </td>
                 <td class="px-4 py-5 text-center">
                     <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-[10px] font-medium uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
-                        {{ match($d->metode_hitung) { 'luas' => 'Luas (mÂ²)', 'keliling' => 'Keliling (m)', 'KEPING_ROLL' => 'Keping (m)', 'LINEAR_GRID' => 'Potong Manual (m)', default => 'Satuan (Pcs)' } }}
+                        {{ match($d->metode_hitung) { 'luas' => 'Luas (m²)', 'keliling' => 'Keliling (m)', 'KEPING_ROLL' => 'Keping (m)', 'LINEAR_GRID' => 'Potong Manual (m)', default => 'Satuan (Pcs)' } }}
                     </span>
                 </td>
                 <td class="px-4 py-5 text-right">
@@ -162,8 +162,8 @@
             // Satuan rentang eksplisit ikut metode_hitung finishing ITU SENDIRI
             // ('luas'/'keliling'/'quantity' - lihat perbaikan qty acuan
             // finishing sesi sebelumnya), sama seperti Daftar Harga produk -
-            // luas mÂ² & keliling meter boleh pecahan, Pcs wajib bulat.
-            $satuanRentangFinishing = match($d->metode_hitung) { 'luas' => 'mÂ²', 'keliling' => 'm', 'LINEAR_GRID' => 'meter', default => 'Pcs' };
+            // luas m² & keliling meter boleh pecahan, Pcs wajib bulat.
+            $satuanRentangFinishing = match($d->metode_hitung) { 'luas' => 'm²', 'keliling' => 'm', 'LINEAR_GRID' => 'meter', default => 'Pcs' };
             $stepRentangFinishing = $d->metode_hitung === 'quantity' ? '1' : '0.01';
         @endphp
 
@@ -230,7 +230,7 @@
                 </x-form.group>
                 <x-form.group label="Metode Hitung" name="metode_hitung" required dalam>
                     <x-form.select name="metode_hitung" required>
-                        <option value="luas">Luas (mÂ²)</option>
+                        <option value="luas">Luas (m²)</option>
                         <option value="keliling">Keliling (m) - mis. jahit tepi</option>
                         <option value="KEPING_ROLL">Keping (m) - jahit keliling barang per keping</option>
                         <option value="quantity">Satuan (Pcs)</option>
@@ -286,7 +286,7 @@
                 </x-form.group>
                 <x-form.group label="Metode Hitung" dalam>
                     <x-form.select name="metode_hitung" id="edit_metode_hitung" required>
-                        <option value="luas">Luas (mÂ²)</option>
+                        <option value="luas">Luas (m²)</option>
                         <option value="keliling">Keliling (m) - mis. jahit tepi</option>
                         <option value="KEPING_ROLL">Keping (m) - jahit keliling barang per keping</option>
                         <option value="quantity">Satuan (Pcs)</option>

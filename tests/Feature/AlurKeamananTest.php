@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 /**
- * AUDIT Â§8 - keamanan pada alur Customer -> Order -> SPK -> Produksi ->
+ * AUDIT §8 - keamanan pada alur Customer -> Order -> SPK -> Produksi ->
  * Collecting -> Invoice -> Payment -> Journal.
  *
  * PENTING soal cakupan: aplikasi ini ERP SATU PERUSAHAAN. Transaksi, SPK,

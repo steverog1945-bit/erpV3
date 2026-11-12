@@ -14,7 +14,7 @@
     {{-- FILTER & SEARCH --}}
     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-8">
         <form method="GET" action="{{ route('bahan.index') }}" id="filterForm" class="mobile-bahan-filter-form flex flex-wrap items-end gap-4">
-            <div class="w-full md:w-64 lg:w-72">
+            <div class="w-full md:w-56 lg:w-64">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Cari Bahan Baku</label>
                 <div class="relative">
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
@@ -119,7 +119,7 @@
                                 <span class="text-[9px] text-slate-400 font-medium uppercase">{{ $b->kategori->nama_kategori ?? 'Umum' }}</span>
                                 @if($b->merk || $b->jenisBahan)
                                     <span class="text-[9px] text-indigo-600 font-medium uppercase">
-                                        {{ $b->merk->nama_merk ?? '' }}{{ $b->merk && $b->jenisBahan ? ' Ã¢â‚¬Â¢ ' : '' }}{{ $b->jenisBahan->nama_jenis ?? '' }}
+                                        {{ $b->merk->nama_merk ?? '' }}{{ $b->merk && $b->jenisBahan ? ' • ' : '' }}{{ $b->jenisBahan->nama_jenis ?? '' }}
                                     </span>
                                 @endif
                             </div>
@@ -145,7 +145,7 @@
                                 @if($stokHabis)
                                     <span class="text-[9px] font-medium text-rose-500 uppercase tracking-wider">Stok menipis</span>
                                 @elseif($b->satuanHitung && $b->id_satuan_stok !== $b->id_satuan_hitung && $b->nilai_konversi > 1)
-                                    <span class="text-[10px] font-medium text-slate-400">Ã¢â€°Ë† {{ $angka($b->stok * $b->nilai_konversi, 0) }} {{ $b->satuanHitung->nama_satuan }}</span>
+                                    <span class="text-[10px] font-medium text-slate-400">≈ {{ $angka($b->stok * $b->nilai_konversi, 0) }} {{ $b->satuanHitung->nama_satuan }}</span>
                                 @endif
                             </div>
                         </td>
@@ -183,7 +183,7 @@
                                 <span class="text-[11px] font-medium text-slate-400" title="Harga beli terakhir sama dengan harga rata-rata">Sama</span>
                             @else
                                 <span class="inline-flex flex-col items-center px-2 py-0.5 rounded-lg {{ $selisihRp > 0 ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600' }}" title="Harga beli terakhir {{ $selisihRp > 0 ? 'lebih mahal' : 'lebih murah' }} Rp {{ number_format(abs($selisihRp), 0, ',', '.') }} dari harga rata-rata">
-                                    <span class="text-[11px] font-medium tabular-nums">{{ $selisihRp > 0 ? 'Ã¢â€“Â²' : 'Ã¢â€“Â¼' }} {{ angka(abs($selisihPersen), 1) }}%</span>
+                                    <span class="text-[11px] font-medium tabular-nums">{{ $selisihRp > 0 ? '▲' : '▼' }} {{ angka(abs($selisihPersen), 1) }}%</span>
                                     <span class="text-[9px] font-medium tabular-nums">{{ $selisihRp > 0 ? '+' : '-' }}Rp {{ number_format(abs($selisihRp), 0, ',', '.') }}</span>
                                 </span>
                             @endif
@@ -295,7 +295,7 @@
 
         <div id="wrapper_dimensi_roll" class="p-4 bg-indigo-50/50 border border-indigo-100 rounded-xl space-y-3">
             <p class="text-[10px] font-medium text-indigo-500 uppercase tracking-widest">
-                <i class="fas fa-ruler-combined mr-1"></i> Dimensi Roll (Opsional - bahan roll mÃ‚Â²)
+                <i class="fas fa-ruler-combined mr-1"></i> Dimensi Roll (Opsional - bahan roll m²)
             </p>
             <div class="grid grid-cols-2 gap-4">
                 <x-form.group label="Lebar Roll (m)" dalam>

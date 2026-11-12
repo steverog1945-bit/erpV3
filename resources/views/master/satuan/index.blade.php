@@ -30,7 +30,7 @@
                             <i class="fas fa-info-circle mr-1"></i> Penting
                         </p>
                         <p class="text-[11px] text-amber-700 leading-relaxed">
-                            Angka konversi di halaman ini <b>tidak dipakai otomatis</b> untuk menghitung stok. Konversi riil per bahan (mis. 1 Roll = 224 mÃ‚Â²) diatur di
+                            Angka konversi di halaman ini <b>tidak dipakai otomatis</b> untuk menghitung stok. Konversi riil per bahan (mis. 1 Roll = 224 m²) diatur di
                             <a href="{{ route('bahan.index') }}" class="underline font-medium">Master Bahan Baku</a> masing-masing bahan, karena tiap bahan bisa punya nilai konversi berbeda meski satuannya sama (contoh: dua bahan roll dengan lebar berbeda).
                         </p>
                     </div>

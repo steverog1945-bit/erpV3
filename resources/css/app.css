@@ -1741,7 +1741,7 @@ html.dark .cek-nama-telp { color: #8A96B8; }
    VISUAL REFRESH V7 (2026-11) - Input Order: Command Center 1:1 (mockup v2)
    Hanya gaya visual, tanpa mengubah id/name/handler JS. Dipasangkan dengan
    markup po-ic dan po-est di views/penjualan/create.blade.php.
-   Font: floor 13px tetap berlaku (ui-refresh) â€” hierarki lewat berat & warna,
+   Font: floor 13px tetap berlaku (ui-refresh) — hierarki lewat berat & warna,
    bukan ukuran kecil. Desktop >=1280px dijanjikan muat tanpa scroll.
    ========================================================================== */
 

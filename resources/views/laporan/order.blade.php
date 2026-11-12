@@ -335,7 +335,7 @@
             <div class="text-right space-y-1 min-w-[220px]">
                 @if((float) ($t->diskon ?? 0) > 0)
                 <p class="text-[12px] text-slate-500 flex justify-between gap-6"><span>Subtotal Barang</span> <span class="font-medium text-slate-800">Rp {{ number_format($t->total_bayar + (float) $t->diskon, 0, ',', '.') }}</span></p>
-                <p class="text-[12px] text-emerald-600 flex justify-between gap-6"><span>Diskon</span> <span class="font-medium">Ã¢Ë†â€™Rp {{ number_format((float) $t->diskon, 0, ',', '.') }}</span></p>
+                <p class="text-[12px] text-emerald-600 flex justify-between gap-6"><span>Diskon</span> <span class="font-medium">−Rp {{ number_format((float) $t->diskon, 0, ',', '.') }}</span></p>
                 @endif
                 <p class="text-[12px] text-slate-500 flex justify-between gap-6"><span>Grand Total</span> <span class="font-medium text-slate-800">Rp {{ number_format($t->total_bayar, 0, ',', '.') }}</span></p>
                 <p class="text-[12px] text-slate-500 flex justify-between gap-6"><span>Sudah Dibayar</span> <span class="font-medium text-emerald-600">Rp {{ number_format($t->total_dibayar, 0, ',', '.') }}</span></p>

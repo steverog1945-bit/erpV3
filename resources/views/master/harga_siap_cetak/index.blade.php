@@ -58,7 +58,7 @@
             <tr class="hover:bg-slate-50/50 transition-all">
                 <td class="px-6 py-4 text-[13px] font-medium text-slate-700 uppercase">{{ $p->nama_produk }}</td>
                 <td class="px-4 py-4 text-[12px] font-medium text-slate-500">{{ $p->nama_mesin ?? '-' }}</td>
-                <td class="px-4 py-4 text-center text-[12px] text-slate-500">{{ $p->metode_hitung === 'ukuran' ? 'mÂ²' : 'pcs' }}</td>
+                <td class="px-4 py-4 text-center text-[12px] text-slate-500">{{ $p->metode_hitung === 'ukuran' ? 'm²' : 'pcs' }}</td>
                 <td class="px-4 py-4 text-center">
                     @if($p->jumlah_tier > 0)<x-badge variant="success">Sudah diatur</x-badge>@else<x-badge variant="warning">Belum diatur</x-badge>@endif
                 </td>
