@@ -56,6 +56,14 @@ class ApiAuth
             ], 401);
         }
 
+        // Akun nonaktif tidak boleh dipakai lewat API juga - mematikan akun
+        // resign tidak boleh menyisakan pintu ke samping.
+        if (!(int) ($user->is_active ?? 1)) {
+            return response()->json([
+                'error' => 'Akun tidak aktif. Hubungi Administrator.',
+            ], 401);
+        }
+
         // Pasang user ke request dan auth guard untuk controller yang
         // memakai auth()->user() atau $request->user().
         auth()->setUser($user);

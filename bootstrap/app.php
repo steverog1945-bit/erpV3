@@ -20,6 +20,9 @@ return Application::configure(basePath: dirname(__DIR__))
         // Satu submit_id = satu transaksi untuk SEMUA permintaan tulis (klik ganda, coba ulang, dua tab).
         // Tidak melakukan apa pun bila permintaan tidak membawa submit_id. Lihat docblock SubmitSekaliJalan.
         $middleware->appendToGroup('web', \App\Http\Middleware\SubmitSekaliJalan::class);
+        // Akun nonaktif (resign dsb.) langsung dikeluarkan di request berikutnya -
+        // bukan menunggu sesi lama kedaluwarsa sendiri.
+        $middleware->appendToGroup('web', \App\Http\Middleware\PastikanUserAktif::class);
 
         $middleware->alias([
             'menu.access' => \App\Http\Middleware\CheckMenuAccess::class,

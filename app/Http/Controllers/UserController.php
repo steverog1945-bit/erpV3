@@ -30,7 +30,9 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with(['karyawan', 'role'])->get();
-        $karyawan = Karyawan::whereDoesntHave('user')->get(); // Hanya tampilkan karyawan yang belum punya user
+        // Hanya tampilkan karyawan yang belum punya user DAN masih aktif
+        // - karyawan resign/nonaktif tidak perlu (dan tidak boleh) dibuatkan akun.
+        $karyawan = Karyawan::whereDoesntHave('user')->where('status_aktif', 1)->get();
         $roles = Role::all();
         $bagianRoleMap = self::BAGIAN_ROLE_MAP;
         return view('master.user.index', compact('users', 'karyawan', 'roles', 'bagianRoleMap'));
@@ -45,6 +47,14 @@ class UserController extends Controller
             'password' => 'required|min:8',
             'id_role' => 'required|exists:roles,id_role'
         ]);
+
+        // Karyawan resign/nonaktif tidak boleh dibuatkan akun. Dropdown form
+        // memang hanya menampilkan karyawan aktif, tapi form buatan orang
+        // tidak boleh dipercaya - dicek juga di sisi server.
+        $karyawanTerpilih = Karyawan::find($request->id_karyawan);
+        if (!$karyawanTerpilih || !(int) $karyawanTerpilih->status_aktif) {
+            return back()->withInput()->with('error', 'Karyawan ini sudah nonaktif / resign - aktifkan dulu di Master Karyawan bila memang diperlukan.');
+        }
 
         // Hanya Administrator yang boleh membuat akun berrole Administrator
         // (atau role yang sama dengan dirinya bila dia bukan admin).
@@ -105,6 +115,37 @@ class UserController extends Controller
     return back()->with('success', 'Akun user berhasil diperbarui!');
 }
 
+/**
+ * Nonaktifkan / aktifkan akun pengguna (karyawan resign, dsb.).
+ *
+ * Menandakan "akun mati tapi utuh": riwayat transaksi, audit log, dan
+ * dokumen tetap utuh (beda dengan hapus akun). Akun nonaktif DITOLAK di
+ * pintu login (AuthController::login), sesi yang sedang berjalan dipaksa
+ * keluar pada request berikutnya (middleware PastikanUserAktif), dan token
+ * API diblok juga (ApiAuth). Data TIDAK dihapus - kapan pun bisa
+ * diaktifkan kembali lewat tombol yang sama.
+ */
+public function toggleAktif($id)
+{
+    $user = User::findOrFail($id);
+    if ($user->id_user == Auth::id()) {
+        return back()->with('error', 'Anda tidak bisa menonaktifkan akun sendiri!');
+    }
+    if (!\App\Support\Izin::bolehKelolaUser(Auth::user(), $user)) {
+        abort(403, 'Anda tidak berwenang mengubah status akun ini. Akun Administrator hanya bisa dikelola Administrator.');
+    }
+
+    $baru = ! (int) $user->is_active;
+    $user->is_active = (int) $baru;
+    $user->save();
+
+    \App\Services\AuditLogger::log('updated', 'users', (int) $user->id_user, ['is_active' => !$baru], ['is_active' => (int) $baru], $baru ? 'Akun user diaktifkan kembali' : 'Akun user dinonaktifkan');
+
+    return back()->with('success', $baru
+        ? 'Akun @' . $user->username . ' diaktifkan kembali. Bisa masuk lagi.'
+        : 'Akun @' . $user->username . ' dinonaktifkan. Ia tidak bisa masuk sampai diaktifkan kembali.');
+}
+
 public function destroy($id)
 {
     $user = User::findOrFail($id);
@@ -123,7 +164,7 @@ public function destroy($id)
     $tercatatKasir = DB::table('transaksi')->where('id_user_kasir', $id)->exists();
     $punyaPembatalan = DB::table('transaksi')->where('id_user_pembatal_nota', $id)->exists();
     if ($tercatatKasir || $punyaPembatalan) {
-        return back()->with('error', 'Akun ini masih tercatat pada data transaksi (sebagai kasir/pembatal nota) dan tidak bisa dihapus. Nonaktifkan akunnya lewat Setting Akses atau ganti rolenya, agar riwayat tetap utuh.');
+        return back()->with('error', 'Akun ini masih tercatat pada data transaksi (sebagai kasir/pembatal nota) dan tidak bisa dihapus. Nonaktifkan akunnya dengan tombol status (Ikon user-slash) di kolom Keamanan - riwayat transaksi tetap utuh.');
     }
 
     // Audit Fase 2: purchase_orders/purchase_requests/quotations/stock_opnames

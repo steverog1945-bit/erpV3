@@ -54,6 +54,12 @@ class AuthController extends Controller
             return response()->json(['error' => 'Username atau password salah.'], 401);
         }
 
+        // Akun nonaktif (karyawan resign) tidak boleh menerbitkan token
+        // baru - menonaktifkan akun tidak boleh menyisakan pintu ke samping.
+        if (!(int) ($user->is_active ?? 1)) {
+            return response()->json(['error' => 'Akun tidak aktif. Hubungi Administrator.'], 401);
+        }
+
         $hasil = $this->tokenService->terbitkan($user);
 
         return response()->json([

@@ -114,6 +114,18 @@ class AuthController extends Controller
             'password' => 'required|max:255',
         ]);
 
+        // Akun nonaktif (karyawan resign / dinonaktifkan di Manajemen Pengguna)
+        // tidak boleh masuk sama sekali - dicek SEBELUM password, supaya
+        // jawabannya pasti "akun dinonaktifkan", bukan "password salah".
+        $akun = User::where('username', $credentials['username'])->first();
+        if ($akun && ! (int) $akun->is_active) {
+            AuditLogger::log('login_nonaktif', 'users', (int) $akun->id_user, null, null, 'Percobaan masuk ditolak: akun dinonaktifkan');
+
+            return redirect()->route('login')->withErrors([
+                'username' => 'Akun Anda dinonaktifkan (karyawan resign / tidak aktif). Hubungi Administrator.',
+            ]);
+        }
+
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 

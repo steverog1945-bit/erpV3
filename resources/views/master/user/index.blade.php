@@ -19,6 +19,7 @@
                 <th class="px-6 py-5 text-left">Username</th>
                 <th class="px-4 py-5 text-left">Nama Karyawan</th>
                 <th class="px-4 py-5 text-left">Role / Akses</th>
+                <th class="px-4 py-5 text-center">Status</th>
                 <th class="px-8 py-5 text-right">Keamanan</th>
             </tr>
         </thead>
@@ -38,6 +39,16 @@
                         <i class="fas fa-shield-alt mr-1.5"></i> {{ $u->role->nama_role }}
                     </span>
                 </td>
+                <td class="px-4 py-5 text-center">
+                    @if((int) $u->is_active)
+                        <span class="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Aktif</span>
+                    @else
+                        <span class="inline-flex items-center gap-1.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-600 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wider"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>Nonaktif</span>
+                    @endif
+                    @if($u->karyawan && ! (int) $u->karyawan->status_aktif)
+                        <div class="mt-1.5 text-[9px] font-medium text-amber-600 uppercase tracking-wide" title="Data karyawan sudah ditandai non-aktif/resign di Master Karyawan"><i class="fas fa-triangle-exclamation mr-0.5"></i>Karyawan resign</div>
+                    @endif
+                </td>
                 <td class="px-8 py-5 text-right">
                     <div class="flex justify-end gap-2">
                         @if(optional(auth()->user()->role)->nama_role === 'Administrator')
@@ -56,6 +67,16 @@
                         <x-button type="button" size="icon" variant="ghost" onclick="openEditUser({{ json_encode(['id_user' => $u->id_user, 'username' => $u->username, 'id_role' => $u->id_role], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) }})" class="border border-slate-100 hover:text-amber-500" title="Edit">
                             <i class="far fa-edit text-sm"></i>
                         </x-button>
+                        {{-- Nonaktifkan / aktifkan akun (karyawan resign). Tombol
+                             disembunyikan untuk akun sendiri - sama dengan tombol Hapus. --}}
+                        @if((int) auth()->user()->id_user !== (int) $u->id_user)
+                        <form action="{{ route('users.toggle-aktif', $u->id_user) }}" method="POST" class="inline" id="toggle-form-user-{{ $u->id_user }}">
+                            @csrf
+                            <x-button type="button" size="icon" variant="ghost" onclick="confirmToggleUser({{ (int) $u->id_user }}, {{ json_encode($u->username, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) }}, {{ (int) $u->is_active }})" class="border border-slate-100 {{ (int) $u->is_active ? 'hover:text-amber-500' : 'hover:text-emerald-600' }}" title="{{ (int) $u->is_active ? 'Nonaktifkan akun' : 'Aktifkan kembali akun' }}">
+                                <i class="fas {{ (int) $u->is_active ? 'fa-user-slash text-amber-500' : 'fa-user-check text-emerald-600' }} text-sm"></i>
+                            </x-button>
+                        </form>
+                        @endif
                         <form action="{{ url('/users/delete/'.$u->id_user) }}" method="POST" class="inline" id="delete-form-user-{{ $u->id_user }}">
                             @csrf @method('DELETE')
                             {{-- SEC-USER-002: id selalu int, username di-encode JSON_HEX_* -
@@ -183,6 +204,25 @@
         const div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
+    }
+
+    function confirmToggleUser(id, username, isAktif) {
+        Swal.fire({
+            title: isAktif ? 'Nonaktifkan Akun?' : 'Aktifkan Akun?',
+            html: isAktif
+                ? `Akun <b>@${escapeHtml(username)}</b> tidak bisa masuk lagi setelah ini. Riwayat transaksi & audit log tetap utuh, dan akun bisa diaktifkan kembali kapan pun.`
+                : `Akun <b>@${escapeHtml(username)}</b> bisa masuk lagi setelah ini.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: isAktif ? '#93481A' : '#0b7a3e',
+            cancelButtonColor: '#F1F5F1',
+            cancelButtonText: '<span style="color: #5D6A85">Batal</span>',
+            confirmButtonText: isAktif ? 'Ya, Nonaktifkan' : 'Ya, Aktifkan'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('toggle-form-user-' + id).submit();
+            }
+        });
     }
 
     function confirmDeleteUser(id, username) {

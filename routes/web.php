@@ -555,6 +555,9 @@ Route::match(['post', 'patch'], '/pembelian-bahan/pelunasan/{id}', [PembelianBah
     Route::put('/users/update/{id}',
         [UserController::class, 'update'])->whereNumber('id');
 
+    Route::post('/users/{id}/toggle-aktif',
+        [UserController::class, 'toggleAktif'])->whereNumber('id')->name('users.toggle-aktif');
+
     Route::delete('/users/delete/{id}',
         [UserController::class, 'destroy'])->whereNumber('id');
 
