@@ -70,11 +70,34 @@
             <span class="inline-flex items-center gap-2 h-9 px-3 rounded-lg border border-slate-200 bg-white text-[12px] font-medium text-slate-600 shadow-sm">
                 <i class="far fa-calendar-days text-slate-400 text-[11px]"></i>{{ now()->translatedFormat('d F Y') }}
             </span>
+            <button type="button" id="btnRekapWa"
+                data-rekap-order="{{ $orderHariIni }}"
+                data-rekap-omzet="{{ (int) round($nilaiOrderHariIni) }}"
+                data-rekap-antre="{{ $spkAntre }}"
+                data-rekap-proses="{{ $spkProses }}"
+                data-rekap-piutang="{{ $piutangCount }}"
+                data-rekap-urgent="{{ $urgentAktif }}"
+                class="inline-flex items-center gap-2 h-9 px-4 rounded-lg border border-[#BFE7CC] bg-[#25D366]/10 text-[12px] font-semibold text-[#075E33] shadow-sm hover:bg-[#25D366]/25 transition-colors" title="Kirim ringkasan hari ini ke WhatsApp Anda">
+                <i class="fab fa-whatsapp text-[15px] leading-none"></i>Rekap ke WA
+            </button>
             <a href="{{ $u('laporan.order') }}" class="inline-flex items-center gap-2 h-9 px-4 rounded-lg border border-slate-200 bg-white text-[12px] font-semibold text-slate-600 shadow-sm hover:border-slate-300 hover:text-slate-800 transition-colors">
                 <i class="fas fa-download text-[11px]"></i>Ekspor Laporan
             </a>
         </div>
     </div>
+
+    {{-- ============ PERHATIAN HARI INI (hanya tampil jika ada masalah) ============ --}}
+    @if (isset($anomali) && $anomali->isNotEmpty())
+        <div class="mb-5 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-2.5" role="alert" aria-label="Perhatian hari ini">
+            <span class="inline-flex items-center gap-2 text-[12px] font-semibold text-rose-700 shrink-0"><i class="fas fa-triangle-exclamation text-[12px]"></i>Perhatian hari ini</span>
+            <ul class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-[12px] font-medium text-rose-800">
+                @foreach ($anomali as $a)
+                    @php $urlAnomali = \App\Support\JalurLanjut::boleh(route($a['route'], $a['param'])) ? route($a['route'], $a['param']) : '#'; @endphp
+                    <li><a href="{{ $urlAnomali }}" class="underline underline-offset-2 decoration-rose-300 hover:text-rose-900">{{ $a['label'] }}</a></li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     {{-- ============ KPI CARDS (4 kartu, gauge lingkaran beranimasi saat reload) ============ --}}
     @php
@@ -276,6 +299,22 @@ document.addEventListener('DOMContentLoaded', function () {
         requestAnimationFrame(function () {
             setTimeout(function () { el.style.strokeDashoffset = String(target); }, 80 + i * 120);
         });
+    });
+
+    // Kirim rekap hari ini ke WhatsApp (pesan terisi, lewat WhatsApp share).
+    var btnWa = document.getElementById('btnRekapWa');
+    if (btnWa) btnWa.addEventListener('click', function () {
+        var b = this;
+        var d = new Date();
+        var fmt = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        var rupiah = function (n) { return Number(n || 0).toLocaleString('id-ID'); };
+        var teks = 'Rekap Orion Grafika - ' + fmt + '\n'
+            + '- Order hari ini: ' + (b.dataset.rekapOrder || '0') + ' nota (Rp ' + rupiah(b.dataset.rekapOmzet) + ')\n'
+            + '- Antre produksi: ' + (b.dataset.rekapAntre || '0') + ' item\n'
+            + '- Sedang dikerjakan: ' + (b.dataset.rekapProses || '0') + ' item\n'
+            + '- Urgent aktif: ' + (b.dataset.rekapUrgent || '0') + ' item\n'
+            + '- Piutang belum lunas: ' + (b.dataset.rekapPiutang || '0') + ' nota';
+        window.open('https://wa.me/?text=' + encodeURIComponent(teks), '_blank', 'noopener');
     });
 });
 </script>

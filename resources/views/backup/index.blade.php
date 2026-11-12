@@ -29,12 +29,45 @@
     </div>
 
     <x-card class="mb-8">
-        <form method="POST" action="{{ route('backup.jalankan') }}" data-konfirmasi="Jalankan backup manual sekarang?">
-            @csrf
-            <x-button type="submit" variant="primary">
-                <i class="fas fa-play"></i> Jalankan Backup Manual Sekarang
-            </x-button>
-        </form>
+        <div class="flex flex-wrap items-center gap-3">
+            <form method="POST" action="{{ route('backup.jalankan') }}" data-konfirmasi="Jalankan backup manual sekarang?">
+                @csrf
+                <x-button type="submit" variant="primary">
+                    <i class="fas fa-play"></i> Jalankan Backup Manual Sekarang
+                </x-button>
+            </form>
+            <form method="POST" action="{{ route('backup.verifikasi') }}">
+                @csrf
+                <x-button type="submit" variant="outline">
+                    <i class="fas fa-shield-halved"></i> Verifikasi Backup Terbaru
+                </x-button>
+            </form>
+        </div>
+
+        @if (session('verifikasi'))
+            <div class="mt-5 rounded-xl border border-slate-200 overflow-hidden">
+                <div class="px-4 py-2.5 bg-[#F7F9FE] text-[11px] font-semibold uppercase tracking-widest text-slate-500">Hasil verifikasi backup terakhir</div>
+                <ul class="divide-y divide-slate-100">
+                    @foreach (session('verifikasi') as $h)
+                        <li class="px-4 py-3 flex flex-col sm:flex-row sm:items-start gap-2">
+                            <span class="inline-flex items-center gap-2 text-[12px] font-semibold {{ ($h['ok'] ?? false) ? 'text-emerald-700' : 'text-rose-700' }} shrink-0 w-32">
+                                <i class="fas {{ ($h['ok'] ?? false) ? 'fa-circle-check' : 'fa-circle-xmark' }}"></i>{{ $h['label'] }}
+                            </span>
+                            <div class="min-w-0">
+                                <p class="text-[12px] text-slate-600">{{ $h['pesan'] }}</p>
+                                @if (!empty($h['cek']))
+                                    <ul class="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-[10.5px] text-slate-400">
+                                        @foreach ($h['cek'] as $label => $lulus)
+                                            <li class="{{ $lulus ? 'text-emerald-700' : 'text-rose-600 font-semibold' }}">{{ $lulus ? '✓' : '✗' }} {{ $label }}</li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     </x-card>
 
     <x-table>

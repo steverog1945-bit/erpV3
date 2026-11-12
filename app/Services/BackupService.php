@@ -16,6 +16,58 @@ use Symfony\Component\Process\Process;
  */
 class BackupService
 {
+    /**
+     * Verifikasi backup terakhir per tipe (daily/weekly/monthly/manual):
+     * file ada, ukuran wajar & cocok dengan log, dan dump benar-benar
+     * berisi struktur tabel inti. Ini BUKAN restore penuh - hanya tanda
+     * bahwa backup tidak kosong/rusak (restore butuh ambiente darurat
+     * terpisah). Kembalikan ringkasan per tipe untuk UI & CLI.
+     */
+    public static function verifikasiTerbaru(?string $hanyaTipe = null): array
+    {
+        $hasil = [];
+        $tipeList = $hanyaTipe ? [$hanyaTipe] : ['daily', 'weekly', 'monthly', 'manual'];
+        foreach ($tipeList as $tipe) {
+            $log = BackupLog::where('tipe', $tipe)->where('status', 'Sukses')->orderByDesc('started_at')->first();
+            if (!$log) {
+                $hasil[] = ['tipe' => $tipe, 'label' => ucfirst($tipe), 'status' => 'belum-ada', 'ok' => false, 'pesan' => 'Belum ada backup sukses untuk tipe ini.', 'cek' => []];
+                continue;
+            }
+            $hasil[] = array_merge(['tipe' => $tipe, 'label' => ucfirst($tipe), 'status' => 'dicek'], self::verifikasi($log));
+        }
+
+        return $hasil;
+    }
+
+    /** Verifikasi satu log backup. @return array{ok:bool, pesan:string, cek:array<string,bool>, file?:string, size?:int} */
+    public static function verifikasi(BackupLog $log): array
+    {
+        $cek = [];
+        $file = (string) ($log->file_path ?? '');
+        $cek['File backup tercatat'] = $file !== '' && is_file($file);
+        if (!$cek['File backup tercatat']) {
+            return ['ok' => false, 'pesan' => 'File backup tidak ditemukan di disk.', 'cek' => $cek, 'file' => $file];
+        }
+
+        $size = (int) filesize($file);
+        $cek['Ukuran file wajar (>1 KB)'] = $size > 1024;
+        if ($log->ukuran_bytes) {
+            $logSize = (int) $log->ukuran_bytes;
+            $cek['Ukuran cocok dengan log'] = abs($size - $logSize) <= max(1024, (int) round($logSize * 0.05));
+        }
+
+        // mysqldump menulis struktur dulu: cukup baca 512 KB pertama.
+        $head = @file_get_contents($file, false, null, 0, 524288);
+        $cek['Berisi CREATE TABLE'] = $head !== false && stripos($head, 'CREATE TABLE') !== false;
+        foreach (['transaksi', 'bahan_baku', 'users'] as $tabel) {
+            $cek['Berisi tabel `' . $tabel . '`'] = $head !== false && stripos($head, '`' . $tabel . '`') !== false;
+        }
+
+        $ok = !in_array(false, $cek, true);
+
+        return ['ok' => $ok, 'pesan' => $ok ? 'Backup terlihat utuh & bisa dibaca.' : 'Isi backup TIDAK lengkap - buat backup baru sekarang.', 'cek' => $cek, 'file' => $file, 'size' => $size];
+    }
+
     public static function run(string $tipe): BackupLog
     {
         $startedAt = now();

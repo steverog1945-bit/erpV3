@@ -32,4 +32,17 @@ class BackupController extends Controller
             return back()->with('error', \App\Support\PesanError::untuk($e, 'Backup manual gagal'));
         }
     }
+
+    public function verifikasi()
+    {
+        try {
+            $hasil = BackupService::verifikasiTerbaru();
+            $gagal = collect($hasil)->filter(fn ($h) => ($h['ok'] ?? false) !== true)->count();
+            $pesan = $gagal === 0 ? 'Semua backup sukses terverifikasi utuh.' : "{$gagal} tipe backup bermasalah - buat backup baru.";
+
+            return back()->with('verifikasi', $hasil)->with($gagal === 0 ? 'success' : 'error', $pesan);
+        } catch (\Throwable $e) {
+            return back()->with('error', \App\Support\PesanError::untuk($e, 'Verifikasi backup gagal'));
+        }
+    }
 }

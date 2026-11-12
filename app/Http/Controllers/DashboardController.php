@@ -215,8 +215,22 @@ class DashboardController extends Controller
         // Pekerjaan yang menunggu tindakan (sama dengan lonceng notifikasi, khusus role ini).
         $perluTindakan = \App\Services\NotifikasiService::untuk(auth()->user())['items'];
 
+        // Strip "Perhatian Hari Ini" - HANYA muncul bila ada yang perlu dicek;
+        // angka baca saja (nota batal, rework, waste abnormal, selisih kas).
+        $anomBatal = DB::table('transaksi')->whereBetween('tgl_order', [$mulaiHariIni, $akhirHariIni])->where('status_nota', 'Dibatalkan')->count();
+        $anomRework = DB::table('rework')->whereDate('created_at', $today)->where('status', '!=', 'Selesai')->count();
+        $anomWaste = DB::table('waste_log')->where('tanggal', $today)->where('jenis', 'Abnormal')->count();
+        $anomSelisihCount = DB::table('kas_harian')->where('tgl_kas', $today)->whereRaw('ABS(COALESCE(selisih,0)) > 0')->count();
+        $anomSelisihNilai = (float) DB::table('kas_harian')->where('tgl_kas', $today)->sum(DB::raw('ABS(COALESCE(selisih,0))'));
+        $anomali = collect([
+            $anomBatal > 0 ? ['label' => $anomBatal . ' nota dibatalkan hari ini', 'route' => 'penjualan.riwayat', 'param' => [], 'tone' => 'rose'] : null,
+            $anomRework > 0 ? ['label' => $anomRework . ' rework belum selesai', 'route' => 'qc.index', 'param' => [], 'tone' => 'amber'] : null,
+            $anomWaste > 0 ? ['label' => $anomWaste . ' waste abnormal hari ini', 'route' => 'waste.index', 'param' => [], 'tone' => 'amber'] : null,
+            $anomSelisihCount > 0 ? ['label' => 'selisih kas ' . $anomSelisihCount . ' sesi (Rp ' . number_format($anomSelisihNilai, 0, ',', '.') . ')', 'route' => 'kasir.kelola', 'param' => [], 'tone' => 'rose'] : null,
+        ])->filter()->values();
+
         return view('dashboard', compact(
-            'orderKemarin', 'kasMasukKemarin', 'tren', 'perluTindakan',
+            'orderKemarin', 'kasMasukKemarin', 'tren', 'perluTindakan', 'anomali',
             'orderHariIni', 'nilaiOrderHariIni',
             'spkAntre', 'spkProses', 'spkDesain', 'spkCetak', 'spkSelesai', 'urgentAktif',
             'notaLengkap', 'notaBelumLengkap', 'totalNotaAll', 'bebanMesin', 'bebanMesinMaks',

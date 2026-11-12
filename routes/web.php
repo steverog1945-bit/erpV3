@@ -674,6 +674,7 @@ Route::match(['post', 'patch'], '/pembelian-bahan/pelunasan/{id}', [PembelianBah
     // Backup & Recovery (roadmap LEVEL 1) - khusus Administrator.
     Route::get('/backup', [\App\Http\Controllers\BackupController::class, 'index'])->name('backup.index');
     Route::post('/backup/jalankan', [\App\Http\Controllers\BackupController::class, 'jalankan'])->name('backup.jalankan');
+    Route::post('/backup/verifikasi', [\App\Http\Controllers\BackupController::class, 'verifikasi'])->name('backup.verifikasi');
 
     /*
     |--------------------------------------------------------------------------
