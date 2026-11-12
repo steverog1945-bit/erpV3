@@ -16,7 +16,7 @@
     @if(!$kasAktif)
     <div class="mb-6 flex flex-wrap items-center gap-4 rounded-2xl bg-amber-50 border border-amber-100 px-6 py-4">
         <div class="w-11 h-11 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0"><i class="fas fa-exclamation-triangle"></i></div>
-        <div class="w-full md:w-64 lg:w-80">
+        <div class="w-full md:w-64 lg:w-72">
             <p class="text-sm font-medium text-amber-800">Kas kasir belum dibuka</p>
             <p class="text-xs text-amber-600/90 mt-0.5">Transaksi belum bisa diproses sebelum saldo kas hari ini dibuka.</p>
         </div>

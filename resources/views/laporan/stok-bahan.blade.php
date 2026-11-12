@@ -31,7 +31,7 @@
          lain). --}}
     <x-card class="mb-6 no-print">
         <form method="GET" action="{{ route('laporan.stok-bahan') }}" class="flex flex-wrap items-end gap-4">
-            <div class="w-full md:w-64 lg:w-80">
+            <div class="w-full md:w-64 lg:w-72">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Cari Bahan</label>
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Nama atau kode bahan..." class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
             </div>

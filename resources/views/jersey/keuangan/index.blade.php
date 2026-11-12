@@ -35,7 +35,7 @@
 
     <x-card class="mb-6">
         <form method="GET" class="flex flex-col sm:flex-row gap-3">
-            <div class="w-full sm:w-64 lg:w-80">
+            <div class="w-full sm:w-64 lg:w-72">
                 <x-form.input type="text" name="search" value="{{ request('search') }}" placeholder="Cari no. order / pelanggan..." />
             </div>
             <x-button type="submit">Cari</x-button>

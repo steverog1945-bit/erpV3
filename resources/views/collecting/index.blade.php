@@ -23,7 +23,7 @@
     {{-- FILTER --}}
     <x-card class="collecting-mobile-filter-card mb-6">
         <form method="GET" action="{{ route('collecting.index') }}" class="collecting-mobile-filter-form flex flex-wrap items-end gap-4">
-            <div class="collecting-mobile-search w-full md:w-64 lg:w-80">
+            <div class="collecting-mobile-search w-full md:w-64 lg:w-72">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Nama Konsumen</label>
                 <x-form.input type="text" name="nama_konsumen" value="{{ request('nama_konsumen') }}" placeholder="Cari konsumen / ID (CST-000042)..." />
             </div>

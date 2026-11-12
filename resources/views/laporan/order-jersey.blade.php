@@ -56,7 +56,7 @@
                     @endforeach
                 </x-form.select>
             </div>
-            <div class="w-full md:w-64 lg:w-80">
+            <div class="w-full md:w-64 lg:w-72">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Konsumen</label>
                 <select name="id_konsumen" class="select2-konsumen-laporan w-full">
                     <option value="">-- Cari Nama / No. HP --</option>

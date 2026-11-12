@@ -30,7 +30,7 @@
                             <i class="fas fa-info-circle mr-1"></i> Penting
                         </p>
                         <p class="text-[11px] text-amber-700 leading-relaxed">
-                            Angka konversi di halaman ini <b>tidak dipakai otomatis</b> untuk menghitung stok. Konversi riil per bahan (mis. 1 Roll = 224 mÂ²) diatur di
+                            Angka konversi di halaman ini <b>tidak dipakai otomatis</b> untuk menghitung stok. Konversi riil per bahan (mis. 1 Roll = 224 mÃ‚Â²) diatur di
                             <a href="{{ route('bahan.index') }}" class="underline font-medium">Master Bahan Baku</a> masing-masing bahan, karena tiap bahan bisa punya nilai konversi berbeda meski satuannya sama (contoh: dua bahan roll dengan lebar berbeda).
                         </p>
                     </div>
@@ -43,7 +43,7 @@
             {{-- FILTER & SEARCH --}}
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6">
                 <form method="GET" action="{{ route('satuan.index') }}" class="flex flex-wrap items-end gap-4">
-                    <div class="w-full md:w-72 lg:w-80">
+                    <div class="w-full md:w-64 lg:w-72">
                         <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Cari Satuan</label>
                         <div class="relative">
                             <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>

@@ -426,12 +426,12 @@
 
    Nilai di bawah disamakan PERSIS dengan base class x-form.input /
    x-form.select dan dengan token di ui-refresh.css:
-     tinggi 38px | radius 6px | bg #ffffff | border 1px #B9C3DD
+     tinggi 38px | radius 6px | bg #ffffff | border 1px #E2E8F0 (slate-200, sama dengan outline field pencarian)
    Sebelumnya Select2 masih 48px + radius 12px + bg slate-50 + tanpa
    border, sementara input-nya 38px + radius 6px + bg putih, sehingga
    keduanya berdampingan terlihat jelas tidak senada. */
 .select2-container--default .select2-selection--single {
-    border: 1px solid #B9C3DD !important;
+    border: 1px solid #E2E8F0 !important;
     border-radius: 6px !important;
     height: 38px !important;
     display: flex !important;
@@ -465,7 +465,7 @@
 .select2-dropdown {
     font-family: 'Inter', sans-serif !important;
     font-size: 13px !important;
-    border: 1px solid #B9C3DD !important;
+    border: 1px solid #E2E8F0 !important;
     border-radius: 6px !important;
     box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.08) !important;
     overflow: hidden;
@@ -540,19 +540,20 @@ select:not([class*="text-white"]) option { font-weight: 400; font-size: 13px; co
 select option:disabled { color: #B9C3DD; }
 
 /* ===================================================================
-   DROPDOWN LEBIH LEMBUT - border semua <select> native & select2 digeser
-   dari #B9C3DD ke #E3E9F6 supaya outline-nya halus tapi tetap terbaca
-   di latar putih. (focus border tetap #2563EB - itu state fokus, bukan
-   state diam.)
+   OUTLINE DROPDOWN = OUTLINE FIELD PENCARIAN - border semua <select>
+   native & select2 disamakan persis dengan border field pencarian
+   (border-slate-200 = #E2E8F0), supaya satu baris filter tampil dengan
+   satu warna outline. (focus border tetap #2563EB - itu state fokus,
+   bukan state diam.)
    =================================================================== */
 select:not([multiple]):not([size]):not(.select2-hidden-accessible):not([class*="text-white"]) {
-    border: 1px solid #E3E9F6 !important;
+    border: 1px solid #E2E8F0 !important;
 }
 .select2-container--default .select2-selection--single,
 .select2-dropdown {
-    border-color: #E3E9F6 !important;
+    border-color: #E2E8F0 !important;
 }
-select.border, select[class*="border-slate-200"] { border-color: #E3E9F6; }
+select.border, select[class*="border-slate-200"] { border-color: #E2E8F0; }
 
 /* ===================================================================
    DATE PICKER MODERN - input[type="date"] diseragamkan dengan input
@@ -561,7 +562,7 @@ select.border, select[class*="border-slate-200"] { border-color: #E3E9F6; }
    SVG agar tampilan seragam di semua peramban.
    =================================================================== */
 input[type="date"] {
-    border: 1px solid #E3E9F6 !important;
+    border: 1px solid #E2E8F0 !important;
     border-radius: 10px !important;
     background-color: #ffffff;
     height: 40px !important;
@@ -635,7 +636,7 @@ body > .select2-container { z-index: 99990; }
     justify-content: center;
     width: 36px;
     align-self: stretch;
-    border: 1px solid #B9C3DD;
+    border: 1px solid #E2E8F0;
     border-left: 0;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
@@ -732,7 +733,7 @@ html.dark .qp-tombol:hover {
 html.dark .pil-pilih:has(:checked) { color: #FFFFFF !important; }
 /* Multi-select: tinggi minimal ikut isian tunggal, boleh tumbuh
    kalau isinya banyak. Radius/warna/border senada selection--single. */
-.select2-container--default .select2-selection--multiple { border: 1px solid #B9C3DD !important; background: #ffffff !important; border-radius: 6px !important; box-shadow: none !important; min-height: 38px; padding: 3px 6px; gap: 4px; }
+.select2-container--default .select2-selection--multiple { border: 1px solid #E2E8F0 !important; background: #ffffff !important; border-radius: 6px !important; box-shadow: none !important; min-height: 38px; padding: 3px 6px; gap: 4px; }
 .select2-container--default .select2-selection--multiple .select2-selection__choice { background: #EFF4FF; border: none; color: #2563EB; border-radius: 4px; font-weight: 500; font-size: 12px; padding: 2px 8px; }
 
 
@@ -1740,7 +1741,7 @@ html.dark .cek-nama-telp { color: #8A96B8; }
    VISUAL REFRESH V7 (2026-11) - Input Order: Command Center 1:1 (mockup v2)
    Hanya gaya visual, tanpa mengubah id/name/handler JS. Dipasangkan dengan
    markup po-ic dan po-est di views/penjualan/create.blade.php.
-   Font: floor 13px tetap berlaku (ui-refresh) — hierarki lewat berat & warna,
+   Font: floor 13px tetap berlaku (ui-refresh) â€” hierarki lewat berat & warna,
    bukan ukuran kecil. Desktop >=1280px dijanjikan muat tanpa scroll.
    ========================================================================== */
 

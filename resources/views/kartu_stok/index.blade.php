@@ -19,7 +19,7 @@
     @php $adaFilter = request()->anyFilled(['search', 'kategori', 'status_stok']) || request('urut', 'nama') !== 'nama'; @endphp
     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 mb-4">
         <form method="GET" action="{{ route('kartu-stok.index') }}" class="flex flex-wrap items-end gap-3">
-            <div class="w-full md:w-72 lg:w-80">
+            <div class="w-full md:w-64 lg:w-72">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-1.5 ml-2">Cari Bahan</label>
                 <div class="relative">
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>

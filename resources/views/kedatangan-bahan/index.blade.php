@@ -19,7 +19,7 @@
     {{-- FILTER --}}
     <x-card class="mb-6">
         <form method="GET" action="{{ route('kedatangan-bahan.index') }}" class="flex flex-wrap items-end gap-4">
-            <div class="w-full md:w-72 lg:w-80">
+            <div class="w-full md:w-64 lg:w-72">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Pencarian</label>
                 <div class="relative">
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
