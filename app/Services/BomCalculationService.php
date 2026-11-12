@@ -60,6 +60,13 @@ class BomCalculationService
                 if (isset($idDiBom[(int) $t->id_bahan])) {
                     continue;
                 }
+                // Dasar selain 'm2' (mis. 'pcs') = pemakaian per pcs barang,
+                // imbuhan khusus produk metode quantity. Untuk produk ukuran,
+                // m² sudah mencakup luas cetak, jadi baris 'pcs' dilewati
+                // supaya tidak dobel-dihitung.
+                if ($t->dasar !== 'm2' && $produk->metode_hitung === 'ukuran') {
+                    continue;
+                }
                 $dasar = $t->dasar === 'm2' ? $m2 : $qty;
                 $pakai = $dasar * (float) $t->pemakaian;
                 if ($pakai > 0) {
