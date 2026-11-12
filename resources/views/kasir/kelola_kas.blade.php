@@ -252,7 +252,21 @@
                      selalu Transfer) - Debit & Deposit ikut kepencet label
                      TRANSFER yang salah. Sekarang eksplisit 4 metode. --}}
                 <td class="p-4 text-center">
-                    <x-badge variant="info">{{ $m->metode }}</x-badge>
+                    {{-- Badge berwarna per metode (Tunai hijau, Transfer biru, Debit kuning, Deposit abu) +
+                         rekening tujuan untuk Transfer bila tercatat. --}}
+                    @php
+                        $metodeVariant = match ($m->metode) {
+                            'Tunai'   => 'success',
+                            'Transfer' => 'info',
+                            'Debit'   => 'warning',
+                            'Deposit' => 'secondary',
+                            default   => 'info',
+                        };
+                    @endphp
+                    <x-badge :variant="$metodeVariant">{{ $m->metode }}</x-badge>
+                    @if($m->metode === 'Transfer' && !empty($m->nama_bank))
+                        <div class="text-[10px] text-slate-400 mt-1">{{ $m->nama_bank }}{{ $m->nomor_rekening ? ' - ' . $m->nomor_rekening : '' }}</div>
+                    @endif
                 </td>
                 <td class="p-4 text-right">
                     <span class="font-medium text-slate-800">

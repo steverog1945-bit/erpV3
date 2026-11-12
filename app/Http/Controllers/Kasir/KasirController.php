@@ -403,15 +403,15 @@ class KasirController extends Controller
             if ($diskon < 0) {
                 throw new \Exception("Diskon tidak boleh negatif.");
             }
-            if (!in_array($metode, ['Tunai', 'Debit', 'Transfer', 'Deposit'], true)) {
+            if (!in_array($metode, ['Tunai', 'Debit', 'Transfer', 'Deposit', 'QRIS'], true)) {
                 throw new \Exception("Metode pembayaran tidak dikenali.");
             }
 
-            // id_bank hanya relevan untuk Transfer - divalidasi ke tabel
+            // id_bank hanya relevan untuk Transfer/QRIS - divalidasi ke tabel
             // bank_perusahaan supaya id yang dipalsukan dari client tidak
             // lolos ke foreign key pembayaran_riwayat.id_bank.
             $idBank = null;
-            if ($metode === 'Transfer' && $request->filled('id_bank')) {
+            if (in_array($metode, ['Transfer', 'QRIS'], true) && $request->filled('id_bank')) {
                 $idBank = (int) $request->id_bank;
                 if (!DB::table('bank_perusahaan')->where('id_bank', $idBank)->exists()) {
                     throw new \Exception("Rekening bank tujuan tidak ditemukan.");
@@ -669,7 +669,7 @@ class KasirController extends Controller
                 // uangnya sudah masuk kas saat setoran deposit dulu, bukan hari ini.
                 if ($metode == 'Tunai') {
                     DB::table('kas_harian')->where('id_kas', $kas->id_kas)->increment('saldo_akhir', $uangDiterimaSekarang);
-                } elseif ($metode == 'Transfer') {
+                } elseif (in_array($metode, ['Transfer', 'QRIS'], true)) {
                     DB::table('kas_harian')->where('id_kas', $kas->id_kas)->increment('total_transfer', $uangDiterimaSekarang);
                 }
 
@@ -798,6 +798,10 @@ class KasirController extends Controller
         $mutasi = DB::table('pembayaran_riwayat')
             ->join('transaksi', 'pembayaran_riwayat.id_transaksi', '=', 'transaksi.id_transaksi')
             ->join('konsumen', 'transaksi.id_konsumen', '=', 'konsumen.id_konsumen')
+            // Bank tujuan untuk pembayaran Transfer - sebelumnya halaman ini
+            // tidak menampilkan rekening sama sekali padahal bank_perusahaan
+            // terisi per pembayaran. Null tetap aman (pembayaran Tunai/Deposit).
+            ->leftJoin('bank_perusahaan', 'pembayaran_riwayat.id_bank', '=', 'bank_perusahaan.id_bank')
             ->leftJoin(
                 DB::raw('(SELECT id_transaksi, SUM(nominal) AS jml_terbayar FROM pembayaran_riwayat GROUP BY id_transaksi) pr'),
                 'pr.id_transaksi', '=', 'transaksi.id_transaksi'
@@ -806,7 +810,7 @@ class KasirController extends Controller
             // Status turunan, bukan kolom salinan - supaya badge di daftar
             // mutasi dan badge di Monitoring Kasir tidak pernah berbeda untuk
             // nota yang sama.
-            ->select('pembayaran_riwayat.*', 'transaksi.nomor_nota', 'konsumen.nama_konsumen')
+            ->select('pembayaran_riwayat.*', 'transaksi.nomor_nota', 'konsumen.nama_konsumen', 'bank_perusahaan.nama_bank', 'bank_perusahaan.nomor_rekening')
             ->selectRaw(StatusPembayaran::sqlCase('transaksi.total_bayar', 'COALESCE(pr.jml_terbayar, 0)') . ' as display_status_pembayaran')
             ->orderBy('pembayaran_riwayat.tgl_bayar', 'desc')
             ->get();
@@ -1149,7 +1153,7 @@ public function previewClosing()
         ->where('tgl_bayar', '<=', $akhirSesi)
         ->select(
             DB::raw("SUM(CASE WHEN metode = 'Tunai' THEN nominal ELSE 0 END) as tunai_masuk"),
-            DB::raw("SUM(CASE WHEN metode = 'Transfer' THEN nominal ELSE 0 END) as transfer_masuk"),
+            DB::raw("SUM(CASE WHEN metode IN ('Transfer','QRIS') THEN nominal ELSE 0 END) as transfer_masuk"),
             DB::raw("SUM(CASE WHEN metode = 'Debit' THEN nominal ELSE 0 END) as debit_masuk"),
             DB::raw("SUM(CASE WHEN metode = 'Deposit' THEN nominal ELSE 0 END) as deposit_masuk")
         )->first();
@@ -1222,7 +1226,7 @@ public function simpanClosing(Request $request)
             ->where('tgl_bayar', '<=', now())
             ->select(
                 DB::raw("SUM(CASE WHEN metode = 'Tunai' THEN nominal ELSE 0 END) as tunai_masuk"),
-                DB::raw("SUM(CASE WHEN metode = 'Transfer' THEN nominal ELSE 0 END) as transfer_masuk"),
+                DB::raw("SUM(CASE WHEN metode IN ('Transfer','QRIS') THEN nominal ELSE 0 END) as transfer_masuk"),
                 DB::raw("SUM(CASE WHEN metode = 'Debit' THEN nominal ELSE 0 END) as debit_masuk")
             )->first();
 

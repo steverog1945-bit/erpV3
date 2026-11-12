@@ -73,7 +73,7 @@
                             <span class="w-6 text-xs font-medium text-slate-500">{{ $i + 1 }}</span>
                             @if($item->thumbnail)
                                 @if(\App\Support\BerkasDesain::bisaDitampilkan($item->thumbnail))
-                                    <img loading="lazy" decoding="async" src="{{ asset('storage/'.$item->thumbnail) }}" class="w-12 h-12 rounded-xl object-cover border border-white shadow-sm shrink-0">
+                                    <img loading="lazy" decoding="async" src="{{ asset('storage/'.$item->thumbnail) }}" class="w-12 h-12 rounded-xl object-cover border border-white shadow-sm shrink-0 cursor-zoom-in hover:opacity-80 transition" onclick="bukaPreviewBerkasForm('{{ asset('storage/'.$item->thumbnail) }}')" title="Klik untuk preview">
                                 @else
                                     {{-- Berkas desain non-gambar (CDR, AI, EPS, PSD)
                                          tidak bisa ditampilkan peramban - pakai
@@ -89,6 +89,14 @@
                                 <p class="item-nama text-sm font-medium text-slate-700 truncate">{{ $item->nama_produk ?? $item->nama_jasa ?? $item->nama_file }}</p>
                                 @if($item->nama_produk || $item->nama_jasa)
                                     <p class="text-xs text-slate-400 truncate">{{ $item->nama_file }}</p>
+                                @endif
+                                {{-- Ukuran operator (panjang x lebar) - hanya untuk produk metode 'ukuran'. --}}
+                                @if($item->metode_hitung == 'ukuran' && (float) $item->p_ukuran > 0 && (float) $item->l_ukuran > 0)
+                                    <p class="text-[10px] text-slate-500 mt-0.5"><i class="fas fa-ruler-combined mr-1"></i>Ukuran operator: {{ rtrim(rtrim(number_format((float) $item->p_ukuran, 2, ',', '.'), '0'), ',') }} x {{ rtrim(rtrim(number_format((float) $item->l_ukuran, 2, ',', '.'), '0'), ',') }} cm</p>
+                                @endif
+                                {{-- File Siap Cetak: operator tidak perlu membuka berkas lagi. --}}
+                                @if(!empty($item->file_siap_cetak))
+                                    <span class="inline-flex items-center mt-1 px-2 py-0.5 rounded-md text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-100"><i class="fas fa-file-check mr-1"></i>File Siap Cetak</span>
                                 @endif
                                 <p class="disp-biaya-tambahan text-[11px] text-slate-400 mt-1">{!! \App\Support\HtmlBersih::bersihkan($bagianBiaya) !!}</p>
                             </div>
@@ -168,7 +176,7 @@
 
                         <div class="md:col-span-3">
                             <label class="block text-[11px] font-medium text-slate-400 mb-2.5">Metode Pembayaran</label>
-                            <div class="grid grid-cols-2 gap-2">
+                            <span class="grid grid-cols-2 gap-2" id="metode-pembayaran-grid">
                                 <label class="metode-bayar-option relative flex items-center justify-center gap-2 py-3 rounded-2xl border border-indigo-500 bg-indigo-50 text-indigo-700 font-medium text-xs cursor-pointer transition-all">
                                     <input type="radio" name="metode_pembayaran" id="metode-tunai" value="Tunai" class="sr-only" checked onchange="onMetodePembayaranChange()">
                                     <i class="fas fa-money-bill-wave"></i> Tunai
@@ -181,23 +189,46 @@
                                     <input type="radio" name="metode_pembayaran" value="Transfer" class="sr-only" onchange="onMetodePembayaranChange()">
                                     <i class="fas fa-university"></i> Transfer
                                 </label>
+                                <label class="metode-bayar-option relative flex items-center justify-center gap-2 py-3 rounded-2xl border border-slate-100 text-slate-400 font-medium text-xs cursor-pointer transition-all hover:border-slate-200">
+                                    <input type="radio" name="metode_pembayaran" value="QRIS" class="sr-only" onchange="onMetodePembayaranChange()">
+                                    <i class="fas fa-qrcode"></i> QRIS
+                                </label>
                                 <label class="metode-bayar-option relative flex items-center justify-center gap-2 py-3 rounded-2xl border border-slate-100 text-slate-400 font-medium text-xs cursor-pointer transition-all hover:border-slate-200 {{ $saldoDeposit <= 0 ? 'opacity-40 cursor-not-allowed' : '' }}"
                                     title="{{ $saldoDeposit > 0 ? '' : ($depositSudahHabis ? 'Deposit konsumen ini sudah habis terpakai, tidak bisa dipakai lagi.' : 'Konsumen ini belum pernah setor deposit.') }}">
                                     <input type="radio" name="metode_pembayaran" value="Deposit" class="sr-only" {{ $saldoDeposit <= 0 ? 'disabled' : '' }} onchange="onMetodePembayaranChange()">
                                     <i class="fas fa-wallet"></i> Deposit
                                 </label>
-                            </div>
+                            </span>
                         </div>
                     </div>
 
                     <div id="wrapper-bank" class="hidden mt-5">
-                        <label class="block text-[11px] font-medium text-slate-400 mb-2">Rekening Tujuan</label>
-                        <select name="id_bank" id="input-bank" class="w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-600  focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
-                            <option value="">-- Pilih Rekening --</option>
-                            @foreach($banks as $b)
-                                <option value="{{ $b->id_bank }}">{{ $b->nama_bank }} - {{ $b->nomor_rekening }} ({{ $b->atas_nama }})</option>
-                            @endforeach
-                        </select>
+                        <label class="block text-[11px] font-medium text-slate-400 mb-2">Rekening Tujuan (untuk Transfer / QRIS)</label>
+                        <p class="text-[10px] text-slate-400 mb-2 -mt-1">Pilih rekening perusahaan tempat pembayaran masuk.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2" role="radiogroup" aria-label="Pilih rekening bank">
+                            @forelse($banks as $b)
+                            @php
+                                $kata = preg_split('/\s+/', trim((string) $b->nama_bank));
+                                $monogram = mb_strtoupper(mb_substr($kata[0] ?? 'B', 0, 1) . (count($kata) > 1 ? mb_substr($kata[1], 0, 1) : ''), 'UTF-8');
+                                $palettes = ['#1D4E7C', '#12365B', '#134E4A', '#3B1F56', '#4A1F1F', '#2B3648'];
+                                $palette = $palettes[crc32((string) $b->nama_bank) % count($palettes)];
+                                $norekTampil = trim(preg_replace('/(.{4})(?=.)/', '$1 ', (string) $b->nomor_rekening));
+                            @endphp
+                            <label class="cursor-pointer select-none">
+                                <input type="radio" name="id_bank" value="{{ $b->id_bank }}" class="peer sr-only">
+                                <div class="rek-card border border-slate-200 rounded-xl bg-white px-2.5 py-1.5 flex items-center gap-2.5 transition-all hover:border-slate-300">
+                                    <span class="shrink-0 w-9 h-7 rounded-[5px] flex items-center justify-center text-[10px] font-extrabold text-white tracking-wide" style="background: {{ $palette }}">{{ $monogram }}</span>
+                                    <span class="min-w-0 flex-1">
+                                        <span class="block text-[10px] font-bold uppercase tracking-wider text-slate-600 truncate">{{ $b->nama_bank }}</span>
+                                        <span class="block font-mono text-[10px] text-slate-500 tabular-nums tracking-[.12em] mt-0.5">{{ $norekTampil }}</span>
+                                    </span>
+                                    <span class="check-dot shrink-0 w-4 h-4 rounded-full border border-slate-300 flex items-center justify-center text-transparent"><i class="fas fa-check text-[7px]"></i></span>
+                                </div>
+                            </label>
+                            @empty
+                                <p class="text-[11px] text-slate-400 italic border border-dashed border-slate-200 rounded-xl px-4 py-3">Belum ada rekening bank. Tambah dulu di <a href="{{ route('bank.index') }}" class="text-indigo-600 font-semibold hover:underline">Rekening Bank</a>.</p>
+                            @endforelse
+                        </div>
                     </div>
                     <div id="wrapper-deposit-info" class="hidden mt-5 rounded-2xl bg-indigo-50/60 border border-indigo-100 px-4 py-3">
                         <p class="text-xs font-medium text-indigo-600">Saldo deposit: Rp {{ number_format($saldoDeposit, 0, ',', '.') }}</p>
@@ -342,7 +373,7 @@
                  Biaya Cetak jadi komponen utama). --}}
             <div>
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2">Biaya Cetak</label>
-                <input type="text" id="ch-cetak" class="format-ribuan-modal w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
+                <input type="text" id="ch-cetak" class="format-ribuan-modal w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-700 shadow-inner focus:ring-2 focus:ring-indigo-500/20">
             </div>
 
             {{-- Biaya Desain/Finishing disembunyikan default, cuma muncul kalau
@@ -351,11 +382,11 @@
                  selaras dengan penjualan/create.blade.php. --}}
             <div id="ch-wrapper-desain" class="hidden">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2">Biaya Desain</label>
-                <input type="text" id="ch-desain" class="format-ribuan-modal w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
+                <input type="text" id="ch-desain" class="format-ribuan-modal w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-700 shadow-inner focus:ring-2 focus:ring-indigo-500/20">
             </div>
             <div id="ch-wrapper-finishing" class="hidden">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2">Biaya Finishing</label>
-                <input type="text" id="ch-finishing" class="format-ribuan-modal w-full bg-white border border-slate-200 rounded-md py-2 px-3 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 ">
+                <input type="text" id="ch-finishing" class="format-ribuan-modal w-full bg-slate-50 border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-700 shadow-inner focus:ring-2 focus:ring-indigo-500/20">
             </div>
             <div class="flex flex-wrap gap-x-4 gap-y-1">
                 <button type="button" id="ch-btn-tambah-desain" onclick="tampilkanChBiaya('desain')" class="text-indigo-500 hover:text-indigo-700 text-[10px] font-medium uppercase tracking-widest underline underline-offset-4 decoration-dotted">
@@ -687,9 +718,41 @@
 
     function toggleBankField() {
         const metode = getMetodePembayaran();
-        document.getElementById('wrapper-bank').classList.toggle('hidden', metode !== 'Transfer');
+        document.getElementById('wrapper-bank').classList.toggle('hidden', metode !== 'Transfer' && metode !== 'QRIS');
         document.getElementById('wrapper-deposit-info').classList.toggle('hidden', metode !== 'Deposit');
     }
+
+    // Kartu ATM mini pemilihan rekening: gaya kartu tersorot saat terpilih.
+    // (peer-checked untuk elemen bertingkat tidak bisa tanpa varian Tailwind
+    //  arbitrary yang tidak dikompilasi di build ini, jadi lewat JS.)
+    document.querySelectorAll('input[name="id_bank"]').forEach(function (radio) {
+        radio.addEventListener('change', function () {
+            document.querySelectorAll('.rek-card').forEach(function (card) {
+                card.classList.toggle('border-indigo-500', false);
+                card.classList.toggle('bg-indigo-50/50', false);
+                card.classList.toggle('shadow-[0_0_0_3px_rgba(99,102,241,.22)]', false);
+                card.classList.toggle('border-slate-200', true);
+            });
+            const card = radio.closest('label') ? radio.closest('label').querySelector('.rek-card') : null;
+            if (card) {
+                card.classList.remove('border-slate-200');
+                card.classList.add('border-indigo-500', 'bg-indigo-50/50', 'shadow-[0_0_0_3px_rgba(99,102,241,.22)]');
+            }
+            document.querySelectorAll('.check-dot').forEach(function (dot) {
+                dot.classList.toggle('border-indigo-500', false);
+                dot.classList.toggle('bg-indigo-600', false);
+                dot.classList.toggle('text-white', false);
+                dot.classList.toggle('text-transparent', true);
+            });
+            if (card) {
+                const dot = card.querySelector('.check-dot');
+                if (dot) {
+                    dot.classList.remove('border-slate-300', 'text-transparent');
+                    dot.classList.add('border-indigo-500', 'bg-indigo-600', 'text-white');
+                }
+            }
+        });
+    });
 
     // Kalau konsumen ini punya saldo deposit, otomatis pilih Metode
     // Pembayaran = Deposit & isi Uang Diterima = saldo (dibatasi maksimal
@@ -971,6 +1034,42 @@
                 sudahSubmit = false;
             }, 8000);
         });
+    });
+</script>
+
+{{-- Lightbox preview berkas desain - satu klik pada thumbnail item membuka
+     gambar penuh (deteksi klik di area gelap untuk menutup). --}}
+<div id="modal-preview-berkas-form" class="hidden fixed inset-0 z-50 items-center justify-center bg-black/70 p-4" onclick="if(event.target===this)tutupPreviewBerkasForm()">
+    <div class="relative bg-white rounded-2xl p-4 max-w-5xl w-full max-h-[90vh] overflow-auto">
+        <button type="button" onclick="tutupPreviewBerkasForm()" class="absolute top-3 right-3 w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600" aria-label="Tutup"><i class="fas fa-times"></i></button>
+        <img id="modal-preview-berkas-form-img" src="" alt="preview" class="max-w-full max-h-[80vh] rounded-xl shadow-lg mx-auto cursor-zoom-in" onclick="this.classList.toggle('scale-150')">
+        <p class="text-[11px] text-slate-400 text-center mt-3">Klik gambar untuk zoom. Klik di luar untuk menutup.</p>
+    </div>
+</div>
+<script>
+    // Portal ke body - mencegah position:fixed ikut kontainer ber-transform/filter
+    // (modal lama tidak pernah terpusat di layar saat ancestor berubah).
+    (function () {
+        var el = document.getElementById('modal-preview-berkas-form');
+        if (el && el.parentNode !== document.body) {
+            document.body.appendChild(el);
+        }
+    })();
+
+    function bukaPreviewBerkasForm(url) {
+        var img = document.getElementById('modal-preview-berkas-form-img');
+        img.src = url;
+        var modal = document.getElementById('modal-preview-berkas-form');
+        modal.classList.add('flex');
+        modal.classList.remove('hidden');
+    }
+    function tutupPreviewBerkasForm() {
+        var modal = document.getElementById('modal-preview-berkas-form');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') tutupPreviewBerkasForm();
     });
 </script>
 @endsection
