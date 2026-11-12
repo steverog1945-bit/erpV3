@@ -44,6 +44,7 @@
     <div class="pa-chips" id="publikAsistenChips">
         <button type="button" class="pa-chip" data-tanya="cara pesan">Cara pesan?</button>
         <button type="button" class="pa-chip" data-tanya="harga">Harga?</button>
+        <button type="button" class="pa-chip" data-tanya="berapa harga banner 3 x 1 meter">Banner 3x1?</button>
         <button type="button" class="pa-chip" data-tanya="cara bayar">Cara bayar?</button>
         <button type="button" class="pa-chip" data-tanya="jam buka">Jam buka?</button>
         <button type="button" class="pa-chip" data-tanya="kontak">Kontak toko</button>
@@ -122,6 +123,15 @@
     }
     fab.addEventListener('click', function () { buka(!panel.classList.contains('terbuka')); });
     tutup.addEventListener('click', function () { buka(false); });
+    // Deep-link demo/bantuan: ?asisten=1 membuka panel otomatis saat load;
+    // &tanya=... langsung mengirim pertanyaan itu (tautan dukungan/demo).
+    if (new URLSearchParams(location.search).get('asisten') === '1') {
+        buka(true);
+        var tanyaLink = (new URLSearchParams(location.search).get('tanya') || '').trim();
+        if (tanyaLink) {
+            setTimeout(function () { kirim(tanyaLink); }, 150);
+        }
+    }
     form.addEventListener('submit', function (e) {
         e.preventDefault();
         kirim(input.value);

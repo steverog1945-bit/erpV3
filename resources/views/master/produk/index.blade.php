@@ -247,6 +247,11 @@
                     <span><span class="block text-[11px] font-medium text-slate-600 uppercase tracking-wide">Cetak SPK lengkap</span><span class="block text-[11px] text-slate-400">SPK memuat gambar, konsumen, desainer, kebutuhan bahan, dan finishing (seperti SPK order jersey) - untuk cetakan tertentu mis. Century + bahan TC yang ada finishing jahit.</span></span>
                 </label>
 
+                <x-form.group label="Istilah Publik (kamus asisten chat landing)" dalam>
+                    <textarea name="alias_publik" rows="2" placeholder="mis. banner, spanduk, baliho - pisahkan dengan koma" class="w-full bg-white border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 shadow-sm focus:ring-2 focus:ring-indigo-500/20"></textarea>
+                    <span class="block text-[11px] text-slate-400 mt-1">Istilah percetakan yang dipakai konsumen di chat publik untuk produk ini. Dipisah koma, tanpa hardcode - daftar ini yang dibaca asisten landing.</span>
+                </x-form.group>
+
                 <x-form.group label="Keterangan" dalam>
                     <textarea name="keterangan" rows="2" placeholder="Catatan tambahan produk (opsional)" class="w-full bg-white border-none rounded-xl py-3 px-4 text-sm font-medium text-slate-600 shadow-sm focus:ring-2 focus:ring-indigo-500/20"></textarea>
                 </x-form.group>
@@ -473,6 +478,7 @@
             form.querySelector('input[name="min_luas_total"]').value = (parseFloat(data.produk.min_luas_total) > 0) ? data.produk.min_luas_total : '';
             form.querySelector('input[name="kelompok_minimum"]').value = data.produk.kelompok_minimum || '';
             form.querySelector('textarea[name="keterangan"]').value = (data.produk.keterangan && data.produk.keterangan !== '-') ? data.produk.keterangan : '';
+            form.querySelector('textarea[name="alias_publik"]').value = data.alias_publik || '';
 
             // Tidak ada kolom tersendiri utk toggle "pakai minimal order?" -
             // disimpulkan dari data lama: ada angka minimum > 0 berarti "Ya",

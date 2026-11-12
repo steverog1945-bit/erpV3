@@ -128,6 +128,10 @@ public function index(Request $request)
                 DB::table('bom_detail')->insert($bomData);
             }
 
+            // Kamus istilah publik (asisten landing) - bagian dari transaksi
+            // yang sama dengan produk & BOM.
+            $this->syncAliasPublik((int) $id_produk, $request);
+
             $this->syncBomFinishing($id_produk, $request);
 
             // Hardening P0-3: BOM (bom_detail) menentukan qty bahan baku yang
@@ -220,7 +224,32 @@ public function show($id)
         'produk' => $produk,
         'bom'    => $bom,
         'bom_finishing' => $bomFinishing,
+        'alias_publik' => DB::table('produk_alias')->where('id_produk', $id)->orderBy('alias')->pluck('alias')->implode(', '),
     ]);
+}
+
+/**
+ * Sinkron kamus istilah publik (produk_alias) dari textarea form -
+ * pola yang sama dengan BOM (delete + re-insert di dalam transaksi yang
+ * sama). Inilah definisi fleksibel istilah percetakan: owner menentukan
+ * kata mana yang mengarah ke produk mana; asisten landing membaca tabel
+ * ini, tidak ada pemetaan hardcode.
+ */
+private function syncAliasPublik(int $idProduk, Request $request): void
+{
+    $daftar = collect(preg_split('/[,;]+/u', (string) $request->input('alias_publik', '')) ?: [])
+        ->map(fn ($a) => mb_substr(trim(strip_tags($a)), 0, 60))
+        ->filter(fn ($a) => $a !== '')
+        ->unique()
+        ->take(20);
+
+    DB::table('produk_alias')->where('id_produk', $idProduk)->delete();
+    foreach ($daftar as $alias) {
+        DB::table('produk_alias')->insertOrIgnore([
+            'id_produk' => $idProduk, 'alias' => $alias,
+            'created_at' => now(), 'updated_at' => now(),
+        ]);
+    }
 }
 
     public function update(Request $request, $id)
@@ -283,6 +312,8 @@ public function show($id)
                     DB::table('bom_detail')->insert($bomData);
                 }
             }
+
+            $this->syncAliasPublik((int) $id, $request);
 
             $this->syncBomFinishing((int) $id, $request);
 

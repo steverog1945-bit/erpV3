@@ -27,6 +27,9 @@ class AsistenLandingService
     private const KATALOG_CACHE_KEY = 'asisten_landing_katalog_v1';
     private const KATALOG_CACHE_TTL = 300;
 
+    /** Kata umum yang TIDAK boleh jadi kunci pencocokan produk. */
+    private const STOPWORDS = ['cetak', 'cetakan', 'percetakan', 'print', 'printing', 'bikin', 'buat', 'harga', 'berapa', 'ukuran', 'muka', 'sisi', 'custom'];
+
     /** @var array<int, array{pattern:string, kategori:string}> */
     private const POLA_PRIVASI = [
         '/omset|omzet/',
@@ -79,13 +82,15 @@ class AsistenLandingService
         }
 
         // 4b) Produk spesifik disebut ("berapa harga banner", "ukuran stiker")
-        // - jawab dari data katalog NYATA (harga jual golongan Umum, tier
-        // qty terkecil), bukan kalimat generik.
+        // - jawab dari data katalog NYATA (harga jual golongan Retail, tier
+        // qty terkecil), bukan kalimat generik. Istilah konsumen ("banner",
+        // "spanduk", "baliho") diterjemahkan lewat kamus produk_alias yang
+        // dikelola owner dari Master Produk - tidak ada pemetaan hardcode.
         $katalog = $this->katalog();
         if (!empty($katalog)) {
-            $produk = $this->cariProduk($katalog, $t);
-            if ($produk !== null) {
-                return $this->jawabProduk($produk, $t);
+            $kandidat = $this->cariProduk($katalog, $t);
+            if (!empty($kandidat)) {
+                return $this->jawabProduk($kandidat, $t);
             }
         }
 
@@ -236,8 +241,12 @@ class AsistenLandingService
 
     private function muatKatalog(): array
     {
+        // Harga publik memakai golongan Retail (harga walk-in), sesuai
+        // praktik ERP: pelanggan tanpa golongan khusus dibayar Retail.
+        // Fallback: golongan pertama bila belum ada yang bernama Retail.
         $golonganUmum = DB::table('golongan_konsumen')
-            ->orderBy('id_golongan')->orderByRaw("FIELD(nama_golongan, 'Umum') DESC")
+            ->orderByRaw("CASE WHEN nama_golongan = 'Retail' THEN 0 ELSE 1 END")
+            ->orderBy('id_golongan')
             ->value('id_golongan');
         if (!$golonganUmum) {
             return [];
@@ -255,9 +264,19 @@ class AsistenLandingService
             ->get([
                 'p.id_produk', 'p.nama_produk', 'p.metode_hitung',
                 'p.min_order', 'p.min_panjang', 'p.min_lebar',
+                'p.min_luas_tagih', 'p.mode_luas',
                 'sh.range_min', 'sh.harga_jual', 'sh.id_satuan',
                 's.nama_satuan',
             ]);
+
+        // Kamus alias + bahan utama (dari BOM) - read-only, untuk jawaban.
+        $aliasSemua = DB::table('produk_alias')->get(['id_produk', 'alias'])
+            ->groupBy('id_produk');
+        $bahanUtama = DB::table('bom_detail as b')
+            ->join('bahan_baku as bb', 'bb.id_bahan', '=', 'b.id_bahan')
+            ->orderBy('b.id_bom')
+            ->get(['b.id_produk', 'bb.nama_bahan'])
+            ->groupBy('id_produk');
 
         $promo = DB::table('harga_promo')
             ->where('status_promo', 'aktif')
@@ -272,6 +291,10 @@ class AsistenLandingService
                 $katalog[$id]['tiers']++;
                 continue; // tier qty terkecil (range_min paling kecil) sudah tercatat dulu
             }
+            $alias = isset($aliasSemua[$id])
+                ? $aliasSemua[$id]->pluck('alias')->map(fn ($a) => $this->normalisasi((string) $a))->filter()->unique()->values()->all()
+                : [];
+
             $katalog[$id] = [
                 'id' => $id,
                 'nama' => (string) $r->nama_produk,
@@ -282,6 +305,10 @@ class AsistenLandingService
                 'min_order' => (float) $r->min_order,
                 'min_p' => (float) ($r->min_panjang ?? 0),
                 'min_l' => (float) ($r->min_lebar ?? 0),
+                'min_luas_tagih' => $r->min_luas_tagih !== null ? (float) $r->min_luas_tagih : null,
+                'mode_luas' => (string) ($r->mode_luas ?? 'per_item'),
+                'bahan' => isset($bahanUtama[$id]) ? (string) $bahanUtama[$id]->first()->nama_bahan : '',
+                'alias' => $alias,
                 'tiers' => 1,
             ];
         }
@@ -290,58 +317,237 @@ class AsistenLandingService
     }
 
     /**
-     * Cocokkan teks pengunjung dengan nama produk: skor = jumlah token nama
-     * produk (>=3 huruf, bukan angka, bukan kata umum "cetak/print") yang
-     * muncul utuh di teks. Skor tertinggi menang.
+     * Kunci pencocokan satu produk: alias kamus (dari produk_alias) +
+     * token dari nama produk. Alias boleh pendek (>=2 huruf, dipasang
+     * owner sendiri); token nama minimal 4 huruf supaya "AC"/"10R"
+     * tidak salah cocok tanpa alias.
      */
-    private function cariProduk(array $katalog, string $t): ?array
+    private function kunciProduk(array $k): array
     {
-        $stopwords = ['cetak', 'cetakan', 'percetakan', 'print', 'printing', 'bikin', 'buat', 'harga', 'berapa', 'ukuran'];
-        $best = null;
-        $bestScore = 0;
+        $kunci = $k['alias'] ?? [];
+        foreach (preg_split('/\s+/u', $this->normalisasi($k['nama'])) ?: [] as $tok) {
+            if (mb_strlen($tok) >= 4 && !is_numeric($tok) && !in_array($tok, self::STOPWORDS, true)) {
+                $kunci[] = $tok;
+            }
+        }
+
+        return array_values(array_unique($kunci));
+    }
+
+    /**
+     * Cocokkan teks pengunjung dengan kunci produk (alias + nama).
+     * Token diuji sebagai kata utuh; token >=5 huruf juga dicocokkan
+     * sebagai bagian kata ("fls280" menangkap "fls280gr"). Alias
+     * berisi spasi diuji sebagai frasa. Kembalikan SEMUA kandidat
+     * (skor tertinggi dulu) - ambigu ("banner" -> 4 lebar FLS280)
+     * dibalas daftar varian, bukan satu dipilih sembarangan.
+     */
+    private function cariProduk(array $katalog, string $t): array
+    {
+        $hasil = [];
         foreach ($katalog as $k) {
-            $tokens = preg_split('/\s+/u', $this->normalisasi($k['nama'])) ?: [];
             $score = 0;
-            foreach ($tokens as $tok) {
-                if (mb_strlen($tok) < 3 || is_numeric($tok) || in_array($tok, $stopwords, true)) {
+            foreach ($this->kunciProduk($k) as $tok) {
+                if (str_contains($tok, ' ')) {
+                    if (str_contains($t, $tok)) {
+                        $score += 2;
+                    }
+                    continue;
+                }
+                if (mb_strlen($tok) < 2) {
                     continue;
                 }
                 if (preg_match('/(^|\s)' . preg_quote($tok, '/') . '(\s|$)/u', $t)) {
                     $score++;
+                } elseif (mb_strlen($tok) >= 5 && str_contains($t, $tok)) {
+                    $score++;
                 }
             }
-            if ($score > $bestScore) {
-                $bestScore = $score;
-                $best = $k;
+            if ($score > 0) {
+                $hasil[] = ['k' => $k, 'score' => $score];
             }
         }
+        usort($hasil, fn ($a, $b) => $b['score'] <=> $a['score']);
 
-        return $best;
+        return array_map(fn ($h) => $h['k'], $hasil);
     }
 
     /**
-     * Jawaban per produk: harga mulai (atau harga promo bila aktif) + batas
-     * ukuran/min order dari master. Tanpa kalimat yang mengklaim pasti -
-     * total final tetap dihitung kasir dari ukuran & finishing.
+     * Baca dimensi dari teks: "3x1", "3 x 1 m", "300x100 cm", "3,5x2 m".
+     * Unit default METER (istilah umum percetakan); kalau ada "cm",
+     * keduanya dianggap cm. Kembalikan [panjang_m, lebar_m] atau null.
      */
-    private function jawabProduk(array $k, string $t): array
+    private function parseUkuran(string $t): ?array
+    {
+        if (!preg_match('/(\d+(?:[.,]\d+)?)\s*(m|cm|meter|metre)?\s*[x×]\s*(\d+(?:[.,]\d+)?)\s*(m|cm|meter|metre)?/u', $t, $m)) {
+            return null;
+        }
+
+        $a = (float) str_replace(',', '.', $m[1]);
+        $b = (float) str_replace(',', '.', $m[3]);
+        $satuan = ($m[2] ?? '') ?: ($m[4] ?? '');
+        if ($satuan === 'cm') {
+            $a /= 100;
+            $b /= 100;
+        }
+        if ($a <= 0 || $b <= 0 || $a > 1000 || $b > 1000) {
+            return null;
+        }
+
+        // Urutan bebas: simpan [sisi pendek, sisi panjang] - cetakan
+        // berjalan memanjang roll, lebar material >= sisi pendek.
+        return [min($a, $b), max($a, $b)];
+    }
+
+    /**
+     * Estimasi harga SATU item memakai service yang SAMA PERSIS dengan
+     * kasir (LuasTagihService::hitungGrup) - luas = p(cm)x l(cm) x qty /
+     * 10000, tier dari luas, subtotal = round(luas x harga/m², 2), plus
+     * aturan minimum luas kelompok (mode gabungan). Tanpa ini, angka
+     * asisten bisa berbeda dengan nota - itu tidak boleh terjadi.
+     */
+    private function estimasi(array $k, int $golongan, array $ukuranM): ?array
+    {
+        if ($k['promo'] !== null || $k['metode'] !== 'ukuran') {
+            return null; // promo flat / produk per-pcs: biarkan kasir menghitung
+        }
+
+        [$pendek, $panjang] = $ukuranM;
+        $row = (object) [
+            'id_produk' => $k['id'],
+            'mode_luas' => $k['mode_luas'],
+            'min_luas_tagih' => $k['min_luas_tagih'],
+            'metode_hitung' => $k['metode'],
+        ];
+
+        try {
+            $hasil = LuasTagihService::hitungGrup(
+                [['p' => $pendek * 100, 'l' => $panjang * 100, 'qty' => 1]],
+                $row,
+                $golongan
+            );
+        } catch (\Throwable $e) {
+            return null;
+        }
+
+        $item = $hasil['items'][0] ?? null;
+        if (!$item || ($item['harga_per_m2'] ?? 0) <= 0) {
+            return null;
+        }
+
+        return [
+            'luas' => (float) $item['luas_ditagih'],
+            'harga_per_m2' => (float) $item['harga_per_m2'],
+            'total' => (float) $item['subtotal'],
+            'minimum' => $hasil['catatan'] ?? null,
+        ];
+    }
+
+    /**
+     * Jawaban per produk. Satu kandidat -> jawaban lengkap (harga mulai /
+     * promo, estimasi jika ukuran disebut, bahan dari BOM, batas ukuran).
+     * Beberapa kandidat -> daftar varian dengan harga mulai masing-masing.
+     */
+    private function jawabProduk(array $kandidat, string $t): array
+    {
+        $tanyaUkuran = (bool) preg_match('/(ukuran|besar|lebar|panjang|minimal|minimum|min berapa)/u', $t);
+        $tanyaHarga = (bool) preg_match('/(harga|biaya|berapa|tarif|ongkos|price|rate)/u', $t);
+        $ukuran = $this->parseUkuran($t);
+        $intent = ($tanyaHarga || !$tanyaUkuran) ? 'harga-produk' : 'ukuran-produk';
+
+        if (count($kandidat) === 1) {
+            return $this->balas($this->jawabSatuProduk($kandidat[0], $t, $ukuran), $intent);
+        }
+
+        // Beberapa varian cocok (mis. "banner" -> FLS280 1.6/2.2/2.6/3.2m):
+        // kalau ukuran disebut, estimasikan varian yang materialnya muat
+        // (lebar material >= sisi pendek, terkecil yang memenuhi).
+        $k = $this->pilihVarian($kandidat, $ukuran);
+        if ($ukuran !== null) {
+            return $this->balas($this->jawabSatuProduk($k, $t, $ukuran, count($kandidat)), $intent);
+        }
+
+        $lines = ['Ada beberapa varian - sebutkan ukuran/lebar yang Anda mau untuk hitungan pas:'];
+        foreach (array_slice($kandidat, 0, 5) as $c) {
+            $lines[] = '- ' . $c['nama'] . ': Rp ' . number_format((float) $c['harga'], 0, ',', '.') . ($c['satuan'] !== '' ? ' / ' . $c['satuan'] : '') . ($c['promo'] !== null ? ' (PROMO Rp ' . number_format((float) $c['promo'], 0, ',', '.') . ')' : '');
+        }
+        if (count($kandidat) > 5) {
+            $lines[] = '- dan varian lainnya';
+        }
+        $lines[] = 'Contoh: "banner 3 x 1 meter". Untuk hitungan pasti, chat kasir lewat WhatsApp - gratis.';
+
+        return $this->balas(implode("\n", $lines), $intent);
+    }
+
+    /**
+     * Pilih varian terbaik untuk ukuran yang disebut: lebar material
+     * (dibaca dari nama, mis. "FLS280 3.2m") harus >= sisi pendek ukuran;
+     * di antara yang muat, ambil lebar terkecil (paling hemat). Tidak ada
+     * yang muat -> varian terlebar. Heuristik ini SEBAGAI SARAN - kasir
+     * tetap yang menentukan material final saat order.
+     */
+    private function pilihVarian(array $kandidat, ?array $ukuran): array
+    {
+        if ($ukuran === null) {
+            return $kandidat[0];
+        }
+        $pendek = $ukuran[0];
+
+        // Lebar material dibaca dari nama MENTAH (bukan normalisasi yang
+        // membuang titik): "FLS280 3.2m" -> 3.2; "120cm" tidak dianggap m.
+        $lebar = function (array $k): ?float {
+            if (preg_match('/(\d+(?:[.,]\d+)?)\s*m\b/u', mb_strtolower($k['nama']), $m)) {
+                $nilai = (float) str_replace(',', '.', $m[1]);
+                return $nilai > 0 ? $nilai : null;
+            }
+
+            return null;
+        };
+
+        $muat = array_values(array_filter(
+            $kandidat,
+            fn ($k) => ($lebar($k)) !== null && $lebar($k) >= $pendek - 0.001
+        ));
+        if (empty($muat)) {
+            usort($kandidat, fn ($a, $b) => ($lebar($b) ?? 0) <=> ($lebar($a) ?? 0));
+
+            return $kandidat[0];
+        }
+        usort($muat, fn ($a, $b) => $lebar($a) <=> $lebar($b));
+
+        return $muat[0];
+    }
+
+    private function jawabSatuProduk(array $k, string $t, ?array $ukuran, int $totalKandidat = 1): string
     {
         $tanyaUkuran = (bool) preg_match('/(ukuran|besar|lebar|panjang|minimal|minimum|min berapa)/u', $t);
         $tanyaHarga = (bool) preg_match('/(harga|biaya|berapa|tarif|ongkos|price|rate)/u', $t);
 
         $lines = [];
-        if ($tanyaHarga || !$tanyaUkuran) {
-            if ($k['promo'] !== null) {
-                $lines[] = 'Harga ' . $k['nama'] . ' saat ini PROMO: Rp ' . number_format((float) $k['promo'], 0, ',', '.') . ($k['satuan'] !== '' ? ' / ' . $k['satuan'] : '') . ' (berlaku untuk semua pelanggan).';
-            } else {
-                $lines[] = 'Harga mulai ' . $k['nama'] . ': Rp ' . number_format((float) $k['harga'], 0, ',', '.') . ($k['satuan'] !== '' ? ' / ' . $k['satuan'] : '') . ' (harga umum untuk jumlah paling kecil).';
-                if ($k['tiers'] > 1) {
-                    $lines[] = 'Semakin besar jumlah/luasnya, harga per satuan makin hemat (tier lengkapnya dihitung kasir saat order).';
-                }
+        $nama = $k['nama'] . ($k['bahan'] !== '' ? ' (' . $k['bahan'] . ')' : '');
+
+        // Estimasi memakai service kasir (LuasTagihService) - hanya produk
+        // metode ukuran tanpa promo aktif; promo flat ditangani kasir.
+        $estimasi = $ukuran !== null ? $this->estimasi($k, $this->golonganPublikId(), $ukuran) : null;
+
+        if ($k['promo'] !== null) {
+            $lines[] = 'Harga ' . $nama . ' saat ini PROMO: Rp ' . number_format((float) $k['promo'], 0, ',', '.') . ($k['satuan'] !== '' ? ' / ' . $k['satuan'] : '') . ' (berlaku untuk semua pelanggan).';
+        } elseif ($estimasi !== null) {
+            $pendek = rtrim(rtrim(number_format($ukuran[0], 2, ',', '.'), '0'), ',');
+            $panjang = rtrim(rtrim(number_format($ukuran[1], 2, ',', '.'), '0'), ',');
+            $lines[] = 'Estimasi ' . $nama . ' ukuran ' . $pendek . ' x ' . $panjang . ' m: Rp ' . number_format($estimasi['total'], 0, ',', '.') . ' (Rp ' . number_format($estimasi['harga_per_m2'], 0, ',', '.') . '/m² × ' . rtrim(rtrim(number_format($estimasi['luas'], 2, ',', '.'), '0'), ',') . ' m²).';
+            if ($estimasi['minimum'] !== null) {
+                $lines[] = $estimasi['minimum'] . '.';
+            }
+            $lines[] = 'Estimasi untuk 1 lembar, belum termasuk finishing (laminasi, mata ayam, dsb.) - harga final dihitung kasir saat order.';
+        } else {
+            $lines[] = 'Harga mulai ' . $nama . ': Rp ' . number_format((float) $k['harga'], 0, ',', '.') . ($k['satuan'] !== '' ? ' / ' . $k['satuan'] : '') . ' (harga umum untuk jumlah paling kecil).';
+            if ($k['tiers'] > 1) {
+                $lines[] = 'Semakin besar jumlah/luasnya, harga per satuan makin hemat (tier lengkapnya dihitung kasir saat order).';
             }
         }
 
-        if ($tanyaUkuran || !$tanyaHarga) {
+        if ($tanyaUkuran || $ukuran === null) {
             $batas = [];
             if ($k['min_p'] > 0 && $k['min_l'] > 0) {
                 $batas[] = 'ukuran minimal ' . rtrim(rtrim(number_format($k['min_p'], 2, ',', '.'), '0'), ',') . ' x ' . rtrim(rtrim(number_format($k['min_l'], 2, ',', '.'), '0'), ',') . ' m';
@@ -352,15 +558,29 @@ class AsistenLandingService
                 $batas[] = ($k['metode'] === 'ukuran' ? 'luas' : 'jumlah') . ' minimal ' . rtrim(rtrim(number_format($k['min_order'], 2, ',', '.'), '0'), ',');
             }
             if (!empty($batas)) {
-                $lines[] = $k['nama'] . ': ' . implode(', ', $batas) . '.';
-            } else {
+                $lines[] = $nama . ': ' . implode(', ', $batas) . '.';
+            } elseif ($tanyaUkuran) {
                 $lines[] = 'Ukuran ' . $k['nama'] . ' fleksibel sesuai kebutuhan Anda.';
             }
         }
 
-        $lines[] = 'Untuk hitungan pasti (ukuran & bahan Anda), langsung chat kasir lewat tombol WhatsApp di halaman ini - gratis dan cepat.';
+        if ($totalKandidat > 1) {
+            $lines[] = 'Varian lain juga tersedia - sebutkan kebutuhan Anda atau chat kasir.';
+        }
+        $lines[] = 'Untuk hitungan pasti, langsung chat kasir lewat tombol WhatsApp di halaman ini - gratis dan cepat.';
 
-        return $this->balas(implode("\n", $lines), ($tanyaHarga || !$tanyaUkuran) ? 'harga-produk' : 'ukuran-produk');
+        return implode("\n", $lines);
+    }
+
+    /** Id golongan harga publik (Retail; fallback golongan pertama). */
+    private function golonganPublikId(): int
+    {
+        return (int) (Cache::remember('asisten_landing_golongan', self::KATALOG_CACHE_TTL, function () {
+            return DB::table('golongan_konsumen')
+                ->orderByRaw("CASE WHEN nama_golongan = 'Retail' THEN 0 ELSE 1 END")
+                ->orderBy('id_golongan')
+                ->value('id_golongan');
+        }) ?? 0);
     }
 
     private function normalisasi(string $s): string
