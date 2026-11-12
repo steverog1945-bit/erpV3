@@ -31,11 +31,6 @@ class NotaEditRequest extends Model
         return $this->belongsTo(Transaksi::class, 'id_transaksi', 'id_transaksi');
     }
 
-    public function transaksiKoreksi()
-    {
-        return $this->belongsTo(Transaksi::class, 'id_transaksi_koreksi', 'id_transaksi');
-    }
-
     public function requester()
     {
         return $this->belongsTo(User::class, 'id_user_requester', 'id_user');

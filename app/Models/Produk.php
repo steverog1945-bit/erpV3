@@ -25,9 +25,4 @@ class Produk extends Model
 {
     return $this->belongsTo(Mesin::class, 'id_mesin', 'id_mesin');
 }
-    public function bahanBakus()
-    {
-        return $this->belongsToMany(BahanBaku::class, 'bom_detail', 'id_produk', 'id_bahan')
-                    ->withPivot('cara_hitung_pemakaian');
-    }
 }

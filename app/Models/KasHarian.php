@@ -47,9 +47,4 @@ class KasHarian extends Model
     {
         return $this->belongsTo(User::class, 'id_user', 'id_user');
     }
-
-    public function manualEntries()
-    {
-        return $this->hasMany(KasManual::class, 'id_kas', 'id_kas');
-    }
 }

@@ -49,13 +49,6 @@ class BerkasDesain
     public const FORMAT_DOKUMEN = ['pdf', 'cdr', 'ai', 'eps', 'psd'];
 
     /**
-     * Format yang bisa dikompres di peramban lewat canvas (subset format
-     * gambar yang bisa dibuka peramban - SVG & GIF tetap bisa, tapi GIF
-     * beranimasi lebih baik dikompres jadi gambar diam).
-     */
-    public const FORMAT_BISA_DIKOMPRES = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp'];
-
-    /**
      * Batas ukuran berkas gambar (KB). Hasil kompres hanya sampai 200 KB,
      * jadi batas ini murni jaring pengaman kalau ada berkas yang lolos
      * tanpa kompresi.
@@ -108,12 +101,6 @@ class BerkasDesain
     public static function bisaDitampilkan(string $namaAtauPath): bool
     {
         return in_array(self::ekstensi($namaAtauPath), self::FORMAT_GAMBAR, true);
-    }
-
-    /** Format ini bisa dikompres di peramban lewat canvas? */
-    public static function bisaDikompres(string $namaAtauPath): bool
-    {
-        return in_array(self::ekstensi($namaAtauPath), self::FORMAT_BISA_DIKOMPRES, true);
     }
 
     /** Batas ukuran (KB) untuk format tertentu. */

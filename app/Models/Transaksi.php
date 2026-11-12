@@ -53,11 +53,6 @@ class Transaksi extends Model
         return $this->belongsTo(User::class, 'id_user_pembatal_nota', 'id_user');
     }
 
-    public function collector()
-    {
-        return $this->belongsTo(User::class, 'id_user_collecting', 'id_user');
-    }
-
     public function details()
     {
         return $this->hasMany(TransaksiDetail::class, 'id_transaksi', 'id_transaksi');

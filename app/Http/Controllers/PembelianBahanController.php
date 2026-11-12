@@ -619,15 +619,4 @@ public function bayarSupplier(Request $request, $idSupplier)
     return back()->with('success', 'Pembayaran hutang Rp ' . \App\Support\Angka::format((float) $data['nominal'], 2) . ' dibagi ke ' . count($hasil) . ' faktur: ' . collect($hasil)->map(fn ($h) => "{$h['no_faktur']} (Rp " . \App\Support\Angka::format((float) $h['nominal'], 2) . ')')->implode(', ') . '.');
 }
 
-public function getKedatanganDetail(Request $request)
-{
-    $id = $request->id_kedatangan;
-    $data = KedatanganBahan::with(['supplier', 'detail.bahan'])->findOrFail($id);
-
-    return response()->json([
-        'supplier' => $data->supplier,
-        'detail' => $data->detail
-    ]);
-}
-
 }

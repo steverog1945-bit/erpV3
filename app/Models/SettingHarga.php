@@ -40,9 +40,4 @@ class SettingHarga extends Model
     {
         return $this->belongsTo(Satuan::class, 'id_satuan', 'id_satuan');
     }
-
-    public function satuanBerlaku()
-    {
-        return $this->belongsTo(Satuan::class, 'id_satuan_berlaku', 'id_satuan');
-    }
 }

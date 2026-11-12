@@ -254,15 +254,6 @@ class AccountingService
         ]);
     }
 
-    /** Pelunasan hutang pembelian sekaligus: dibayar pemilik di luar kas. */
-    public static function postPelunasanHutang(string $noFaktur, float $grandTotal): void
-    {
-        self::postJournal(now()->toDateString(), $noFaktur, "Pelunasan hutang {$noFaktur}", [
-            ['kode_akun' => self::AKUN_HUTANG_USAHA, 'debet' => $grandTotal],
-            ['kode_akun' => self::AKUN_DANA_PEMILIK_PEMBELIAN, 'kredit' => $grandTotal],
-        ]);
-    }
-
     /**
      * Pembayaran (cicilan/pelunasan) hutang pembelian lewat
      * PembayaranHutangService. Referensi jurnal dibuat unik per pembayaran

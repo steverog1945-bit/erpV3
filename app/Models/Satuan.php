@@ -18,16 +18,6 @@ class Satuan extends Model
         'nilai_konversi',
     ];
 
-    public function bahanBakuStok()
-    {
-        return $this->hasMany(BahanBaku::class, 'id_satuan_stok', 'id_satuan');
-    }
-
-    public function bahanBakuHitung()
-    {
-        return $this->hasMany(BahanBaku::class, 'id_satuan_hitung', 'id_satuan');
-    }
-
     public function jasa()
     {
         return $this->hasMany(Jasa::class, 'id_satuan', 'id_satuan');

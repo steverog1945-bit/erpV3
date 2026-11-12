@@ -66,9 +66,4 @@ class JerseyOrderPricingService
 
         return null;
     }
-
-    public static function hitungHargaSatuan(?int $productTypeId, ?int $categoryId, ?int $materialId, int $qty): float
-    {
-        return (float) (self::cariTierHarga($productTypeId, $categoryId, $materialId, $qty)?->price ?? 0);
-    }
 }

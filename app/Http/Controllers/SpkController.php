@@ -573,32 +573,6 @@ class SpkController extends Controller
     }
 
     /**
-     * Ambil Satu Pekerjaan: ambil SPK dari antrean (Antre) ke Produksi
-     * (Desain). Selalu pakai metode POST ke URL ini.
-     */
-    public function ambilSatu($id)
-    {
-        if ($pesan = self::pastikanOrderDiterima((int) $id)) {
-            return back()->with('error', $pesan);
-        }
-
-        $diambil = DB::table('transaksi_detail')
-            ->where('id_detail', $id)
-            ->where('status_spk', 'Antre')
-            ->update(['status_spk' => 'Desain']);
-
-        if ($diambil === 0) {
-            $detail = DB::table('transaksi_detail')->where('id_detail', $id)->first();
-            if (!$detail) {
-                return back()->with('error', 'Item SPK tidak ditemukan.');
-            }
-            return back()->with('error', 'Item ini sudah diambil/diproses sebelumnya (status: ' . $detail->status_spk . ').');
-        }
-
-        return back()->with('success', 'Pekerjaan diambil, item sekarang ada di halaman Produksi.');
-    }
-
-    /**
      * Bulk ambil: pindahkan banyak item dari antrean ke produksi sekaligus.
      */
     public function bulkAmbil(Request $request)
@@ -636,49 +610,4 @@ class SpkController extends Controller
         return back()->with($diambil > 0 ? 'success' : 'error', $pesan);
     }
 
-    /**
-     * Setujui/Pilih finishing untuk item SPK (modal finishinng di halaman SPK).
-     */
-    public function finishingPost(Request $request, $id)
-    {
-        $request->validate([
-            'finishing' => 'required|array',
-            'finishing.*.id_finishing' => 'exists:finishing,id_finishing',
-            'finishing.*.status_finishing' => 'required|in:Standar,Custom',
-            'finishing.*.biaya' => 'nullable|numeric|min:0',
-            'finishing.*.catatan' => 'nullable|string|max:255',
-        ]);
-
-        $detail = DB::table('transaksi_detail')->where('id_detail', $id)->first();
-
-        if (!$detail) {
-            return back()->with('error', 'Item SPK tidak ditemukan.');
-        }
-
-        // Hapus finishing lama untuk item ini
-        DB::table('transaksi_detail_finishing')->where('id_detail', $id)->delete();
-
-        // Simpan finishing baru
-        foreach ($request->finishing as $fin) {
-            $finishing = DB::table('finishing')->where('id_finishing', $fin['id_finishing'])->first();
-            if ($finishing && $finishing->nama_finishing === 'Potong Manual A3') {
-                $hasTier = DB::table('finishing_harga')->where('id_finishing', $fin['id_finishing'])->exists();
-                if (!$hasTier) {
-                    return back()->with('error', 'Tier harga Potong Manual A3 belum diisi, hubungi admin.');
-                }
-            }
-            DB::table('transaksi_detail_finishing')->insert([
-                'id_detail' => $id,
-                'id_finishing' => $fin['id_finishing'],
-                'status_finishing' => $fin['status_finishing'],
-                'qty_pakai' => $fin['qty_pakai'] ?? null,
-                'biaya' => $fin['biaya'] ?? 0,
-                'catatan' => $fin['catatan'] ?? null,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
-
-        return back()->with('success', 'Finishing berhasil disimpan.');
-    }
 }

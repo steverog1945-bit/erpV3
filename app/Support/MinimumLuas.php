@@ -22,11 +22,6 @@ class MinimumLuas
         return $diff > 0 ? $diff : 0.0;
     }
 
-    public static function totalCukup(float $totalAktual, float $minLuasTotal): bool
-    {
-        return round($totalAktual, 4) >= round($minLuasTotal, 4);
-    }
-
     public static function kelompokLabel(?string $kelompok, int $idProduk): string
     {
         $k = trim((string) $kelompok);

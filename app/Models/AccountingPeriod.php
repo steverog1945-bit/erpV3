@@ -16,9 +16,4 @@ class AccountingPeriod extends Model
     protected $casts = [
         'closed_at' => 'datetime',
     ];
-
-    public function namaBulan(): string
-    {
-        return \Carbon\Carbon::createFromDate($this->tahun, $this->bulan, 1)->translatedFormat('F Y');
-    }
 }

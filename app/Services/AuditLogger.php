@@ -58,20 +58,4 @@ class AuditLogger
 
         self::log($event, $tabel, $id, $lama ? (array) $lama : null, $baru, $keterangan);
     }
-
-    /**
-     * Helper untuk jalur DB::table(): baca baris SEBELUM diubah, lakukan
-     * $callback (yang melakukan UPDATE-nya), lalu catat diff old->new.
-     * Dipakai supaya controller tidak perlu manual susun old_values.
-     *
-     * @param  \Closure(): void  $callback
-     */
-    public static function logUpdate(string $table, string $pk, int $id, \Closure $callback, ?string $keterangan = null): void
-    {
-        $before = (array) DB::table($table)->where($pk, $id)->first();
-        $callback();
-        $after = (array) DB::table($table)->where($pk, $id)->first();
-
-        static::log('updated', $table, $id, $before ?: null, $after ?: null, $keterangan);
-    }
 }

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LandingPageMedia extends Model
 {
@@ -34,10 +33,5 @@ class LandingPageMedia extends Model
     public function landingPage(): BelongsTo
     {
         return $this->belongsTo(LandingPage::class, 'landing_page_id');
-    }
-
-    public function uploader(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'uploaded_by', 'id_user');
     }
 }
