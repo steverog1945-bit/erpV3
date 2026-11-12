@@ -498,11 +498,20 @@
         align-items: flex-end;
         gap: 16px;
     }
+    /* Pencarian bahan JANGAN tumbuh mengisi sisa lebar (flex-grow:0) -
+       memberi ruang pada dropdown Kategori (div ke-2, satu-satunya yang
+       boleh tumbuh) agar lebih besar dari field lain. */
     #filterForm.mobile-bahan-filter-form > div:first-child {
-        flex: 1 1 220px;
-        min-width: 200px;
+        flex: 0 1 200px;
+        min-width: 170px;
+        width: auto;
     }
-    #filterForm.mobile-bahan-filter-form > div:not(:first-child) {
+    #filterForm.mobile-bahan-filter-form > div:nth-child(2) {
+        flex: 1 1 280px;
+        min-width: 240px;
+        width: auto;
+    }
+    #filterForm.mobile-bahan-filter-form > div:not(:first-child):not(:nth-child(2)) {
         flex: 0 1 160px;
         min-width: 128px;
         width: 160px;
