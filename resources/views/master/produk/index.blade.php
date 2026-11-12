@@ -19,7 +19,7 @@
     {{-- QUICK SEARCH & FILTER --}}
     <x-card class="mb-8">
         <form action="{{ route('produk.index') }}" method="GET" class="flex flex-col lg:flex-row gap-4 lg:items-end">
-            <div class="flex-1">
+            <div class="w-full lg:w-80">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Cari Produk</label>
                 <x-form.input type="text" name="search" value="{{ request('search') }}"
                     placeholder="Cari Produk atau Barcode..." />

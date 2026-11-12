@@ -50,7 +50,7 @@
         <form method="GET" action="{{ route('spk.index') }}" class="spk-filter-form flex flex-wrap items-end gap-4">
             <input type="hidden" name="divisi" value="{{ request('divisi') }}">
 
-            <div class="spk-filter-search flex-1 min-w-[200px]">
+            <div class="spk-filter-search w-full md:w-72 lg:w-80">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Cari</label>
                 <x-form.input type="text" name="search" value="{{ request('search') }}"
                     placeholder="Nama file, konsumen, atau nomor nota..." />

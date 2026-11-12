@@ -24,7 +24,7 @@
     <x-card class="produksi-filter-card p-4 mb-4">
         <form method="GET" action="{{ route('produksi.index') }}" class="produksi-filter-form flex flex-wrap items-end gap-3">
             <input type="hidden" name="divisi" value="{{ request('divisi') }}">
-            <div class="produksi-filter-search flex-1 min-w-[200px]">
+            <div class="produksi-filter-search w-full md:w-72 lg:w-80">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-1.5 ml-1">Konsumen</label>
                 <x-form.input type="text" name="konsumen" value="{{ request('konsumen') }}" placeholder="Nama konsumen..." />
             </div>

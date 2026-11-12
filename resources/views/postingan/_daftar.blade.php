@@ -22,7 +22,7 @@
             <form method="GET" action="{{ $basisUrl }}" class="mt-7 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3" data-no-autosubmit>
                 @foreach($paramTetap as $pn => $pv)<input type="hidden" name="{{ $pn }}" value="{{ $pv }}">@endforeach
                 @if($kategoriSlug)<input type="hidden" name="kategori" value="{{ $kategoriSlug }}">@endif
-                <div class="relative flex-1 min-w-[220px]">
+                <div class="relative w-full md:w-64 lg:w-80">
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
                     <input type="text" name="cari" value="{{ $cari }}" placeholder="Cari judul, isi, atau tag..." class="w-full rounded-2xl border-none bg-white py-3.5 pl-12 pr-4 text-sm font-medium text-slate-700 shadow-lg focus:ring-4 focus:ring-white/30">
                 </div>
@@ -73,7 +73,7 @@
             @if($unggulan->disematkan)<span class="absolute left-5 top-5 inline-flex items-center gap-1.5 rounded-full bg-amber-400/90 px-3 py-1.5 text-[10px] font-medium uppercase tracking-widest text-amber-950"><i class="fas fa-thumbtack"></i> Disematkan</span>@endif
         </div>
         <div class="p-8 lg:p-12 flex flex-col justify-center">
-            <p class="text-[11px] font-medium uppercase tracking-[0.2em] text-indigo-500">Terbaru{{ $unggulan->kategori ? ' · ' . $unggulan->kategori->nama : '' }}</p>
+            <p class="text-[11px] font-medium uppercase tracking-[0.2em] text-indigo-500">Terbaru{{ $unggulan->kategori ? ' Â· ' . $unggulan->kategori->nama : '' }}</p>
             <h2 class="text-2xl lg:text-3xl font-medium text-slate-800 mt-3 leading-snug group-hover:text-indigo-600 transition-colors">{{ $unggulan->judul }}</h2>
             <p class="text-sm text-slate-500 mt-3 leading-relaxed line-clamp-3">{{ $unggulan->ringkasan }}</p>
             <div class="mt-6 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-medium text-slate-400">
@@ -102,13 +102,13 @@
             </a>
             <div class="p-6 flex flex-col flex-1">
                 @if($pengelola && $p->status_tampil !== 'Terbit')
-                    <span class="self-start mb-2 px-2 py-0.5 rounded-md text-[10px] font-medium uppercase tracking-widest {{ $labelStatus[$p->status_tampil] }}">{{ $p->status_tampil }}{{ $p->status_tampil === 'Terjadwal' ? ' · ' . $p->terbit_at->translatedFormat('d M H:i') : '' }}</span>
+                    <span class="self-start mb-2 px-2 py-0.5 rounded-md text-[10px] font-medium uppercase tracking-widest {{ $labelStatus[$p->status_tampil] }}">{{ $p->status_tampil }}{{ $p->status_tampil === 'Terjadwal' ? ' Â· ' . $p->terbit_at->translatedFormat('d M H:i') : '' }}</span>
                 @endif
                 <h3 class="text-base font-medium text-slate-800 leading-snug group-hover:text-indigo-600 transition-colors line-clamp-2"><a href="{{ route('postingan.show', $p->slug) }}">{{ $p->judul }}</a></h3>
                 <p class="text-[13px] text-slate-500 mt-2 leading-relaxed line-clamp-3">{{ $p->ringkasan }}</p>
                 <div class="mt-auto pt-5 flex items-center justify-between text-[11px] font-medium text-slate-400">
                     <span class="truncate"><i class="far fa-user mr-1"></i>{{ $p->nama_penulis }}</span>
-                    <span class="shrink-0"><i class="far fa-calendar mr-1"></i>{{ optional($p->terbit_at)->translatedFormat('d M Y') ?? 'Draft' }} · {{ $p->menit_baca }} mnt</span>
+                    <span class="shrink-0"><i class="far fa-calendar mr-1"></i>{{ optional($p->terbit_at)->translatedFormat('d M Y') ?? 'Draft' }} Â· {{ $p->menit_baca }} mnt</span>
                 </div>
                 @if($pengelola)
                 <div class="mt-4 pt-4 border-t border-slate-50 flex items-center justify-end gap-2">
@@ -154,3 +154,4 @@
 </script>
 @endpush
 @endonce
+

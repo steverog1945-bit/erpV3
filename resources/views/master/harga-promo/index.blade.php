@@ -18,7 +18,7 @@
 
     <x-card class="mb-6">
         <form method="GET" action="{{ route('harga-promo.index') }}" class="flex flex-wrap items-end gap-4">
-            <div class="flex-1 min-w-[260px]">
+            <div class="w-full md:w-72 lg:w-80">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Cari Produk</label>
                 <x-form.input type="text" name="search" value="{{ request('search') }}" placeholder="Nama produk..." />
             </div>
@@ -215,3 +215,4 @@
     }
 </script>
 @endpush
+

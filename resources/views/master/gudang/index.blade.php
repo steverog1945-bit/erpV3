@@ -14,7 +14,7 @@
     {{-- FILTER & SEARCH --}}
     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-8">
         <form method="GET" action="{{ route('gudang.index') }}" class="flex flex-wrap items-end gap-4">
-            <div class="flex-1 min-w-[260px]">
+            <div class="w-full md:w-72 lg:w-80">
                 <label class="block text-[10px] font-medium text-slate-400 uppercase tracking-widest mb-2 ml-2">Cari Gudang</label>
                 <div class="relative">
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
@@ -189,3 +189,4 @@
     }
 </script>
 @endsection
+

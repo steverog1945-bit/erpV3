@@ -45,7 +45,7 @@
                 <form method="POST" action="{{ route('kas-kecil.saldo-awal') }}" class="flex flex-wrap items-center gap-4"
                       data-konfirmasi="Tetapkan saldo awal Kas Kecil? Nominal ini dicatat sebagai modal yang sudah ada di Kas Kecil.">
                     @csrf
-                    <div class="flex-1 min-w-[220px]">
+                    <div class="w-full md:w-64 lg:w-80">
                         <p class="text-sm font-medium text-slate-900">Saldo awal Kas Kecil belum ditetapkan</p>
                         <p class="text-xs text-slate-500 mt-0.5">Isi uang yang sudah ada di Kas Kecil sebelum pencatatan dimulai. Hanya sekali.</p>
                     </div>
@@ -313,3 +313,4 @@
 </script>
 @endpush
 @endsection
+

@@ -20,7 +20,7 @@
 
     <x-card class="mb-6">
         <form method="GET" class="jersey-orders-filter grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div class="md:col-span-2">
+            <div class="md:col-span-1">
                 <x-form.input type="text" name="search" value="{{ request('search') }}" placeholder="Cari no. order / pelanggan / tim..." />
             </div>
             <x-form.select name="status">
