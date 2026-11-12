@@ -452,6 +452,32 @@
                     @endforelse
                 </tbody>
             </x-table>
+
+            {{-- INPUT CEPAT TIER HARGA PER TIPE PRODUK (satu aksi simpan untuk banyak tier sekaligus) --}}
+            <div class="border-t border-slate-100 mt-6 pt-6">
+                <p class="text-[11px] font-medium text-indigo-600 uppercase tracking-widest mb-1">Input Cepat per Tipe Produk</p>
+                <p class="text-[11px] text-slate-400 mb-3">Isi beberapa tier sekaligus untuk satu tipe produk &amp; bahan — cocok saat mengatur harga grosir awal. Simpan dulu tier-nya; tier lama pada cakupan yang sama (tipe + bahan + kelompok) digantikan.</p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-3">
+                    <select id="cepat-tipe" class="w-full bg-white border border-slate-200 rounded-xl py-2.5 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+                        <option value="">-- Pilih Tipe Produk --</option>
+                        @foreach($productTypes->where('is_active', true) as $pt)<option value="{{ $pt->id }}">{{ $pt->name }}</option>@endforeach
+                    </select>
+                    <select id="cepat-bahan" class="w-full bg-white border border-slate-200 rounded-xl py-2.5 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+                        <option value="">-- Semua Bahan --</option>
+                        @foreach($materials->where('is_active', true) as $m)<option class="opsi-bahan" value="{{ $m->id }}">{{ $m->name }}</option>@endforeach
+                    </select>
+                    <select id="cepat-kelompok" class="w-full bg-white border border-slate-200 rounded-xl py-2.5 px-3 text-sm font-medium text-slate-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500">
+                        <option value="dewasa">Dewasa</option>
+                        <option value="anak">Anak</option>
+                    </select>
+                </div>
+                <div id="cepat-baris" class="space-y-2 mb-3"></div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button type="button" onclick="tambahBarisCepat()" class="inline-flex items-center gap-2 h-9 px-4 rounded-lg border border-indigo-200 bg-indigo-50 text-indigo-700 text-[11px] font-semibold hover:bg-indigo-100 transition-colors"><i class="fas fa-plus text-[9px]"></i> Tambah Baris</button>
+                    <button type="button" onclick="isiPitaStandar()" class="inline-flex items-center gap-2 h-9 px-4 rounded-lg border border-slate-200 bg-white text-slate-600 text-[11px] font-semibold hover:border-slate-300 hover:text-slate-800 transition-colors" title="Isi 4 pita standar: 1-11, 12-23, 24-49, 50+"><i class="fas fa-grip-lines text-[9px]"></i> Isi Pita Standar</button>
+                    <button type="button" onclick="simpanCepat()" class="inline-flex items-center gap-2 h-9 px-4 rounded-lg bg-indigo-600 text-white text-[11px] font-semibold hover:bg-indigo-700 transition-colors"><i class="fas fa-check text-[9px]"></i> Simpan Tier</button>
+                </div>
+            </div>
         </x-card>
     </div>
 

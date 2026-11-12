@@ -446,7 +446,13 @@ class JerseyOrderController extends Controller
             'lines.*.thumbnail.required' => 'Thumbnail desain wajib diisi untuk setiap barang (acuan warna & bentuk produksi).',
         ]);
 
-        $this->validasiSleeveCollar($request);
+        // CATATAN: dulu ada pemanggilan $this->validasiSleeveCollar() di sini,
+        // di updateLines() dan tambahSusulan() - method-nya tidak pernah ada
+        // (tidak ada di histori git), sehingga SEMUA POST ke endpoint ini
+        // melempar ErrorException 500 dan order tidak pernah tersimpan.
+        // Dihapus. Validasi lengan/kerah tetap: aturan nullable|exists di atas
+        // + peringatan non-blocking di cek-kelengkapan (client) - persis
+        // seperti perilaku yang memang terpasang.
 
         // Audit: size_quantities dikunci ke master SEBELUM transaksi dibuka -
         // key yang bukan ID ukuran master aktif ditolak dengan pesan validasi
@@ -1308,7 +1314,7 @@ class JerseyOrderController extends Controller
             'lines.*.thumbnail.required' => 'Thumbnail desain wajib diisi untuk setiap barang (acuan warna & bentuk produksi).',
         ]);
 
-        $this->validasiSleeveCollar($request);
+        // (validasiSleeveCollar() hantu sudah dihapus di store() - lihat catatan di sana.)
 
         // Audit: size_quantities dikunci ke master (lihat store()).
         foreach ($data['lines'] as $i => $lineData) {
@@ -1425,7 +1431,7 @@ class JerseyOrderController extends Controller
             'lines.*.thumbnail.required' => 'Thumbnail desain wajib diisi.',
         ]);
 
-        $this->validasiSleeveCollar($request);
+        // (validasiSleeveCollar() hantu sudah dihapus di store() - lihat catatan di sana.)
 
         // Audit: size_quantities dikunci ke master (lihat store()).
         foreach ($data['lines'] as $i => $lineData) {

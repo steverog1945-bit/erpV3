@@ -310,7 +310,7 @@
                     const w = document.getElementById('wrapper-diskon-tier');
                     if (w) w.classList.toggle('hidden', m !== 'tier');
                     if (m === 'manual') {
-                        const el = document.querySelector('input[name="discount"]');
+                        const el = document.querySelector("input[name='discount']");
                         if (el) el.focus();
                     } else {
                         const el = document.getElementById('potongan-per-pcs');
@@ -321,7 +321,7 @@
                     const pot = (function (v) { return parseInt(String(v).replace(/\D/g, '')) || 0; })(document.getElementById('potongan-per-pcs')?.value || '0');
                     const qty = parseInt(document.getElementById('total-qty-order')?.value || '0') || 0;
                     const disc = pot * qty;
-                    const el = form.querySelector('input[name="discount"]');
+                    const el = form.querySelector("input[name='discount']");
                     if (el) el.value = disc.toLocaleString('id-ID');
                 };
                 document.addEventListener('DOMContentLoaded', toggleModeDiskon);

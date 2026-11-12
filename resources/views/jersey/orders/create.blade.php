@@ -159,7 +159,7 @@
                                 const w = document.getElementById('wrapper-diskon-tier');
                                 if (w) w.classList.toggle('hidden', m !== 'tier');
                                 if (m === 'manual') {
-                                    const el = document.querySelector('input[name="discount"]');
+                                    const el = document.querySelector("input[name='discount']");
                                     if (el) el.focus();
                                 } else {
                                     const el = document.getElementById('potongan-per-pcs');
@@ -175,7 +175,7 @@
                                 const pot = cleanRupiah(document.getElementById('potongan-per-pcs')?.value || '0');
                                 const qty = totalQtyOrder();
                                 const disc = pot * qty;
-                                const el = document.querySelector('input[name="discount"]');
+                                const el = document.querySelector("input[name='discount']");
                                 if (el) el.value = formatRupiahDariAngka ? formatRupiahDariAngka(disc) : disc;
                                 // Tulis programmatic TIDAK memicu event 'input' - panggil
                                 // preview manual supaya Perkiraan Total langsung terpotong,

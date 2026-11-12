@@ -53,10 +53,18 @@ class AppServiceProvider extends ServiceProvider
 
             return Limit::perMinute(5)->by($kunci)->response(function (Request $request, array $headers) {
                 $headers['Retry-After'] = 300;
-                return response()->json([
-                    'error' => 'Terlalu banyak percobaan login. Coba lagi dalam beberapa saat.',
-                    'retry_after' => 300,
-                ], 429, $headers);
+                // Browser: pengguna melihat pesan di halaman login seperti
+                // semua penolakan form lain di aplikasi ini. Klient API/AJAX:
+                // tetap JSON 429 supaya bisa dirapikan secara terprogram.
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'error' => 'Terlalu banyak percobaan login. Coba lagi dalam beberapa saat.',
+                        'retry_after' => 300,
+                    ], 429, $headers);
+                }
+
+                return redirect()->route('login')
+                    ->withErrors(['username' => 'Terlalu banyak percobaan login. Coba lagi dalam beberapa saat.']);
             });
         });
 
