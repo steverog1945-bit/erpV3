@@ -1473,6 +1473,15 @@ public function rejectEditNota(Request $request, $id)
  */
     public function editLangsung($id)
     {
+        // Hardening: jalur "langsung" ini HANYA sah saat approval edit nota
+        // DINONAKTIFKAN di Pengaturan Aplikasi. Sebelumnya flag itu hanya
+        // dicek di requestEditNota - POST manual ke URL ini tetap dieksekusi
+        // self-approve (batal nota + stok/jurnal balik) walau approval aktif,
+        // melewati persetujuan Administrator.
+        if (\App\Models\AppSetting::current()->approval_edit_nota) {
+            return back()->with('error', 'Approval edit nota sedang aktif. Gunakan tombol "Ajukan Edit" agar koreksi disetujui Administrator dulu.');
+        }
+
         $transaksi = DB::table('transaksi')->where('id_transaksi', $id)->first();
         if (!$transaksi) {
             abort(404);

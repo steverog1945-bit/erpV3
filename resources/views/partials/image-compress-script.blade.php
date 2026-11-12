@@ -43,7 +43,7 @@
     // keterangan saja.
     function bisaDitampilkanBerkas(namaAtauPath) {
         const ext = (String(namaAtauPath || '').split('.').pop() || '').toLowerCase();
-        return ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'svg', 'tif', 'tiff'].indexOf(ext) >= 0;
+        return ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'tif', 'tiff'].indexOf(ext) >= 0;
     }
 
     // ==============================================================

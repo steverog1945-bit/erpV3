@@ -163,8 +163,16 @@ public function destroy($id)
             $disk->delete('profil/' . $user->foto_profil);
         }
 
-        $ext = $request->file('foto')->getClientOriginalExtension() ?: 'jpg';
-        $nama = 'u' . $user->id_user . '_' . time() . '.' . strtolower($ext);
+        // Ekstensi disimpan dari MIME yang SUDAH tervalidasi Laravel, bukan
+        // dari nama asal klien (sebelumnya PNG poliglot bisa tersimpan
+        // sebagai .php). Pola sama dengan LandingPageBuilderController.
+        $ext = match ($request->file('foto')->getMimeType()) {
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            'image/webp' => 'webp',
+            default => 'jpg',
+        };
+        $nama = 'u' . $user->id_user . '_' . time() . '.' . $ext;
         $request->file('foto')->storeAs('profil', $nama, 'public');
 
         $user->foto_profil = $nama;

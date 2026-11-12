@@ -383,7 +383,10 @@ Route::post('/penjualan/{id}/edit-langsung', [PenjualanController::class, 'editL
         Route::get('/monitoring', [KasirController::class, 'index'])->name('index');
 
         Route::get('/check-pembayaran',
-            [KasirController::class, 'checkNewTransaction']);
+            [KasirController::class, 'checkNewTransaction'])
+            // Rate limiter polling (30/mnt per IP) - endpoint ini dipanggil
+            // berulang oleh JS kasir, dibatasi supaya tidak jadi noise/brute.
+            ->middleware('throttle:polling');
 
         Route::get('/bayar-form/{id}',
             [KasirController::class, 'bayarForm'])->name('bayarForm');
@@ -612,17 +615,17 @@ Route::match(['post', 'patch'], '/pembelian-bahan/pelunasan/{id}', [PembelianBah
     Route::get('/spk/{id}/print/{format?}', [SpkController::class, 'print'])->name('spk.print');
     // SPK lengkap untuk DESAINER (gambar, konsumen, bahan, finishing) - tim produksi tetap memakai SPK thermal di atas.
     Route::get('/spk-desain/{id}', [SpkController::class, 'printDesain'])->whereNumber('id')->name('spk.desain');
-    Route::get('/spk/cek-antrian-baru', [SpkController::class, 'cekAntrianBaru'])->name('spk.cek-antrian-baru');
+    Route::get('/spk/cek-antrian-baru', [SpkController::class, 'cekAntrianBaru'])->name('spk.cek-antrian-baru')->middleware('throttle:polling');
 
     Route::get('/produksi', [ProduksiController::class, 'index'])->name('produksi.index');
     Route::patch('/produksi/{id}/simpan-qty', [ProduksiController::class, 'simpanQty'])->name('produksi.simpan-qty');
     Route::patch('/produksi/{id}/selesai', [ProduksiController::class, 'selesai'])->name('produksi.selesai');
     Route::patch('/produksi/{id}/cancel', [ProduksiController::class, 'cancel'])->name('produksi.cancel');
-    Route::get('/produksi/cek-antrian-baru', [ProduksiController::class, 'cekAntrianBaru'])->name('produksi.cek-antrian-baru');
+    Route::get('/produksi/cek-antrian-baru', [ProduksiController::class, 'cekAntrianBaru'])->name('produksi.cek-antrian-baru')->middleware('throttle:polling');
 
     Route::get('/collecting', [CollectingController::class, 'index'])->name('collecting.index');
     Route::patch('/collecting/{id}/proses', [CollectingController::class, 'proses'])->name('collecting.proses');
-    Route::get('/collecting/cek-antrian-baru', [CollectingController::class, 'cekAntrianBaru'])->name('collecting.cek-antrian-baru');
+    Route::get('/collecting/cek-antrian-baru', [CollectingController::class, 'cekAntrianBaru'])->name('collecting.cek-antrian-baru')->middleware('throttle:polling');
 
     Route::get('/laporan/order', [LaporanController::class, 'order'])->name('laporan.order');
     Route::get('/laporan/produksi', [LaporanController::class, 'produksi'])->name('laporan.produksi');
@@ -1000,4 +1003,5 @@ Route::match(['post', 'patch'], '/pembelian-bahan/pelunasan/{id}', [PembelianBah
 */
 Route::get('/lacak/{id}', [\App\Http\Controllers\PremiumController::class, 'lacak'])
     ->whereNumber('id')
-    ->name('lacak.nota');
+    ->name('lacak.nota')
+    ->middleware('throttle:polling');

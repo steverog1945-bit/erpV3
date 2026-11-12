@@ -35,7 +35,7 @@ class BerkasDesain
      * Format yang bisa dibuka peramban sebagai gambar (bisa jadi <img>) dan
      * bisa dikompres lewat canvas.
      */
-    public const FORMAT_GAMBAR = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'svg', 'tif', 'tiff'];
+    public const FORMAT_GAMBAR = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'tif', 'tiff'];
 
     /**
      * Format gambar yang sah, tapi peramban tidak bisa menampilkannya

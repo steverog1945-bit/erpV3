@@ -101,10 +101,17 @@ class UploadBerkasDesainTest extends TestCase
 
     public function test_semua_format_gambar_umum_boleh_diunggah(): void
     {
-        foreach (['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'svg', 'tif', 'tiff', 'heic', 'ai', 'eps', 'psd'] as $ext) {
+        foreach (['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp', 'tif', 'tiff', 'heic', 'ai', 'eps', 'psd'] as $ext) {
             $r = $this->upload('desain.' . $ext)->assertOk();
             $this->assertStringEndsWith('.' . $ext, $r->json('path'));
         }
+    }
+
+    public function test_svg_ditolak_karena_bisa_membawa_skrip(): void
+    {
+        $this->upload('desain.svg')
+            ->assertStatus(422)
+            ->assertJsonValidationErrors(['thumbnail']);
     }
 
     public function test_berkas_berbahaya_ditolak(): void
