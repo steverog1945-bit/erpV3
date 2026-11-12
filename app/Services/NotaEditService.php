@@ -27,7 +27,7 @@ class NotaEditService
     /**
      * @return array{boleh: bool, alasan: ?string}
      */
-    public static function bolehEdit(object $transaksi, ?User $user = null, ?bool $adaItemSelesai = null, ?bool $adaItemProduksi = null): array
+    public static function bolehEdit(object $transaksi, ?User $user = null, ?bool $adaItemSelesai = null, ?bool $adaItemProduksi = null, ?float $totalTerbayar = null): array
     {
         $user ??= Auth::user();
 
@@ -46,7 +46,8 @@ class NotaEditService
         // dari kolom status_pembayaran yang bisa basi. Nota total <= 0
         // (tidak ada tagihan) tidak dianggap Lunas untuk tujuan kunci.
         $totalBayarLunas = (float) ($transaksi->total_bayar ?? 0);
-        $totalTerbayarLunas = (float) DB::table('pembayaran_riwayat')
+        // Dihitung sekali (riwayat memakai LEFT JOIN subquery - tanpa ini, 1 query SUM per baris).
+        $totalTerbayarLunas = $totalTerbayar ?? (float) DB::table('pembayaran_riwayat')
             ->where('id_transaksi', $transaksi->id_transaksi)
             ->sum('nominal');
         if ($totalBayarLunas > 0
@@ -112,7 +113,8 @@ class NotaEditService
             $transaksi,
             $user,
             isset($transaksi->ada_item_selesai) ? (bool) $transaksi->ada_item_selesai : null,
-            isset($transaksi->ada_item_produksi) ? (bool) $transaksi->ada_item_produksi : null
+            isset($transaksi->ada_item_produksi) ? (bool) $transaksi->ada_item_produksi : null,
+            isset($transaksi->total_terbayar) ? (float) $transaksi->total_terbayar : null
         );
     }
 }

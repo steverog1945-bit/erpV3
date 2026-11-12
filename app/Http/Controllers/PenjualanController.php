@@ -837,6 +837,12 @@ public function riwayat(Request $request)
         ->select('id_transaksi', DB::raw('MAX(id_request) as max_id'))
         ->groupBy('id_transaksi');
 
+    // Total terbayar per nota - dihitung SATU query untuk seluruh halaman
+    // (dulu SUM per baris di bolehEdit -> N+1 pada daftar Riwayat).
+    $totalTerbayarSum = DB::table('pembayaran_riwayat')
+        ->select('id_transaksi', DB::raw('COALESCE(SUM(nominal), 0) as total_terbayar'))
+        ->groupBy('id_transaksi');
+
     $transaksis = DB::table('transaksi')
         ->join('konsumen', 'transaksi.id_konsumen', '=', 'konsumen.id_konsumen')
         ->leftJoin('golongan_konsumen', 'konsumen.id_golongan', '=', 'golongan_konsumen.id_golongan')
@@ -844,6 +850,7 @@ public function riwayat(Request $request)
         ->leftJoin('karyawan', 'users.id_karyawan', '=', 'karyawan.id_karyawan')
         ->leftJoinSub($latestEditReq, 'latest_req', fn ($join) => $join->on('transaksi.id_transaksi', '=', 'latest_req.id_transaksi'))
         ->leftJoin('nota_edit_request', 'nota_edit_request.id_request', '=', 'latest_req.max_id')
+        ->leftJoinSub($totalTerbayarSum, 'terbayar', fn ($join) => $join->on('transaksi.id_transaksi', '=', 'terbayar.id_transaksi'))
         // Perf dataset besar: rentang sargable untuk memakai index
         // (tgl_order,status_nota) - whereDate()/DATE() mematikan index.
         ->when($from, fn ($q) => $q->where('tgl_order', '>=', $from . ' 00:00:00'))
@@ -864,6 +871,9 @@ public function riwayat(Request $request)
             'nota_edit_request.id_request as edit_request_id',
             'nota_edit_request.status as edit_request_status',
             'nota_edit_request.catatan_approver as edit_request_catatan',
+            // Total terbayar (dari LEFT JOIN subquery di atas) - dipakai
+            // penandaRiwayat tanpa query tambahan per baris.
+            DB::raw('COALESCE(terbayar.total_terbayar, 0) as total_terbayar'),
             // Penanda untuk syarat edit selisih, diambil sebagai subquery
             // supaya daftar riwayat tidak jadi N+1 query (satu nota satu
             // query, bisa ratusan baris).
@@ -879,10 +889,12 @@ public function riwayat(Request $request)
 
     // Penanda "boleh diedit" per baris - sumbernya sama dengan yang dipakai
     // server saat menyimpan (NotaEditService), jadi tombol Edit di daftar dan
-    // penolakan saat disimpan tidak bisa berbeda pendapat.
+    // penolakan saat disimpan tidak bisa berbeda pendapat. Dihitung SEKALI
+    // per baris (dulu 2x, dan pembayaran_riwayat di-SUM per baris).
     $transaksis->getCollection()->each(function ($t) {
-        $t->boleh_edit = \App\Services\NotaEditService::penandaRiwayat($t)['boleh'];
-        $t->alasan_edit = \App\Services\NotaEditService::penandaRiwayat($t)['alasan'];
+        $penanda = \App\Services\NotaEditService::penandaRiwayat($t);
+        $t->boleh_edit = $penanda['boleh'];
+        $t->alasan_edit = $penanda['alasan'];
     });
 
     return view('penjualan.riwayat', compact('transaksis', 'from', 'to', 'konsumenTerpilih', 'isAdmin', 'pendingEditCount', 'cari'));
