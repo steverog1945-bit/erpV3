@@ -1077,9 +1077,47 @@ class JerseyOrderController extends Controller
         $diskon = (float) str_replace(['.', ','], ['', '.'], (string) $request->input('discount', 0));
         $biayaTambahan = (float) str_replace(['.', ','], ['', '.'], (string) $request->input('additional_charge', 0));
 
+        // Pembagian diskon antar baris untuk TAMPILAN preview saja. Diskon
+        // tetap tersimpan di level order (satu kolom jersey_orders.discount);
+        // pembagian ini supaya "perkiraan harga barang" di form menampilkan
+        // harga SETELAH diskon. Proporsional terhadap bruto tiap baris,
+        // dibulatkan ke rupiah, sisa pembulatan ditaruh ke baris terbesar -
+        // jadi jumlah potongan per baris = diskon yang diketik (tidak pernah
+        // kurang/lebih berapa pun pembulatan per baris, dan total tetap
+        // rekonsiliasi persis dengan total_order di bawah).
+        $grossBaris = [];
+        foreach ($hasilPerBaris as $idx => $row) {
+            $grossBaris[$idx] = (float) $row['subtotal'] + (float) ($row['finishing_biaya'] ?? 0);
+        }
+        $totalGross = array_sum($grossBaris);
+        $diskonTampil = $totalGross > 0 ? min($diskon, (float) $totalGross) : 0.0;
+        $bagiDiskon = array_fill_keys(array_keys($grossBaris), 0);
+        $sisaBagi = (int) round($diskonTampil);
+        if ($totalGross > 0 && $diskonTampil > 0) {
+            foreach ($grossBaris as $idx => $g) {
+                $bagi = (int) floor($g / $totalGross * $diskonTampil);
+                $bagiDiskon[$idx] = $bagi;
+                $sisaBagi -= $bagi;
+            }
+            arsort($grossBaris);
+            foreach ($grossBaris as $idx => $g) {
+                if ($sisaBagi <= 0) {
+                    break;
+                }
+                $bagiDiskon[$idx] += 1;
+                $sisaBagi -= 1;
+            }
+        }
+        foreach ($hasilPerBaris as $idx => &$row) {
+            $row['diskon_baris'] = $bagiDiskon[$idx] ?? 0;
+        }
+        unset($row);
+
         return response()->json([
             'lines' => $hasilPerBaris,
             'total_barang' => $totalOrder,
+            'diskon' => $diskon,
+            'biaya_tambahan' => $biayaTambahan,
             'total_order' => max(0, $totalOrder - $diskon + $biayaTambahan),
         ]);
     }

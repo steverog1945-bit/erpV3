@@ -177,6 +177,10 @@
                                 const disc = pot * qty;
                                 const el = document.querySelector('input[name="discount"]');
                                 if (el) el.value = formatRupiahDariAngka ? formatRupiahDariAngka(disc) : disc;
+                                // Tulis programmatic TIDAK memicu event 'input' - panggil
+                                // preview manual supaya Perkiraan Total langsung terpotong,
+                                // tidak menunggu ada field lain yang berubah.
+                                if (typeof jadwalkanPreviewHarga === 'function') jadwalkanPreviewHarga();
                             }
                             document.addEventListener('DOMContentLoaded', toggleDesainerSiapCetak);
                             document.addEventListener('DOMContentLoaded', toggleModeDiskon);
@@ -706,8 +710,11 @@
                     if (detailEl) detailEl.textContent = 'Isi qty & pilihan barang untuk lihat perkiraan harga.';
                 } else {
                     // Finishing jahit ikut dijumlahkan (server sudah melakukannya
-                    // di preview-mu) - keduanya harus menampilkan total yang sama.
-                    nilaiEl.textContent = 'Rp ' + Math.round(info.subtotal + (info.finishing_biaya || 0)).toLocaleString('id-ID');
+                    // di preview-mu) dan diskon order dibagikan proporsional ke
+                    // baris (diskon_baris dari server) - ditampilkan SETELAH
+                    // dipotong supaya selisihnya terlihat langsung di kartu.
+                    const dBaris = Math.round(info.diskon_baris || 0);
+                    nilaiEl.textContent = 'Rp ' + Math.max(0, Math.round(info.subtotal + (info.finishing_biaya || 0) - dBaris)).toLocaleString('id-ID');
                     // Teks detail sekarang hanya menyimpan CATATAN (tier belum
                     // cocok, pemain belum pilih ukuran) - rincian angkanya
                     // pindah ke daftar line-price-preview-list di bawah, satu
@@ -758,7 +765,22 @@
                     li.append(kiri, kanan);
                     listEl.appendChild(li);
                 }
-                listEl.classList.toggle('hidden', barisRincian.length === 0 || finNominal !== 0);
+                // Baris diskon (pembagian proporsional dari server - sama
+                // dengan yang dipotong dari nilai kartu & total order).
+                const dBaris = Math.round((info && info.diskon_baris) ? info.diskon_baris : 0);
+                if (dBaris > 0) {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-center justify-between gap-3 py-1';
+                    const kiri = document.createElement('span');
+                    kiri.className = 'min-w-0';
+                    kiri.textContent = 'Diskon';
+                    const kanan = document.createElement('span');
+                    kanan.className = 'font-semibold tabular-nums shrink-0 text-emerald-600';
+                    kanan.textContent = '−Rp ' + dBaris.toLocaleString('id-ID');
+                    li.append(kiri, kanan);
+                    listEl.appendChild(li);
+                }
+                listEl.classList.toggle('hidden', (barisRincian.length === 0 || finNominal !== 0) && dBaris === 0);
             }
 
             // Baris ringkasan di sidebar - dibangun via createElement/textContent
@@ -767,7 +789,8 @@
             const namaBarang = (card.querySelector('input[name$="[nama_barang]"]') ? card.querySelector('input[name$="[nama_barang]"]').value.trim() : '') || `Barang #${idx + 1}`;
             const thumbSrc = (card.querySelector('.thumbnail-preview:not(.hidden)') ? card.querySelector('.thumbnail-preview:not(.hidden)').src : '') || '';
             const qty = info ? info.qty : 0;
-            const subtotal = info ? Math.round(info.subtotal + (info.finishing_biaya || 0)) : 0;
+            // Net setelah pembagian diskon per baris - sama dengan kartu perkiraan barang.
+            const subtotal = info ? Math.max(0, Math.round(info.subtotal + (info.finishing_biaya || 0) - (info.diskon_baris || 0))) : 0;
 
             const baris = document.createElement('div');
             baris.className = 'flex items-center gap-2.5 py-2';
@@ -805,6 +828,31 @@
 
         if (!ringkasanEl.children.length) {
             ringkasanEl.innerHTML = '<p class="text-xs text-slate-500 italic text-center py-5">Belum ada barang ditambahkan.</p>';
+        } else if (document.querySelector('.jersey-line-card')) {
+            // Baris info Diskon & Biaya tambahan - angka ini sudah TERPASANG
+            // di harga per baris & Perkiraan Total (server yang menghitung),
+            // baris ini cuma supaya operator tahu kenapa harganya turun/naik.
+            const diskonInfo = Math.round(data.diskon || 0);
+            const tambahanInfo = Math.round(data.biaya_tambahan || 0);
+            if (diskonInfo > 0 || tambahanInfo > 0) {
+                const foot = document.createElement('div');
+                foot.className = 'border-t border-slate-100 mt-1 pt-2 space-y-1';
+                const barisInfo = (label, nilai, cls) => {
+                    const row = document.createElement('div');
+                    row.className = 'flex items-center justify-between text-[11px]';
+                    const l = document.createElement('span');
+                    l.className = 'text-slate-400';
+                    l.textContent = label;
+                    const r = document.createElement('span');
+                    r.className = 'font-semibold tabular-nums ' + cls;
+                    r.textContent = nilai;
+                    row.append(l, r);
+                    foot.appendChild(row);
+                };
+                if (diskonInfo > 0) barisInfo('Diskon (sudah dipotong dari harga di atas)', '−Rp ' + diskonInfo.toLocaleString('id-ID'), 'text-emerald-600');
+                if (tambahanInfo > 0) barisInfo('Biaya tambahan', '+Rp ' + tambahanInfo.toLocaleString('id-ID'), 'text-slate-600');
+                ringkasanEl.appendChild(foot);
+            }
         }
 
         const totalEl = document.getElementById('preview-total-order');
