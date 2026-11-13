@@ -2190,11 +2190,12 @@
             @endif
         @endif
         @if(session('error'))
-            Swal.fire({ icon: 'error', title: 'Tidak berhasil', text: @json(session('error')), customClass: { popup: 'rounded-2xl' } });
+            {{-- Non-blocking: error sebagai toast supaya tidak menutup layar. --}}
+            Toast.fire({ icon: 'error', title: 'Tidak berhasil', text: @json(session('error')), timer: 6000, showCloseButton: true });
         @endif
         @if(session('warning'))
             {{-- Ditampilkan setelah toast sukses (bila ada) supaya peringatannya tidak tertutup. --}}
-            setTimeout(() => Swal.fire({ icon: 'warning', title: 'Perhatian', text: @json(session('warning')), customClass: { popup: 'rounded-2xl' } }), {{ session('success') ? 600 : 0 }});
+            setTimeout(() => Toast.fire({ icon: 'warning', title: 'Perhatian', text: @json(session('warning')), timer: 6000, showCloseButton: true }), {{ session('success') ? 600 : 0 }});
         @endif
         @if($errors->any())
             {{-- Validation error: tampilkan pesan pertama agar operator tahu kolom mana yang kurang / salah.
@@ -2206,7 +2207,7 @@
             (function () {
                 const pesan = @json($errors->first());
                 if (document.body.innerText.indexOf(pesan) !== -1) return;
-                Swal.fire({ icon: 'error', title: 'Periksa kembali isian', text: pesan, customClass: { popup: 'rounded-2xl' } });
+                Toast.fire({ icon: 'error', title: 'Periksa kembali isian', text: pesan, timer: 6000, showCloseButton: true });
             })();
         @endif
     </script>
