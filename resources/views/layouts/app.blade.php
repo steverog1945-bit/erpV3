@@ -461,7 +461,7 @@
     }
     .content-wrapper {
         width: 100%; flex: 1;
-        animation: proContentIn .34s cubic-bezier(.22,1,.36,1) both;
+        animation: proContentIn .22s cubic-bezier(.22,1,.36,1) both;
     }
     /* Tanpa transform pada elemen ini: transform menjadikan ancestor "containing
        block" bagi position:fixed, sehingga modal (x-modal/swal) melayang
@@ -469,7 +469,7 @@
     @keyframes proContentIn { from { opacity: 0; } to { opacity: 1; } }
     body.pv2-leaving main#mainContent, body.pv2-leaving .content-wrapper {
         opacity: 0;
-        transition: opacity .18s cubic-bezier(.4,0,.2,1);
+        transition: opacity .12s cubic-bezier(.4,0,.2,1);
     }
 
     .pro-topbar {
@@ -1937,9 +1937,9 @@
         e.preventDefault();
         document.body.classList.add('pv2-leaving');
         clearTimeout(navTimer);
-        navTimer = window.setTimeout(function () { location.href = url.href; }, 180);
+        navTimer = window.setTimeout(function () { location.href = url.href; }, 120);
     }, true);
-    // Kalau pengguna menekan back/forward sebelum 180ms habis, batalkan pindah halaman.
+    // Kalau pengguna menekan back/forward sebelum 120ms habis, batalkan pindah halaman.
     window.addEventListener('pageshow', function (e) {
         if (e.persisted && navTimer) { clearTimeout(navTimer); navTimer = null; }
     });
