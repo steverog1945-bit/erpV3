@@ -17,6 +17,9 @@
     # Folder berisi data usaha (desain pelanggan, bukti bayar) tidak dilayani langsung: diteruskan ke Laravel
     # (BerkasPrivatController) yang mewajibkan login. Logo dan gambar postingan tetap publik.
     RewriteRule ^storage/(order_thumbnails|jersey_thumbnails|jersey_bukti_bayar|kas_kecil_bukti|bukti_serah_terima|berkas_order)/ index.php [L,NC]
+    # Folder sisa migrasi berkas (storage-old2) juga tidak dilayani langsung:
+    # diteruskan ke Laravel sehingga anonim mendapat 404, bukan gambar pelanggan.
+    RewriteRule ^storage-old2/ index.php [L,NC]
     RewriteRule ^storage/ - [E=BERKAS_STATIS:1]
     RewriteRule ^storage/.*\.(x?html?|svg|xml|m?js)$ - [E=BERKAS_AKTIF:1,NC]
     RewriteRule ^storage/[^.]*$ - [E=BERKAS_AKTIF:1]
