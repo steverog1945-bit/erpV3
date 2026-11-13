@@ -1988,6 +1988,106 @@ html.dark .page-input-order .po-est #status_hitung { color: #FCD34D; }
     .page-input-order .urgent-btn:active { transform: none; }
 }
 
+/* ===================================================================
+   GERAK HALUS GLOBAL — feedback tekan untuk tombol, entri panel
+   pembayaran, dan stagger kartu. Prinsip: hanya transform+opacity,
+   ease-out kuat, di bawah 300ms, hormati prefers-reduced-motion.
+   =================================================================== */
+:root {
+    --ease-out-kuat: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Tekan tombol (hanya tombol yang belum punya transition kelas sendiri -
+   selector elemen kalah dari kelas, jadi x-button dsb tidak berubah).
+   Tombol yang diposisikan lewat kelas translate-* dikecualikan agar
+   transform penempatannya tidak tertimpa scale. */
+button:not(:disabled):not([class*="translate-"]),
+[type="submit"]:not(:disabled) {
+    transition-property: transform;
+    transition-duration: 160ms;
+    transition-timing-function: var(--ease-out-kuat);
+}
+button:not(:disabled):not([class*="translate-"]):active,
+[type="submit"]:not(:disabled):active {
+    transform: scale(0.97);
+}
+
+/* ===== Halaman Input Pembayaran ===== */
+
+/* Kartu pilihan (Lunas/DP, Tunai/Debit/Transfer/Deposit): masuk berurutan
+   40ms sekali saat halaman dibuka; tekan = pil menyusut halus. */
+.tipe-bayar-option,
+.metode-bayar-option {
+    animation: kartuPilihanMasuk .28s var(--ease-out-kuat) both;
+}
+.tipe-bayar-option:active,
+.metode-bayar-option:active {
+    transform: scale(0.97);
+}
+.tipe-bayar-option:nth-child(2),
+#metode-pembayaran-grid .metode-bayar-option:nth-child(2) { animation-delay: 40ms; }
+#metode-pembayaran-grid .metode-bayar-option:nth-child(3) { animation-delay: 80ms; }
+#metode-pembayaran-grid .metode-bayar-option:nth-child(4) { animation-delay: 120ms; }
+#metode-pembayaran-grid .metode-bayar-option:nth-child(5) { animation-delay: 160ms; }
+@keyframes kartuPilihanMasuk {
+    from { opacity: 0; transform: translateY(10px) scale(0.97); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* Panel yang muncul saat metode berubah (rekening, QRIS, deposit):
+   diluncurkan dari atas dengan fade - penanda state, bukan dekorasi. */
+#wrapper-bank:not(.hidden),
+#wrapper-qris:not(.hidden),
+#wrapper-deposit-info:not(.hidden) {
+    animation: panelMasuk .24s var(--ease-out-kuat) both;
+}
+@keyframes panelMasuk {
+    from { opacity: 0; transform: translateY(-6px) scale(0.985); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* Kartu ATM rekening saat dipilih: angkat sedikit + bayangan lebih tegas. */
+@media (hover: hover) and (pointer: fine) {
+    .rek-card:hover {
+        box-shadow: 0 8px 22px rgba(2, 6, 23, .28) !important;
+    }
+}
+input[name="id_bank"]:checked ~ .rek-card {
+    box-shadow: 0 0 0 2px #ffffff inset, 0 8px 22px rgba(2, 6, 23, .28) !important;
+}
+
+/* Kode QRIS: zoom sangat kecil saat pertama tampil agar mata tertarik
+   ke sana (tujuan: state indication - inilah yang harus discan). */
+#wrapper-qris:not(.hidden) img {
+    animation: qrisZoom .26s var(--ease-out-kuat) both;
+    transform-origin: center;
+}
+@keyframes qrisZoom {
+    from { opacity: 0; transform: scale(0.94); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* Nominal uang diterima: fokus berubah halus (sudah ada ring Tailwind). */
+#input-bayar-mask {
+    transition-property: border-color, background-color, box-shadow;
+    transition-duration: 160ms;
+    transition-timing-function: var(--ease-out-kuat);
+}
+
+/* Hormati preferensi gerakan: buang masuk/stagger, sisakan fade. */
+@media (prefers-reduced-motion: reduce) {
+    button:not(:disabled):active, [type="submit"]:not(:disabled):active { transform: none; }
+    .tipe-bayar-option, .metode-bayar-option,
+    #wrapper-bank:not(.hidden), #wrapper-qris:not(.hidden),
+    #wrapper-deposit-info:not(.hidden),
+    #wrapper-qris:not(.hidden) img { animation: fadeMasuk .2s ease both; }
+    .tipe-bayar-option:active, .metode-bayar-option:active { transform: none; }
+}
+@keyframes fadeMasuk {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
 
 
 

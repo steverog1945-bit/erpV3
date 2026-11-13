@@ -176,7 +176,7 @@
 
                         <div class="md:col-span-3">
                             <label class="block text-[11px] font-medium text-slate-400 mb-2.5">Metode Pembayaran</label>
-                            <span class="grid grid-cols-2 md:grid-cols-3 gap-2" id="metode-pembayaran-grid">
+                            <span class="grid grid-cols-2 gap-2" id="metode-pembayaran-grid">
                                 <label class="metode-bayar-option relative flex items-center justify-center gap-2 py-3 rounded-2xl border border-indigo-500 bg-indigo-50 text-indigo-700 font-medium text-xs cursor-pointer transition-all">
                                     <input type="radio" name="metode_pembayaran" id="metode-tunai" value="Tunai" class="sr-only" checked onchange="onMetodePembayaranChange()">
                                     <i class="fas fa-money-bill-wave"></i> Tunai
@@ -187,11 +187,7 @@
                                 </label>
                                 <label class="metode-bayar-option relative flex items-center justify-center gap-2 py-3 rounded-2xl border border-slate-100 text-slate-400 font-medium text-xs cursor-pointer transition-all hover:border-slate-200">
                                     <input type="radio" name="metode_pembayaran" value="Transfer" class="sr-only" onchange="onMetodePembayaranChange()">
-                                    <i class="fas fa-university"></i> Transfer
-                                </label>
-                                <label class="metode-bayar-option relative flex items-center justify-center gap-2 py-3 rounded-2xl border border-slate-100 text-slate-400 font-medium text-xs cursor-pointer transition-all hover:border-slate-200">
-                                    <input type="radio" name="metode_pembayaran" value="QRIS" class="sr-only" onchange="onMetodePembayaranChange()">
-                                    <i class="fas fa-qrcode"></i> QRIS
+                                    <i class="fas fa-university"></i> Transfer / QRIS
                                 </label>
                                 <label class="metode-bayar-option relative flex items-center justify-center gap-2 py-3 rounded-2xl border border-slate-100 text-slate-400 font-medium text-xs cursor-pointer transition-all hover:border-slate-200 {{ $saldoDeposit <= 0 ? 'opacity-40 cursor-not-allowed' : '' }}"
                                     title="{{ $saldoDeposit > 0 ? '' : ($depositSudahHabis ? 'Deposit konsumen ini sudah habis terpakai, tidak bisa dipakai lagi.' : 'Konsumen ini belum pernah setor deposit.') }}">
@@ -204,7 +200,7 @@
 
                     <div id="wrapper-bank" class="hidden mt-5">
                         <label class="block text-[11px] font-medium text-slate-400 mb-2">Rekening Tujuan (untuk Transfer / QRIS)</label>
-                        <p class="text-[10px] text-slate-400 mb-2 -mt-1">Pilih rekening perusahaan tempat pembayaran masuk.</p>
+                        <p class="text-[10px] text-slate-400 mb-2 -mt-1">Pilih rekening perusahaan tempat pembayaran masuk. Barcode QRIS tampil di bawah daftar rekening.</p>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2" role="radiogroup" aria-label="Pilih rekening bank">
                             @forelse($banks as $b)
                             @php
@@ -760,10 +756,12 @@
     }
 
     function toggleBankField() {
-        const metode = getMetodePembayaran();
-        document.getElementById('wrapper-bank').classList.toggle('hidden', metode !== 'Transfer' && metode !== 'QRIS');
-        document.getElementById('wrapper-qris').classList.toggle('hidden', metode !== 'QRIS');
-        document.getElementById('wrapper-deposit-info').classList.toggle('hidden', metode !== 'Deposit');
+        // Transfer sekarang mencakup QRIS: daftar seluruh rekening + panel
+        // barcode QRIS tampil bersamaan di bawahnya.
+        const transfer = getMetodePembayaran() === 'Transfer';
+        document.getElementById('wrapper-bank').classList.toggle('hidden', !transfer);
+        document.getElementById('wrapper-qris').classList.toggle('hidden', !transfer);
+        document.getElementById('wrapper-deposit-info').classList.toggle('hidden', getMetodePembayaran() !== 'Deposit');
     }
 
     // Kartu ATM mini pemilihan rekening: tombol pil "Pilih" berubah jadi
