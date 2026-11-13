@@ -47,8 +47,22 @@ class SubmitSekaliJalan
 
         // Sidik isi kiriman ikut menjadi kunci: submit_id yang sama dengan isi BERBEDA (form yang id-nya tidak berganti)
         // adalah kiriman baru dan diproses, bukan dijawab dengan hasil kiriman sebelumnya tanpa menyimpan apa pun.
-        $isi = $request->except(['submit_id', '_token', '_method']);
-        $sidik = md5(serialize($isi));
+        //
+        // `$request->except()` ikut membawa objek UploadedFile (file ada di
+        // bag files, bukan bag input), dan serialize() tidak tersedia untuk
+        // kelas itu -> "Serialization of 'Illuminate\Http\UploadedFile' is
+        // not allowed" (error 500 untuk SEMUA upload multipart yang membawa
+        // submit_id - mis. gambar QRIS di master bank). Sidik sekarang dihitung
+        // dari input teks (semua skalar) + sidik berkas rekursif (nama|ukuran|
+        // mime|md5), jadi tetap membedakan "berkas berbeda, teks sama" sebagai
+        // kiriman baru tanpa pernah men-serialize file itu sendiri.
+        $isi = $request->input();
+        $isi = array_diff_key($isi, array_flip(['submit_id', '_token', '_method']));
+        $berkas = $request->allFiles();
+        if ($berkas) {
+            $isi['__berkas'] = $this->sidikBerkas($berkas);
+        }
+        $sidik = md5((string) json_encode($isi, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE));
         $kunci = 'submit:' . optional($request->route())->getName() . ':' . $request->path() . ':' . Auth::id() . ':' . $id . ':' . $sidik;
 
         if (!Cache::add($kunci, 'diproses', now()->addMinutes(self::TTL_DIPROSES_MENIT))) {
@@ -70,6 +84,23 @@ class SubmitSekaliJalan
         }
 
         return $respons;
+    }
+
+    /** Sidik berkas rekursif: nama|ukuran|mime|md5 untuk satu berkas. Upload selalu beberapa MB; md5_file cepat. */
+    private function sidikBerkas(mixed $berkas): mixed
+    {
+        if (is_array($berkas)) {
+            $hasil = [];
+            foreach ($berkas as $k => $b) {
+                $hasil[$k] = $this->sidikBerkas($b);
+            }
+            return $hasil;
+        }
+        if (! $berkas instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+            return null;
+        }
+        $hash = @md5_file($berkas->getRealPath()) ?: 'nohash';
+        return $berkas->getClientOriginalName() . '|' . $berkas->getSize() . '|' . $berkas->getMimeType() . '|' . $hash;
     }
 
     /** Hasil yang disimpan untuk dikembalikan ke pengiriman ulang, atau null bila pengiriman ini tidak sukses. */
