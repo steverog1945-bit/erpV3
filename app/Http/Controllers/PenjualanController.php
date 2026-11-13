@@ -877,7 +877,7 @@ public function riwayat(Request $request)
             // Penanda untuk syarat edit selisih, diambil sebagai subquery
             // supaya daftar riwayat tidak jadi N+1 query (satu nota satu
             // query, bisa ratusan baris).
-            DB::raw("EXISTS (SELECT 1 FROM transaksi_detail d WHERE d.id_transaksi = transaksi.id_transaksi AND d.status_spk IN ('Selesai', 'Cetak')) as ada_item_selesai"),
+            DB::raw("EXISTS (SELECT 1 FROM transaksi_detail d WHERE d.id_transaksi = transaksi.id_transaksi AND d.id_produk IS NOT NULL AND d.status_spk IN ('Selesai', 'Cetak')) as ada_item_selesai"),
             DB::raw("EXISTS (SELECT 1 FROM transaksi_detail d WHERE d.id_transaksi = transaksi.id_transaksi AND d.id_produk IS NOT NULL) as ada_item_produksi")
         )
         ->orderByDesc('tgl_order')

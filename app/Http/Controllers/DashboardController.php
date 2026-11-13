@@ -15,14 +15,15 @@ class DashboardController extends Controller
      * dibaca Administrator & Kasir. Sekarang dipecah per role:
      *
      * - Administrator, Kasir       -> dashboard penuh (semua nominal & aksi).
-     * - Operator Desain            -> alur order/produksi + status pembayaran
-     *   (badge Lunas/DP/Belum Bayar boleh terlihat), TAPI TIDAK ADA satu pun
-     *   angka Rupiah (nilai order, kas masuk, piutang) - role ini cuma input
-     *   order & lihat status, tidak pernah menyentuh transaksi/nominal.
-     * - Operator Produksi ("operator cetak") -> SPK-sentris: daftar SPK yang
-     *   perlu dikerjakan langsung tersaji (bukan cuma angka), dibatasi ke
-     *   mesin/divisi tanggung jawabnya sendiri (pola sama dengan
-     *   SpkController::index()), tanpa nominal sama sekali.
+     * - Operator Desain            -> dashboard khusus rute /dashboard/desain
+     *   (role.only, hanya Operator Desain + Administrator) - mirip dashboard
+     *   utama TAPI TIDAK ADA satu pun angka Rupiah (nilai order, kas,
+     *   piutang): role ini cuma input order & lihat status, tidak pernah
+     *   menyentuh transaksi/nominal.
+     * - Operator Produksi ("operator cetak") -> dashboard khusus rute
+     *   /dashboard/produksi (role.only) - SPK-sentris: semua hitungan &
+     *   daftar kerja dibatasi ke mesin/divisi tanggung jawab karyawan yang
+     *   login (pola sama dengan SpkController::index()), tanpa nominal.
      * - Gudang                     -> ringkasan stok bahan baku (habis/
      *   menipis/belum ada batas minimal) & kedatangan bahan terbaru, tanpa
      *   nominal (harga rata-rata TIDAK ditampilkan).
@@ -40,8 +41,10 @@ class DashboardController extends Controller
         }
 
         return match ($namaRole) {
-            'Operator Desain' => $this->dashboardDesain(),
-            'Operator Produksi' => $this->dashboardProduksi($user),
+            // Halaman role punya rute & gemboknya sendiri (role.only) - /dashboard
+            // mengalihkan ke sana supaya link "Dashboard" di sidebar tetap satu pintu.
+            'Operator Desain' => redirect()->route('dashboard.desain'),
+            'Operator Produksi' => redirect()->route('dashboard.produksi'),
             'Gudang' => $this->dashboardGudang(),
             default => $this->dashboardFull(), // Administrator, Kasir, & role lain yang belum diklasifikasi eksplisit
         };
@@ -79,12 +82,8 @@ class DashboardController extends Controller
     {
         $today = now()->format('Y-m-d');
         [$mulaiHariIni, $akhirHariIni] = self::rentangHari($today);
-        [$mulaiKemarin, $akhirKemarin] = self::rentangHari(now()->subDay()->format('Y-m-d'));
-
-        $piutangRingkas = self::piutangRingkas();
 
         $orderHariIni = DB::table('transaksi')->whereBetween('tgl_order', [$mulaiHariIni, $akhirHariIni])->where('status_nota', '!=', 'Dibatalkan')->count();
-        $nilaiOrderHariIni = (float) DB::table('transaksi')->whereBetween('tgl_order', [$mulaiHariIni, $akhirHariIni])->where('status_nota', '!=', 'Dibatalkan')->sum('total_bayar');
 
         $statusSpk = DB::table('transaksi_detail')
             ->select('status_spk', DB::raw('COUNT(*) as jumlah'))
@@ -99,24 +98,39 @@ class DashboardController extends Controller
             ->whereNotIn('status_spk', ['Selesai', 'Batal'])
             ->count();
 
-        $kasMasukHariIni = (float) self::uangMasuk($mulaiHariIni, $akhirHariIni);
-
         $kasAktifSemua = KasSesiService::aktif();
         $kasAktif = $kasAktifSemua ? (bool) $kasAktifSemua : false;
 
-        return response()->json([
-            'piutang' => $piutangRingkas['total'],
-            'piutang_count' => $piutangRingkas['jumlah'],
+        // Angka Rupiah HANYA untuk role yang berhak lihat nominal
+        // (Administrator & Kasir). Role lain menerima hitungan/count saja -
+        // dulu endpoint ini membocorkan piutang, nilai order & kas masuk ke
+        // semua yang login (ada di always_allow).
+        $namaRole = optional(auth()->user()->role)->nama_role;
+        $nominalBoleh = in_array($namaRole, ['Administrator', 'Kasir'], true);
+
+        $payload = [
             'order_hari_ini' => (int) $orderHariIni,
-            'nilai_order_hari_ini' => $nilaiOrderHariIni,
-            'kas_masuk_hari_ini' => $kasMasukHariIni,
             'spk_antre' => $spkAntre,
             'spk_proses' => $spkProses,
             'spk_selesai' => $spkSelesai,
             'urgent_aktif' => (int) $urgentAktif,
             'kas_aktif' => $kasAktif,
             'updated_at' => now()->toDateTimeString(),
-        ]);
+        ];
+
+        if ($nominalBoleh) {
+            $piutangRingkas = self::piutangRingkas();
+            $nilaiOrderHariIni = (float) DB::table('transaksi')->whereBetween('tgl_order', [$mulaiHariIni, $akhirHariIni])->where('status_nota', '!=', 'Dibatalkan')->sum('total_bayar');
+
+            $payload['piutang'] = $piutangRingkas['total'];
+            $payload['piutang_count'] = $piutangRingkas['jumlah'];
+            $payload['nilai_order_hari_ini'] = $nilaiOrderHariIni;
+            $payload['kas_masuk_hari_ini'] = (float) self::uangMasuk($mulaiHariIni, $akhirHariIni);
+        } else {
+            $payload['piutang_count'] = self::piutangRingkas()['jumlah'];
+        }
+
+        return response()->json($payload);
     }
 
     /**
@@ -256,35 +270,81 @@ class DashboardController extends Controller
     }
 
     /**
-     * Operator Desain - alur order/produksi + status pembayaran (badge
-     * saja), TANPA satu pun angka Rupiah. $orderTerbaru SENGAJA tidak
-     * meng-select total_bayar sama sekali (bukan cuma disembunyikan di
-     * view) supaya tidak ada jalan nominal itu ikut kebawa ke view ini.
+     * Builder data bersama untuk dashboard peran operasional (Desain &
+     * Produksi). Cermin dari dashboard penuh - gauge KPI, siklus alur 5
+     * tahap, beban produksi per mesin, panel perlu perhatian - TAPI tanpa
+     * satu pun angka Rupiah: nilai order, kas, piutang & total_bayar tidak
+     * pernah di-select/dikirim ke view. Query hanya membaca tabel yang
+     * sudah ada (tidak ada perubahan skema/data).
+     *
+     * @param \Illuminate\Support\Collection|null $mesinDiizinkan  Bila diisi
+     *   (penugasan mesin karyawan), semua hitungan SPK & daftar urgent dibatasi
+     *   ke mesin tsb - pola sama dengan SpkController::index(). Administrator/
+     *   karyawan tanpa penugasan mesin: null (lihat semua).
+     * @param bool $hanyaAktif  true (dashboard Produksi) = hanya item dari nota
+     *   berstatus 'Aktif'; false (dashboard Desain) = semua nota yang tidak
+     *   dibatalkan (pola dashboard utama).
      */
-    private function dashboardDesain()
+    private function ringkasanOperasional($mesinDiizinkan = null, bool $hanyaAktif = false): array
     {
         $today = now()->format('Y-m-d');
+        [$mulaiHariIni, $akhirHariIni] = self::rentangHari($today);
+        [$mulaiKemarin, $akhirKemarin] = self::rentangHari(now()->subDay()->format('Y-m-d'));
 
-        $orderHariIni = DB::table('transaksi')->whereBetween('tgl_order', self::rentangHari($today))->where('status_nota', '!=', 'Dibatalkan')->count();
+        $orderHariIni = DB::table('transaksi')->whereBetween('tgl_order', [$mulaiHariIni, $akhirHariIni])->where('status_nota', '!=', 'Dibatalkan')->count();
+        $orderKemarin = DB::table('transaksi')->whereBetween('tgl_order', [$mulaiKemarin, $akhirKemarin])->where('status_nota', '!=', 'Dibatalkan')->count();
 
-        $statusSpk = DB::table('transaksi_detail')
-            ->select('status_spk', DB::raw('COUNT(*) as jumlah'))
-            ->groupBy('status_spk')
+        $baseSpk = DB::table('transaksi_detail')
+            ->join('transaksi', 'transaksi_detail.id_transaksi', '=', 'transaksi.id_transaksi')
+            ->join('produk', 'transaksi_detail.id_produk', '=', 'produk.id_produk');
+        if ($hanyaAktif) {
+            $baseSpk->where('transaksi.status_nota', 'Aktif');
+        } else {
+            $baseSpk->where('transaksi.status_nota', '!=', 'Dibatalkan');
+        }
+        if ($mesinDiizinkan) {
+            $baseSpk->whereIn('produk.id_mesin', $mesinDiizinkan);
+        }
+
+        $statusSpk = (clone $baseSpk)
+            ->select('transaksi_detail.status_spk', DB::raw('COUNT(*) as jumlah'))
+            ->groupBy('transaksi_detail.status_spk')
             ->pluck('jumlah', 'status_spk');
 
         $spkAntre = (int) ($statusSpk['Antre'] ?? 0);
-        $spkProses = (int) (($statusSpk['Desain'] ?? 0) + ($statusSpk['Cetak'] ?? 0));
+        $spkDesain = (int) ($statusSpk['Desain'] ?? 0);
+        $spkCetak = (int) ($statusSpk['Cetak'] ?? 0);
+        $spkProses = $spkDesain + $spkCetak;
         $spkSelesai = (int) ($statusSpk['Selesai'] ?? 0);
 
-        $urgentAktif = DB::table('transaksi_detail')
-            ->where('status_urgent', 1)
-            ->whereNotIn('status_spk', ['Selesai', 'Batal'])
+        $urgentAktif = (clone $baseSpk)
+            ->where('transaksi_detail.status_urgent', 1)
+            ->whereNotIn('transaksi_detail.status_spk', ['Selesai', 'Batal'])
             ->count();
 
-        [$notaLengkap] = $this->ringkasanCollecting();
+        [$notaLengkap, $notaBelumLengkap] = $this->ringkasanCollecting();
 
-        $urgentList = DB::table('transaksi_detail')
+        // Penyebut persentase tahap Collecting & penyebut gauge selesai - murni
+        // hitungan nota (bukan nominal). Sama seperti dashboard utama.
+        $totalNotaAll = (int) DB::table('transaksi')->where('status_nota', '!=', 'Dibatalkan')->count();
+
+        // Beban SPK aktif per mesin (antre/desain/cetak) - angka nyata, bukan
+        // contoh. Dibatasi ke mesin tanggung jawab bila ada penugasan.
+        $bebanMesin = DB::table('transaksi_detail')
             ->join('transaksi', 'transaksi_detail.id_transaksi', '=', 'transaksi.id_transaksi')
+            ->join('produk', 'transaksi_detail.id_produk', '=', 'produk.id_produk')
+            ->leftJoin('mesin', 'produk.id_mesin', '=', 'mesin.id_mesin')
+            ->when($hanyaAktif, fn ($q) => $q->where('transaksi.status_nota', '=', 'Aktif'), fn ($q) => $q->where('transaksi.status_nota', '!=', 'Dibatalkan'))
+            ->when($mesinDiizinkan, fn ($q) => $q->whereIn('produk.id_mesin', $mesinDiizinkan))
+            ->whereIn('transaksi_detail.status_spk', ['Antre', 'Desain', 'Cetak'])
+            ->select(DB::raw("COALESCE(mesin.nama_mesin, 'Lainnya') as nama_mesin"), DB::raw('COUNT(*) as jumlah'))
+            ->groupBy('produk.id_mesin', 'mesin.nama_mesin')
+            ->orderByDesc('jumlah')
+            ->limit(4)
+            ->get();
+        $bebanMesinMaks = max(1, (int) $bebanMesin->max('jumlah'));
+
+        $urgentList = (clone $baseSpk)
             ->where('transaksi_detail.status_urgent', 1)
             ->whereNotIn('transaksi_detail.status_spk', ['Selesai', 'Batal'])
             ->select('transaksi_detail.id_detail', 'transaksi_detail.nama_file', 'transaksi_detail.status_spk')
@@ -294,7 +354,49 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
-        // TIDAK ADA total_bayar di select - hanya status pembayaran (badge).
+        // Pekerjaan yang menunggu tindakan (sama dengan lonceng notifikasi,
+        // sudah difilter per izin role oleh NotifikasiService - aman dipakai).
+        $perluTindakan = \App\Services\NotifikasiService::untuk(auth()->user())['items'];
+
+        // Strip "Perhatian Hari Ini" - TANPA nominal: selisih kas (memuat Rupiah)
+        // sengaja tidak disertakan untuk role ini. Setiap butir hanya tampil bila
+        // role memang boleh membuka halaman tujuannya.
+        $anomBatal = DB::table('transaksi')->whereBetween('tgl_order', [$mulaiHariIni, $akhirHariIni])->where('status_nota', 'Dibatalkan')->count();
+        $anomRework = DB::table('rework')->whereDate('created_at', $today)->where('status', '!=', 'Selesai')->count();
+        $anomWaste = DB::table('waste_log')->where('tanggal', $today)->where('jenis', 'Abnormal')->count();
+        $anomali = collect([
+            $anomBatal > 0 ? ['label' => $anomBatal . ' nota dibatalkan hari ini', 'route' => 'penjualan.riwayat', 'param' => [], 'tone' => 'rose'] : null,
+            $anomRework > 0 ? ['label' => $anomRework . ' rework belum selesai', 'route' => 'qc.index', 'param' => [], 'tone' => 'amber'] : null,
+            $anomWaste > 0 ? ['label' => $anomWaste . ' waste abnormal hari ini', 'route' => 'waste.index', 'param' => [], 'tone' => 'amber'] : null,
+        ])->filter()->values()
+            ->filter(function ($a) {
+                try {
+                    return \App\Support\JalurLanjut::boleh(route($a['route'], $a['param']));
+                } catch (\Throwable $e) {
+                    return false;
+                }
+            })->values();
+
+        return compact(
+            'orderHariIni', 'orderKemarin',
+            'spkAntre', 'spkDesain', 'spkCetak', 'spkProses', 'spkSelesai', 'urgentAktif',
+            'notaLengkap', 'notaBelumLengkap', 'totalNotaAll', 'bebanMesin', 'bebanMesinMaks',
+            'urgentList', 'perluTindakan', 'anomali'
+        );
+    }
+
+    /**
+     * Halaman dashboard Operator Desain - rute /dashboard/desain, dijaga
+     * role.only:Operator Desain (Administrator lolos untuk inspeksi).
+     * TANPA satu pun angka Rupiah; status pembayaran hanya badge Lunas/DP/
+     * Belum Bayar. $orderTerbaru SENGAJA tidak meng-select total_bayar sama
+     * sekali (bukan cuma disembunyikan di view) supaya tidak ada jalan
+     * nominal itu ikut kebawa ke view ini.
+     */
+    public function desain()
+    {
+        $data = $this->ringkasanOperasional(null, false);
+
         $orderTerbaru = DB::table('transaksi')
             ->select('transaksi.id_transaksi', 'transaksi.nomor_nota', 'transaksi.tgl_order', 'transaksi.status_pembayaran', 'transaksi.status_nota')
             // Nama pelanggan lewat subquery: dengan JOIN, MySQL mengurutkan seluruh nota dulu (filesort).
@@ -303,20 +405,19 @@ class DashboardController extends Controller
             ->limit(6)
             ->get();
 
-        return view('dashboard-desain', compact(
-            'orderHariIni', 'spkAntre', 'spkProses', 'spkSelesai', 'urgentAktif',
-            'notaLengkap', 'urgentList', 'orderTerbaru'
-        ));
+        return view('dashboard-desain', array_merge($data, compact('orderTerbaru')));
     }
 
     /**
-     * Operator Produksi ("operator cetak") - SPK-sentris, dibatasi ke
+     * Halaman dashboard Operator Produksi ("operator cetak") - rute
+     * /dashboard/produksi, dijaga role.only:Operator Produksi (Administrator
+     * lolos untuk inspeksi). SPK-sentris: semua hitungan dibatasi ke
      * mesin/divisi tanggung jawab karyawan yang login (pola sama persis
-     * dengan SpkController::index() - Administrator/karyawan tanpa
-     * penugasan mesin lihat semua). Tanpa nominal sama sekali.
+     * dengan SpkController::index()). Tanpa nominal sama sekali.
      */
-    private function dashboardProduksi($user)
+    public function produksi()
     {
+        $user = auth()->user();
         $karyawan = optional($user)->karyawan;
         $mesinDiizinkan = null;
         $namaMesinDiizinkan = null;
@@ -328,27 +429,7 @@ class DashboardController extends Controller
             }
         }
 
-        $baseSpk = DB::table('transaksi_detail')
-            ->join('transaksi', 'transaksi_detail.id_transaksi', '=', 'transaksi.id_transaksi')
-            ->join('produk', 'transaksi_detail.id_produk', '=', 'produk.id_produk')
-            ->where('transaksi.status_nota', 'Aktif');
-        if ($mesinDiizinkan) {
-            $baseSpk->whereIn('produk.id_mesin', $mesinDiizinkan);
-        }
-
-        $statusSpk = (clone $baseSpk)
-            ->select('transaksi_detail.status_spk', DB::raw('COUNT(*) as jumlah'))
-            ->groupBy('transaksi_detail.status_spk')
-            ->pluck('jumlah', 'status_spk');
-
-        $spkAntre = (int) ($statusSpk['Antre'] ?? 0);
-        $spkProses = (int) (($statusSpk['Desain'] ?? 0) + ($statusSpk['Cetak'] ?? 0));
-        $spkSelesai = (int) ($statusSpk['Selesai'] ?? 0);
-
-        $urgentAktif = (clone $baseSpk)
-            ->where('transaksi_detail.status_urgent', 1)
-            ->whereNotIn('transaksi_detail.status_spk', ['Selesai', 'Batal'])
-            ->count();
+        $data = $this->ringkasanOperasional($mesinDiizinkan, true);
 
         // Daftar SPK yang PERLU DIKERJAKAN, langsung tersaji (bukan cuma
         // angka) - Antre dulu (siap diambil), baru Desain/Cetak yang
@@ -373,10 +454,7 @@ class DashboardController extends Controller
             ->limit(10)
             ->get();
 
-        return view('dashboard-produksi', compact(
-            'spkAntre', 'spkProses', 'spkSelesai', 'urgentAktif',
-            'spkPerluDikerjakan', 'namaMesinDiizinkan'
-        ));
+        return view('dashboard-produksi', array_merge($data, compact('spkPerluDikerjakan', 'namaMesinDiizinkan')));
     }
 
     /**

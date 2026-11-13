@@ -29,6 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'restrict.input-only' => \App\Http\Middleware\RestrictInputOnlyRoles::class,
             'throttle.write' => \App\Http\Middleware\ThrottleWriteRequests::class,
             'hanya.admin' => \App\Http\Middleware\HanyaAdministrator::class,
+            'role.only' => \App\Http\Middleware\HanyaRole::class,
             'sekali.jalan' => \App\Http\Middleware\SubmitSekaliJalan::class,
             'api.auth' => \App\Http\Middleware\ApiAuth::class,
             'api.rbac' => \App\Http\Middleware\ApiRbac::class,

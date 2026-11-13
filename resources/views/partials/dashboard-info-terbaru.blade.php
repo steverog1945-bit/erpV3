@@ -13,7 +13,7 @@
             <p class="text-[10px] font-medium text-indigo-500 uppercase tracking-[0.2em]">Info &amp; Panduan</p>
             <h2 class="text-lg font-medium text-slate-800">Info Terbaru</h2>
         </div>
-        <a href="{{ route('dashboard', ['tab' => 'info']) }}" title="Lihat semua postingan" class="text-[11px] font-medium text-indigo-600 uppercase tracking-widest hover:underline">Lihat semua</a>
+        <a href="{{ $lihatSemuaUrl ?? route('dashboard', ['tab' => 'info']) }}" title="Lihat semua postingan" class="text-[11px] font-medium text-indigo-600 uppercase tracking-widest hover:underline">Lihat semua</a>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
         @foreach($infoTerbaru as $ip)

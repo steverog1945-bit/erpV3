@@ -37,6 +37,9 @@ class QcController extends Controller
         $items = DB::table('transaksi_detail as d')
             ->join('transaksi as t', 't.id_transaksi', '=', 'd.id_transaksi')
             ->where('t.status_nota', 'Aktif')
+            // Item JASA (id_produk NULL) dikecualikan: tidak punya barang
+            // fisik untuk diperiksa, dan statusnya 'Selesai' sejak nota dibuat.
+            ->whereNotNull('d.id_produk')
             ->whereIn('d.status_spk', ['Cetak', 'Selesai'])
             ->orderByDesc('d.id_detail')
             ->limit(300)

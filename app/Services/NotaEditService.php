@@ -81,8 +81,12 @@ class NotaEditService
         // daftar Riwayat (subquery di PenjualanController::riwayat) juga
         // menghitungnya - kalau hanya salah satu yang dipakai, tombol Edit di
         // daftar dan penolakan saat menyimpan bisa berbeda pendapat.
+        // Item JASA (id_produk NULL) sengaja TIDAK dihitung: statusnya 'Selesai'
+        // sejak nota dibuat dan tidak boleh mengunci koreksi - konsisten dengan
+        // batalkanNota() dan komentar niat di PenjualanController.
         $adaItemSelesai ??= DB::table('transaksi_detail')
             ->where('id_transaksi', $transaksi->id_transaksi)
+            ->whereNotNull('id_produk')
             ->whereIn('status_spk', ['Selesai', 'Cetak'])
             ->exists();
         if ($adaItemSelesai) {

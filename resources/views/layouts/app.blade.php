@@ -280,7 +280,7 @@
             color: var(--pro-ink-3); font-weight: 500; cursor: pointer;
             border-bottom: 1px solid #EFF3FA; margin-bottom: 2px;
         }
-        #mainSidebar .menu-group-toggle > i.fa-chevron-down { margin-left: auto; font-size: 11px; opacity: .6; font-weight: 400; transition: transform .38s cubic-bezier(.32,1.25,.4,1), opacity .2s ease; }
+        #mainSidebar .menu-group-toggle > i.fa-chevron-down { margin-left: auto; font-size: 11px; opacity: .6; transition: transform .38s cubic-bezier(.32,1.25,.4,1), opacity .2s ease; }
         #mainSidebar .menu-group-toggle[aria-expanded="true"] > i.fa-chevron-down { transform: rotate(180deg); opacity: .9; }
         #mainSidebar .menu-group-toggle i.rotate-180 { transform: rotate(180deg); opacity: .9; }
         #mainSidebar .menu-group-items {

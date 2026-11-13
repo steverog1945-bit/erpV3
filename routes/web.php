@@ -143,7 +143,12 @@ Route::middleware(['auth', 'menu.access', 'throttle.write'])->group(function () 
     */
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('/dashboard/api/kpi', [DashboardController::class, 'kpiApi'])->name('dashboard.kpi-api');
+    // Dashboard khusus per role - dijaga 'role.only' (Administrator lolos),
+    // sedangkan /dashboard tetap milik Admin/Kasir/Gudang. Konten halaman ini
+    // hanya bisa dilihat oleh role yang bersangkutan sama sekali.
+    Route::get('/dashboard/produksi', [DashboardController::class, 'produksi'])->middleware('role.only:Operator Produksi')->name('dashboard.produksi');
+    Route::get('/dashboard/desain', [DashboardController::class, 'desain'])->middleware('role.only:Operator Desain')->name('dashboard.desain');
+    Route::get('/dashboard/api/kpi', [DashboardController::class, 'kpiApi'])->name('dashboard.kpi-api');
 
 
 
