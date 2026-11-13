@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\KasSesiService;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -50,17 +51,37 @@ class DashboardController extends Controller
      * API JSON untuk KPI dashboard real-time (polling dari blade via fetch).
      * Hanya mengembalikan angka kunci - tanpa HTML - supaya ringan dan cepat.
      */
+    /**
+     * Piutang global (dipakai dashboard & API KPI) - SUM + COUNT digabung
+     * SATU scan (dulu dua query identik). Sisa tagihan (total - yang sudah
+     * dibayar), bukan total nota: nota DP sudah sebagian lunas.
+     *
+     * Cache 60 detik: angka ini global (tidak per-user/filter) dan query-nya
+     * O(N) atas nota bukan-Lunas - di skala 756 ribu baris 112-160ms, dan
+     * tumbuh linear. Cold cache = query yang sama persis seperti sebelumnya
+     * (hasil identik); warm cache tidak menyentuh tabel sama sekali. Angka
+     * piutang boleh tertinggal maksimal 60 detik di layar.
+     */
+    private static function piutangRingkas(): array
+    {
+        return Cache::remember('ringkasan.piutang', 60, function () {
+            $row = DB::table('transaksi')
+                ->where('status_pembayaran', '!=', 'Lunas')
+                ->where('status_nota', '!=', 'Dibatalkan')
+                ->selectRaw('COALESCE(SUM(GREATEST(0, total_bayar - COALESCE((SELECT SUM(pr.nominal) FROM pembayaran_riwayat pr WHERE pr.id_transaksi = transaksi.id_transaksi), 0))), 0) as total, COUNT(*) as jumlah')
+                ->first();
+
+            return ['total' => (float) ($row->total ?? 0), 'jumlah' => (int) ($row->jumlah ?? 0)];
+        });
+    }
+
     public function kpiApi()
     {
         $today = now()->format('Y-m-d');
         [$mulaiHariIni, $akhirHariIni] = self::rentangHari($today);
         [$mulaiKemarin, $akhirKemarin] = self::rentangHari(now()->subDay()->format('Y-m-d'));
 
-        $piutangRow = DB::table('transaksi')
-            ->where('status_pembayaran', '!=', 'Lunas')
-            ->where('status_nota', '!=', 'Dibatalkan')
-            ->selectRaw('COALESCE(SUM(GREATEST(0, total_bayar - COALESCE((SELECT SUM(pr.nominal) FROM pembayaran_riwayat pr WHERE pr.id_transaksi = transaksi.id_transaksi), 0))), 0) as total, COUNT(*) as jumlah')
-            ->first();
+        $piutangRingkas = self::piutangRingkas();
 
         $orderHariIni = DB::table('transaksi')->whereBetween('tgl_order', [$mulaiHariIni, $akhirHariIni])->where('status_nota', '!=', 'Dibatalkan')->count();
         $nilaiOrderHariIni = (float) DB::table('transaksi')->whereBetween('tgl_order', [$mulaiHariIni, $akhirHariIni])->where('status_nota', '!=', 'Dibatalkan')->sum('total_bayar');
@@ -84,8 +105,8 @@ class DashboardController extends Controller
         $kasAktif = $kasAktifSemua ? (bool) $kasAktifSemua : false;
 
         return response()->json([
-            'piutang' => (float) ($piutangRow->total ?? 0),
-            'piutang_count' => (int) ($piutangRow->jumlah ?? 0),
+            'piutang' => $piutangRingkas['total'],
+            'piutang_count' => $piutangRingkas['jumlah'],
             'order_hari_ini' => (int) $orderHariIni,
             'nilai_order_hari_ini' => $nilaiOrderHariIni,
             'kas_masuk_hari_ini' => $kasMasukHariIni,
@@ -115,15 +136,10 @@ class DashboardController extends Controller
         [$mulaiHariIni, $akhirHariIni] = self::rentangHari($today);
         [$mulaiKemarin, $akhirKemarin] = self::rentangHari($kemarin = now()->subDay()->format('Y-m-d'));
 
-        // Piutang: SUM + COUNT digabung SATU scan (dulu dua query identik).
+        // Piutang: lihat piutangRingkas() - di-cache 60 detik, angka global.
         // $piutang TETAP float (dipakai langsung oleh format angka di blade).
-        $piutangRow = DB::table('transaksi')
-            ->where('status_pembayaran', '!=', 'Lunas')
-            ->where('status_nota', '!=', 'Dibatalkan')
-            // Sisa tagihan (total - yang sudah dibayar), bukan total nota: nota DP sudah sebagian lunas.
-            ->selectRaw('COALESCE(SUM(GREATEST(0, total_bayar - COALESCE((SELECT SUM(pr.nominal) FROM pembayaran_riwayat pr WHERE pr.id_transaksi = transaksi.id_transaksi), 0))), 0) as total, COUNT(*) as jumlah')
-            ->first();
-        $piutang = (float) ($piutangRow->total ?? 0);
+        $piutangRingkas = self::piutangRingkas();
+        $piutang = $piutangRingkas['total'];
 
         $orderHariIni = DB::table('transaksi')->whereBetween('tgl_order', [$mulaiHariIni, $akhirHariIni])->where('status_nota', '!=', 'Dibatalkan')->count();
         $nilaiOrderHariIni = DB::table('transaksi')->whereBetween('tgl_order', [$mulaiHariIni, $akhirHariIni])->where('status_nota', '!=', 'Dibatalkan')->sum('total_bayar');
@@ -148,7 +164,7 @@ class DashboardController extends Controller
 
         [$notaLengkap, $notaBelumLengkap] = $this->ringkasanCollecting();
 
-        $piutangCount = (int) ($piutangRow->jumlah ?? 0);
+        $piutangCount = (int) $piutangRingkas['jumlah'];
 
         // Total nota aktif (non-dibatalkan) — dipakai sebagai angka penyebut
         // untuk menampilkan persentase nota lunas di kartu Kinerja Pembayaran.
@@ -431,14 +447,20 @@ class DashboardController extends Controller
      */
     private function ringkasanCollecting(): array
     {
-        // Dua hitungan berindeks, bukan GROUP BY seluruh item lalu dihitung lagi (tumbuh terus seiring nota).
-        // Nota lengkap = nota yang punya item dan tidak satu pun itemnya masih berjalan.
-        $totalNota = DB::table('transaksi_detail')->distinct()->count('id_transaksi');
-        // Status berjalan ditulis positif (IN) supaya indeks status_spk terpakai; NOT IN memaksa pemindaian penuh.
-        $notaBelum = DB::table('transaksi_detail')->whereIn('status_spk', ['Antre', 'Desain', 'Cetak', 'Pending'])->distinct()->count('id_transaksi');
-        $notaLengkap = $totalNota - $notaBelum;
+        // Cache 60 detik terhadap dua DISTINCT-count atas transaksi_detail
+        // (tumbuh linear, 45-70ms di skala stress): angka GLOBAL, tidak
+        // per-user/filter. Cold cache = dua query yang sama seperti sebelum,
+        // hasil identik; boleh tertinggal maksimal 60 detik.
+        return Cache::remember('ringkasan.collecting', 60, function () {
+            // Dua hitungan berindeks, bukan GROUP BY seluruh item lalu dihitung lagi (tumbuh terus seiring nota).
+            // Nota lengkap = nota yang punya item dan tidak satu pun itemnya masih berjalan.
+            $totalNota = DB::table('transaksi_detail')->distinct()->count('id_transaksi');
+            // Status berjalan ditulis positif (IN) supaya indeks status_spk terpakai; NOT IN memaksa pemindaian penuh.
+            $notaBelum = DB::table('transaksi_detail')->whereIn('status_spk', ['Antre', 'Desain', 'Cetak', 'Pending'])->distinct()->count('id_transaksi');
+            $notaLengkap = $totalNota - $notaBelum;
 
-        return [$notaLengkap, $totalNota - $notaLengkap];
+            return [$notaLengkap, $totalNota - $notaLengkap];
+        });
     }
 
     /**

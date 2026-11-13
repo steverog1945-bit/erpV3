@@ -7,6 +7,7 @@ use App\Services\StatusPembayaran;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Services\AccountingService;
@@ -129,7 +130,22 @@ class KasirController extends Controller
         // Count paginasi dijalankan di inti saja: hasilnya sama persis dengan
         // count atas gabungan penuh, karena join nama 1:1 ke PK tidak pernah
         // menambah/mengurangi baris (FK menjamin konsumen/user selalu ada).
-        $totalIntisari = (clone $intisari)->count();
+        //
+        // Cache 60 detik per kombinasi filter (kunci = hash seluruh input
+        // yang mempengaruhi hasil): COUNT ini memindai nota tersaring +
+        // agregat pembayaran (470-600ms di skala 756 ribu baris, tumbuh
+        // linear) dan tidak berubah berarti tiap detik. Baris daftar TETAP
+        // diambil live (kasir sedang bekerja); yang tertinggal maksimal 60
+        // detik hanya angka "menampilkan X dari N nota" di footer paginasi.
+        $kunciCount = 'kasir.mon-count:' . md5(json_encode([
+            (string) $request->input('tgl_mulai'),
+            (string) $request->input('tgl_selesai'),
+            (string) $request->input('id_konsumen'),
+            (string) $request->input('nomor_nota'),
+            (string) $request->input('status_bayar'),
+            $request->has('status_filtered') ? '1' : '0',
+        ]));
+        $totalIntisari = Cache::remember($kunciCount, 60, fn () => (clone $intisari)->count());
 
         // Lapisan nama: JOIN konsumen/users hanya atas 20 baris halaman ini.
         // Badge status diturunkan lagi dari total nota & total masuk baris yang
