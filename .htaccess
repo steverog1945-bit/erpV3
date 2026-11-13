@@ -5,6 +5,11 @@
 
     RewriteEngine On
 
+    # Root '/' diproses Apache lewat DirectoryIndex (index.php) - Laravel
+    # tidak cocokkan route '/' (405). Kirim ke /landing-page agar halaman
+    # utama publik tampil seperti semula.
+    RewriteRule ^$ /grafikaorionV3/landing-page [R=302,L]
+
     # ------------------------------------------------------------------
     # JALUR /storage/*
     # Instance ini dilayani dari root proyek (DocumentRoot = htdocs,
@@ -72,3 +77,4 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
