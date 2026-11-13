@@ -228,6 +228,7 @@
                                         <span class="min-w-0 flex-1">
                                             <span class="block text-[9px] font-bold uppercase tracking-[.16em] text-white/70 truncate">{{ $b->nama_bank }}</span>
                                             <span class="block font-mono text-[11.5px] font-semibold text-white tabular-nums tracking-[.13em] mt-0.5" style="text-shadow: 0 1px 4px rgba(0,0,0,.35)">{{ $norekTampil }}</span>
+                                            <span class="block text-[9.5px] font-medium text-white/85 truncate mt-0.5" style="text-shadow: 0 1px 4px rgba(0,0,0,.3)">a.n. {{ $b->atas_nama }}</span>
                                         </span>
                                         {{-- Tombol state profesional: pil "Pilih" <-> "Terpilih" --}}
                                         <span class="rek-btn shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold border border-white/40 bg-white/10 text-white transition-colors duration-150 ease-out">

@@ -54,8 +54,11 @@ class LaporanController extends Controller
                 $request->validate(['tgl_dari' => 'nullable|date', 'tgl_sampai' => 'nullable|date']);
         $tglDari = $request->filled('tgl_dari') ? $request->tgl_dari : now()->format('Y-m-d');
         $tglSampai = $request->filled('tgl_sampai') ? $request->tgl_sampai : now()->format('Y-m-d');
+        // Batas atas hari-terakhir (eksklusif) - dipakai lagi oleh query resume
+        // di bawah, supaya filter resume & daftar memakai batas yang sama persis.
+        $batasAtas = \Carbon\Carbon::parse($tglSampai)->addDay()->format('Y-m-d') . ' 00:00:00';
         $query->where('transaksi.tgl_order', '>=', $tglDari . ' 00:00:00')
-              ->where('transaksi.tgl_order', '<', \Carbon\Carbon::parse($tglSampai)->addDay()->format('Y-m-d') . ' 00:00:00');
+              ->where('transaksi.tgl_order', '<', $batasAtas);
 
         if ($request->filled('status_pembayaran')) {
             $query->where('transaksi.status_pembayaran', $request->status_pembayaran);
@@ -70,29 +73,72 @@ class LaporanController extends Controller
             $query->where('transaksi.id_konsumen', $request->id_konsumen);
         }
 
-        // Resume dihitung dari query YANG SAMA (sebelum pagination) supaya konsisten dengan filter.
-        // Nota yang sudah dibatalkan tetap ditampilkan di listing (untuk jejak
-        // audit, ditandai badge Dibatalkan) tapi dikeluarkan dari resume angka
-        // supaya total transaksi/piutang tidak ikut menghitung order yang
-        // sudah batal.
-        $resumeQuery = (clone $query)->where('transaksi.status_nota', '!=', 'Dibatalkan');
-        $jumlahTransaksi = $resumeQuery->count();
-        $totalTransaksi = (clone $resumeQuery)->sum('transaksi.total_bayar');
-        $totalPiutang = (clone $resumeQuery)
+        // Resume dihitung dari filter YANG SAMA dengan listing (sebelum
+        // pagination) supaya konsisten dengan filter. Nota yang sudah
+        // dibatalkan tetap ditampilkan di listing (untuk jejak audit, ditandai
+        // badge Dibatalkan) tapi dikeluarkan dari resume angka supaya total
+        // transaksi/piutang tidak ikut menghitung order yang sudah batal.
+        //
+        // Perf dataset besar (uji beban 756 ribu baris sintetis, 2026-11-13):
+        // resume HANYA butuh kolom transaksi, jadi TIDAK ikut join master
+        // konsumen/golongan/users/karyawan untuk COUNT/SUM. Join 1:1 ke PK
+        // itu tidak menambah/mengurangi baris (FK menjamin konsumen/golongan
+        // selalu ada), tapi menggandakan biaya scan - COUNT yang seharusnya
+        // 1ms lewat indeks transaksi_tgl_order_status_nota_index menjadi
+        // 193ms per query. Filter id_golongan tetap dihormati lewat
+        // whereExists ke konsumen; angka yang dihasilkan identik dengan
+        // versi join.
+        $saringResume = function ($q) use ($request, $tglDari, $batasAtas) {
+            $q->where('transaksi.tgl_order', '>=', $tglDari . ' 00:00:00')
+              ->where('transaksi.tgl_order', '<', $batasAtas)
+              ->where('transaksi.status_nota', '!=', 'Dibatalkan');
+            if ($request->filled('status_pembayaran')) {
+                $q->where('transaksi.status_pembayaran', $request->status_pembayaran);
+            }
+            if ($request->filled('id_golongan')) {
+                $q->whereExists(fn ($w) => $w->selectRaw(1)->from('konsumen')
+                    ->whereColumn('konsumen.id_konsumen', 'transaksi.id_konsumen')
+                    ->where('konsumen.id_golongan', $request->id_golongan));
+            }
+            if ($request->filled('id_konsumen')) {
+                $q->where('transaksi.id_konsumen', $request->id_konsumen);
+            }
+        };
+
+        $resumeBase = DB::table('transaksi')->where($saringResume);
+        $jumlahTransaksi = (clone $resumeBase)->count();
+        $totalTransaksi = (clone $resumeBase)->sum('transaksi.total_bayar');
+
+        // Piutang resume = jumlah GREATEST(0, total - yang sudah dibayar)
+        // dihitung DI SQL. Sebelumnya dihitung di PHP lewat ->get()->sum(),
+        // yang memuat SELURUH baris hasil filter (dilengkapi subquery total
+        // terbayar korelasi per baris) ke memori dulu - rumus & filter sama
+        // persis, angka identik.
+        $totalPiutang = (float) (clone $resumeBase)
             ->where('transaksi.status_pembayaran', '!=', 'Lunas')
-            ->get()
-            ->sum(fn ($t) => max(0, $t->total_bayar - $t->total_dibayar));
+            ->selectRaw('COALESCE(SUM(GREATEST(0, transaksi.total_bayar - COALESCE((SELECT SUM(pr.nominal) FROM pembayaran_riwayat pr WHERE pr.id_transaksi = transaksi.id_transaksi), 0))), 0) as sisa_tagihan')
+            ->first()
+            ->sisa_tagihan;
+
+        // Batasan nota untuk kedua breakdown: whereExists ke transaksi dengan
+        // filter YANG SAMA dengan resume, bukan pluck seluruh id lalu whereIn -
+        // pada rentang lebar (36 bulan) pluck bisa memuat ratusan ribu id ke
+        // memori sia-sia.
+        $batasiNota = fn ($w) => $w->selectRaw(1)->from('transaksi')
+            ->whereColumn('transaksi.id_transaksi', 'transaksi_detail.id_transaksi')
+            ->where($saringResume);
 
         // Breakdown per Divisi/Mesin (proxy kategori - lihat catatan di
         // laporan.order.blade.php, tabel produk tidak punya kolom
         // kategori) - biaya cetak/design/finishing dijumlah dari
         // transaksi_detail, DIBATASI ke nota yang sama persis dengan hasil
         // filter resume di atas supaya kedua bagian laporan selalu sinkron.
-        $idNotaSesuaiFilter = (clone $resumeQuery)->pluck('transaksi.id_transaksi');
+        // Batasan ke nota yang sama persis dengan hasil filter resume di atas
+        // supaya kedua bagian laporan selalu sinkron (lihat $batasiNota).
         $breakdownDivisi = DB::table('transaksi_detail')
             ->leftJoin('produk', 'transaksi_detail.id_produk', '=', 'produk.id_produk')
             ->leftJoin('mesin', 'produk.id_mesin', '=', 'mesin.id_mesin')
-            ->whereIn('transaksi_detail.id_transaksi', $idNotaSesuaiFilter)
+            ->whereExists($batasiNota)
             ->select(
                 DB::raw("COALESCE(mesin.nama_mesin, 'Lainnya') as divisi"),
                 DB::raw('SUM(transaksi_detail.biaya_cetak) as total_biaya_cetak'),
@@ -113,7 +159,7 @@ class LaporanController extends Controller
             ->leftJoin('produk', 'transaksi_detail.id_produk', '=', 'produk.id_produk')
             ->leftJoin('jasa', 'transaksi_detail.id_jasa', '=', 'jasa.id_jasa')
             ->leftJoin('mesin', 'produk.id_mesin', '=', 'mesin.id_mesin')
-            ->whereIn('transaksi_detail.id_transaksi', $idNotaSesuaiFilter)
+            ->whereExists($batasiNota)
             ->select(
                 DB::raw("COALESCE(mesin.nama_mesin, 'Lainnya') as divisi"),
                 DB::raw("COALESCE(produk.nama_produk, jasa.nama_jasa, '-') as produk"),
