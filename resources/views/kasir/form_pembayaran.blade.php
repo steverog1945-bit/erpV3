@@ -27,6 +27,8 @@
         @csrf
         <fieldset @if($notaSudahLunas) disabled @endif style="border:0;padding:0;margin:0;min-width:0;">
         <input type="hidden" name="id_transaksi" value="{{ $transaksi->id_transaksi }}">
+        {{-- Sumber bayar: 'langsung' = dari Antrean Baru ("Terima dan Bayar"), lainnya dari kasir seperti biasa. Diproses di prosesBayar untuk keterangan riwayat. --}}
+        <input type="hidden" name="sumber_bayar" value="{{ $sumberBayar ?? 'monitoring' }}">
         {{-- P0-4: anti klik-ganda. Diisi waktu pertama submit; kalau sudah terisi, submit kedua diabaikan (server tetap punya guard sendiri via session). --}}
         <input type="hidden" name="submit_id" value="">
 

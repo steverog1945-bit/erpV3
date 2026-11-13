@@ -50,17 +50,25 @@
                     <p class="text-2xl font-medium text-slate-800 tracking-tight"><span class="text-sm font-medium text-slate-400 mr-1">Rp</span>{{ number_format($w->total_bayar, 0, ',', '.') }}</p>
                 </div>
 
-                <div class="mt-5">
+                <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-2">
                     @if($kasAktif)
                         <form method="POST" action="{{ route('kasir.terimaTransaksi', $w->id_transaksi) }}">
                             @csrf
                             <input type="hidden" name="submit_id" value="terima-{{ $w->id_transaksi }}-{{ $loop->index }}">
+                            <button type="submit" class="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs shadow-sm transition-all">
+                                <i class="fas fa-inbox"></i> Terima
+                            </button>
+                        </form>
+                        <form method="POST" action="{{ route('kasir.terimaTransaksi', $w->id_transaksi) }}">
+                            @csrf
+                            <input type="hidden" name="submit_id" value="terima-bayar-{{ $w->id_transaksi }}-{{ $loop->index }}">
+                            <input type="hidden" name="lanjut" value="bayar">
                             <button type="submit" class="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white font-medium text-xs shadow-sm transition-all">
-                                <i class="fas fa-check-circle"></i> Terima Transaksi
+                                <i class="fas fa-money-bill-wave"></i> Terima dan Bayar
                             </button>
                         </form>
                     @else
-                        <span class="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl bg-slate-100 text-slate-400 font-medium text-xs cursor-not-allowed" title="Kas belum dibuka">
+                        <span class="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl bg-slate-100 text-slate-400 font-medium text-xs cursor-not-allowed sm:col-span-2" title="Kas belum dibuka">
                             <i class="fas fa-lock"></i> Terkunci
                         </span>
                     @endif

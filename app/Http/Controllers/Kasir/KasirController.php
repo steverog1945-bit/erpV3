@@ -218,8 +218,16 @@ class KasirController extends Controller
         return view('kasir.waiting_list', compact('waiting'));
     }
 
-    public function bayarForm($id)
+    public function bayarForm(Request $request, $id)
     {
+        // Sumber masuk ke form: 'langsung' dari tombol "Terima dan Bayar" di
+        // Antrean Baru, selain itu dianggap dari Monitoring/kasir seperti
+        // biasa. Menentukan keterangan pembayaran yang tercatat (lihat
+        // prosesBayar). Whitelist eksplisit - nilai lain ditolak ke default.
+        $sumberBayar = in_array((string) $request->query('sumber'), ['langsung', 'monitoring'], true)
+            ? (string) $request->query('sumber')
+            : 'monitoring';
+
         $transaksi = DB::table('transaksi')
             ->join('konsumen', 'transaksi.id_konsumen', '=', 'konsumen.id_konsumen')
             ->leftJoin('golongan_konsumen', 'konsumen.id_golongan', '=', 'golongan_konsumen.id_golongan')
@@ -312,7 +320,7 @@ class KasirController extends Controller
             ->where('tipe', 'Setoran')
             ->exists();
 
-        return view('kasir.form_pembayaran', compact('transaksi', 'items', 'totalTerbayar', 'sisaTagihan', 'banks', 'saldoDeposit', 'depositSudahHabis', 'penerimaan', 'statusPembayaran', 'notaSudahLunas'));
+        return view('kasir.form_pembayaran', compact('transaksi', 'items', 'totalTerbayar', 'sisaTagihan', 'banks', 'saldoDeposit', 'depositSudahHabis', 'penerimaan', 'statusPembayaran', 'notaSudahLunas', 'sumberBayar'));
     }
 
     /**
@@ -377,6 +385,17 @@ class KasirController extends Controller
             $request->session()->put('terima_submit_id', $sudahDiproses);
 
             DB::commit();
+
+            // "Terima dan Bayar" - SPK sudah diaktifkan di atas (status_order =
+            // Diterima Kasir, identik dengan tombol Terima biasa). Konsumen
+            // langsung diarahkan ke form pembayaran yang penuh rincian cetak -
+            // baik bayar lunas maupun DP. Jika konsumen berubah pikiran di
+            // kasir, salahkan tetap di halaman form; nota tetap berstatus
+            // Diterima dan masuk Monitoring Kasir untuk ditagih nanti.
+            if ((string) $request->input('lanjut') === 'bayar') {
+                return redirect()->route('kasir.bayarForm', ['id' => $id, 'sumber' => 'langsung'])
+                    ->with('success', 'Nota diterima. Silakan bayar - lunas atau DP.');
+            }
 
             return $this->responTerima($request, 'success', 'Transaksi berhasil diterima. SPK siap diproses.');
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -692,13 +711,25 @@ class KasirController extends Controller
                     ]);
                 }
 
+                // Keterangan pembayaran: dibedakan berdasar jalur masuknya
+                // (Antrean "Terima dan Bayar" vs kasir seperti biasa/lewat
+                // Monitoring). Terima kasih untuk business logic: masuk
+                // langsung ke SPK lewat terimaTransaksi yang sama, hanya
+                // sumber pembayaran yang beda — tidak ada jalur khusus.
+                $sumberBayar = in_array((string) $request->input('sumber_bayar'), ['langsung', 'monitoring'], true)
+                    ? (string) $request->input('sumber_bayar')
+                    : 'monitoring';
+                $teksKeterangan = $sumberBayar === 'langsung'
+                    ? 'Langsung Bayar ' . $nomorNota
+                    : 'Pelunasan transaksi untuk transaksi : ' . $nomorNota;
+
                 $idBayarRiwayat = DB::table('pembayaran_riwayat')->insertGetId([
                     'id_transaksi' => $id_transaksi,
                     'nominal'      => $uangDiterimaSekarang,
                     'metode'       => $metode,
                     'id_bank'      => $idBank,
                     'tgl_bayar'    => now(),
-                    'keterangan'   => "Pembayaran via Kasir",
+                    'keterangan'   => $teksKeterangan,
                     // Catatan serah uang untuk nota: yang diserahkan pelanggan dan kembaliannya.
                     'uang_diterima' => round($uangDiterimaSekarang + $kembalian, 2),
                     'kembalian'    => $kembalian,
