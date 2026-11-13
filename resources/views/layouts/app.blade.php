@@ -1958,7 +1958,6 @@
         });
         var mbk = document.getElementById('menuBackdrop');
         if (mbk) { mbk.classList.remove('terbuka'); mbk.setAttribute('aria-hidden', 'true'); }
-        });
         var ov = document.getElementById('sidebarOverlay');
         if (ov) { ov.classList.remove('terbuka'); ov.setAttribute('aria-hidden', 'true'); }
         var np = document.getElementById('notif-panel');
