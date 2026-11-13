@@ -765,7 +765,7 @@
             class="{{ $iconClass }} {{ Request::is('pembelian-bahan', 'pembelian-bahan/*') ? $iconActive : $iconNonActive }}"
             fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M9 14l6-6m0 0l-6-6m6 6H3" />
+                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
         </svg>
         <span class="text-sm font-medium">Pembelian Bahan</span>
     </a>
@@ -800,7 +800,7 @@
         <path stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
-              d="M8 17l4 4 4-4m0-5l-4-4-4 4m-4 5h16" />
+              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
     </svg>
 
     <span class="text-sm font-medium">

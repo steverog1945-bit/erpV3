@@ -166,6 +166,9 @@ Route::get('/dashboard/api/kpi', [DashboardController::class, 'kpiApi'])->name('
     Route::patch('/platform-belanja/{id}/toggle', [\App\Http\Controllers\PlatformBelanjaController::class, 'toggle'])->whereNumber('id')->name('platform-belanja.toggle');
     Route::delete('/platform-belanja/{id}', [\App\Http\Controllers\PlatformBelanjaController::class, 'destroy'])->whereNumber('id')->name('platform-belanja.destroy');
     Route::resource('bank', BankController::class)->except(['create', 'edit', 'show']); // tambah/ubah lewat modal; rute tanpa method membalas 500
+    // Gambar QRIS perusahaan (berkas di storage/app/public/qris, tanpa DB).
+    // Dipakai panel barcode QRIS di Input Pembayaran.
+    Route::post('bank/qris', [BankController::class, 'updateQris'])->name('bank.qris.update');
     // Pencarian konsumen AJAX untuk dropdown POS (dataset konsumen bisa
     // puluhan ribu - jangan menyeret semuanya ke browser tiap buka POS).
     // HARUS terdaftar sebelum resource('konsumen') agar tidak tertangkap

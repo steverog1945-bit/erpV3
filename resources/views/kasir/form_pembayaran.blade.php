@@ -176,7 +176,7 @@
 
                         <div class="md:col-span-3">
                             <label class="block text-[11px] font-medium text-slate-400 mb-2.5">Metode Pembayaran</label>
-                            <span class="grid grid-cols-2 gap-2" id="metode-pembayaran-grid">
+                            <span class="grid grid-cols-2 md:grid-cols-3 gap-2" id="metode-pembayaran-grid">
                                 <label class="metode-bayar-option relative flex items-center justify-center gap-2 py-3 rounded-2xl border border-indigo-500 bg-indigo-50 text-indigo-700 font-medium text-xs cursor-pointer transition-all">
                                     <input type="radio" name="metode_pembayaran" id="metode-tunai" value="Tunai" class="sr-only" checked onchange="onMetodePembayaranChange()">
                                     <i class="fas fa-money-bill-wave"></i> Tunai
@@ -244,6 +244,34 @@
                                 <p class="text-[11px] text-slate-400 italic border border-dashed border-slate-200 rounded-xl px-4 py-3">Belum ada rekening bank. Tambah dulu di <a href="{{ route('bank.index') }}" class="text-indigo-600 font-semibold hover:underline">Rekening Bank</a>.</p>
                             @endforelse
                         </div>
+                    </div>
+                    <div id="wrapper-qris" class="hidden mt-5">
+                        <label class="block text-[11px] font-medium text-slate-400 mb-2">Barcode QRIS</label>
+                        <p class="text-[10px] text-slate-400 mb-2 -mt-1">Minta konsumen memindai kode ini dengan aplikasi bank / e-wallet apa pun.</p>
+                        @php
+                            // Gambar QRIS tersimpan sebagai file (tanpa kolom DB):
+                            // storage/app/public/qris/qris.png|jpg|jpeg|webp, diunggah
+                            // dari halaman Rekening Bank. Cari yang ada.
+                            $qrisExt = collect(['png', 'jpg', 'jpeg', 'webp'])->first(
+                                fn ($e) => file_exists(public_path('storage/qris/qris.' . $e))
+                            );
+                        @endphp
+                        @if($qrisExt)
+                        <div class="inline-flex flex-col items-center rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_4px_18px_rgba(15,23,42,.06)]">
+                            <img src="{{ asset('storage/qris/qris.' . $qrisExt) }}" alt="QRIS Perusahaan"
+                                 class="w-56 max-w-full rounded-lg" loading="lazy">
+                            <span class="mt-3 inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                                <i class="fas fa-qrcode text-indigo-500"></i> QR Code Standar Pembayaran Nasional
+                            </span>
+                        </div>
+                        @else
+                        <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 px-4 py-5 text-center">
+                            <i class="fas fa-qrcode text-2xl text-slate-300"></i>
+                            <p class="mt-2 text-xs font-medium text-slate-500">Belum ada gambar QRIS.</p>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Unggah gambar QRIS perusahaan di menu
+                                <a href="{{ route('bank.index') }}" class="text-indigo-600 font-semibold hover:underline">Rekening Bank</a>.</p>
+                        </div>
+                        @endif
                     </div>
                     <div id="wrapper-deposit-info" class="hidden mt-5 rounded-2xl bg-indigo-50/60 border border-indigo-100 px-4 py-3">
                         <p class="text-xs font-medium text-indigo-600">Saldo deposit: Rp {{ number_format($saldoDeposit, 0, ',', '.') }}</p>
@@ -734,6 +762,7 @@
     function toggleBankField() {
         const metode = getMetodePembayaran();
         document.getElementById('wrapper-bank').classList.toggle('hidden', metode !== 'Transfer' && metode !== 'QRIS');
+        document.getElementById('wrapper-qris').classList.toggle('hidden', metode !== 'QRIS');
         document.getElementById('wrapper-deposit-info').classList.toggle('hidden', metode !== 'Deposit');
     }
 

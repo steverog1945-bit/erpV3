@@ -31,6 +31,36 @@
         </form>
     </div>
 
+    {{-- Gambar QRIS perusahaan: dipakai halaman Input Pembayaran saat metode
+         QRIS dipilih. Tersimpan sebagai berkas di storage/app/public/qris/
+         (tanpa kolom database) - mengunggah ulang menggantikan gambar lama. --}}
+    @php
+        $qrisAda = collect(['png', 'jpg', 'jpeg', 'webp'])->first(
+            fn ($e) => file_exists(public_path('storage/qris/qris.' . $e))
+        );
+    @endphp
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-8">
+        <div class="flex flex-col md:flex-row md:items-center gap-5">
+            <div class="flex items-center justify-center shrink-0 w-32 h-32 rounded-2xl border border-slate-200 bg-slate-50/60 overflow-hidden">
+                @if($qrisAda)
+                    <img src="{{ asset('storage/qris/qris.' . $qrisAda) }}" alt="QRIS saat ini" class="w-full h-full object-contain" loading="lazy">
+                @else
+                    <i class="fas fa-qrcode text-3xl text-slate-300"></i>
+                @endif
+            </div>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-slate-800">Gambar QRIS Perusahaan</p>
+                <p class="text-[11px] text-slate-400 mt-1 max-w-xl">Ditampilkan di halaman Input Pembayaran saat kasir memilih metode <b>QRIS</b>, supaya konsumen bisa memindai langsung dari layar kasir. PNG/JPG/WEBP maks 2 MB. Mengunggah gambar baru menggantikan yang lama.</p>
+                <form method="POST" action="{{ route('bank.qris.update') }}" enctype="multipart/form-data" class="mt-3 flex flex-wrap items-center gap-2">
+                    @csrf
+                    <input type="file" name="qris" accept="image/png,image/jpeg,image/webp" required
+                           class="text-xs font-medium text-slate-600 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-indigo-50 file:text-indigo-700 file:text-xs file:font-semibold hover:file:bg-indigo-100">
+                    <button type="submit" class="h-[38px] px-5 bg-indigo-600 text-white rounded-xl text-[11px] font-medium uppercase tracking-widest hover:bg-indigo-700 transition-colors">Unggah QRIS</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     {{-- Kartu rekening bergaya kartu ATM: gradien gelap + chip + teks besar
          yang mudah dibaca dari jauh. Tambah/hapus tetap lewat form; nomor
          rekening disalin lewat clipboard (tombol SALIN). --}}

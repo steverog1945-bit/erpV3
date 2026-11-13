@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class BankController extends Controller
 {
@@ -20,6 +21,30 @@ class BankController extends Controller
 
         $bank = $query->orderBy('nama_bank')->paginate(20)->withQueryString();
         return view('master.bank.index', compact('bank'));
+    }
+
+    /** Gambar QRIS perusahaan: berkas tetap di storage/app/public/qris/qris.{ext}
+     *  (tanpa kolom database). Panel barcode QRIS di Input Pembayaran membaca
+     *  lokasi ini; mengunggah ulang menggantikan berkas lama. */
+    public function updateQris(Request $request)
+    {
+        $request->validate(['qris' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048']);
+
+        $ext = match ($request->file('qris')->getMimeType()) {
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            'image/webp' => 'webp',
+            default => 'jpg',
+        };
+
+        // Hapus semua varian ekstensi lama supaya tidak ada dua gambar QRIS.
+        foreach (['png', 'jpg', 'jpeg', 'webp'] as $lama) {
+            Storage::disk('public')->delete('qris/qris.' . $lama);
+        }
+
+        $request->file('qris')->storeAs('qris', 'qris.' . $ext, 'public');
+
+        return redirect()->back()->with('success', 'Gambar QRIS berhasil diunggah.');
     }
 
     public function store(Request $request) {
