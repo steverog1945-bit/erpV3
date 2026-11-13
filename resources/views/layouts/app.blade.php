@@ -1969,6 +1969,25 @@
         var pb = document.getElementById('profil-menu-btn');
         if (pb) pb.setAttribute('aria-expanded', 'false');
         document.body.classList.remove('menu-panel-open');
+
+        // Toast/Swal & modal yang masih tampil menggantung di DOM saat
+        // halaman dipulihkan dari bfcache akan terlihat kembali - persis
+        // perilaku "menu besar muncul lagi". Tutup semuanya di sini, untuk
+        // semua halaman (back/forward).
+        if (window.Swal) { try { Swal.close(); } catch (e) { /* abaikan */ } }
+        document.querySelectorAll('.swal2-container').forEach(function (c) { c.remove(); });
+        document.querySelectorAll('[data-modal-root]:not([hidden])').forEach(function (m) {
+            if (window.closeModal && m.id) { window.closeModal(m.id); }
+            else { m.hidden = true; m.removeAttribute('data-state'); }
+        });
+        if (window.jQuery) {
+            try {
+                jQuery('.select2-hidden-accessible').each(function () { jQuery(this).select2('close'); });
+            } catch (e) { /* abaikan */ }
+        }
+        // Jaring pengaman terakhir: kalau ada kode lama menulis
+        // body.style.overflow langsung, scroll halaman kembali normal.
+        document.body.style.overflow = '';
     });
 </script>
 </main>
